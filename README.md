@@ -65,6 +65,7 @@ tools/blender/             art pipeline (Blender 5.2 as the bpy Python module)
   worm.py, worm_pose.py    procedural pipe worm, animated from spine functions
   latch.py                 solves the chewing worm's pose so its mouth sits on the burst pipe
   render_character.py      render a rigged GLB into 6 hex directions
+  render_aim.py, package_fire.py   the aimed firing clips, muzzle positions and aim data
   retarget.py, build_attack.py   pistol animations retargeted from Quaternius (CC0)
 tools/web/                 web packaging and a headless browser test
 source/models/             player GLBs (Tripo export, and with retargeted pistol clips)
@@ -77,6 +78,8 @@ art/spritecook_pack_v0.2/  the earlier SpriteCook asset pack
 python3 -I tools/blender/build.py L2 out    # then copy out/L2 to game/levels/L2
 python3 -I tools/blender/build.py L3 out
 python3 -I tools/blender/latch.py              # pose of the worm latched onto the burst pipe -> latch.json
+python3 -I tools/blender/render_aim.py source/models/player_male_v2.glb aim_out
+python3 tools/blender/package_fire.py aim_out game/characters/player_male
 python3 -I tools/blender/worm.py worm_out && python3 tools/blender/package_worm.py worm_out
 ```
 
@@ -87,6 +90,7 @@ Everything uses one camera: orthographic, 30 degrees above the ground (2:1 isome
 - **Walls.** Interior walls are cut down to stubs, dollhouse style, so rooms stay readable. Only the outer back walls stand full height.
 - **Draw order.** Props, doors and characters are separate sprites, sorted by their footprint.
 - **Hexes.** A hex is 0.64 m: exactly 14 frames of the walk cycle.
+- **Aiming.** Every character records its height and where to hit it (body, head), measured on the 3D model. The shot is rendered at six gun angles, from 60 degrees down to 40 up, and the game picks the one that lines up with the target, so the pistol points down at a worm on the floor and up at anything taller. The tracer starts at the muzzle measured on the firing frame.
 - **No foot sliding.** Characters move by the stride measured in Blender for each animation frame, so their feet don't slide.
 
 ## Credits and licences

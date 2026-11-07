@@ -132,6 +132,55 @@ func is_moving() -> bool:
 	return anim in STEP_CLIPS and not path.is_empty()
 
 
+## A point on this character to shoot at: "body" or "head". x, y are ground metres, z is height.
+## Measured from the 3D model and stored in character.json ("aim_points": forward, height).
+func aim_point(part := "body") -> Vector3:
+	var pts: Dictionary = data.get("aim_points", {})
+	var fz: Array = pts.get(part, pts.get("body", [0.0, 0.5]))
+	var f := Vector2(cos(deg_to_rad(60.0 * dir)), sin(deg_to_rad(60.0 * dir)))
+	var g := ground + f * float(fz[0])
+	return Vector3(g.x, g.y, float(fz[1]))
+
+
+static func aim_to_screen(p: Vector3) -> Vector2:
+	return Hex.ground_to_screen(Vector2(p.x, p.y), p.z)
+
+
+## The firing clip whose gun angle best lines up with the target, for the current facing.
+## Each clip was rendered at one aim pitch; its muzzle position on the firing frame is in the json.
+func fire_clip(target: Vector3) -> String:
+	var aim: Dictionary = data.get("aim", {})
+	var best := "pistol_attack"
+	var best_err := INF
+	var dist := Vector2(target.x, target.y).distance_to(ground)
+	for p in aim.get("pitches", []):
+		var key: String = aim["clip"] + "_" + _pitch_tag(int(p))
+		if not has_clip(key):
+			continue
+		var m: Array = data["animations"][key]["directions"][str(dir)]["muzzle_m"]
+		var want := rad_to_deg(atan2(target.z - float(m[1]), maxf(dist - float(m[0]), 0.05)))
+		var err := absf(want - float(p))
+		if err < best_err:
+			best_err = err
+			best = key
+	return best
+
+
+## Where the muzzle is on the firing frame of a clip, in screen pixels from this actor's feet.
+func muzzle_offset(clip: String) -> Vector2:
+	var dinfo: Dictionary = data["animations"].get(clip, {}).get("directions", {}).get(str(dir), {})
+	if dinfo.has("muzzle_offset_px"):
+		return Vector2(dinfo["muzzle_offset_px"][0], dinfo["muzzle_offset_px"][1])
+	var f := Vector2(cos(deg_to_rad(60.0 * dir)), sin(deg_to_rad(60.0 * dir)))
+	return Hex.ground_to_screen(ground + f * 0.55, 1.32) - position
+
+
+static func _pitch_tag(p: int) -> String:
+	if p == 0:
+		return "0"
+	return ("m%d" % -p) if p < 0 else ("p%d" % p)
+
+
 func idle_clip(in_combat: bool) -> String:
 	if kind == "player" and in_combat:
 		return "pistol_idle"

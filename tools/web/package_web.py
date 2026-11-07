@@ -1,19 +1,23 @@
 """Turn a Godot web export into files the artifact host accepts: the 35 MB engine gzipped into
 engine.wasm and the game pack split into <16 MB parts named pack0.wasm, pack1.wasm, ...
 A small loader in index.html rebuilds both before Godot fetches them.
-Usage: python3 package_web.py export_dir site_dir"""
+Usage: python3 package_web.py export_dir site_dir [part_prefix]
+Give each new build a new part prefix when the parts must be uploaded in more than one go:
+the live page keeps loading the old parts until the new index.html goes up."""
 import sys, os, gzip, shutil
 src, dst = sys.argv[1], sys.argv[2]
+prefix = sys.argv[3] if len(sys.argv) > 3 else "pack"
 shutil.rmtree(dst, ignore_errors=True); os.makedirs(dst)
 for f in ("index.js", "index.audio.worklet.js", "index.png", "index.icon.png", "index.apple-touch-icon.png"):
     shutil.copy(os.path.join(src, f), dst)
-with open(os.path.join(src, "index.wasm"), "rb") as fi, gzip.open(os.path.join(dst, "engine.wasm"), "wb", 9) as fo:
+with open(os.path.join(src, "index.wasm"), "rb") as fi, \
+        gzip.GzipFile(os.path.join(dst, "engine.wasm"), "wb", 9, mtime=0) as fo:      # same engine, same bytes
     shutil.copyfileobj(fi, fo)
 data = open(os.path.join(src, "index.pck"), "rb").read()
 CH = 16_000_000
 parts = []
 for i in range(0, len(data), CH):
-    name = f"pack{len(parts)}.wasm"
+    name = f"{prefix}{len(parts)}.wasm"
     open(os.path.join(dst, name), "wb").write(data[i:i + CH]); parts.append(name)
 html = open(os.path.join(src, "index.html")).read()
 loader = '''<script>

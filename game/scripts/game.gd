@@ -585,11 +585,16 @@ func attack(w: Actor) -> void:
 
 func shoot(w: Actor, penalty: int) -> void:
 	player.face_ground(w.ground)
-	player.play("pistol_attack", player.dir)
+	var target := w.aim_point("body")
+	var clip := player.fire_clip(target)          # the gun follows the target's height
+	if "--autotest" in OS.get_cmdline_user_args():
+		print("shot: ", clip, " at ", Hex.distance(player.hex, w.hex), " hexes, target height ", snappedf(target.z, 0.01))
+	player.play(clip, player.dir)
 	await player.action_point
 	var chance := hit_chance(player.hex, w.hex) - penalty
-	_tracer(w)
-	if rng.randi_range(1, 100) <= chance:
+	var hit := rng.randi_range(1, 100) <= chance
+	_tracer(player.position + player.muzzle_offset(clip), Actor.aim_to_screen(target), hit)
+	if hit:
 		damage(w, rng.randi_range(5, 9))
 	else:
 		_float(w.position + Vector2(0, -60), "MISS", Hud.DIM)
@@ -798,10 +803,12 @@ func _float(at: Vector2, t: String, c: Color) -> void:
 	tw.tween_callback(l.queue_free)
 
 
-func _tracer(w: Actor) -> void:
-	var dirv := Vector2(cos(deg_to_rad(60.0 * player.dir)), sin(deg_to_rad(60.0 * player.dir)))
-	var muzzle := Hex.ground_to_screen(player.ground + dirv * 0.55, 1.32)
-	var hitp := w.position + Vector2(0, -28)
+func _tracer(muzzle: Vector2, aimp: Vector2, hit: bool) -> void:
+	var hitp := aimp
+	if not hit:                                   # a miss goes wide and carries on past the target
+		var along := (aimp - muzzle).normalized()
+		var side := Vector2(-along.y, along.x) * rng.randf_range(18.0, 40.0) * (1.0 if rng.randf() < 0.5 else -1.0)
+		hitp = aimp + side + along * 140.0
 	var line := Line2D.new()
 	line.points = PackedVector2Array([muzzle, hitp])
 	line.width = 4.0

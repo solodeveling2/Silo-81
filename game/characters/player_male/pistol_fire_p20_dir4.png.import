@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dr7t7p5lf83ow"
-path="res://.godot/imported/pistol_attack_dir1.png-83cb454f9b03f8a54f07f76cc66a2eed.ctex"
+uid="uid://cqg4bfrhrkev2"
+path="res://.godot/imported/pistol_fire_p20_dir4.png-184cc702f4dd8841637292e6e9d183dd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://characters/player_male/pistol_attack_dir1.png"
-dest_files=["res://.godot/imported/pistol_attack_dir1.png-83cb454f9b03f8a54f07f76cc66a2eed.ctex"]
+source_file="res://characters/player_male/pistol_fire_p20_dir4.png"
+dest_files=["res://.godot/imported/pistol_fire_p20_dir4.png-184cc702f4dd8841637292e6e9d183dd.ctex"]
 
 [params]
 

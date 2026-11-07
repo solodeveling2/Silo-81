@@ -8,6 +8,15 @@ data = {"name": "pipe_worm", "pixels_per_metre": steps["pixels_per_metre"],
         "direction_order": "0=right, then counter-clockwise: 1=up-right, 2=up-left, 3=left, 4=down-left, 5=down-right",
         "animations": {}}
 ACTION_FRAME = {"bite": 11, "hit": 0, "death": 0}
+
+# measurements the game aims with, taken from the rest pose: height, and where to hit it
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import worm_pose as wp
+_pos = wp.body_pos(wp.rest_params())
+_neck = _pos[int(0.7 * (wp.NS - 1))]
+data["height_m"] = round(float((_pos[:, 2] + wp.RAD).max()), 2)
+data["aim_points"] = {"body": [round(float(_neck[0]), 2), round(float(_neck[2]), 2)],       # forward, height (m)
+                      "head": [round(float(_pos[-1][0]), 2), round(float(_pos[-1][2]), 2)]}
 for anim in ["idle", "crawl", "bite", "hit", "death", "chew", "release"]:
     meta = steps["animations"][anim]; n = meta["frames"]; ax, ay = meta["anchor_px"]
     entry = {"fps": meta["fps"], "loop": meta["loop"], "frames": n, "directions": {}}

@@ -9,6 +9,7 @@ sprite sheets with Silo 81 toon shading, Fallout-style.
 - Painted base-colour texture x 3 toon bands from a fixed key light, plus an ink outline.
 
 Usage: python3 render_character.py model.glb out_dir [anim_name ...]
+Importing it as a module (render_aim.py does) sets the scene up without rendering.
 """
 import sys, os, json, math
 import bpy
@@ -200,85 +201,90 @@ if any(k in GUN_ANIMS for k in ANIMS) and "pistol_aim" in bpy.data.actions:
     gun.matrix_world = Matrix.Translation(palm) @ basis
     print("pistol prop attached to mixamorig:RightHand")
 
-summary = {"pixels_per_metre": PPM, "camera_elevation_deg": 30, "height_m": HEIGHT_M, "animations": {}}
-for key, cfg in ANIMS.items():
-    if ONLY and key not in ONLY:
-        continue
-    act = act_for(key)
-    arm.animation_data.action = act
-    if gun is not None:
-        gun.hide_render = key not in GUN_ANIMS
-    f0, f1 = int(act.frame_range[0]), int(act.frame_range[1])
-    rig.rotation_euler = (0, 0, 0); arm.location = arm_base_loc
-    if cfg.get("find_loop"):                                  # pick the cleanest loop point
-        lo, hi = cfg["find_loop"]
-        sc.frame_set(f0); ref = pose_vec()
-        best = None
-        for f in range(f0 + lo, min(f1, f0 + hi) + 1):
-            sc.frame_set(f)
-            d = sum((a - b).length for a, b in zip(pose_vec(), ref))
-            if best is None or d < best[0]:
-                best = (d, f)
-        f1 = best[1]
-        print(key, "loop point", f1, "pose error", round(best[0], 4))
-    n_src = f1 - f0                     # loops: last frame == first frame, so it is not rendered
-    step_src = 24 / cfg["fps"]
-    n_out = int(round(n_src / step_src)) if cfg["loop"] else int(n_src // step_src) + 1
-    if os.environ.get("QUICK"):
-        n_out = int(os.environ["QUICK"])
-    # forward root motion (in the rig's own, unscaled space)
-    sc.frame_set(f0); a = hips_world(); sc.frame_set(f1); b = hips_world()
-    D = (b - a) / scale if cfg["inplace"] else Vector((0, 0, 0))
-    D.z = 0
-    A0 = Vector((a.x, a.y, 0)) / scale if cfg["inplace"] else Vector((0, 0, 0))   # clip may not start at the origin
-    fwd = Vector((D.x, D.y, 0)).normalized() if D.length > 1e-6 else Vector((0, -1, 0))
-    face_angle = math.degrees(math.atan2(fwd.y, fwd.x))       # -90 = facing -Y
-    canvas = cfg["canvas"]
-    sc.render.resolution_x = sc.render.resolution_y = canvas
-    cam.data.ortho_scale = canvas / PPM
-    out_dir = os.path.join(OUT, key); os.makedirs(out_dir, exist_ok=True)
-    meta = {"fps": cfg["fps"], "frames": n_out, "loop": cfg["loop"], "canvas": canvas,
-            "anchor_px": None, "directions": {}}
-    for d in range(6):
-        ang = 60 * d                                               # 0 = screen right, counter-clockwise
-        rig.rotation_euler = (0, 0, math.radians(ang - (-90)))     # source faces -Y
-        track = []
-        for i in range(n_out + (1 if cfg["inplace"] else 0)):
-            f = f0 + i * step_src
-            sc.frame_set(int(f), subframe=f - int(f))
-            t = (f - f0) / n_src
-            arm.location = arm_base_loc - A0 - D * t               # centre it and strip the average forward motion
-            bpy.context.view_layer.update()
-            if i < n_out:
-                sc.render.filepath = os.path.join(out_dir, f"dir{d}_{i:03d}.png")
-                bpy.ops.render.render(write_still=True)
+def render_clips():
+    summary = {"pixels_per_metre": PPM, "camera_elevation_deg": 30, "height_m": HEIGHT_M, "animations": {}}
+    for key, cfg in ANIMS.items():
+        if ONLY and key not in ONLY:
+            continue
+        act = act_for(key)
+        arm.animation_data.action = act
+        if gun is not None:
+            gun.hide_render = key not in GUN_ANIMS
+        f0, f1 = int(act.frame_range[0]), int(act.frame_range[1])
+        rig.rotation_euler = (0, 0, 0); arm.location = arm_base_loc
+        if cfg.get("find_loop"):                                  # pick the cleanest loop point
+            lo, hi = cfg["find_loop"]
+            sc.frame_set(f0); ref = pose_vec()
+            best = None
+            for f in range(f0 + lo, min(f1, f0 + hi) + 1):
+                sc.frame_set(f)
+                d = sum((a - b).length for a, b in zip(pose_vec(), ref))
+                if best is None or d < best[0]:
+                    best = (d, f)
+            f1 = best[1]
+            print(key, "loop point", f1, "pose error", round(best[0], 4))
+        n_src = f1 - f0                     # loops: last frame == first frame, so it is not rendered
+        step_src = 24 / cfg["fps"]
+        n_out = int(round(n_src / step_src)) if cfg["loop"] else int(n_src // step_src) + 1
+        if os.environ.get("QUICK"):
+            n_out = int(os.environ["QUICK"])
+        # forward root motion (in the rig's own, unscaled space)
+        sc.frame_set(f0); a = hips_world(); sc.frame_set(f1); b = hips_world()
+        D = (b - a) / scale if cfg["inplace"] else Vector((0, 0, 0))
+        D.z = 0
+        A0 = Vector((a.x, a.y, 0)) / scale if cfg["inplace"] else Vector((0, 0, 0))   # clip may not start at the origin
+        fwd = Vector((D.x, D.y, 0)).normalized() if D.length > 1e-6 else Vector((0, -1, 0))
+        face_angle = math.degrees(math.atan2(fwd.y, fwd.x))       # -90 = facing -Y
+        canvas = cfg["canvas"]
+        sc.render.resolution_x = sc.render.resolution_y = canvas
+        cam.data.ortho_scale = canvas / PPM
+        out_dir = os.path.join(OUT, key); os.makedirs(out_dir, exist_ok=True)
+        meta = {"fps": cfg["fps"], "frames": n_out, "loop": cfg["loop"], "canvas": canvas,
+                "anchor_px": None, "directions": {}}
+        for d in range(6):
+            ang = 60 * d                                               # 0 = screen right, counter-clockwise
+            rig.rotation_euler = (0, 0, math.radians(ang - (-90)))     # source faces -Y
+            track = []
+            for i in range(n_out + (1 if cfg["inplace"] else 0)):
+                f = f0 + i * step_src
+                sc.frame_set(int(f), subframe=f - int(f))
+                t = (f - f0) / n_src
+                arm.location = arm_base_loc - A0 - D * t               # centre it and strip the average forward motion
+                bpy.context.view_layer.update()
+                if i < n_out:
+                    sc.render.filepath = os.path.join(out_dir, f"dir{d}_{i:03d}.png")
+                    bpy.ops.render.render(write_still=True)
+                if cfg["inplace"]:
+                    toes = [arm.matrix_world @ P[n].head for n in ("mixamorig:LeftToeBase", "mixamorig:RightToeBase")]
+                    k = min(range(2), key=lambda j: toes[j].z)
+                    track.append((k, toes[k].z, screen_xy(toes[k], canvas)))
+            if meta["anchor_px"] is None:
+                meta["anchor_px"] = [round(v, 1) for v in screen_xy(Vector((0, 0, 0)), canvas)]
+            dist = D.length * scale / n_src * step_src               # metres per sprite frame
+            step = (dist * math.cos(math.radians(ang)) * PPM, -dist * math.sin(math.radians(ang)) * math.sin(ELEV) * PPM)
+            entry = {"angle_deg": ang, "step_px": [round(step[0], 3), round(step[1], 3)]}
             if cfg["inplace"]:
-                toes = [arm.matrix_world @ P[n].head for n in ("mixamorig:LeftToeBase", "mixamorig:RightToeBase")]
-                k = min(range(2), key=lambda j: toes[j].z)
-                track.append((k, toes[k].z, screen_xy(toes[k], canvas)))
-        if meta["anchor_px"] is None:
-            meta["anchor_px"] = [round(v, 1) for v in screen_xy(Vector((0, 0, 0)), canvas)]
-        dist = D.length * scale / n_src * step_src               # metres per sprite frame
-        step = (dist * math.cos(math.radians(ang)) * PPM, -dist * math.sin(math.radians(ang)) * math.sin(ELEV) * PPM)
-        entry = {"angle_deg": ang, "step_px": [round(step[0], 3), round(step[1], 3)]}
-        if cfg["inplace"]:
-            zmin = min(z for _, z, _ in track)
-            res = []
-            for i in range(len(track) - 1):
-                (k1, z1, p1), (k2, z2, p2) = track[i], track[i + 1]
-                if k1 == k2 and z1 < zmin + 0.02 and z2 < zmin + 0.02:
-                    res.append(math.hypot(p2[0] + step[0] - p1[0], p2[1] + step[1] - p1[1]))
-            entry["planted_toe_drift_px_per_frame"] = round(sum(res) / len(res), 3) if res else None
-            entry["contact_frames_checked"] = len(res)
-        meta["directions"][str(d)] = entry
-        print(key, "dir", d, entry)
-    summary["animations"][key] = meta
-    rig.rotation_euler = (0, 0, 0); arm.location = arm_base_loc
+                zmin = min(z for _, z, _ in track)
+                res = []
+                for i in range(len(track) - 1):
+                    (k1, z1, p1), (k2, z2, p2) = track[i], track[i + 1]
+                    if k1 == k2 and z1 < zmin + 0.02 and z2 < zmin + 0.02:
+                        res.append(math.hypot(p2[0] + step[0] - p1[0], p2[1] + step[1] - p1[1]))
+                entry["planted_toe_drift_px_per_frame"] = round(sum(res) / len(res), 3) if res else None
+                entry["contact_frames_checked"] = len(res)
+            meta["directions"][str(d)] = entry
+            print(key, "dir", d, entry)
+        summary["animations"][key] = meta
+        rig.rotation_euler = (0, 0, 0); arm.location = arm_base_loc
 
-prev = {}
-p = os.path.join(OUT, "steps.json")
-if os.path.exists(p):
-    prev = json.load(open(p))
-prev.update({k: v for k, v in summary.items() if k != "animations"})
-prev.setdefault("animations", {}).update(summary["animations"])
-json.dump(prev, open(p, "w"), indent=2)
+    prev = {}
+    p = os.path.join(OUT, "steps.json")
+    if os.path.exists(p):
+        prev = json.load(open(p))
+    prev.update({k: v for k, v in summary.items() if k != "animations"})
+    prev.setdefault("animations", {}).update(summary["animations"])
+    json.dump(prev, open(p, "w"), indent=2)
+
+
+if __name__ == "__main__":
+    render_clips()
