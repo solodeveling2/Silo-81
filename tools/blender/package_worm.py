@@ -8,7 +8,7 @@ data = {"name": "pipe_worm", "pixels_per_metre": steps["pixels_per_metre"],
         "direction_order": "0=right, then counter-clockwise: 1=up-right, 2=up-left, 3=left, 4=down-left, 5=down-right",
         "animations": {}}
 ACTION_FRAME = {"bite": 11, "hit": 0, "death": 0}
-for anim in ["idle", "crawl", "bite", "hit", "death"]:
+for anim in ["idle", "crawl", "bite", "hit", "death", "chew", "release"]:
     meta = steps["animations"][anim]; n = meta["frames"]; ax, ay = meta["anchor_px"]
     entry = {"fps": meta["fps"], "loop": meta["loop"], "frames": n, "directions": {}}
     if anim in ACTION_FRAME: entry["action_frame"] = ACTION_FRAME[anim]

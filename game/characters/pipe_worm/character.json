@@ -520,6 +520,212 @@
     }
    },
    "action_frame": 0
+  },
+  "chew": {
+   "fps": 24,
+   "loop": true,
+   "frames": 36,
+   "directions": {
+    "0": {
+     "sheet": "chew_dir0.png",
+     "frame_size": [
+      211,
+      95
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      110.0,
+      91.6
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "sheet": "chew_dir1.png",
+     "frame_size": [
+      122,
+      162
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      69.0,
+      116.6
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "sheet": "chew_dir2.png",
+     "frame_size": [
+      124,
+      163
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      76.0,
+      111.6
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "sheet": "chew_dir3.png",
+     "frame_size": [
+      212,
+      94
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      102.0,
+      75.6
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "sheet": "chew_dir4.png",
+     "frame_size": [
+      122,
+      58
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      53.0,
+      50.6
+     ],
+     "step_px": [
+      -0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "chew_dir5.png",
+     "frame_size": [
+      124,
+      64
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      48.0,
+      59.6
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "release": {
+   "fps": 24,
+   "loop": false,
+   "frames": 14,
+   "directions": {
+    "0": {
+     "sheet": "release_dir0.png",
+     "frame_size": [
+      202,
+      100
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      110.0,
+      93.6
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "sheet": "release_dir1.png",
+     "frame_size": [
+      118,
+      163
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      69.0,
+      117.6
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "sheet": "release_dir2.png",
+     "frame_size": [
+      117,
+      163
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      69.0,
+      111.6
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "sheet": "release_dir3.png",
+     "frame_size": [
+      203,
+      98
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      93.0,
+      81.6
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "sheet": "release_dir4.png",
+     "frame_size": [
+      119,
+      71
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      50.0,
+      61.6
+     ],
+     "step_px": [
+      -0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "release_dir5.png",
+     "frame_size": [
+      117,
+      75
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      48.0,
+      63.6
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
   }
  }
 }

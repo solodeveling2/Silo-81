@@ -6,7 +6,7 @@ This repository holds the first playable slice and the tools that build its art.
 
 ## The playable slice
 
-You wake in your room on Level 2. Mira calls on the intercom: pressure on the general heating circuit is dropping. You take the welding kit from your toolbox and go down to Level 3. There, blind toothed worms are chewing through the heating pipes. You fight them and weld the burst pipe.
+You wake in your room on Level 2. Mira calls on the intercom: pressure on the general heating circuit is dropping. You take the welding kit from your toolbox and go down to Level 3. There, blind toothed worms are chewing through the heating pipes; one still has its teeth in the burst flow pipe, the lowest on the wall. You fight them and weld the burst pipe.
 
 Room 2-D at the cold end of the corridor is locked. You can pick the lock or force it with enough Strength. Its contents are still to be designed.
 
@@ -62,7 +62,8 @@ game/                      Godot project
   levels/L2, levels/L3     pre-rendered background, prop and door sprites, level.json
 tools/blender/             art pipeline (Blender 5.2 as the bpy Python module)
   build.py, kit.py         build a level from its plan and render background + sorted sprites
-  worm.py                  procedural pipe worm, animated from spine functions
+  worm.py, worm_pose.py    procedural pipe worm, animated from spine functions
+  latch.py                 solves the chewing worm's pose so its mouth sits on the burst pipe
   render_character.py      render a rigged GLB into 6 hex directions
   retarget.py, build_attack.py   pistol animations retargeted from Quaternius (CC0)
 tools/web/                 web packaging and a headless browser test
@@ -75,6 +76,7 @@ art/spritecook_pack_v0.2/  the earlier SpriteCook asset pack
 ```
 python3 -I tools/blender/build.py L2 out    # then copy out/L2 to game/levels/L2
 python3 -I tools/blender/build.py L3 out
+python3 -I tools/blender/latch.py              # pose of the worm latched onto the burst pipe -> latch.json
 python3 -I tools/blender/worm.py worm_out && python3 tools/blender/package_worm.py worm_out
 ```
 

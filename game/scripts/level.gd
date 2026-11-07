@@ -135,7 +135,7 @@ func set_pipe(fixed: bool) -> void:
 		cr.set_color(0, Color(0.95, 0.97, 1.0, 0.75)); cr.set_color(1, Color(0.9, 0.93, 0.96, 0.0))
 		steam.color_ramp = cr
 		steam.z_index = 5
-		steam.position = Hex.plan_to_screen(Vector2(pipe["u"], pipe["v"] - 0.37), 1.15)
+		steam.position = Hex.plan_to_screen(Vector2(pipe["u"], pipe["v"] - 0.37), pipe.get("z", 1.15))
 		add_child(steam)
 	steam.emitting = not fixed
 

@@ -110,8 +110,12 @@ func load_level(id: String, arrive: Vector2) -> void:
 			a.set_meta("index", i)
 			level.sorted.add_child(a)
 			a.place_at_hex(level.nearest_walkable(Vector2(w[0], w[1])))
-			a.play("idle", int(w[2]))
-			a.sprite.speed_scale = rng.randf_range(0.85, 1.1)
+			if w.size() > 3 and w[3] == "chew" and a.has_clip("chew"):
+				a.set_meta("latched", true)         # teeth in the burst pipe until something disturbs it
+				a.play("chew", int(w[2]))
+			else:
+				a.play("idle", int(w[2]))
+				a.sprite.speed_scale = rng.randf_range(0.85, 1.1)
 			a.stepped.connect(_on_worm_step.bind(a))
 			worms.append(a)
 		i += 1
@@ -306,7 +310,7 @@ func _on_player_step(h: Vector2i) -> void:
 	if level_id == "L3":
 		if not flags["found_leak"] and Hex.plan_to_ground(Vector2(level.pipe["u"], level.pipe["v"])).distance_to(player.ground) < 5.0:
 			flags["found_leak"] = true
-			hud.log_msg("Water sprays from the heating flow pipe. Something has chewed clean through the lagging.")
+			hud.log_msg("Water sprays from the heating flow, the lowest pipe on the wall. A worm hangs off it with its teeth in the steel.")
 		for w in worms:
 			if w.alive and Hex.distance(h, w.hex) <= SIGHT and level.line_of_sight(h, w.hex):
 				player.stop_now()
@@ -509,12 +513,31 @@ func start_combat(msg: String) -> void:
 	for w in live_worms():
 		w.set_meta("combat", true)
 		w.ring_color = Color(0.85, 0.25, 0.2, 0.8)
+		if w.get_meta("latched", false):
+			_unlatch(w)
+			continue
 		w.face_ground(player.ground)
 		w.play("idle", w.dir)
 	hud.show_banner("COMBAT")
 	hud.log_msg(msg, Color(0.95, 0.6, 0.45))
 	hud.log_msg("Your turn: %d action points." % AP_MAX, Hud.DIM)
 	refresh()
+
+
+## The worm on the burst pipe lets go, drops back and turns towards you.
+func _unlatch(w: Actor) -> void:
+	if w.has_clip("release"):
+		w.play("release", w.dir)
+		await w.anim_done               # nothing else may play on it until it has let go
+	w.set_meta("latched", false)
+	if w.alive:
+		w.face_ground(player.ground)
+		w.play("idle", w.dir)
+
+
+func _wait_unlatched(w: Actor) -> void:
+	while w.get_meta("latched", false):
+		await get_tree().process_frame
 
 
 func end_combat() -> void:
@@ -595,11 +618,17 @@ func damage(a: Actor, dmg: int) -> void:
 	if a.hp <= 0:
 		a.alive = false
 		a.ring_color = Color(0, 0, 0, 0)
-		a.play("death", a.dir)
 		state["L3"]["dead"].append(a.get_meta("index"))
 		hud.log_msg("The worm thrashes and goes limp.", Hud.GREEN)
-	else:
+	_wound_anim(a)
+
+
+func _wound_anim(a: Actor) -> void:
+	await _wait_unlatched(a)                # a worm still letting go of the pipe finishes that first
+	if a.alive:
 		_react(a)
+	else:
+		a.play("death", a.dir)
 
 
 func _react(a: Actor) -> void:
@@ -684,6 +713,7 @@ func enemy_phase() -> void:
 
 
 func worm_turn(w: Actor) -> void:
+	await _wait_unlatched(w)
 	w.ap = WORM_AP
 	var guard := 0
 	while w.alive and player.alive and w.ap > 0 and guard < 8:

@@ -9,6 +9,7 @@ Screen space (Godot pixels): sx = x * PPM, sy = -(y * 0.5 + z * 0.866) * PPM, gr
 Usage: python3 -I build.py L2|L3 out_dir [--quick]
 """
 import sys, os, json, math
+import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bpy
 from mathutils import Vector, Matrix
@@ -20,7 +21,8 @@ QUICK = "--quick" in sys.argv
 PPM = 165.0
 SIN, COS = 0.5, math.sqrt(3) / 2
 T = 0.25                     # wall thickness
-FULL, STUB = 2.7, 0.4        # back walls stand full height; the rest are cut away like a dollhouse
+FULL, STUB = 2.7, 0.4
+PIPE_Z = (1.75, 1.15, 0.45)  # pipe gallery runs, top to bottom: bore water, heating return, heating flow        # back walls stand full height; the rest are cut away like a dollhouse
 FONTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 MARKER = os.path.join(FONTS, "PermanentMarker-Regular.ttf")
 STENCIL = os.path.join(FONTS, "AllertaStencil-Regular.ttf")
@@ -196,12 +198,12 @@ def L3():
     ]
     WI = 1.8 - T / 2
     D["decor"] += [
-        dict(t="pipes", u0=-0.6, u1=18.0 - T / 2, v=WI, gap=(8.1, 9.3)),
+        dict(t="pipes", u0=-0.6, u1=18.0 - T / 2, v=WI, gap=(8.25, 9.45), gap_run=2),
         dict(t="stairs_up", u0=-4.0, u1=-0.8, v0=0.4, v1=1.8),
         dict(t="stencil", u=1.8, v=WI, f="-v", z=2.35, text="LEVEL 3 - LIFE SUPPORT", size=0.15),
         dict(t="stencil", u=18.0 - T / 2, v=-3.6, f="-u", z=2.3, text="PUMP ROOM 3-P", size=0.15),
         dict(t="manifold", u=18.0 - T / 2, v=-2.6, f="-u"),
-        dict(t="puddle", u=8.7, v=0.6, r=0.9), dict(t="puddle", u=7.6, v=0.1, r=0.5),
+        dict(t="puddle", u=8.95, v=0.75, r=0.9), dict(t="puddle", u=7.8, v=0.3, r=0.5),
         dict(t="drain", u0=0.0, u1=18.0, v=-1.2),
         dict(t="cd_sign", u=18.0 - T / 2, v=0.8, f="-u", z=1.9),
         dict(t="mould", u=4.0, v=WI, f="-v"),
@@ -215,17 +217,17 @@ def L3():
         dict(t="crate", u=16.9, v=-2.2, f="-u"),
     ]
     D["blocked"] += [[-0.6, 18.0, 1.25, 1.8]]        # pipes stand off the north wall
-    D["pipe"] = dict(id="pipe_break", u=8.7, v=WI, name="Burst pipe",
+    D["pipe"] = dict(id="pipe_break", u=8.85, v=WI, z=PIPE_Z[2], gap=(8.25, 9.45), name="Burst pipe",
                      text="The heating flow for the general circuit, chewed through. Hot water sprays from the hole and the pressure is falling. It needs welding.",
                      fixed_text="Welded. The bead is ugly but it holds, and the gauge needle is climbing back.")
     D["inspect"] += [
-        dict(id="pipes_label", u=4.5, v=1.2, name="Pipes", text="Top to bottom: bore water; heating flow, general circuit, to Level 2; heating return."),
+        dict(id="pipes_label", u=4.5, v=1.2, name="Pipes", text="Top to bottom: bore water; heating return; heating flow for the general circuit, up to Level 2. The flow runs lowest, where the worms can reach it."),
         dict(id="gauge", u=14.0, v=1.2, name="Gauge", text="Pressure on the general circuit, falling."),
         dict(id="manifold", u=17.6, v=-2.6, name="Valve manifold", text="Valve wheels tagged in three different handwritings. The newest tag says COUNCIL ORDER: DO NOT OPEN."),
     ]
     D["stairs"] += [dict(id="stairs_up", u=-0.45, v=1.0, to="L2", arrive=[-0.3, 0.0], name="Stairs up",
                          text="Back up to Level 2.")]
-    D["spawns"] = {"player": [-0.3, 0.0, 0], "worms": [[7.9, 0.75, 2], [9.4, 0.8, 2], [12.6, 0.85, 2]]}
+    D["spawns"] = {"player": [-0.3, 0.0, 0], "worms": [[8.32, 1.08, 1, "chew"], [5.4, 0.85, 2], [13.1, -3.0, 1]]}
     D["bounds"] = [-4.2, 18.0, -6.0, 1.8]
     return D
 
@@ -512,9 +514,9 @@ def build_pipes(d):
     steel = toon("PipeSteel", (0.38, 0.38, 0.36), noise=0.08)
     v = d["v"] - 0.24
     gap = d.get("gap")
-    runs = [(1.75, 0.07, 0.1), (1.15, 0.09, 0.13), (0.55, 0.09, 0.13)]
+    runs = [(PIPE_Z[0], 0.07, 0.1), (PIPE_Z[1], 0.09, 0.13), (PIPE_Z[2], 0.09, 0.13)]
     for k, (z, r, lag) in enumerate(runs):
-        if k == 1 and gap:
+        if k == d.get("gap_run", 1) and gap:
             pipe_run(b, d["u0"], gap[0], v, z, r, lag); pipe_run(b, gap[1], d["u1"], v, z, r, lag)
         else:
             pipe_run(b, d["u0"], d["u1"], v, z, r, lag)
@@ -524,7 +526,7 @@ def build_pipes(d):
         b.box(u - 0.04, u + 0.04, v, d["v"], 0.3, 1.95, toon("Bracket", (0.3, 0.3, 0.28), noise=0.1))
         u += 2.0
     for u in (2.9, 3.5):                                                       # valve wheels
-        z = 1.15 if u < 3.2 else 0.55
+        z = PIPE_Z[1] if u < 3.2 else PIPE_Z[2]
         b.cyl((u, v - 0.13, z), (u, v - 0.3, z), 0.03, steel)
         b.cyl((u, v - 0.3, z), (u, v - 0.33, z), 0.16, toon("ValveRed", (0.5, 0.12, 0.1)), seg=16)
     for u in (6.0, 14.0):                                                      # gauges
@@ -535,8 +537,8 @@ def build_pipes(d):
     bg_objects.append(ob)
     # labels on the pipe lagging, facing the camera side (-v)
     lab = flat("PipeLabel", (0.1, 0.1, 0.1))
-    for (u, z, txt) in ((1.5, 1.75, "BORE WATER  >>"), (1.5, 1.15, "HEATING FLOW - GENERAL CIRCUIT  >> L2"), (1.5, 0.55, "<<  HEATING RETURN"),
-                        (11.5, 1.15, "HEATING FLOW - GENERAL CIRCUIT  >> L2"), (11.5, 0.55, "<<  HEATING RETURN")):
+    for (u, z, txt) in ((1.5, PIPE_Z[0], "BORE WATER  >>"), (1.5, PIPE_Z[1], "<<  HEATING RETURN"), (4.3, PIPE_Z[2], "HEATING FLOW - GENERAL CIRCUIT  >> L2"),
+                        (11.5, PIPE_Z[1], "<<  HEATING RETURN"), (11.5, PIPE_Z[2], "HEATING FLOW - GENERAL CIRCUIT  >> L2")):
         lag = 0.1 if z > 1.5 else 0.13
         add_text_on_wall(txt, STENCIL, 0.085, lab, u, v - lag - 0.012, "-v", z - 0.04, dy=0.0, align="LEFT")
 
@@ -717,21 +719,38 @@ for d in LV["doors"]:
 if "pipe" in LV:
     pd = LV["pipe"]
     v = pd["v"] - 0.24
-    gap = (8.1, 9.3)
+    gap = tuple(pd["gap"])
+    Z = pd["z"]
+    hu = pd["u"]                                          # centre of the hole
+
+    def scraps(b, lag):
+        """Chewed lagging on the floor under the breach: it stays after the repair."""
+        rng = np.random.default_rng(81)
+        for k in range(12):
+            uu = hu - 0.45 + rng.random() * 0.9
+            vv = v - 0.2 - rng.random() * 0.5
+            a = rng.random() * math.pi
+            l = 0.03 + rng.random() * 0.07
+            r = 0.01 + rng.random() * 0.012
+            du, dv = math.cos(a) * l / 2, math.sin(a) * l / 2
+            b.cyl((uu - du, vv - dv, r * 0.6), (uu + du, vv + dv, r * 0.6), r, lag, seg=4)
 
     def build_broken():
         b = Builder("PipeBroken")
-        steel = toon("PipeSteel", (0.38, 0.38, 0.36), noise=0.08)
         lag = toon("Lagging", (0.72, 0.7, 0.62), noise=0.14, noise_scale=9)
         dark = toon("PipeHole", (0.06, 0.05, 0.05))
-        b.cyl((gap[0], v, 1.15), (gap[1], v, 1.15), 0.09, toon("RustPipe", kit.RUST, noise=0.2, noise_scale=12), seg=16)
-        b.cyl((gap[0], v, 1.15), (gap[0] + 0.25, v, 1.15), 0.13, lag, seg=16)
-        b.cyl((gap[1] - 0.2, v, 1.15), (gap[1], v, 1.15), 0.13, lag, seg=16)
-        for k in range(7):                                # shredded lagging hanging down
-            uu = gap[0] + 0.3 + k * 0.09
-            b.box(uu, uu + 0.05, v - 0.12, v - 0.1, 0.8 + 0.05 * (k % 3), 1.12, lag)
-        b.box(8.55, 8.8, v - 0.095, v - 0.08, 1.08, 1.2, dark)
-        b.box(8.6, 8.75, v - 0.1, v - 0.085, 1.0, 1.08, dark)
+        b.cyl((gap[0], v, Z), (gap[1], v, Z), 0.09, toon("RustPipe", kit.RUST, noise=0.2, noise_scale=12), seg=16)
+        b.cyl((gap[0], v, Z), (gap[0] + 0.25, v, Z), 0.13, lag, seg=16)
+        b.cyl((gap[1] - 0.2, v, Z), (gap[1], v, Z), 0.13, lag, seg=16)
+        rag = toon("LaggingRag", (0.52, 0.5, 0.44), noise=0.2, noise_scale=14)
+        for u0, n in ((gap[0] + 0.25, 1), (gap[1] - 0.2, -1)):        # torn flaps at the chewed ends
+            for k in range(3):
+                uu = u0 + n * (0.01 + 0.035 * k)
+                drop = 0.05 + 0.04 * ((k * 7 + (n > 0)) % 3)
+                b.cyl((uu, v - 0.11, Z - 0.08), (uu + n * 0.02, v - 0.13, Z - 0.08 - drop), 0.012, rag, seg=6)
+        b.box(hu - 0.13, hu + 0.12, v - 0.095, v - 0.08, Z - 0.07, Z + 0.05, dark)
+        b.box(hu - 0.08, hu + 0.07, v - 0.1, v - 0.085, Z - 0.15, Z - 0.07, dark)
+        scraps(b, rag)
         ob = b.finish(outline=0.01)
         ob.matrix_world = ROT45 @ ob.matrix_world
         return [ob]
@@ -739,11 +758,13 @@ if "pipe" in LV:
     def build_fixed():
         b = Builder("PipeFixed")
         lag = toon("LaggingNew", (0.8, 0.78, 0.68), noise=0.08, noise_scale=9)
+        old = toon("Lagging", (0.72, 0.7, 0.62), noise=0.14, noise_scale=9)
         steel = toon("PipeSteel", (0.38, 0.38, 0.36), noise=0.08)
-        b.cyl((gap[0], v, 1.15), (gap[1], v, 1.15), 0.13, toon("Lagging", (0.72, 0.7, 0.62), noise=0.14, noise_scale=9), seg=16)
-        b.cyl((8.4, v, 1.15), (9.05, v, 1.15), 0.135, lag, seg=16)
-        for uu in (8.42, 9.0):
-            b.cyl((uu, v, 1.15), (uu + 0.05, v, 1.15), 0.145, steel, seg=16)
+        b.cyl((gap[0], v, Z), (gap[1], v, Z), 0.13, old, seg=16)
+        b.cyl((hu - 0.32, v, Z), (hu + 0.33, v, Z), 0.135, lag, seg=16)
+        for uu in (hu - 0.3, hu + 0.28):
+            b.cyl((uu, v, Z), (uu + 0.05, v, Z), 0.145, steel, seg=16)
+        scraps(b, toon("LaggingRag", (0.52, 0.5, 0.44), noise=0.2, noise_scale=14))
         ob = b.finish(outline=0.01)
         ob.matrix_world = ROT45 @ ob.matrix_world
         return [ob]

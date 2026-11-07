@@ -11,59 +11,24 @@ from bpy_extras.object_utils import world_to_camera_view
 
 OUT = sys.argv[1]
 ONLY = set(sys.argv[2:])
-PPM = 165.0
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from worm_pose import PPM, L, R_MAX, HEX, NS, S, RAD, RIDGE, smooth, spine_from, TAIL0, REST, rest_params, lerp_pose, LATCH_FILE
 ELEV = math.radians(30)
 SAMPLES = 10
 CANVAS = 384
-L = 1.25                       # body length, metres
-R_MAX = 0.085                 # body radius
-HEX = 28 * 7.538 / PPM        # hex spacing in metres (one player walk half-clip), 1.279 m
-NS, NA = 120, 16              # rings along the body, vertices per ring
+NA = 16                       # vertices per ring
 os.makedirs(OUT, exist_ok=True)
 
 # fps, frames, loop, inplace(crawl)
 ANIMS = {
-    "idle":  dict(fps=24, frames=32, loop=True),
-    "crawl": dict(fps=24, frames=24, loop=True, inplace=True),
-    "bite":  dict(fps=24, frames=20, loop=False),
-    "hit":   dict(fps=24, frames=12, loop=False),
-    "death": dict(fps=24, frames=32, loop=False),
+    "idle":    dict(fps=24, frames=32, loop=True),
+    "crawl":   dict(fps=24, frames=24, loop=True, inplace=True),
+    "bite":    dict(fps=24, frames=20, loop=False),
+    "hit":     dict(fps=24, frames=12, loop=False),
+    "death":   dict(fps=24, frames=32, loop=False),
+    "chew":    dict(fps=24, frames=36, loop=True),      # latched onto a pipe, tearing at it
+    "release": dict(fps=24, frames=14, loop=False),     # lets go and drops back to the rest pose
 }
-
-def smooth(a, b, x):
-    t = np.clip((x - a) / (b - a), 0, 1)
-    return t * t * (3 - 2 * t)
-
-S = np.linspace(0, 1, NS)
-
-def radius(s):
-    r = 0.22 + 0.78 * smooth(0.0, 0.28, s)
-    r = r * (1 - 0.1 * smooth(0.78, 0.86, s) * (1 - smooth(0.9, 0.96, s)))   # slight neck
-    r = r * (1 + 0.12 * smooth(0.9, 0.97, s))                                   # head bulb
-    ridge = np.maximum(0, np.cos(2 * np.pi * s * L / 0.055)) ** 6
-    return R_MAX * r * (1 + 0.07 * ridge), ridge
-
-RAD, RIDGE = radius(S)
-
-# ---------- pose: parameters -> spine ----------
-def spine(p):
-    """p: dict of pose parameters. Returns positions (NS,3) with the tail at the origin."""
-    t = p.get("t", 0.0)
-    # lateral heading along the body
-    lat = p["lat_amp"] * np.cos(2 * np.pi * (p["lat_cycles"] * S + p["lat_phase"]))
-    if p.get("crawl"):
-        k = 2 * np.pi / (HEX / 2)                          # two waves per hex
-        lat = p["lat_amp"] * np.cos(k * (S * L + p["crawl_d"]))
-    lat = lat * (1 - 0.55 * smooth(0.75, 1.0, S))        # the head stays steadier
-    lat = lat + p.get("curl", 0.0) * (S - 0.5) * 2.0
-    # pitch: the front third rears up, the head tips forward
-    raise_ = p["raise"] * smooth(0.5, 0.68, S) * (1 - smooth(0.8, 0.93, S))
-    pitch = raise_ + p["head_pitch"] * smooth(0.86, 1.0, S)
-    ds = L / (NS - 1)
-    d = np.stack([np.cos(pitch) * np.cos(lat), np.cos(pitch) * np.sin(lat), np.sin(pitch)], 1)
-    pos = np.zeros((NS, 3))
-    pos[1:] = np.cumsum(d[:-1] * ds, 0)
-    return pos
 
 def frames_along(pos):
     T = np.gradient(pos, axis=0)
@@ -225,12 +190,9 @@ def screen_xy(p):
     return uv.x * CANVAS, (1 - uv.y) * CANVAS
 
 # ---------- animation parameter curves ----------
-REST = dict(lat_amp=0.32, lat_cycles=1.0, lat_phase=0.1, raise_=0, raise_v=1.2, head_pitch=-0.5, mouth=0.15, curl=0.0)
-
 def pose_for(anim, i, n):
     u = i / n                                    # loop phase for loops, progress for one-shots
-    p = dict(lat_amp=REST["lat_amp"], lat_cycles=REST["lat_cycles"], lat_phase=REST["lat_phase"],
-             raise_=REST["raise_v"], head_pitch=REST["head_pitch"], mouth=REST["mouth"], curl=0.0)
+    p = rest_params()
     if anim == "idle":                                         # chewing: head bobs, mouth works
         p["raise_"] += 0.08 * math.sin(2 * math.pi * u)
         p["head_pitch"] += 0.18 * math.sin(2 * math.pi * 2 * u)
@@ -266,20 +228,29 @@ def pose_for(anim, i, n):
         p["curl"] = 0.9 * fall
         p["lat_amp"] = p["lat_amp"] * (1 - 0.6 * fall)
         p["mouth"] = 0.15 + 0.5 * thrash + 0.25 * fall
+    elif anim == "chew":                                       # latched onto the pipe, tearing at it
+        w = 2 * math.pi * u
+        p.update(LATCH["pose"])
+        bite = max(0.0, math.sin(3 * w)) ** 0.7                                # three bites per loop
+        tug = math.sin(3 * w - 1.2)                                             # each bite tears back
+        p["mouth"] = 0.15 + 0.85 * bite
+        p["neck_yaw"] += 0.16 * math.sin(w) + 0.05 * math.sin(3 * w + 1.0)      # worrying side to side
+        p["head_pitch"] += 0.18 * tug                                           # wrenching upwards
+        p["raise_"] -= 0.07 * max(0.0, tug)                                     # pulling back off the steel
+        p["lat_amp"] += 0.05 * max(0.0, tug)                                    # the body bunches as it pulls
+        p["lat_phase"] += 0.03 * math.sin(w)
+    elif anim == "release":                                    # lets go and drops back to rest
+        t = float(smooth(0.0, 1.0, (i + 1) / n))
+        p = lerp_pose(dict(p, **LATCH["pose"]), rest_params(), t)
+        jerk = math.sin(math.pi * t)
+        p["raise_"] += 0.18 * jerk                                              # rears back off the pipe
+        p["head_pitch"] -= 0.25 * jerk
+        p["mouth"] = 0.2 * (1 - t) + 0.4 * jerk + REST["mouth"] * t
     return p
 
-def spine_from(p):
-    q = {"lat_amp": p["lat_amp"], "lat_cycles": p["lat_cycles"], "lat_phase": p["lat_phase"],
-         "raise": p["raise_"], "head_pitch": p["head_pitch"], "curl": p.get("curl", 0.0),
-         "crawl": p.get("crawl", False), "crawl_d": p.get("crawl_d", 0.0)}
-    pos = spine(q)
-    pos[:, 2] += RAD                                           # rest on the ground
-    return pos
 
-# the body frame: rest pose midpoint (on the ground) sits at the origin; the tail stays put
-rest_pos = spine_from(pose_for("idle", 0, 1) | dict(raise_=REST["raise_v"]))
-mid = rest_pos[NS // 2].copy()
-TAIL0 = -np.array([mid[0], mid[1], 0.0])
+LATCH = json.load(open(LATCH_FILE)) if os.path.exists(LATCH_FILE) else None
+
 
 def set_pose(anim, i, n):
     p = pose_for(anim, i, n)
@@ -299,6 +270,8 @@ anchor = None
 for key, cfg in ANIMS.items():
     if ONLY and key not in ONLY:
         continue
+    if key in ("chew", "release") and LATCH is None:
+        print("skip", key, "(run latch.py first)"); continue
     n = cfg["frames"]
     n_out = int(os.environ.get("QUICK", n))
     picks = [int(x) % n for x in os.environ["PICK"].split(",")] if os.environ.get("PICK") else list(range(n_out))

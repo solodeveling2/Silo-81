@@ -224,7 +224,7 @@
    "u": 4.5,
    "v": 1.2,
    "name": "Pipes",
-   "text": "Top to bottom: bore water; heating flow, general circuit, to Level 2; heating return."
+   "text": "Top to bottom: bore water; heating return; heating flow for the general circuit, up to Level 2. The flow runs lowest, where the worms can reach it."
   },
   {
    "id": "gauge",
@@ -263,19 +263,20 @@
   ],
   "worms": [
    [
-    7.9,
-    0.75,
-    2
+    8.32,
+    1.08,
+    1,
+    "chew"
    ],
    [
-    9.4,
-    0.8,
-    2
-   ],
-   [
-    12.6,
+    5.4,
     0.85,
     2
+   ],
+   [
+    13.1,
+    -3.0,
+    1
    ]
   ]
  },
@@ -307,24 +308,29 @@
  },
  "pipe": {
   "id": "pipe_break",
-  "u": 8.7,
+  "u": 8.85,
   "v": 1.675,
+  "z": 0.45,
+  "gap": [
+   8.25,
+   9.45
+  ],
   "name": "Burst pipe",
   "text": "The heating flow for the general circuit, chewed through. Hot water sprays from the hole and the pressure is falling. It needs welding.",
   "fixed_text": "Welded. The bead is ugly but it holds, and the gauge needle is climbing back.",
   "broken": {
    "sprite": "spr_004.png",
-   "x0": 754,
-   "y0": -825
+   "x0": 772,
+   "y0": -734
   },
   "fixed": {
    "sprite": "spr_005.png",
-   "x0": 753,
-   "y0": -828
+   "x0": 770,
+   "y0": -737
   },
   "sort": [
-   819.6,
-   -605.2
+   837.1,
+   -614.0
   ]
  }
 }
