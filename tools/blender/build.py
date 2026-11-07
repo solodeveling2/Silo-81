@@ -625,6 +625,12 @@ def wall_material(w):
 
 
 CUT = toon("WallCut", (0.2, 0.2, 0.19))
+# Architecture: dark wall tops separate rooms at a glance (the Wasteland 3 read), a dark skirting band
+# separates floor from wall, square posts mark corners and wall ends, concrete jambs frame openings.
+TOP = toon("WallTop", (0.055, 0.052, 0.048), noise=0.1, noise_scale=9)
+SKIRT = toon("Skirting", (0.22, 0.23, 0.21), noise=0.06)
+JAMB = toon("DoorJamb", (0.56, 0.56, 0.53), tex="concrete_wall", tex_scale=1.2)
+POST, SK_H, SK_D = T + 0.1, 0.13, 0.025
 front_walls = []                                    # full height too, but drawn as sorted sprites that fade (see below)
 
 
@@ -641,19 +647,29 @@ def build_wall(w, full=False):
     m = wall_material(w)
     z0 = -2.75 if w.get("shaft") else 0.0
     h = FULL if full else w["h"]
+    tall = h >= FULL
+
+    def box(s0, s1, half, za, zb, mat, top=None):
+        """A box along the wall: s along it, `half` the half-thickness across it."""
+        if along_u:
+            b.box(s0, s1, va - half, va + half, za, zb, mat, top_mat=top)
+        else:
+            b.box(ua - half, ua + half, s0, s1, za, zb, mat, top_mat=top)
+
     for (s0, s1) in segs:
         if s1 - s0 < 0.01:
             continue
-        if along_u:
-            b.box(s0, s1, va - T / 2, va + T / 2, z0, h, m, top_mat=CUT if h < FULL else None)
-        else:
-            b.box(ua - T / 2, ua + T / 2, s0, s1, z0, h, m, top_mat=CUT if h < FULL else None)
-    if h >= FULL:
-        for (t0, t1, _) in ops:                     # lintels over openings in full walls
-            if along_u:
-                b.box(t0, t1, va - T / 2, va + T / 2, 2.1, h, m)
-            else:
-                b.box(ua - T / 2, ua + T / 2, t0, t1, 2.1, h, m)
+        box(s0, s1, T / 2, z0, h, m, CUT if not tall else TOP)
+        if not w.get("shaft"):
+            box(s0, s1, T / 2 + SK_D, 0.0, SK_H, SKIRT, SKIRT)          # skirting on both faces
+    if tall:
+        for (t0, t1, _) in ops:                     # lintels and jambs round openings in full walls
+            box(t0, t1, T / 2, 2.1, h, m, TOP)
+            box(t0 - 0.06, t1 + 0.06, T / 2 + 0.04, 2.1, 2.24, JAMB, JAMB)
+            for e in (t0, t1):
+                box(e - 0.07, e + 0.07, T / 2 + 0.04, 0.0, 2.24, JAMB, JAMB)
+        for e in (lo, hi):                          # corner / end posts, a little proud of both faces
+            box(e - POST / 2, e + POST / 2, POST / 2, z0, h + 0.03, m, TOP)
     return b
 
 

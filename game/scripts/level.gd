@@ -64,8 +64,12 @@ func build(dir: String, state: Dictionary) -> void:
 		s.position = Vector2(wp["x0"], wp["y0"]) - n.position
 		n.add_child(s)
 		sorted.add_child(n)
-		wall_parts.append({"sprite": s, "rect": Rect2(Vector2(wp["x0"], wp["y0"]), s.texture.get_size()),
-						   "y": n.position.y, "a": 1.0})
+		var mat := ShaderMaterial.new()
+		mat.shader = WALL_CUT
+		s.material = mat
+		wall_parts.append({"sprite": s, "mat": mat, "rect": Rect2(Vector2(wp["x0"], wp["y0"]), s.texture.get_size()),
+						   "y": n.position.y, "sort": n.position, "wall": int(wp.get("wall", -1)), "cut": WALL_FULL_PX})
+	_prep_wall_cuts()
 
 	for d in data["doors"]:
 		var n := Node2D.new()
@@ -123,24 +127,77 @@ func set_door_open(id: String, open: bool) -> void:
 
 # Fade the wall strips that stand in front of something you need to see (the player, the spot under
 # the cursor, worms): strips drawn after it whose picture overlaps it go see-through, with a soft edge.
+# ---------------------------------------------------------------- wall cutaway
+# A wall strip that stands between the camera and an actor is cut down to a low opaque wall with a
+# solid top edge (the Fallout / Wasteland cutaway), never made translucent: nothing behind it can show
+# through a wall that is still standing, and walls that hide nobody stay whole.
+const PX_PER_M := 165.0 * 0.866              # screen px per metre of height (30 degree camera)
+const WALL_FULL_PX := 2.7 * PX_PER_M + 40.0  # above the wall top: nothing cut
+const WALL_STUB_PX := 0.55 * PX_PER_M        # a cut wall keeps this much
+const CUT_WINDOW := 70.0                     # px either side of the silhouette that also open, so the cut reads as a clean gap
+const WALL_CUT := preload("res://scripts/wall_cut.gdshader")
+
+
+func _prep_wall_cuts() -> void:
+	"""Each strip's wall base line (screen y at z=0 along the wall) from neighbouring strips of the same wall."""
+	var by_wall := {}
+	for wp in wall_parts:
+		if not by_wall.has(wp["wall"]):
+			by_wall[wp["wall"]] = []
+		by_wall[wp["wall"]].append(wp)
+	for k in by_wall:
+		var strips: Array = by_wall[k]
+		strips.sort_custom(func(a, b): return a["sort"].x < b["sort"].x)
+		for i in strips.size():
+			strips[i]["left"] = strips[i - 1] if i > 0 else null
+			strips[i]["right"] = strips[i + 1] if i < strips.size() - 1 else null
+		var slope := 0.0
+		if strips.size() > 1:
+			var d: Vector2 = strips[-1]["sort"] - strips[0]["sort"]
+			if abs(d.x) > 1.0:
+				slope = clamp(d.y / d.x, -0.6, 0.6)
+		for wp in strips:
+			var m: ShaderMaterial = wp["mat"]
+			m.set_shader_parameter("origin", wp["rect"].position)
+			m.set_shader_parameter("size", wp["rect"].size)
+			m.set_shader_parameter("base", wp["sort"])
+			m.set_shader_parameter("slope", slope)
+			m.set_shader_parameter("cut", WALL_FULL_PX)
+
+
 func fade_walls(foci: Array, dt: float) -> void:
+	"""foci: [{y: feet y, rect: the actor's screen silhouette}]. Kept name for callers."""
+	var open_x := []                         # [wall, x0, x1] spans to open, per wall
 	for wp in wall_parts:
 		var r: Rect2 = wp["rect"]
-		var target := 1.0
 		for f in foci:
-			var fr: Rect2 = f["rect"]
-			if wp["y"] <= f["y"] + 1.0:              # strip is behind it: nothing to hide
+			if wp["y"] <= f["y"] + 2.0:          # strip stands behind the actor: it hides nothing
 				continue
-			if r.position.y > fr.end.y or r.end.y < fr.position.y:
-				continue
-			var dx: float = abs(r.get_center().x - fr.get_center().x) - (r.size.x + fr.size.x) * 0.5
-			var k: float = clamp((dx + 10.0) / 120.0, 0.0, 1.0)       # soft edge, 120 px wide
-			target = min(target, lerp(0.16, 1.0, k * k * (3.0 - 2.0 * k)))
-		var a: float = wp["a"]
-		a = move_toward(a, target, dt * 4.0)
-		if a != wp["a"]:
-			wp["a"] = a
-			wp["sprite"].modulate.a = a
+			if r.intersects(f["rect"]):
+				open_x.append([wp["wall"], f["rect"].position.x - CUT_WINDOW, f["rect"].end.x + CUT_WINDOW, f["y"]])
+	for wp in wall_parts:
+		var target := WALL_FULL_PX
+		var r: Rect2 = wp["rect"]
+		for o in open_x:
+			if o[0] == wp["wall"] and r.end.x > o[1] and r.position.x < o[2] and wp["y"] > o[3] + 2.0:
+				target = WALL_STUB_PX
+				break
+		var c: float = wp["cut"]
+		var nc: float = move_toward(c, target, dt * 900.0)      # about 0.35 s from full to stub
+		if nc != c:
+			wp["cut"] = nc
+			(wp["mat"] as ShaderMaterial).set_shader_parameter("cut", nc)
+	for wp in wall_parts:                         # a dark edge where a standing wall meets a cut beside it
+		var m: ShaderMaterial = wp["mat"]
+		var mine: float = wp["cut"]
+		for side in ["left", "right"]:
+			var nb = wp[side]
+			var e := 0.0
+			if nb != null and nb["cut"] < mine - 20.0:
+				e = nb["cut"]
+			if wp.get("e_" + side, -1.0) != e:
+				wp["e_" + side] = e
+				m.set_shader_parameter("edge_" + side, e)
 
 
 func set_pipe(fixed: bool) -> void:
