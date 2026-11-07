@@ -1,0 +1,8 @@
+# Godot cache and builds
+game/.godot/
+build/
+*.tmp
+# never commit keys or local secrets
+.secrets/
+*.key
+.env

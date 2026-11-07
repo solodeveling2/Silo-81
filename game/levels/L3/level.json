@@ -1,0 +1,330 @@
+{
+ "level": "L3",
+ "name": "Level 3 - Pipe gallery",
+ "ppm": 165.0,
+ "rooms": [
+  {
+   "id": "landing",
+   "r": [
+    -4.2,
+    0.0,
+    -1.6,
+    1.8
+   ]
+  },
+  {
+   "id": "gallery",
+   "r": [
+    0.0,
+    18.0,
+    -1.6,
+    1.8
+   ],
+   "name": "Pipe gallery"
+  },
+  {
+   "id": "pumps",
+   "r": [
+    9.0,
+    18.0,
+    -6.0,
+    -1.6
+   ],
+   "name": "Pump room 3-P"
+  }
+ ],
+ "walls": [
+  {
+   "a": [
+    -4.2,
+    1.8
+   ],
+   "b": [
+    18.0,
+    1.8
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    18.0,
+    -6.0
+   ],
+   "b": [
+    18.0,
+    1.8
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    -4.2,
+    -1.6
+   ],
+   "b": [
+    -4.2,
+    1.8
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -4.2,
+    -1.6
+   ],
+   "b": [
+    18.0,
+    -1.6
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     12.4,
+     13.8,
+     null
+    ]
+   ]
+  },
+  {
+   "a": [
+    9.0,
+    -6.0
+   ],
+   "b": [
+    9.0,
+    -1.6
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    9.0,
+    -6.0
+   ],
+   "b": [
+    18.0,
+    -6.0
+   ],
+   "h": 0.4,
+   "openings": []
+  }
+ ],
+ "doors": [],
+ "props": [
+  {
+   "type": "pump",
+   "footprint": [
+    11.3,
+    12.0,
+    -5.2,
+    -4.0
+   ],
+   "sprite": "spr_000.png",
+   "x0": 1776.8,
+   "y0": -703.7,
+   "sort": [
+    1895.9,
+    -411.3
+   ],
+   "name": "Circulation pump",
+   "text": "Circulation pump for the general circuit, running hard against the leak."
+  },
+  {
+   "type": "pump",
+   "footprint": [
+    14.9,
+    15.6,
+    -5.2,
+    -4.0
+   ],
+   "sprite": "spr_000.png",
+   "x0": 2196.8,
+   "y0": -913.7,
+   "sort": [
+    2316.0,
+    -621.3
+   ],
+   "name": "Circulation pump",
+   "text": "The standby pump. Its bearings were replaced with parts from Level 1."
+  },
+  {
+   "type": "workbench",
+   "footprint": [
+    17.175,
+    17.875,
+    -5.8,
+    -4.0
+   ],
+   "sprite": "spr_001.png",
+   "x0": 2462.2,
+   "y0": -967.9,
+   "sort": [
+    2616.4,
+    -736.5
+   ],
+   "name": "Workbench",
+   "text": "Somebody's half-finished repair: a flange, filed by hand."
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    9.29,
+    9.91,
+    -5.5,
+    -4.88
+   ],
+   "sprite": "spr_002.png",
+   "x0": 1646.8,
+   "y0": -380.2,
+   "sort": [
+    1725.6,
+    -257.3
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    9.99,
+    10.61,
+    -5.5,
+    -4.88
+   ],
+   "sprite": "spr_002.png",
+   "x0": 1728.4,
+   "y0": -421.0,
+   "sort": [
+    1807.3,
+    -298.1
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    16.28,
+    16.9,
+    -2.51,
+    -1.89
+   ],
+   "sprite": "spr_003.png",
+   "x0": 2113.4,
+   "y0": -963.5,
+   "sort": [
+    2192.3,
+    -839.5
+   ]
+  }
+ ],
+ "inspect": [
+  {
+   "id": "pipes_label",
+   "u": 4.5,
+   "v": 1.2,
+   "name": "Pipes",
+   "text": "Top to bottom: bore water; heating flow, general circuit, to Level 2; heating return."
+  },
+  {
+   "id": "gauge",
+   "u": 14.0,
+   "v": 1.2,
+   "name": "Gauge",
+   "text": "Pressure on the general circuit, falling."
+  },
+  {
+   "id": "manifold",
+   "u": 17.6,
+   "v": -2.6,
+   "name": "Valve manifold",
+   "text": "Valve wheels tagged in three different handwritings. The newest tag says COUNCIL ORDER: DO NOT OPEN."
+  }
+ ],
+ "stairs": [
+  {
+   "id": "stairs_up",
+   "u": -0.45,
+   "v": 1.0,
+   "to": "L2",
+   "arrive": [
+    -0.3,
+    0.0
+   ],
+   "name": "Stairs up",
+   "text": "Back up to Level 2."
+  }
+ ],
+ "spawns": {
+  "player": [
+   -0.3,
+   0.0,
+   0
+  ],
+  "worms": [
+   [
+    7.9,
+    0.75,
+    2
+   ],
+   [
+    9.4,
+    0.8,
+    2
+   ],
+   [
+    12.6,
+    0.85,
+    2
+   ]
+  ]
+ },
+ "blocked": [
+  [
+   -4.2,
+   -0.75,
+   0.35,
+   1.8
+  ],
+  [
+   -0.6,
+   18.0,
+   1.25,
+   1.8
+  ]
+ ],
+ "bounds": [
+  -4.2,
+  18.0,
+  -6.0,
+  1.8
+ ],
+ "sprites": [],
+ "bg": {
+  "file": "bg.png",
+  "x0": -737,
+  "y0": -1564
+ },
+ "pipe": {
+  "id": "pipe_break",
+  "u": 8.7,
+  "v": 1.675,
+  "name": "Burst pipe",
+  "text": "The heating flow for the general circuit, chewed through. Hot water sprays from the hole and the pressure is falling. It needs welding.",
+  "fixed_text": "Welded. The bead is ugly but it holds, and the gauge needle is climbing back.",
+  "broken": {
+   "sprite": "spr_004.png",
+   "x0": 754,
+   "y0": -825
+  },
+  "fixed": {
+   "sprite": "spr_005.png",
+   "x0": 753,
+   "y0": -828
+  },
+  "sort": [
+   819.6,
+   -605.2
+  ]
+ }
+}

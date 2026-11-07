@@ -1,0 +1,1376 @@
+{
+ "level": "L2",
+ "name": "Level 2 - Dormitories",
+ "ppm": 165.0,
+ "rooms": [
+  {
+   "id": "landing",
+   "r": [
+    -4.2,
+    0.0,
+    -1.4,
+    1.4
+   ]
+  },
+  {
+   "id": "corridor",
+   "r": [
+    0.0,
+    22.6,
+    -1.4,
+    1.4
+   ]
+  },
+  {
+   "id": "room_2_1",
+   "r": [
+    0.6,
+    4.6,
+    1.4,
+    5.6
+   ],
+   "name": "Your room"
+  },
+  {
+   "id": "dorm_2a",
+   "r": [
+    4.6,
+    11.6,
+    1.4,
+    5.6
+   ],
+   "name": "Dormitory 2-A"
+  },
+  {
+   "id": "dorm_2b",
+   "r": [
+    11.6,
+    18.6,
+    1.4,
+    5.6
+   ],
+   "name": "Dormitory 2-B"
+  },
+  {
+   "id": "room_2_d",
+   "r": [
+    18.6,
+    22.6,
+    1.4,
+    5.6
+   ],
+   "name": "Room 2-D",
+   "dark": true
+  },
+  {
+   "id": "washroom",
+   "r": [
+    1.0,
+    7.0,
+    -5.0,
+    -1.4
+   ],
+   "name": "Washroom"
+  },
+  {
+   "id": "dorm_2c",
+   "r": [
+    7.0,
+    14.0,
+    -5.0,
+    -1.4
+   ],
+   "name": "Dormitory 2-C"
+  },
+  {
+   "id": "linen",
+   "r": [
+    14.0,
+    18.6,
+    -5.0,
+    -1.4
+   ],
+   "name": "Linen store"
+  }
+ ],
+ "walls": [
+  {
+   "a": [
+    -4.2,
+    1.4
+   ],
+   "b": [
+    0.6,
+    1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    0.6,
+    5.6
+   ],
+   "b": [
+    22.6,
+    5.6
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    22.6,
+    1.4
+   ],
+   "b": [
+    22.6,
+    5.6
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    22.6,
+    -1.4
+   ],
+   "b": [
+    22.6,
+    1.4
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    18.6,
+    -5.0
+   ],
+   "b": [
+    18.6,
+    -1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -4.2,
+    -1.4
+   ],
+   "b": [
+    -4.2,
+    1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -4.2,
+    -1.4
+   ],
+   "b": [
+    1.0,
+    -1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    0.6,
+    1.4
+   ],
+   "b": [
+    22.6,
+    1.4
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     2.1,
+     3.1,
+     "door_2_1"
+    ],
+    [
+     7.4,
+     8.8,
+     null
+    ],
+    [
+     14.4,
+     15.8,
+     null
+    ],
+    [
+     20.1,
+     21.1,
+     "door_2_d"
+    ]
+   ]
+  },
+  {
+   "a": [
+    0.6,
+    1.4
+   ],
+   "b": [
+    0.6,
+    5.6
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    4.6,
+    1.4
+   ],
+   "b": [
+    4.6,
+    5.6
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    11.6,
+    1.4
+   ],
+   "b": [
+    11.6,
+    5.6
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    18.6,
+    1.4
+   ],
+   "b": [
+    18.6,
+    5.6
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    1.0,
+    -1.4
+   ],
+   "b": [
+    22.6,
+    -1.4
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     3.4,
+     4.8,
+     null
+    ],
+    [
+     9.8,
+     11.2,
+     null
+    ],
+    [
+     15.6,
+     17.0,
+     null
+    ]
+   ]
+  },
+  {
+   "a": [
+    1.0,
+    -5.0
+   ],
+   "b": [
+    1.0,
+    -1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    7.0,
+    -5.0
+   ],
+   "b": [
+    7.0,
+    -1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    14.0,
+    -5.0
+   ],
+   "b": [
+    14.0,
+    -1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    1.0,
+    -5.0
+   ],
+   "b": [
+    18.6,
+    -5.0
+   ],
+   "h": 0.4,
+   "openings": []
+  }
+ ],
+ "doors": [
+  {
+   "id": "door_2_1",
+   "kind": "plywood",
+   "u": 2.6,
+   "v": 1.4,
+   "locked": false,
+   "name": "Door to your room",
+   "text": "Plywood on a steel frame. Your door; it has not locked properly in years.",
+   "sort": [
+    140.0,
+    -233.3
+   ],
+   "spr_open": {
+    "sprite": "spr_041.png",
+    "x0": -49.0,
+    "y0": -639.3
+   },
+   "spr_closed": {
+    "sprite": "spr_040.png",
+    "x0": 52.0,
+    "y0": -585.3
+   },
+   "open": true
+  },
+  {
+   "id": "door_2_d",
+   "kind": "steel",
+   "u": 20.6,
+   "v": 1.4,
+   "locked": true,
+   "lock": 45,
+   "strength": 6,
+   "name": "Room 2-D",
+   "text": "A steel door at the cold end of the corridor. Security's padlock is through the hasp. Nobody has lived here for years.",
+   "sort": [
+    2240.1,
+    -1283.4
+   ],
+   "spr_open": {
+    "sprite": "spr_043.png",
+    "x0": 2051.1,
+    "y0": -1689.4
+   },
+   "spr_closed": {
+    "sprite": "spr_042.png",
+    "x0": 2152.1,
+    "y0": -1635.4
+   },
+   "open": false
+  }
+ ],
+ "props": [
+  {
+   "type": "bed",
+   "footprint": [
+    0.9,
+    2.9,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_000.png",
+   "x0": -539.1,
+   "y0": -602.2,
+   "sort": [
+    -364.6,
+    -404.0
+   ],
+   "id": "bed_player",
+   "name": "Your bunk",
+   "text": "Your bed. The blanket is your mother's, older than you."
+  },
+  {
+   "type": "locker",
+   "footprint": [
+    3.5,
+    4.5,
+    4.975,
+    5.475
+   ],
+   "sprite": "spr_001.png",
+   "x0": -239.1,
+   "y0": -854.7,
+   "sort": [
+    -142.9,
+    -538.2
+   ],
+   "name": "Your locker",
+   "text": "Spare overalls, a dead torch, a photo of Mira's graduation from apprentice."
+  },
+  {
+   "type": "desk",
+   "footprint": [
+    3.875,
+    4.475,
+    2.8,
+    4.0
+   ],
+   "sprite": "spr_002.png",
+   "x0": -22.6,
+   "y0": -674.4,
+   "sort": [
+    90.4,
+    -441.9
+   ],
+   "name": "Your desk",
+   "text": "Work orders. Most are about the general circuit, and most are marked DEFERRED by the Council."
+  },
+  {
+   "type": "chair",
+   "footprint": [
+    3.75,
+    4.25,
+    3.15,
+    3.65
+   ],
+   "sprite": "spr_003.png",
+   "x0": 13.8,
+   "y0": -594.1,
+   "sort": [
+    70.0,
+    -431.7
+   ]
+  },
+  {
+   "type": "toolbox",
+   "footprint": [
+    0.725,
+    1.025,
+    2.3,
+    3.3
+   ],
+   "sprite": "spr_004.png",
+   "x0": -280.1,
+   "y0": -334.6,
+   "sort": [
+    -224.6,
+    -214.4
+   ],
+   "id": "toolbox",
+   "name": "Your toolbox",
+   "text": "Your toolbox. The welding kit is inside: torch, two small bottles, a handful of rods."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    4.75,
+    6.75,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_005.png",
+   "x0": -89.9,
+   "y0": -960.8,
+   "sort": [
+    84.6,
+    -628.6
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts. Names are painted on the frame; two have been crossed out."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    7.1,
+    9.1,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_006.png",
+   "x0": 184.3,
+   "y0": -1097.9,
+   "sort": [
+    358.8,
+    -765.7
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts. Names are painted on the frame; two have been crossed out."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    9.45,
+    11.45,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_007.png",
+   "x0": 458.4,
+   "y0": -1235.0,
+   "sort": [
+    632.9,
+    -902.8
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts. Names are painted on the frame; two have been crossed out."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    6.82,
+    6.92,
+    4.775,
+    5.425
+   ],
+   "sprite": "spr_008.png",
+   "x0": 159.3,
+   "y0": -1020.2,
+   "sort": [
+    206.5,
+    -698.3
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire: the only walls a family gets in here."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    6.82,
+    6.92,
+    4.125,
+    4.775
+   ],
+   "sprite": "spr_009.png",
+   "x0": 235.2,
+   "y0": -982.3,
+   "sort": [
+    282.3,
+    -660.4
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire: the only walls a family gets in here."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    6.82,
+    6.92,
+    3.475,
+    4.125
+   ],
+   "sprite": "spr_010.png",
+   "x0": 310.0,
+   "y0": -943.4,
+   "sort": [
+    358.2,
+    -622.4
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire: the only walls a family gets in here."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    9.17,
+    9.27,
+    4.775,
+    5.425
+   ],
+   "sprite": "spr_011.png",
+   "x0": 432.5,
+   "y0": -1156.3,
+   "sort": [
+    480.7,
+    -835.4
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire: the only walls a family gets in here."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    9.17,
+    9.27,
+    4.125,
+    4.775
+   ],
+   "sprite": "spr_012.png",
+   "x0": 508.4,
+   "y0": -1118.4,
+   "sort": [
+    556.5,
+    -797.5
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire: the only walls a family gets in here."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    9.17,
+    9.27,
+    3.475,
+    4.125
+   ],
+   "sprite": "spr_013.png",
+   "x0": 585.2,
+   "y0": -1081.5,
+   "sort": [
+    632.4,
+    -759.5
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire: the only walls a family gets in here."
+  },
+  {
+   "type": "table",
+   "footprint": [
+    7.5,
+    8.7,
+    2.0,
+    2.7
+   ],
+   "sprite": "spr_014.png",
+   "x0": 551.7,
+   "y0": -793.2,
+   "sort": [
+    670.9,
+    -609.6
+   ]
+  },
+  {
+   "type": "stool",
+   "footprint": [
+    7.42,
+    7.78,
+    2.69,
+    3.05
+   ],
+   "sprite": "spr_015.png",
+   "x0": 504.9,
+   "y0": -705.3,
+   "sort": [
+    551.9,
+    -610.8
+   ]
+  },
+  {
+   "type": "stool",
+   "footprint": [
+    8.42,
+    8.78,
+    2.69,
+    3.05
+   ],
+   "sprite": "spr_015.png",
+   "x0": 621.5,
+   "y0": -763.6,
+   "sort": [
+    668.5,
+    -669.1
+   ]
+  },
+  {
+   "type": "locker",
+   "footprint": [
+    4.725,
+    5.225,
+    2.025,
+    2.575
+   ],
+   "sprite": "spr_016.png",
+   "x0": 242.9,
+   "y0": -729.8,
+   "sort": [
+    312.1,
+    -424.4
+   ]
+  },
+  {
+   "type": "locker",
+   "footprint": [
+    4.725,
+    5.225,
+    2.625,
+    3.175
+   ],
+   "sprite": "spr_016.png",
+   "x0": 172.9,
+   "y0": -764.8,
+   "sort": [
+    242.1,
+    -459.4
+   ]
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    11.75,
+    13.75,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_007.png",
+   "x0": 726.8,
+   "y0": -1369.2,
+   "sort": [
+    901.3,
+    -1036.9
+   ],
+   "name": "Bunk",
+   "text": "The mattress is damp. Frost has got as far as the wall behind it."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    14.1,
+    16.1,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_017.png",
+   "x0": 1001.0,
+   "y0": -1506.3,
+   "sort": [
+    1175.5,
+    -1174.0
+   ],
+   "name": "Bunk",
+   "text": "The mattress is damp. Frost has got as far as the wall behind it."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    16.45,
+    18.45,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_018.png",
+   "x0": 1275.2,
+   "y0": -1643.4,
+   "sort": [
+    1449.7,
+    -1311.1
+   ],
+   "name": "Bunk",
+   "text": "The mattress is damp. Frost has got as far as the wall behind it."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    13.82,
+    13.92,
+    4.775,
+    5.425
+   ],
+   "sprite": "spr_019.png",
+   "x0": 976.1,
+   "y0": -1428.6,
+   "sort": [
+    1023.2,
+    -1106.6
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    13.82,
+    13.92,
+    4.125,
+    4.775
+   ],
+   "sprite": "spr_020.png",
+   "x0": 1050.9,
+   "y0": -1389.6,
+   "sort": [
+    1099.1,
+    -1068.7
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    13.82,
+    13.92,
+    3.475,
+    4.125
+   ],
+   "sprite": "spr_021.png",
+   "x0": 1126.7,
+   "y0": -1351.7,
+   "sort": [
+    1174.9,
+    -1030.8
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    16.17,
+    16.27,
+    4.775,
+    5.425
+   ],
+   "sprite": "spr_022.png",
+   "x0": 1249.2,
+   "y0": -1564.6,
+   "sort": [
+    1297.4,
+    -1243.7
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    16.17,
+    16.27,
+    4.125,
+    4.775
+   ],
+   "sprite": "spr_023.png",
+   "x0": 1326.1,
+   "y0": -1527.7,
+   "sort": [
+    1373.2,
+    -1205.8
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    16.17,
+    16.27,
+    3.475,
+    4.125
+   ],
+   "sprite": "spr_024.png",
+   "x0": 1401.9,
+   "y0": -1489.8,
+   "sort": [
+    1449.1,
+    -1167.9
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire."
+  },
+  {
+   "type": "bucket",
+   "footprint": [
+    14.93,
+    15.27,
+    2.66,
+    3.0
+   ],
+   "sprite": "spr_025.png",
+   "x0": 1386.7,
+   "y0": -1115.9,
+   "sort": [
+    1431.6,
+    -1046.0
+   ],
+   "name": "Bucket",
+   "text": "Catching a drip from the ceiling. The water has a skin of ice."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    19.0,
+    21.0,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_026.png",
+   "x0": 1572.7,
+   "y0": -1792.1,
+   "sort": [
+    1747.2,
+    -1459.9
+   ],
+   "name": "Bare bunk",
+   "text": "Stripped to the springs. Someone took the mattress, and they took it a long time ago."
+  },
+  {
+   "type": "chair",
+   "footprint": [
+    20.85,
+    21.35,
+    2.7,
+    3.2
+   ],
+   "sprite": "spr_027.png",
+   "x0": 2004.4,
+   "y0": -1531.6,
+   "sort": [
+    2117.6,
+    -1403.0
+   ]
+  },
+  {
+   "type": "locker",
+   "footprint": [
+    21.975,
+    22.475,
+    4.475,
+    5.025
+   ],
+   "sprite": "spr_028.png",
+   "x0": 1903.0,
+   "y0": -1878.2,
+   "sort": [
+    2038.9,
+    -1573.6
+   ],
+   "name": "Open locker",
+   "text": "Empty. The door hangs open."
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    19.09,
+    19.71,
+    2.2,
+    2.82
+   ],
+   "sprite": "spr_029.png",
+   "x0": 1891.8,
+   "y0": -1401.1,
+   "sort": [
+    1970.6,
+    -1278.1
+   ],
+   "name": "Crate",
+   "text": "Nailed shut."
+  },
+  {
+   "type": "sinks",
+   "footprint": [
+    1.25,
+    3.35,
+    -1.975,
+    -1.525
+   ],
+   "sprite": "spr_030.png",
+   "x0": 328.3,
+   "y0": -253.2,
+   "sort": [
+    472.5,
+    -32.1
+   ],
+   "name": "Washbasins",
+   "text": "Cold water only, except on bath day."
+  },
+  {
+   "type": "bucket",
+   "footprint": [
+    1.33,
+    1.67,
+    -4.4,
+    -4.06
+   ],
+   "sprite": "spr_031.png",
+   "x0": 621.4,
+   "y0": 88.2,
+   "sort": [
+    668.5,
+    159.3
+   ]
+  },
+  {
+   "type": "stall",
+   "footprint": [
+    5.675,
+    6.875,
+    -2.65,
+    -1.75
+   ],
+   "sprite": "spr_032.png",
+   "x0": 857.8,
+   "y0": -571.7,
+   "sort": [
+    988.8,
+    -237.7
+   ],
+   "name": "Toilet stall",
+   "text": "Fixtures from the closed washrooms on Level 1, refitted here."
+  },
+  {
+   "type": "stall",
+   "footprint": [
+    5.675,
+    6.875,
+    -3.55,
+    -2.65
+   ],
+   "sprite": "spr_032.png",
+   "x0": 962.8,
+   "y0": -519.2,
+   "sort": [
+    1093.8,
+    -185.2
+   ],
+   "name": "Toilet stall",
+   "text": "Fixtures from the closed washrooms on Level 1, refitted here."
+  },
+  {
+   "type": "stall",
+   "footprint": [
+    5.675,
+    6.875,
+    -4.45,
+    -3.55
+   ],
+   "sprite": "spr_032.png",
+   "x0": 1067.8,
+   "y0": -466.7,
+   "sort": [
+    1198.8,
+    -132.7
+   ],
+   "name": "Toilet stall",
+   "text": "Fixtures from the closed washrooms on Level 1, refitted here."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    7.4,
+    9.4,
+    -2.425,
+    -1.525
+   ],
+   "sprite": "spr_017.png",
+   "x0": 1036.0,
+   "y0": -707.1,
+   "sort": [
+    1210.5,
+    -374.8
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    11.6,
+    13.6,
+    -2.425,
+    -1.525
+   ],
+   "sprite": "spr_018.png",
+   "x0": 1526.0,
+   "y0": -952.1,
+   "sort": [
+    1700.5,
+    -619.8
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    7.4,
+    9.4,
+    -4.875,
+    -3.975
+   ],
+   "sprite": "spr_033.png",
+   "x0": 1321.8,
+   "y0": -563.6,
+   "sort": [
+    1496.3,
+    -231.9
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    10.0,
+    12.0,
+    -4.875,
+    -3.975
+   ],
+   "sprite": "spr_034.png",
+   "x0": 1625.2,
+   "y0": -715.3,
+   "sort": [
+    1799.7,
+    -383.6
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts."
+  },
+  {
+   "type": "table",
+   "footprint": [
+    11.7,
+    12.7,
+    -4.3,
+    -3.6
+   ],
+   "sprite": "spr_035.png",
+   "x0": 1777.4,
+   "y0": -659.7,
+   "sort": [
+    1884.3,
+    -481.3
+   ]
+  },
+  {
+   "type": "stool",
+   "footprint": [
+    11.52,
+    11.88,
+    -2.9,
+    -2.54
+   ],
+   "sprite": "spr_036.png",
+   "x0": 1636.4,
+   "y0": -618.4,
+   "sort": [
+    1682.4,
+    -523.9
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    14.19,
+    14.81,
+    -4.6,
+    -3.98
+   ],
+   "sprite": "spr_029.png",
+   "x0": 2113.4,
+   "y0": -718.5,
+   "sort": [
+    2192.3,
+    -595.6
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    14.89,
+    15.51,
+    -4.6,
+    -3.98
+   ],
+   "sprite": "spr_029.png",
+   "x0": 2195.1,
+   "y0": -759.4,
+   "sort": [
+    2273.9,
+    -636.4
+   ]
+  },
+  {
+   "type": "laundry",
+   "footprint": [
+    14.9,
+    16.7,
+    -2.85,
+    -2.6
+   ],
+   "sprite": "spr_037.png",
+   "x0": 2039.8,
+   "y0": -1085.0,
+   "sort": [
+    2161.4,
+    -762.7
+   ],
+   "name": "Washing line",
+   "text": "Blankets drying. They will not dry down here."
+  },
+  {
+   "type": "laundry",
+   "footprint": [
+    15.1,
+    16.9,
+    -4.05,
+    -3.8
+   ],
+   "sprite": "spr_038.png",
+   "x0": 2203.1,
+   "y0": -1026.7,
+   "sort": [
+    2324.7,
+    -704.4
+   ],
+   "name": "Washing line",
+   "text": "Blankets drying."
+  },
+  {
+   "type": "shelf",
+   "footprint": [
+    18.025,
+    18.475,
+    -2.75,
+    -1.65
+   ],
+   "sprite": "spr_039.png",
+   "x0": 2285.2,
+   "y0": -1262.4,
+   "sort": [
+    2386.0,
+    -936.3
+   ],
+   "name": "Linen shelves",
+   "text": "Folded blankets, counted and signed for."
+  },
+  {
+   "type": "shelf",
+   "footprint": [
+    18.025,
+    18.475,
+    -3.9,
+    -2.8
+   ],
+   "sprite": "spr_039.png",
+   "x0": 2419.4,
+   "y0": -1195.3,
+   "sort": [
+    2520.1,
+    -869.2
+   ],
+   "name": "Linen shelves",
+   "text": "Folded blankets, counted and signed for."
+  },
+  {
+   "type": "shelf",
+   "footprint": [
+    18.025,
+    18.475,
+    -4.85,
+    -3.75
+   ],
+   "sprite": "spr_039.png",
+   "x0": 2530.2,
+   "y0": -1139.9,
+   "sort": [
+    2631.0,
+    -813.8
+   ],
+   "name": "Linen shelves",
+   "text": "Folded blankets, counted and signed for."
+  }
+ ],
+ "inspect": [
+  {
+   "id": "graffiti",
+   "u": 22.2,
+   "v": 0.3,
+   "name": "Graffiti",
+   "text": "HEAT IS RANK, sprayed over the old WARMTH FOR ALL poster, with an arrow pointing down towards the warm levels. A child's handwriting, or someone who wanted it to look like one."
+  },
+  {
+   "id": "radiator_end",
+   "u": 22.1,
+   "v": -0.75,
+   "name": "Radiator",
+   "text": "Dead. Frost in the fins. The far end of the branch never gets enough flow, so the water barely moves out here."
+  },
+  {
+   "id": "radiator_own",
+   "u": 3.2,
+   "v": 5.1,
+   "name": "Radiator",
+   "text": "Your radiator. Warm, mostly: your room is near the start of the branch."
+  },
+  {
+   "id": "cd_sign",
+   "u": 22.2,
+   "v": -1.0,
+   "name": "Civil defence sign",
+   "text": "Blue triangle on orange: civil defence. Painted when the silo was new."
+  },
+  {
+   "id": "intercom",
+   "u": 1.0,
+   "v": 5.2,
+   "name": "Intercom",
+   "text": "The line to Engineering. It still smells of Mira's solder."
+  },
+  {
+   "id": "drawing",
+   "u": 21.75,
+   "v": 5.2,
+   "name": "Drawing",
+   "text": "A child's drawing of a sky: blue, with a yellow sun. Nobody in Silo 81 has seen one.",
+   "room": "room_2_d"
+  }
+ ],
+ "stairs": [
+  {
+   "id": "stairs_down",
+   "u": -0.45,
+   "v": 0.7,
+   "to": "L3",
+   "arrive": [
+    -0.3,
+    -0.2
+   ],
+   "name": "Stairs down",
+   "text": "The stairwell down to Level 3, life support."
+  }
+ ],
+ "spawns": {
+  "player": [
+   2.3,
+   3.5,
+   5
+  ],
+  "worms": []
+ },
+ "blocked": [
+  [
+   -4.0,
+   -0.8,
+   0.0,
+   1.4
+  ]
+ ],
+ "bounds": [
+  -4.2,
+  22.6,
+  -5.0,
+  5.6
+ ],
+ "sprites": [],
+ "bg": {
+  "file": "bg.png",
+  "x0": -691,
+  "y0": -2054
+ }
+}

@@ -1,0 +1,525 @@
+{
+ "name": "pipe_worm",
+ "pixels_per_metre": 165.0,
+ "direction_order": "0=right, then counter-clockwise: 1=up-right, 2=up-left, 3=left, 4=down-left, 5=down-right",
+ "animations": {
+  "idle": {
+   "fps": 24,
+   "loop": true,
+   "frames": 32,
+   "directions": {
+    "0": {
+     "sheet": "idle_dir0.png",
+     "frame_size": [
+      194,
+      94
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      110.0,
+      85.6
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "sheet": "idle_dir1.png",
+     "frame_size": [
+      122,
+      158
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      69.0,
+      112.6
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "sheet": "idle_dir2.png",
+     "frame_size": [
+      108,
+      162
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      60.0,
+      110.6
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "sheet": "idle_dir3.png",
+     "frame_size": [
+      194,
+      98
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      82.6
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "sheet": "idle_dir4.png",
+     "frame_size": [
+      122,
+      71
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      53.0,
+      60.6
+     ],
+     "step_px": [
+      -0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "idle_dir5.png",
+     "frame_size": [
+      108,
+      70
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      48.0,
+      58.6
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "crawl": {
+   "fps": 24,
+   "loop": true,
+   "frames": 24,
+   "directions": {
+    "0": {
+     "sheet": "crawl_dir0.png",
+     "frame_size": [
+      214,
+      69
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      109.0,
+      55.6
+     ],
+     "step_px": [
+      8.794,
+      -0.0
+     ]
+    },
+    "1": {
+     "sheet": "crawl_dir1.png",
+     "frame_size": [
+      128,
+      141
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      59.0,
+      92.6
+     ],
+     "step_px": [
+      4.397,
+      -3.808
+     ]
+    },
+    "2": {
+     "sheet": "crawl_dir2.png",
+     "frame_size": [
+      128,
+      141
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      69.0,
+      92.6
+     ],
+     "step_px": [
+      -4.397,
+      -3.808
+     ]
+    },
+    "3": {
+     "sheet": "crawl_dir3.png",
+     "frame_size": [
+      214,
+      69
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      105.0,
+      55.6
+     ],
+     "step_px": [
+      -8.794,
+      -0.0
+     ]
+    },
+    "4": {
+     "sheet": "crawl_dir4.png",
+     "frame_size": [
+      129,
+      83
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      70.0,
+      57.6
+     ],
+     "step_px": [
+      -4.397,
+      3.808
+     ]
+    },
+    "5": {
+     "sheet": "crawl_dir5.png",
+     "frame_size": [
+      128,
+      82
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      59.0,
+      56.6
+     ],
+     "step_px": [
+      4.397,
+      3.808
+     ]
+    }
+   }
+  },
+  "bite": {
+   "fps": 24,
+   "loop": false,
+   "frames": 20,
+   "directions": {
+    "0": {
+     "sheet": "bite_dir0.png",
+     "frame_size": [
+      222,
+      94
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      111.0,
+      83.6
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "sheet": "bite_dir1.png",
+     "frame_size": [
+      133,
+      158
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      69.0,
+      112.6
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "sheet": "bite_dir2.png",
+     "frame_size": [
+      132,
+      161
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      109.6
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "sheet": "bite_dir3.png",
+     "frame_size": [
+      222,
+      104
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      111.0,
+      88.6
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "sheet": "bite_dir4.png",
+     "frame_size": [
+      133,
+      111
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      64.0,
+      74.6
+     ],
+     "step_px": [
+      -0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "bite_dir5.png",
+     "frame_size": [
+      132,
+      100
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      48.0,
+      69.6
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "action_frame": 11
+  },
+  "hit": {
+   "fps": 24,
+   "loop": false,
+   "frames": 12,
+   "directions": {
+    "0": {
+     "sheet": "hit_dir0.png",
+     "frame_size": [
+      192,
+      97
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      110.0,
+      82.6
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "sheet": "hit_dir1.png",
+     "frame_size": [
+      123,
+      155
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      69.0,
+      109.6
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "sheet": "hit_dir2.png",
+     "frame_size": [
+      104,
+      159
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      56.0,
+      107.6
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "sheet": "hit_dir3.png",
+     "frame_size": [
+      193,
+      104
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      82.0,
+      88.6
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "sheet": "hit_dir4.png",
+     "frame_size": [
+      123,
+      81
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      54.0,
+      71.6
+     ],
+     "step_px": [
+      -0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "hit_dir5.png",
+     "frame_size": [
+      105,
+      79
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      48.0,
+      65.6
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "action_frame": 0
+  },
+  "death": {
+   "fps": 24,
+   "loop": false,
+   "frames": 32,
+   "directions": {
+    "0": {
+     "sheet": "death_dir0.png",
+     "frame_size": [
+      217,
+      111
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      111.0,
+      84.6
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "sheet": "death_dir1.png",
+     "frame_size": [
+      132,
+      158
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      70.0,
+      112.6
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "sheet": "death_dir2.png",
+     "frame_size": [
+      141,
+      160
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      72.0,
+      108.6
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "sheet": "death_dir3.png",
+     "frame_size": [
+      216,
+      115
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      105.0,
+      91.6
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "sheet": "death_dir4.png",
+     "frame_size": [
+      133,
+      113
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      63.0,
+      73.6
+     ],
+     "step_px": [
+      -0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "death_dir5.png",
+     "frame_size": [
+      142,
+      108
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      69.0,
+      69.6
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "action_frame": 0
+  }
+ }
+}
