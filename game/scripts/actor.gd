@@ -30,6 +30,9 @@ var ap := 0
 var ring_color := Color(0, 0, 0, 0)
 var highlight := false
 var _switching := false
+## Held aim: the pitch (degrees) the gun is pointing at between shots, or NAN when not aiming.
+## The gun stays on the target until it dies, you move, or combat ends.
+var aim_pitch := NAN
 var _per_frame := {}
 
 
@@ -82,6 +85,15 @@ func has_clip(a: String) -> bool:
 func play(a: String, d: int, keep_phase := false) -> void:
 	if not has_clip(a):
 		return
+	if a == "pistol_hold" and is_aiming():
+		anim = a; dir = d
+		var hinfo: Dictionary = data["animations"][a]["directions"][str(d)]
+		sprite.offset = -Vector2(hinfo["feet_anchor"][0], hinfo["feet_anchor"][1])
+		_switching = true
+		sprite.play("%s_%d" % [a, d])
+		_switching = false
+		_show_hold(aim_pitch)
+		return
 	var f := sprite.frame
 	var p := sprite.frame_progress
 	anim = a
@@ -115,6 +127,7 @@ func follow(hexes: Array, clip: String = "") -> void:
 		arrived.emit.call_deferred()
 		return
 	move_clip = clip if clip != "" else ("crawl" if kind == "worm" else "walk")
+	aim_pitch = NAN                                   # you lower the gun to walk
 	play(move_clip, Hex.dir_towards(ground, path[0]))
 
 
@@ -154,7 +167,7 @@ func fire_clip(target: Vector3) -> String:
 	var best_err := INF
 	var dist := Vector2(target.x, target.y).distance_to(ground)
 	for p in aim.get("pitches", []):
-		var key: String = aim["clip"] + "_" + _pitch_tag(int(p))
+		var key: String = aim.get("shot", aim.get("clip", "pistol_fire")) + "_" + _pitch_tag(int(p))
 		if not has_clip(key):
 			continue
 		var m: Array = data["animations"][key]["directions"][str(dir)]["muzzle_m"]
@@ -183,8 +196,89 @@ static func _pitch_tag(p: int) -> String:
 
 func idle_clip(in_combat: bool) -> String:
 	if kind == "player" and in_combat:
-		return "pistol_idle"
+		return "pistol_hold" if is_aiming() and has_clip("pistol_hold") else "pistol_idle"
 	return "idle"
+
+
+# ------------------------------------------------------------------ held aim
+func is_aiming() -> bool:
+	return not is_nan(aim_pitch)
+
+
+## The rendered shot pitch that best points the gun at this target from here, facing d.
+func pitch_for(target: Vector3, d: int) -> int:
+	var keep := dir
+	dir = d
+	var key := fire_clip(target)
+	dir = keep
+	return int(data["animations"][key]["pitch_deg"]) if data["animations"].has(key) else 0
+
+
+func _show_hold(p: float) -> void:
+	# the held-aim clip has one frame per pitch (every 5 degrees); show the nearest, paused
+	var hp: Array = data.get("aim", {}).get("hold_pitches", [])
+	if hp.is_empty() or not has_clip("pistol_hold"):
+		return
+	var best := 0
+	for i in hp.size():
+		if absf(float(hp[i]) - p) < absf(float(hp[best]) - p):
+			best = i
+	if anim != "pistol_hold":
+		play("pistol_hold", dir)
+	elif sprite.animation != "pistol_hold_%d" % dir:
+		play("pistol_hold", dir)
+	sprite.pause()
+	sprite.frame = best
+
+
+## Bring the gun onto a target and keep it there. From the lowered stance this is the raise; if
+## already aiming, the arms swing from the held pitch to the new one (turning first if needed).
+func aim_at(target: Vector3) -> void:
+	var nd := Hex.dir_towards(ground, Vector2(target.x, target.y))
+	var p := pitch_for(target, nd)
+	var tag := _pitch_tag(p)
+	if not is_aiming():
+		dir = nd
+		if has_clip("pistol_raise_" + tag):
+			play("pistol_raise_" + tag, dir)
+			await anim_done
+		aim_pitch = p
+		_show_hold(p)
+		return
+	if nd != dir:
+		dir = nd
+		_show_hold(aim_pitch)
+	var from := aim_pitch
+	var steps := int(ceil(absf(p - from) / 5.0))
+	for i in range(1, steps + 1):
+		await get_tree().create_timer(1.0 / 40.0).timeout
+		_show_hold(lerpf(from, p, float(i) / steps))
+	aim_pitch = p
+	_show_hold(p)
+
+
+## Fire from the held aim (call aim_at first). Emits action_point on the shot; ends back on the hold.
+func fire_held() -> String:
+	var key: String = str(data.get("aim", {}).get("shot", "pistol_shot")) + "_" + _pitch_tag(int(aim_pitch))
+	if not has_clip(key):
+		key = fire_clip(Vector3(ground.x, ground.y, 1.0))
+	play(key, dir)
+	if int(data["animations"][key].get("action_frame", -1)) == 0:
+		action_point.emit.call_deferred()             # fires on its first frame, which never "changes" to itself
+	return key
+
+
+## Lower the gun back to the combat stance (target dead, combat over).
+func lower_aim() -> void:
+	if not is_aiming():
+		return
+	var key: String = str(data.get("aim", {}).get("lower", "pistol_lower")) + "_" + _pitch_tag(int(aim_pitch))
+	aim_pitch = NAN
+	if has_clip(key) and alive:
+		play(key, dir)
+		await anim_done
+	if alive and anim == key:
+		play("pistol_idle" if has_clip("pistol_idle") else "idle", dir)
 
 
 func _on_frame_changed() -> void:

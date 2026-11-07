@@ -47,6 +47,7 @@ var state := {"L2": {}, "L2W": {}, "L3": {"dead": [], "pipe_fixed": false}, "L4W
 var flags := {"visited_L3": false, "found_leak": false, "seen_worms": false, "door_seen": false,
 			  "quest": "none"}        # maintenance call: none -> given -> done (reported back to Tibor)
 var tibor: Actor = null
+var aim_target: Actor = null      # what the gun is held on between shots
 
 
 func _ready() -> void:
@@ -684,6 +685,8 @@ func end_combat() -> void:
 	my_turn = true
 	overwatch = 0
 	player.set_meta("combat", false)
+	player.aim_pitch = NAN
+	aim_target = null
 	player.play("idle", player.dir)
 	hud.show_banner("COMBAT OVER")
 	hud.log_msg("The last worm curls up and stops moving.", Hud.GREEN)
@@ -723,12 +726,14 @@ func attack(w: Actor) -> void:
 
 
 func shoot(w: Actor, penalty: int) -> void:
-	player.face_ground(w.ground)
 	var target := w.aim_point("body")
-	var clip := player.fire_clip(target)          # the gun follows the target's height
+	# the gun goes onto the target's height and stays there between shots: raise from the stance,
+	# or swing from whatever you were aiming at before
+	await player.aim_at(target)
+	aim_target = w
+	var clip := player.fire_held()
 	if "--autotest" in OS.get_cmdline_user_args():
 		print("shot: ", clip, " at ", Hex.distance(player.hex, w.hex), " hexes, target height ", snappedf(target.z, 0.01))
-	player.play(clip, player.dir)
 	await player.action_point
 	var chance := hit_chance(player.hex, w.hex) - penalty
 	var hit := rng.randi_range(1, 100) <= chance
@@ -738,8 +743,13 @@ func shoot(w: Actor, penalty: int) -> void:
 	else:
 		_float(w.position + Vector2(0, -60), "MISS", Hud.DIM)
 	await player.anim_done
-	if player.alive:
-		player.play(player.idle_clip(mode == "combat"), player.dir)
+	if not player.alive:
+		return
+	if not w.alive or mode != "combat":
+		aim_target = null
+		await player.lower_aim()                  # target down: lower the gun
+	else:
+		player.play("pistol_hold", player.dir)    # keep it on the target
 
 
 func damage(a: Actor, dmg: int) -> void:
