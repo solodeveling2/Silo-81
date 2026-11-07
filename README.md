@@ -59,7 +59,7 @@ game/                      Godot project
   scripts/                 game.gd (rules, turns, AI), level.gd (map, hexes, doors),
                            actor.gd (sprites, slide-free movement), hud.gd (UI), hex.gd (coordinates)
   characters/              sprite sheets + character.json (player, pipe worm)
-  levels/L2, L2W, L3       pre-rendered background, prop and door sprites, level.json
+  levels/L2, L2W, L3, L4W  pre-rendered background, prop and door sprites, level.json
 tools/blender/             art pipeline (Blender 5.2 as the bpy Python module)
   build.py, kit.py         build a level from its plan and render background + sorted sprites
   worm.py, worm_pose.py    procedural pipe worm, animated from spine functions
@@ -79,6 +79,7 @@ art/concepts/              character concept art (Nano Banana 2.1 via Gemini)
 python3 -I tools/blender/build.py L2 out    # then copy out/L2 to game/levels/L2
 python3 -I tools/blender/build.py L3 out
 python3 -I tools/blender/build.py L2W out   # Level 2 west: commons, kitchen, clinic, school, Archive
+python3 -I tools/blender/build.py L4W out   # Level 4 west: Council, Varga, valve gallery, Engineering
 python3 -I tools/blender/latch.py              # pose of the worm latched onto the burst pipe -> latch.json
 python3 -I tools/blender/render_aim.py source/models/player_male_v2.glb aim_out
 python3 tools/blender/package_fire.py aim_out game/characters/player_male

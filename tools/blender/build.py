@@ -190,6 +190,7 @@ def L3():
     ]
     D["holes"] = []
     D["blocked"] += [[-4.2, -0.75, 0.35, 1.8]]       # the stair flight
+    D["holes"] = [[-4.0, -0.8, -1.5, 0.15]]          # the flight down to Level 4
     W = D["walls"]
     W += [
         dict(a=(-4.2, 1.8), b=(18.0, 1.8), h=FULL, face="-v", mat="raw"),
@@ -203,6 +204,7 @@ def L3():
     D["decor"] += [
         dict(t="pipes", u0=-0.6, u1=18.0 - T / 2, v=WI, gap=(8.25, 9.45), gap_run=2),
         dict(t="stairs_up", u0=-4.0, u1=-0.8, v0=0.4, v1=1.8),
+        dict(t="stairs_down", u0=-4.0, u1=-0.8, v0=-1.5, v1=0.15),
         dict(t="stencil", u=1.8, v=WI, f="-v", z=2.35, text="LEVEL 3 - LIFE SUPPORT", size=0.15),
         dict(t="stencil", u=18.0 - T / 2, v=-3.6, f="-u", z=2.3, text="PUMP ROOM 3-P", size=0.15),
         dict(t="manifold", u=18.0 - T / 2, v=-2.6, f="-u"),
@@ -229,7 +231,9 @@ def L3():
         dict(id="manifold", u=17.6, v=-2.6, name="Valve manifold", text="Valve wheels tagged in three different handwritings. The newest tag says COUNCIL ORDER: DO NOT OPEN."),
     ]
     D["stairs"] += [dict(id="stairs_up", u=-0.45, v=1.0, to="L2", arrive=[-0.3, 0.0], name="Stairs up",
-                         text="Back up to Level 2.")]
+                         text="Back up to Level 2."),
+                    dict(id="stairs_down", u=-0.45, v=-0.9, to="L4W", arrive=[-0.3, -0.6], name="Stairs down",
+                         text="Down to Level 4: engineering and command. The air gets warmer on every step.")]
     D["spawns"] = {"player": [-0.3, 0.0, 0], "worms": [[8.32, 1.08, 1, "chew"], [5.4, 0.85, 2], [13.1, -3.0, 1]]}
     D["bounds"] = [-4.2, 18.0, -6.0, 1.8]
     return D
@@ -393,7 +397,158 @@ def L2W():
     return D
 
 
-LV = {"L2": L2, "L3": L3, "L2W": L2W}[LEVEL]()
+def L4W():
+    """Level 4 west of the core: valve gallery, Engineering, the Council chamber, Varga's office,
+    the radio room and the duty quarters. Everything here is on the priority circuit."""
+    D = {"name": "Level 4 - Command", "rooms": [], "walls": [], "doors": [], "props": [], "decor": [],
+         "inspect": [], "stairs": [], "spawns": {}, "blocked": []}
+    concrete = dict(rgb=(0.5, 0.49, 0.45), noise=0.18, noise_scale=3.0)
+    plant = dict(rgb=(0.42, 0.43, 0.4), noise=0.14, noise_scale=4, grating=((0.33, 0.34, 0.32), 0.5))
+    parquet = dict(rgb=(0.46, 0.32, 0.2), noise=0.14, noise_scale=8, grating=((0.38, 0.26, 0.16), 0.4))
+    D["rooms"] += [
+        dict(id="landing4", r=[-4.2, 0.0, -1.5, 1.5], floor=concrete),
+        dict(id="corridor4", r=[-30.0, -4.2, -1.5, 1.5], floor=concrete),
+        dict(id="valves", name="Valve gallery", r=[-12.0, -4.2, 1.5, 8.0], floor=plant),
+        dict(id="engineering", name="Engineering", r=[-12.0, -4.2, -8.0, -1.5], floor=plant),
+        dict(id="council", name="Council chamber", r=[-24.0, -12.0, 1.5, 10.0], floor=parquet),
+        dict(id="varga", name="Varga's office", r=[-30.0, -24.0, 1.5, 10.0], floor=parquet),
+        dict(id="radio", name="Radio and map room", r=[-30.0, -24.0, -8.0, -1.5], floor=concrete),
+        dict(id="duty1", name="Duty quarters D-1", r=[-24.0, -20.0, -7.0, -1.5], floor=parquet),
+        dict(id="duty2", name="Duty quarters D-2", r=[-20.0, -16.0, -7.0, -1.5], floor=parquet),
+        dict(id="duty3", name="Duty quarters D-3", r=[-16.0, -12.0, -7.0, -1.5], floor=parquet),
+    ]
+    D["holes"] = []
+    D["blocked"] += [[-4.2, -0.75, 0.05, 1.5]]          # the flight up
+    W = D["walls"]
+    W += [
+        # back walls (north and east faces), full height
+        dict(a=(-12.0, 8.0), b=(-4.2, 8.0), h=FULL, face="-v", mat="machine"),
+        dict(a=(-24.0, 10.0), b=(-12.0, 10.0), h=FULL, face="-v", mat="panel"),
+        dict(a=(-30.0, 10.0), b=(-24.0, 10.0), h=FULL, face="-v", mat="panel"),
+        dict(a=(-4.2, 1.5), b=(-4.2, 8.0), h=FULL, face="-u", mat="machine"),
+        dict(a=(0.0, -1.5), b=(0.0, 1.5), h=FULL, face="-u", mat="raw"),
+        dict(a=(-4.2, 1.5), b=(0.0, 1.5), h=FULL, face="-v", mat="raw"),
+        dict(a=(-4.2, -8.0), b=(-4.2, -1.5), h=FULL, face="-u", mat="machine"),
+        dict(a=(-12.0, 8.0), b=(-12.0, 10.0), h=FULL, face="-u", mat="panel"),
+        # the rest cut down
+        dict(a=(-30.0, 1.5), b=(-4.2, 1.5), h=STUB, mat="panel", openings=[(-27.65, -26.35, "door_varga"), (-18.9, -17.1, None), (-9.0, -7.2, None)]),
+        dict(a=(-12.0, 1.5), b=(-12.0, 8.0), h=STUB, mat="panel"),
+        dict(a=(-24.0, 1.5), b=(-24.0, 10.0), h=STUB, mat="panel"),
+        dict(a=(-30.0, 1.5), b=(-30.0, 10.0), h=STUB, mat="panel"),
+        dict(a=(-30.0, -1.5), b=(-30.0, 1.5), h=STUB),
+        dict(a=(-30.0, -8.0), b=(-30.0, -1.5), h=STUB),
+        dict(a=(-30.0, -1.5), b=(-4.2, -1.5), h=STUB, openings=[(-27.6, -26.3, None), (-22.65, -21.35, "door_d1"), (-18.65, -17.35, "door_d2"),
+                                                               (-14.65, -13.35, "door_d3"), (-9.0, -7.2, None)]),
+        dict(a=(-30.0, -8.0), b=(-24.0, -8.0), h=STUB),
+        dict(a=(-24.0, -8.0), b=(-24.0, -1.5), h=STUB),
+        dict(a=(-24.0, -7.0), b=(-12.0, -7.0), h=STUB, mat="panel"),
+        dict(a=(-20.0, -7.0), b=(-20.0, -1.5), h=STUB, mat="panel"),
+        dict(a=(-16.0, -7.0), b=(-16.0, -1.5), h=STUB, mat="panel"),
+        dict(a=(-12.0, -8.0), b=(-12.0, -1.5), h=STUB, mat="machine"),
+        dict(a=(-12.0, -8.0), b=(-4.2, -8.0), h=STUB, mat="machine"),
+        dict(a=(-4.2, -1.5), b=(0.0, -1.5), h=STUB),
+    ]
+    D["doors"] += [
+        dict(id="door_varga", kind="steel", label="VARGA", u=-27.0, v=1.5, axis="u", open=False, locked=True, lock=70, strength=8,
+             name="Varga's office", text="A steel door with a brass nameplate, VARGA, polished. Locked when she is out, which is not often."),
+        dict(id="door_d1", kind="plywood", u=-22.0, v=-1.5, axis="u", open=False, locked=False, name="Quarters D-1",
+             text="D-1. ALBU on a card in a brass holder."),
+        dict(id="door_d2", kind="plywood", u=-18.0, v=-1.5, axis="u", open=False, locked=False, name="Quarters D-2",
+             text="D-2. RUS, typed, the card perfectly straight."),
+        dict(id="door_d3", kind="plywood", u=-14.0, v=-1.5, axis="u", open=True, locked=False, name="Quarters D-3",
+             text="D-3. KISS, in pencil. The door is propped open with a medical textbook."),
+    ]
+    P = D["props"]
+    VN, CN, EN = 8.0 - T / 2, 10.0 - T / 2, -8.0 + T / 2
+    # valve gallery
+    P += [
+        dict(t="workbench", u=-11.0, v=VN, f="-v", name="Logbook bench", text="The valve log: every turn of every wheel, signed and dated. Since the second generation, most entries are signed RUS."),
+        dict(t="locker", u=-12.0 + T / 2, v=3.0, f="+u", w=1.0, name="Key locker", text="Steel, chained. The radiator keys hang inside in rows, each on its own numbered hook. Four hooks are empty."),
+    ]
+    # Engineering
+    P += [
+        dict(t="workbench", u=-9.6, v=EN, f="+v", name="Workbench", text="A half-rebuilt pump impeller, its blades built up with weld and filed back by hand."),
+        dict(t="lathe", u=-6.5, v=EN, f="+v", name="Lathe", text="The silo's only lathe. Its maker's plate is from 1951; its belts are cut from a conveyor in a closed section."),
+        dict(t="shelf", u=-12.0 + T / 2, v=-5.4, f="+u", name="Parts shelf", text="Gaskets cut from inner tubes, labelled by size. Bearings in jars of oil."),
+        dict(t="crate", u=-5.0, v=-2.4, f="-u", name="Crate", text="SPARES - EXCHANGER. Nearly empty."),
+        dict(t="crate", u=-5.0, v=-3.1, f="-u"),
+        dict(t="locker", u=-4.2 - T / 2, v=-5.6, f="-u", w=1.0, name="Lockers", text="Mira's overalls, a spare set of yours, a photo of the first crew taped inside a door."),
+    ]
+    # Council chamber: a long table, rugs and lamps carried down from closed rooms
+    P += [dict(t="table", u=-18.0, v=5.4, f="+v", L=3.2, name="Council table", text="Long enough for twelve. Four chairs are used; the rest are pushed back against the wall.")]
+    for u in (-19.1, -18.0, -16.9):
+        P.append(dict(t="chair", u=u, v=4.85, f="+v"))
+        P.append(dict(t="chair", u=u, v=6.65, f="-v"))
+    P += [
+        dict(t="chair", u=-20.0, v=5.75, f="+u", name="Chair at the head", text="The chair at the head of the table, with a cushion. Varga's."),
+        dict(t="floorlamp", u=-23.5, v=CN - 0.2, f="-v", name="Lamp", text="A brass standard lamp. The Level 1 inventory lists one like it as missing."),
+        dict(t="floorlamp", u=-12.7, v=CN - 0.2, f="-v"),
+        dict(t="files", u=-23.9 + T / 2, v=6.0, f="+u", k=1, name="Council records", text="Minutes, valve orders, ration tables. The spines are dated in Albu's handwriting."),
+        dict(t="chair", u=-13.0, v=2.6, f="-u"), dict(t="chair", u=-13.0, v=3.3, f="-u"),
+    ]
+    # Varga's office
+    P += [
+        dict(t="terminal", u=-27.0, v=CN, f="-v", id="varga_terminal", name="Varga's terminal",
+             text="A green-screen terminal, the only one still working. The menu lists DIRECTIVES, RATIONS, POPULATION. It asks for a password."),
+        dict(t="chair", u=-27.0, v=8.6, f="+v"),
+        dict(t="safe", u=-29.9 + T / 2, v=7.8, f="+u", name="Safe", text="An old Romanian-made safe, painted green. The dial is worn smooth around three numbers."),
+        dict(t="cabinet", u=-24.2 - T / 2, v=8.9, f="-u", name="Filing cabinet", text="Personnel files. Each resident's trade, health record and number."),
+        dict(t="bed", u=-29.9 + T / 2, v=3.9, f="+u", k=4, name="Camp bed", text="A narrow cot made up with military corners. Varga sleeps here, next to the terminal."),
+        dict(t="floorlamp", u=-24.6, v=CN - 0.2, f="-v"),
+    ]
+    # radio and map room
+    P += [
+        dict(t="radioset", u=-27.0, v=-8.0 + T / 2, f="+v", name="Radio set", text="Dusted daily, powered never. The log beside it has one entry per year: NOTHING HEARD."),
+        dict(t="maptable", u=-27.0, v=-4.9, f="+v", name="Map table", text="A survey map of the valley above. The town is circled in red. Someone has pencilled a date beside it."),
+        dict(t="chair", u=-29.2, v=-3.4, f="+u"),
+    ]
+    # duty quarters D-1 (Albu), D-2 (Rus), D-3 (Dr. Kiss)
+    for u0, k, who in ((-24.0, 0, "Albu's"), (-20.0, 2, "Rus's"), (-16.0, 3, "Dr. Kiss's")):
+        P += [
+            dict(t="bed", u=u0 + 2.0, v=-7.0 + T / 2, f="+v", k=k, name=f"{who} bed", text="A real bed with a real mattress, on the priority circuit. Nobody on Level 2 sleeps like this."),
+            dict(t="locker", u=u0 + 4.0 - T / 2, v=-3.1, f="-u", w=0.55, name="Locker", text="Locked."),
+        ]
+    P += [
+        dict(t="desk", u=-24.0 + T / 2, v=-4.2, f="+u", name="Albu's desk", text="A ledger open at this week's rations, and a jar of sugar lumps with a paper lid."),
+        dict(t="desk", u=-14.6, v=-3.2, f="+u", name="Dr. Kiss's desk", text="Medical journals from 1951, read to pieces. A drawing of Oana's, of the clinic, pinned above it."),
+    ]
+    D["decor"] += [
+        dict(t="stairs_up", u0=-4.0, u1=-0.8, v0=0.1, v1=1.5),
+        dict(t="steeldoor", u=-0.0 - T / 2, v=0.0, f="-u", label="EXCHANGER HALL"),
+        dict(t="stencil", u=-8.1, v=VN, f="-v", z=2.45, text="VALVE GALLERY - PRIORITY / GENERAL", size=0.11),
+        dict(t="manifold", u=-9.2, v=VN, f="-v"),
+        dict(t="manifold", u=-6.6, v=VN, f="-v"),
+        dict(t="radiator", u=-4.2 - T / 2, v=5.6, f="-u", sections=8, state="working"),
+        dict(t="toolboard", u=-4.2 - T / 2, v=-3.6, f="-u", z=1.0),
+        dict(t="stencil", u=-4.2 - T / 2, v=-3.6, f="-u", z=2.3, text="ENGINEERING", size=0.13),
+        dict(t="banner", u=-18.0, v=CN, f="-v", z=1.85, text="COUNCIL OF SILO 81"),
+        dict(t="silomap", u=-15.0, v=CN, f="-v", z=0.9),
+        dict(t="radiator", u=-21.2, v=CN, f="-v", sections=12, state="working"),
+        dict(t="radiator", u=-28.8, v=CN, f="-v", sections=8, state="working"),
+        dict(t="rug", u=-18.0, v=5.9), dict(t="rug", u=-26.0, v=6.2), dict(t="rug", u=-14.2, v=3.6),
+        dict(t="cd_sign", u=-12.0 + T / 2, v=7.0, f="+u", z=1.9),
+        dict(t="floorline", u0=-29.8, u1=-0.2, v=-1.05),
+        dict(t="drain", u0=-29.8, u1=-4.4, v=0.6),
+        dict(t="floortext", u=-8.1, v=0.95, text="VALVES"), dict(t="floortext", u=-8.1, v=-0.95, text="ENGINEERING"),
+        dict(t="floortext", u=-18.0, v=0.95, text="COUNCIL"), dict(t="floortext", u=-27.0, v=-0.95, text="RADIO"),
+        dict(t="floortext", u=-2.2, v=-0.9, text="STAIRS L3"),
+    ]
+    D["inspect"] += [
+        dict(id="manifold_a", u=-9.2, v=7.2, name="Valve manifold", text="Four wheels, chained and padlocked. Tags in three handwritings: PRIORITY - COMMAND, PRIORITY - CLINIC, GENERAL - L2 EAST, GENERAL - L1. The newest tag says COUNCIL ORDER: HALF TURN ONLY."),
+        dict(id="manifold_b", u=-6.6, v=7.2, name="Valve manifold", text="Water treatment, the bays, Level 3. One wheel at the end has no tag at all and no chain. Its pipe runs up into the ceiling and east, towards the exchanger hall. The wheel is open, and by the dust it always has been."),
+        dict(id="toolboard", u=-4.6, v=-3.6, name="Tool board", text="Painted outlines of thirty tools. Seven are still there. The rest were traded, broken or taken to closed sections and never brought back."),
+        dict(id="banner", u=-18.0, v=9.4, name="Banner", text="COUNCIL OF SILO 81, in gold thread on red wool that was a curtain once."),
+        dict(id="silomap", u=-15.0, v=9.4, name="General plan", text="The founders' plan of the silo, four levels and the core. Behind the exchanger hall it shows solid rock."),
+        dict(id="exchanger_door", u=-0.6, v=0.0, name="Exchanger hall", text="Heavy steel, warm to the touch, the wheel greased. Beyond it, the bore, the exchanger and Mira's crew. (The exchanger hall is the next map to be built.)"),
+    ]
+    D["stairs"] += [dict(id="stairs_up4", u=-0.45, v=0.8, to="L3", arrive=[-0.3, -0.6], name="Stairs up",
+                         text="Up to Level 3, life support.")]
+    D["spawns"] = {"player": [-0.3, -0.6, 3], "worms": []}
+    D["bounds"] = [-30.0, 0.0, -8.0, 10.0]
+    return D
+
+
+LV = {"L2": L2, "L3": L3, "L2W": L2W, "L4W": L4W}[LEVEL]()
 
 # ============================================================ background geometry
 bg_objects = []
@@ -451,6 +606,12 @@ for w in LV["walls"]:
 
 
 def wall_material(w):
+    if w.get("mat") == "panel":                 # Council rooms: wood panelling under cream paint
+        return toon(f"WallPanel_{LEVEL}", (0.78, 0.74, 0.64), noise=0.1, noise_scale=3.0,
+                    dado=((0.36, 0.25, 0.16), 1.1))
+    if w.get("mat") == "machine":               # plant rooms: machinery green under grey
+        return toon(f"WallMachine_{LEVEL}", (0.6, 0.6, 0.56), noise=0.18, noise_scale=2.5,
+                    dado=((0.3, 0.38, 0.32), 1.3))
     if w.get("mat") == "raw":
         return toon(f"WallRaw_{LEVEL}", (0.56, 0.55, 0.51), noise=0.22, noise_scale=2.5,
                     frost=None)
@@ -725,6 +886,52 @@ def decor(d):
                 b.box(-0.26 + c * 0.13, -0.2 + c * 0.13, 0.2, 0.202, 0.2 + r * 0.25, 0.24 + r * 0.25, flat("TapeLabel", (0.86, 0.82, 0.62)))
         ob = b.finish(outline=0.006)
         add_on_wall(ob, d["u"], d["v"], d["f"], d.get("z", 0.9))
+    elif t == "toolboard":
+        b = Builder("ToolBoard")
+        b.box(-1.0, 1.0, 0.0, 0.03, 0.0, 1.0, toon("Pegboard", (0.62, 0.52, 0.36), noise=0.12, noise_scale=12))
+        ghost = flat("ToolOutline", (0.22, 0.2, 0.18))
+        tool = toon("ToolSteel", (0.48, 0.5, 0.5), noise=0.06)
+        for i, (x, z, w, h, present) in enumerate(((-0.8, 0.5, 0.06, 0.4, False), (-0.6, 0.45, 0.08, 0.45, True), (-0.4, 0.55, 0.05, 0.35, False),
+                                                   (-0.15, 0.4, 0.22, 0.08, False), (0.15, 0.6, 0.05, 0.3, True), (0.35, 0.5, 0.07, 0.42, False),
+                                                   (0.6, 0.55, 0.18, 0.06, False), (0.8, 0.45, 0.05, 0.4, True), (-0.5, 0.12, 0.3, 0.06, False), (0.3, 0.12, 0.25, 0.08, False))):
+            b.box(x - w / 2, x + w / 2, 0.031, 0.033, z, z + h, ghost)
+            if present:
+                b.box(x - w / 2 + 0.01, x + w / 2 - 0.01, 0.034, 0.05, z + 0.02, z + h - 0.02, tool)
+        ob = b.finish(outline=0.006)
+        add_on_wall(ob, d["u"], d["v"], d["f"], d.get("z", 1.0))
+    elif t == "silomap":
+        b = Builder("SiloMap")
+        b.box(-0.8, 0.8, 0.0, 0.03, 0.0, 1.1, toon("BoardFrame", (0.4, 0.3, 0.18), noise=0.1))
+        b.box(-0.74, 0.74, 0.03, 0.034, 0.06, 1.04, flat("MapPaper", (0.84, 0.8, 0.66)))
+        ink = flat("MapInk", (0.2, 0.22, 0.3))
+        for k in range(4):
+            z = 0.2 + k * 0.2
+            b.box(-0.55, 0.55, 0.035, 0.037, z, z + 0.012, ink)
+            b.box(-0.55, -0.54, 0.035, 0.037, z, z + 0.14, ink)
+            b.box(0.54, 0.55, 0.035, 0.037, z, z + 0.14, ink)
+        b.box(-0.06, 0.06, 0.035, 0.037, 0.2, 0.96, ink)
+        b.box(-0.02, 0.02, 0.035, 0.037, 0.02, 0.2, flat("MapRed", (0.65, 0.12, 0.1)))
+        ob = b.finish(outline=0.006)
+        add_on_wall(ob, d["u"], d["v"], d["f"], d.get("z", 1.0))
+        add_text_on_wall("SILO 81 - GENERAL PLAN", STENCIL, 0.06, ink, d["u"], d["v"], d["f"], d.get("z", 1.0) + 0.98, dy=0.04)
+    elif t == "steeldoor":
+        b = Builder("SteelDoor")
+        b.box(-0.75, 0.75, 0.0, 0.1, 0.0, 2.4, toon("LiftFrame", (0.3, 0.33, 0.3), noise=0.08))
+        b.box(-0.65, 0.65, 0.1, 0.16, 0.05, 2.25, toon("BlastSteel", (0.4, 0.43, 0.4), noise=0.14, noise_scale=6))
+        b.cyl((0.0, 0.16, 1.2), (0.0, 0.24, 1.2), 0.22, toon("ValveRed", (0.5, 0.12, 0.1)), seg=16)
+        for z in (0.3, 2.0):
+            b.box(-0.6, 0.6, 0.16, 0.18, z, z + 0.06, toon("Hazard", (0.75, 0.6, 0.12)))
+        ob = b.finish(outline=0.01)
+        add_on_wall(ob, d["u"], d["v"], d["f"], 0.0)
+        if d.get("label"):
+            add_text_on_wall(d["label"], STENCIL, 0.14, flat("StencilPaint", (0.12, 0.12, 0.11)), d["u"], d["v"], d["f"], 2.5, dy=0.05)
+    elif t == "banner":
+        b = Builder("Banner")
+        b.box(-0.9, 0.9, 0.0, 0.01, 0.0, 0.5, toon("BannerRed", (0.5, 0.1, 0.08), noise=0.1, noise_scale=10))
+        b.box(-0.95, 0.95, -0.02, 0.03, 0.48, 0.52, toon("Brass", (0.6, 0.48, 0.24), noise=0.06))
+        ob = b.finish(outline=0.006)
+        add_on_wall(ob, d["u"], d["v"], d["f"], d.get("z", 1.9))
+        add_text_on_wall(d.get("text", "COUNCIL OF SILO 81"), STENCIL, 0.1, flat("BannerText", (0.88, 0.8, 0.55)), d["u"], d["v"], d["f"], d.get("z", 1.9) + 0.2, dy=0.015)
     elif t == "pipes":
         build_pipes(d)
     elif t == "manifold":
@@ -874,6 +1081,12 @@ PROP_FN = {
     "schooldesk": lambda p: kit.schooldesk("SchoolDesk"),
     "sacks": lambda p: kit.sacks("Sacks"),
     "files": lambda p: kit.file_shelf("Files", p.get("k", 0)),
+    "terminal": lambda p: kit.terminal("Terminal"),
+    "radioset": lambda p: kit.radioset("Radio"),
+    "maptable": lambda p: kit.maptable("MapTable"),
+    "floorlamp": lambda p: kit.floorlamp("FloorLamp"),
+    "safe": lambda p: kit.safe("Safe"),
+    "lathe": lambda p: kit.lathe("Lathe"),
 }
 cache = {}
 
@@ -906,7 +1119,8 @@ for i, p in enumerate(LV["props"]):
              "bucket": (0.34, 0.34), "shelf": (1.1, 0.45), "sinks": (0.7 * p.get("n", 3), 0.45), "stall": (0.9, 1.2), "laundry": (1.8, 0.25),
              "pump": (1.2, 0.7), "workbench": (1.8, 0.7), "bench": (p.get("L", 2.2), 0.32), "stove": (1.6, 0.8),
              "counter": (p.get("L", 2.0), 0.62), "cabinet": (0.48, 0.62), "medscreen": (1.8, 0.2), "medcab": (0.9, 0.42),
-             "schooldesk": (1.1, 0.85), "sacks": (1.1, 0.6), "files": (1.1, 0.42)}[p["t"]]
+             "schooldesk": (1.1, 0.85), "sacks": (1.1, 0.6), "files": (1.1, 0.42), "terminal": (1.4, 0.7), "radioset": (1.6, 0.6),
+             "maptable": (1.8, 1.1), "floorlamp": (0.3, 0.3), "safe": (0.7, 0.6), "lathe": (1.8, 0.6)}[p["t"]]
     fp = footprint(p["u"], p["v"], p["f"], L, Dp)
     cu, cv = (fp[0] + fp[1]) / 2, (fp[2] + fp[3]) / 2
     sx, sy = scr_uv(p["u"], p["v"])

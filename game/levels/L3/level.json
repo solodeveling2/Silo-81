@@ -253,6 +253,18 @@
    ],
    "name": "Stairs up",
    "text": "Back up to Level 2."
+  },
+  {
+   "id": "stairs_down",
+   "u": -0.45,
+   "v": -0.9,
+   "to": "L4W",
+   "arrive": [
+    -0.3,
+    -0.6
+   ],
+   "name": "Stairs down",
+   "text": "Down to Level 4: engineering and command. The air gets warmer on every step."
   }
  ],
  "spawns": {
@@ -292,6 +304,12 @@
    18.0,
    1.25,
    1.8
+  ],
+  [
+   -4.0,
+   -0.8,
+   -1.5,
+   0.15
   ]
  ],
  "bounds": [

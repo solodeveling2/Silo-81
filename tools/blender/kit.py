@@ -728,3 +728,92 @@ def file_shelf(name, k=0):
             b.box(x, x + w - 0.01, 0.06, D - 0.06, zz + 0.025, zz + 0.025 + h, toon(f"BoxFile{(i + j + k) % 4}", c, noise=0.1))
             x += w; j += 1
     return b.finish(), (L, D)
+
+
+# ---------------------------------------------------------------- Level 4 west: Council, Engineering, valve gallery
+def terminal(name):
+    """Desk with a green-screen terminal and a printer: Varga's terminal."""
+    b = Builder(name)
+    wood = toon("DeskWood", WOOD, noise=0.12, noise_scale=10)
+    case = toon("TermCase", (0.62, 0.6, 0.52), noise=0.06)
+    L, D = 1.4, 0.7
+    b.box(-L / 2, L / 2, 0, D, 0.72, 0.76, wood)
+    for x in (-L / 2 + 0.04, L / 2 - 0.04):
+        b.box(x - 0.03, x + 0.03, 0.04, D - 0.04, 0, 0.72, wood)
+    b.box(-0.35, 0.15, 0.1, 0.5, 0.76, 1.16, case)
+    b.box(-0.3, 0.1, 0.5, 0.51, 0.82, 1.1, flat("TermGlass", (0.12, 0.28, 0.16)))
+    for k in range(4):
+        b.box(-0.26, -0.26 + 0.08 + 0.06 * (k % 3), 0.511, 0.513, 1.04 - k * 0.05, 1.05 - k * 0.05, flat("TermText", (0.45, 0.85, 0.5)))
+    b.box(-0.35, 0.2, 0.52, 0.68, 0.76, 0.79, case)                           # keyboard
+    b.box(0.3, 0.62, 0.1, 0.45, 0.76, 0.92, case)                             # printer
+    b.box(0.32, 0.6, 0.3, 0.52, 0.92, 0.93, toon("Paper", (0.85, 0.83, 0.76)))
+    return b.finish(), (L, D)
+
+
+def radioset(name):
+    """The silent radio: a tall cabinet set with dials, a headset and a morse key on a bench."""
+    b = Builder(name)
+    grey = toon("RadioGrey", (0.36, 0.4, 0.38), noise=0.08)
+    dark = toon("RadioDark", (0.14, 0.15, 0.14))
+    L, D = 1.6, 0.6
+    b.box(-L / 2, L / 2, 0, D, 0.72, 0.76, toon("BenchWood", (0.38, 0.27, 0.16), noise=0.14, noise_scale=10))
+    for x in (-L / 2 + 0.04, L / 2 - 0.04):
+        b.box(x - 0.03, x + 0.03, 0.04, D - 0.04, 0, 0.72, grey)
+    b.box(-0.7, 0.4, 0.02, 0.4, 0.76, 1.75, grey)
+    for r in range(3):
+        for c in range(4):
+            b.cyl((-0.58 + c * 0.25, 0.4, 0.95 + r * 0.25), (-0.58 + c * 0.25, 0.43, 0.95 + r * 0.25), 0.05, dark, seg=10)
+    b.box(-0.6, 0.0, 0.4, 0.41, 1.55, 1.68, flat("RadioDial", (0.82, 0.74, 0.5)))
+    b.cyl((0.6, 0.35, 0.76), (0.6, 0.35, 0.8), 0.06, dark, seg=10)            # morse key
+    b.box(0.45, 0.65, 0.15, 0.3, 0.76, 0.86, dark)                            # headset
+    return b.finish(), (L, D)
+
+
+def maptable(name):
+    b = Builder(name)
+    wood = toon("TableWood", (0.45, 0.33, 0.2), noise=0.12, noise_scale=10)
+    L, D = 1.8, 1.1
+    b.box(-L / 2, L / 2, 0, D, 0.84, 0.88, wood)
+    for x in (-L / 2 + 0.06, L / 2 - 0.06):
+        for y in (0.06, D - 0.06):
+            b.box(x - 0.04, x + 0.04, y - 0.04, y + 0.04, 0, 0.84, wood)
+    b.box(-0.75, 0.75, 0.08, D - 0.08, 0.88, 0.885, toon("MapPaper", (0.78, 0.74, 0.6), noise=0.12, noise_scale=8))
+    for k in range(5):
+        b.box(-0.6 + k * 0.28, -0.55 + k * 0.28, 0.2, 0.9, 0.885, 0.887, flat("MapLine", (0.4, 0.35, 0.3)))
+    b.cyl((0.4, 0.5, 0.885), (0.4, 0.5, 0.9), 0.12, flat("MapCircle", (0.6, 0.15, 0.1)), seg=16)
+    return b.finish(), (L, D)
+
+
+def floorlamp(name):
+    b = Builder(name)
+    brass = toon("Brass", (0.6, 0.48, 0.24), noise=0.06)
+    b.cyl((0, 0.15, 0), (0, 0.15, 0.04), 0.14, brass, seg=12)
+    b.cyl((0, 0.15, 0.04), (0, 0.15, 1.5), 0.015, brass, seg=8)
+    b.cyl((0, 0.15, 1.42), (0, 0.15, 1.7), 0.22, toon("LampShade", (0.78, 0.66, 0.42), noise=0.08), seg=14, r1=0.12)
+    return b.finish(), (0.3, 0.3)
+
+
+def safe(name):
+    b = Builder(name)
+    body = toon("SafeGreen", (0.2, 0.28, 0.22), noise=0.08)
+    b.box(-0.35, 0.35, 0.0, 0.6, 0.0, 0.9, body)
+    b.box(-0.3, 0.3, 0.6, 0.62, 0.06, 0.84, toon("SafeDoor", (0.24, 0.32, 0.26), noise=0.08))
+    b.cyl((0.0, 0.62, 0.55), (0.0, 0.66, 0.55), 0.08, toon("Brass", (0.6, 0.48, 0.24), noise=0.06), seg=14)
+    b.box(0.15, 0.25, 0.62, 0.66, 0.35, 0.45, toon("Steel", (0.5, 0.5, 0.5)))
+    return b.finish(), (0.7, 0.6)
+
+
+def lathe(name):
+    b = Builder(name)
+    paint = toon("MachineGreen", (0.3, 0.38, 0.32), noise=0.1)
+    steel = toon("Steel", (0.5, 0.5, 0.5))
+    L, D = 1.8, 0.6
+    for x in (-0.7, 0.7):
+        b.box(x - 0.2, x + 0.2, 0.05, D - 0.05, 0, 0.85, paint)
+    b.box(-L / 2, L / 2, 0.1, D - 0.1, 0.85, 1.0, paint)
+    b.box(-0.85, -0.45, 0.1, D - 0.1, 1.0, 1.35, paint)                     # headstock
+    b.cyl((-0.45, D / 2, 1.18), (0.6, D / 2, 1.18), 0.03, steel, seg=8)
+    b.box(0.55, 0.8, 0.15, D - 0.15, 1.0, 1.25, paint)                       # tailstock
+    b.box(-0.1, 0.2, 0.05, D - 0.05, 1.0, 1.12, steel)                       # carriage
+    b.box(-0.6, 0.6, D - 0.02, D, 0.3, 0.32, toon("Hazard", (0.75, 0.6, 0.12)))
+    return b.finish(), (L, D)

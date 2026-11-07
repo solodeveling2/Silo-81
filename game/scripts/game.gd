@@ -39,7 +39,7 @@ var path_preview: Array = []
 var dialog_handler := Callable()
 var rng := RandomNumberGenerator.new()
 var stats := {"hp": 40, "hp_max": 40, "ap": AP_MAX, "str": 6, "lockpick": 45, "medkits": 2, "kit": false}
-var state := {"L2": {}, "L2W": {}, "L3": {"dead": [], "pipe_fixed": false}}
+var state := {"L2": {}, "L2W": {}, "L3": {"dead": [], "pipe_fixed": false}, "L4W": {}}
 var flags := {"visited_L3": false, "found_leak": false, "seen_worms": false, "door_seen": false}
 
 
@@ -65,6 +65,8 @@ func _ready() -> void:
 		autotest.call_deferred()
 	elif "--test-commons" in OS.get_cmdline_user_args():
 		test_commons.call_deferred()
+	elif "--test-command" in OS.get_cmdline_user_args():
+		test_command.call_deferred()
 
 
 # ================================================================== levels
@@ -1006,6 +1008,41 @@ func test_commons() -> void:
 		print("  reached ", player.hex == target, "  in room ", level._in_room(Hex.hex_to_plan(player.hex)))
 	var back: Dictionary = level.data["stairs"][0]
 	await interact({"kind": "stairs", "id": back["id"], "name": back["name"], "text": back["text"], "plan": Vector2(back["u"], back["v"]), "to": back["to"], "arrive": back["arrive"]})
+	print("back on ", level_id, " at ", player.hex)
+	print("TEST END")
+	get_tree().quit()
+
+
+## Goes down from Level 3 to Level 4 and walks into every room of the command wing.
+func test_command() -> void:
+	await get_tree().create_timer(0.3).timeout
+	load_level("L3", Vector2(-0.3, 0.0))
+	await get_tree().create_timer(0.3).timeout
+	for w in worms:
+		w.alive = false                     # this test is about rooms, not worms
+	var down: Dictionary = level.data["stairs"][1]
+	await interact({"kind": "stairs", "id": down["id"], "name": down["name"], "text": down["text"], "plan": Vector2(down["u"], down["v"]), "to": down["to"], "arrive": down["arrive"]})
+	print("now on ", level_id, " at ", player.hex, " walkable ", level.walkable.size())
+	var doors_for := {"duty1": "door_d1", "duty2": "door_d2", "duty3": "door_d3", "varga": "door_varga"}
+	for room in ["valves", "engineering", "council", "radio", "duty1", "duty2", "duty3", "varga"]:
+		var r: Array = []
+		for rr in level.data["rooms"]:
+			if rr["id"] == room:
+				r = rr["r"]
+		if doors_for.has(room):
+			var did: String = doors_for[room]
+			if room == "varga":
+				level.doors[did]["locked"] = false      # skip the lockpick roll in the test
+			var d: Dictionary = level.doors[did]["data"]
+			await interact({"kind": "door", "id": did, "name": d["name"], "text": d["text"], "plan": Vector2(d["u"], d["v"])})
+		var target := level.nearest_walkable(Vector2((r[0] + r[1]) / 2.0, (r[2] + r[3]) / 2.0), 3.0)
+		var path := level.find_path(player.hex, target, [])
+		print(room, ": target ", target, " path ", path.size())
+		if not path.is_empty():
+			await walk(path)
+		print("  reached ", player.hex == target, "  in room ", level._in_room(Hex.hex_to_plan(player.hex)))
+	var up: Dictionary = level.data["stairs"][0]
+	await interact({"kind": "stairs", "id": up["id"], "name": up["name"], "text": up["text"], "plan": Vector2(up["u"], up["v"]), "to": up["to"], "arrive": up["arrive"]})
 	print("back on ", level_id, " at ", player.hex)
 	print("TEST END")
 	get_tree().quit()
