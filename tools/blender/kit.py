@@ -98,16 +98,23 @@ TEX_FOR = {      # name: (texture, metres per repeat, tint[, metal sheen 0..1])
 
 # kit materials that keep their designed colour but take the pack's surface wear from a texture
 DETAIL = {}
-for _t, _names in {
-    "wood_grain": "TableWood DeskWood ChairWood BenchWood SchoolWood CrateWood CrateDark PatchWood PlyDoor CounterDoor ChopBoard BoardFrame Pegboard",
-    "steel_grey": "Locker LockerDark FilingGrey FilingDrawer ShelfSteel BunkFrame SchoolFrame TermCase TVCase SwitchGrey RadioGrey "
-                  "IntercomGrey PumpGrey CounterBody LiftSteel LiftFrame DoorFrame Railing HatchFrame StallPanel ScreenFrame ToolSteel Zinc",
-    "steel_green": "MachineGreen PumpGreen SafeGreen SafeDoor LampGreen",
-    "steel_rust": "StoveIron StoveDoor BlastSteel Rivet Breaker GasBottle DrainGrate Hotplate",
-    "paint_white": "MedWhite MedDoor Enamel SinkDark PotEnamel",
-    "fabric": "Mattress Pillow Rug RugInner ScreenCloth",
-    "concrete_wall": "ConcretePlinth",
-}.items():
+for _t, _names in [
+    ("wood_grain", "TableWood DeskWood ChairWood BenchWood SchoolWood CrateWood CrateDark PatchWood PlyDoor CounterDoor ChopBoard BoardFrame Pegboard"),
+    ("steel_grey", "Locker LockerDark FilingGrey FilingDrawer ShelfSteel BunkFrame SchoolFrame TermCase TVCase SwitchGrey RadioGrey "
+                  "IntercomGrey PumpGrey CounterBody LiftSteel LiftFrame DoorFrame Railing HatchFrame StallPanel ScreenFrame ToolSteel Zinc"),
+    ("steel_green", "MachineGreen PumpGreen SafeGreen SafeDoor LampGreen"),
+    ("steel_rust", "StoveIron StoveDoor BlastSteel Rivet Breaker GasBottle DrainGrate Hotplate"),
+    ("paint_white", "MedWhite MedDoor Enamel SinkDark PotEnamel"),
+    ("fabric", "Mattress Pillow Rug RugInner ScreenCloth"),
+    ("concrete_wall", "ConcretePlinth"),
+    # wall fixtures and one-off props: same pack wear, designed colours kept
+    ("paint_white", "Radiator_working"),
+    ("steel_grey", "Radiator_dead Radiator_frozen RadioDark Tin PotAlu Knob CashTin Wire"),
+    ("steel_rust", "GasRed Brass Padlock"),
+    ("fabric", "Sack0 Sack1 BenchSeat LampShade Cork Leather Carton"),
+    ("wood_grain", "CounterTop RationBoard Peg"),
+    ("concrete_wall", "BoardGreen"),
+]:
     for _n in _names.split():
         DETAIL[_n] = _t
 _MEANS = None
@@ -721,6 +728,16 @@ def toolbox(name):
     return b.finish(), (1.0, 0.3)
 
 
+def toolbox_bottles(name):
+    """Just the gas bottles beside the toolbox (the box itself is a Tripo model)."""
+    b = Builder(name)
+    bottle = toon("GasBottle", (0.2, 0.35, 0.5))
+    b.cyl((0.42, 0.14, 0), (0.42, 0.14, 0.55), 0.08, bottle)
+    b.cyl((0.42, 0.14, 0.55), (0.42, 0.14, 0.62), 0.03, toon("Brass", (0.6, 0.48, 0.2)))
+    b.cyl((0.6, 0.14, 0), (0.6, 0.14, 0.5), 0.07, toon("GasRed", (0.55, 0.18, 0.14)))
+    return b.finish(), (1.0, 0.3)
+
+
 def crate(name, h=0.55):
     b = Builder(name)
     wood = toon("CrateWood", (0.5, 0.4, 0.25), noise=0.15, noise_scale=10)
@@ -1133,10 +1150,13 @@ def glb_prop(name, file, L, D, rot=0.0, fit="x", H=None, outline=0.01, mirror=Fa
         bmesh.ops.reverse_faces(bm, faces=bm.faces, flip_multires=False)
     xs = [v.co.x for v in bm.verts]; ys = [v.co.y for v in bm.verts]; zs = [v.co.z for v in bm.verts]
     s = (L / (max(xs) - min(xs))) if fit == "x" else (H / (max(zs) - min(zs)))
+    sx = sy = sz = s
+    if fit == "box":                             # stretch each axis: long tables and counters from one model
+        sx, sy, sz = L / (max(xs) - min(xs)), D / (max(ys) - min(ys)), H / (max(zs) - min(zs))
     cx = (max(xs) + min(xs)) / 2
     for v in bm.verts:
-        v.co = Vector(((v.co.x - cx) * s, (v.co.y - min(ys)) * s, (v.co.z - min(zs)) * s))
-    depth = (max(ys) - min(ys)) * s
+        v.co = Vector(((v.co.x - cx) * sx, (v.co.y - min(ys)) * sy, (v.co.z - min(zs)) * sz))
+    depth = (max(ys) - min(ys)) * sy
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
     for m in mats:
         _toon_textured(m)
@@ -1146,4 +1166,4 @@ def glb_prop(name, file, L, D, rot=0.0, fit="x", H=None, outline=0.01, mirror=Fa
         me.materials.append(ink())
         sol = ob.modifiers.new("Outline", "SOLIDIFY"); sol.thickness = -outline
         sol.use_flip_normals = True; sol.use_rim = False; sol.material_offset = len(mats)
-    return ob, (L if fit == "x" else (max(xs) - min(xs)) * s, depth)
+    return ob, (L if fit in ("x", "box") else (max(xs) - min(xs)) * s, depth)

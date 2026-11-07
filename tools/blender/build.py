@@ -1204,7 +1204,68 @@ GLB_PROPS = {
     "locker": dict(file="silo81_locker.glb", rot=180, fit="x", L=1.0, D=0.5),
     "stall": dict(file="silo81_toilet_stall.glb", rot=180, fit="z", H=2.05, L=0.9, D=1.2),
     "shelf": dict(file="silo81_linen_shelf.glb", rot=180, fit="z", H=1.9, L=1.1, D=0.45),
-}
+    # leftover furniture (Gemini reference -> Tripo); "box" stretches to the procedural footprint
+    "chair": dict(file="silo81_chair.glb", rot=180, fit="z", H=0.9, L=0.5, D=0.5),
+    "stool": dict(file="silo81_stool.glb", rot=180, fit="z", H=0.62, L=0.36, D=0.36),
+    "desk": dict(file="silo81_desk.glb", rot=180, fit="box", L=1.2, D=0.6, H=0.95),
+    "schooldesk": dict(file="silo81_schooldesk.glb", rot=180, fit="box", L=1.1, D=0.85, H=0.8),
+    "table": dict(file="silo81_table.glb", rot=180, fit="box", L=1.2, D=0.7, H=0.76),
+    "bench": dict(file="silo81_bench.glb", rot=180, fit="box", L=2.2, D=0.32, H=0.45),
+    "crate": dict(file="silo81_crate.glb", rot=180, fit="x", L=0.62, D=0.62),
+    "washbasin": dict(file="silo81_washbasin.glb", rot=180, fit="z", H=0.5, L=0.56, D=0.45, lift=0.38),
+    "kshelf": dict(file="silo81_shelf.glb", rot=180, fit="z", H=1.8, L=1.1, D=0.45),
+    "files": dict(file="silo81_filing.glb", rot=0, fit="box", L=1.1, D=0.42, H=1.9),
+    "workbench": dict(file="silo81_workbench.glb", rot=180, fit="box", L=1.8, D=0.7, H=0.95),
+    "stove": dict(file="silo81_stove.glb", rot=180, fit="box", L=1.6, D=0.8, H=0.95),
+    "counter": dict(file="silo81_counter.glb", rot=180, fit="box", L=2.0, D=0.62, H=0.92),
+    "pump": dict(file="silo81_pump.glb", rot=180, fit="x", L=1.2, D=0.7),
+    "toolbox": dict(file="silo81_toolbox.glb", rot=180, fit="x", L=0.56, D=0.26),
+    "medcab": dict(file="silo81_medcab.glb", rot=180, fit="z", H=1.8, L=0.9, D=0.42)}
+
+
+def glb_box(key, L=None, D=None, H=None):
+    """A "box"-fit GLB stretched to this instance's size (long tables, short counters)."""
+    c = dict(GLB_PROPS[key]); c.update({k: v for k, v in (("L", L), ("D", D), ("H", H)) if v is not None})
+    return kit.glb_prop(key, c["file"], c["L"], c["D"], rot=c["rot"], fit=c["fit"], H=c.get("H"))
+
+
+def joined(parts, name):
+    """Join (object, x-offset) parts into one object, keeping one ink outline."""
+    obs = []
+    for ob, dx in parts:
+        ob.location.x += dx
+        obs.append(ob)
+    for ob in obs[1:]:
+        for m in list(ob.modifiers):
+            ob.modifiers.remove(m)
+    with bpy.context.temp_override(active_object=obs[0], selected_editable_objects=obs, object=obs[0]):
+        bpy.ops.object.join()
+    ob = obs[0]; ob.name = name
+    mats = list(ob.data.materials)
+    ink = [i for i, mm in enumerate(mats) if mm and mm.name.startswith("Ink")]
+    if ink and ink[0] != len(mats) - 1:            # the outline material must stay addressable by offset
+        ob.data.materials.append(mats[ink[0]])
+    for m in ob.modifiers:
+        if m.type == "SOLIDIFY":
+            m.material_offset = len(ob.data.materials) - 1
+    return ob
+
+
+def sinks_fn(p):
+    n = p.get("n", 3)
+    if not have_glb("washbasin"):
+        return kit.sinks("Sinks", n)
+    L = 0.7 * n
+    parts = [(glb("washbasin")[0], -L / 2 + 0.35 + i * 0.7) for i in range(n)]
+    return joined(parts, "Sinks"), (L, 0.45)
+
+
+def toolbox_fn(p):
+    if not have_glb("toolbox"):
+        return kit.toolbox("Toolbox")
+    box, _ = glb("toolbox")
+    bottles, _ = kit.toolbox_bottles("Bottles")
+    return joined([(box, -0.2), (bottles, 0.0)], "Toolbox"), (1.0, 0.3)
 
 
 def have_glb(key):
@@ -1213,7 +1274,10 @@ def have_glb(key):
 
 def glb(key, mirror=False):
     c = GLB_PROPS[key]
-    return kit.glb_prop(key, c["file"], c.get("L", 1.0), c.get("D", 1.0), rot=c["rot"], fit=c["fit"], H=c.get("H"), mirror=mirror)
+    ob, size = kit.glb_prop(key, c["file"], c.get("L", 1.0), c.get("D", 1.0), rot=c["rot"], fit=c["fit"], H=c.get("H"), mirror=mirror)
+    if c.get("lift"):                                  # wall-hung (washbasins)
+        ob.data.transform(Matrix.Translation((0, 0, c["lift"])))
+    return ob, size
 
 
 def bunk_fn(p):
@@ -1229,29 +1293,29 @@ PROP_FN = {
     "bunk": bunk_fn,
     "bed": lambda p: glb("bed") if p.get("mine") and have_glb("bed") else kit.bed("Bed", p.get("k", 1)),
     "locker": lambda p: glb("locker") if have_glb("locker") and p.get("w", 0.55) >= 0.9 and not p.get("open") else kit.locker("Locker", p.get("w", 0.55), p.get("open", False), p.get("k", 0)),
-    "desk": lambda p: kit.desk("Desk"),
-    "chair": lambda p: kit.chair("Chair", p.get("overturned", False)),
-    "table": lambda p: kit.table("Table", p.get("L", 1.2)),
-    "stool": lambda p: kit.stool("Stool"),
+    "desk": lambda p: glb("desk") if have_glb("desk") else kit.desk("Desk"),
+    "chair": lambda p: kit.chair("Chair", True) if p.get("overturned") or not have_glb("chair") else glb("chair"),
+    "table": lambda p: glb_box("table", L=p.get("L", 1.2)) if have_glb("table") else kit.table("Table", p.get("L", 1.2)),
+    "stool": lambda p: glb("stool") if have_glb("stool") else kit.stool("Stool"),
     "curtain": lambda p: kit.curtain("Curtain", p.get("k", 0)),
-    "toolbox": lambda p: kit.toolbox("Toolbox"),
-    "crate": lambda p: kit.crate("Crate"),
+    "toolbox": toolbox_fn,
+    "crate": lambda p: glb("crate") if have_glb("crate") else kit.crate("Crate"),
     "bucket": lambda p: kit.bucket("Bucket"),
-    "shelf": lambda p: glb("shelf") if p.get("linen") and have_glb("shelf") else kit.shelf("Shelf"),
-    "sinks": lambda p: kit.sinks("Sinks", p.get("n", 3)),
+    "shelf": lambda p: glb("shelf") if p.get("linen") and have_glb("shelf") else glb("kshelf") if have_glb("kshelf") else kit.shelf("Shelf"),
+    "sinks": sinks_fn,
     "stall": lambda p: glb("stall") if have_glb("stall") else kit.stall("Stall"),
     "laundry": lambda p: kit.laundry("Laundry", p.get("k", 0)),
-    "pump": lambda p: kit.pump("Pump"),
-    "workbench": lambda p: kit.workbench("Workbench"),
-    "bench": lambda p: kit.bench("Bench", p.get("L", 2.2)),
-    "stove": lambda p: kit.stove("Stove"),
-    "counter": lambda p: kit.counter("Counter", p.get("L", 2.0), p.get("hatch", False)),
+    "pump": lambda p: glb("pump") if have_glb("pump") else kit.pump("Pump"),
+    "workbench": lambda p: glb("workbench") if have_glb("workbench") else kit.workbench("Workbench"),
+    "bench": lambda p: glb_box("bench", L=p.get("L", 2.2)) if have_glb("bench") else kit.bench("Bench", p.get("L", 2.2)),
+    "stove": lambda p: glb("stove") if have_glb("stove") else kit.stove("Stove"),
+    "counter": lambda p: glb_box("counter", L=p.get("L", 2.0)) if have_glb("counter") and not p.get("hatch") else kit.counter("Counter", p.get("L", 2.0), p.get("hatch", False)),
     "cabinet": lambda p: kit.cabinet("Cabinet"),
     "medscreen": lambda p: kit.medscreen("Screen"),
-    "medcab": lambda p: kit.medcab("MedCabinet"),
-    "schooldesk": lambda p: kit.schooldesk("SchoolDesk"),
+    "medcab": lambda p: glb("medcab") if have_glb("medcab") else kit.medcab("MedCabinet"),
+    "schooldesk": lambda p: glb("schooldesk") if have_glb("schooldesk") else kit.schooldesk("SchoolDesk"),
     "sacks": lambda p: kit.sacks("Sacks"),
-    "files": lambda p: kit.file_shelf("Files", p.get("k", 0)),
+    "files": lambda p: glb("files") if have_glb("files") else kit.file_shelf("Files", p.get("k", 0)),
     "terminal": lambda p: kit.terminal("Terminal"),
     "radioset": lambda p: kit.radioset("Radio"),
     "maptable": lambda p: kit.maptable("MapTable"),
