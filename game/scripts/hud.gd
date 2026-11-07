@@ -268,9 +268,7 @@ var _dialog_buttons: VBoxContainer
 func _build_dialog(root: Control) -> void:
 	dialog = PanelContainer.new()
 	dialog.add_theme_stylebox_override("panel", _box(Color(0.08, 0.075, 0.065, 0.97), BRASS, 2, 6))
-	dialog.set_anchors_preset(Control.PRESET_CENTER)
 	dialog.custom_minimum_size = Vector2(520, 0)
-	dialog.position = Vector2(-260, -200)
 	dialog.visible = false
 	root.add_child(dialog)
 	var col := VBoxContainer.new()
@@ -301,7 +299,20 @@ func open_dialog(title: String, text: String, options: Array) -> void:
 		_dialog_buttons.add_child(b)
 	dialog.visible = true
 	dialog.reset_size()
-	dialog.position = Vector2(-dialog.size.x / 2, -dialog.size.y / 2 - 60)
+	_center_dialog()
+
+
+# Centre the dialog in the screen (a Control's position is in its parent's pixels, not relative to
+# its anchor, so a negative position put it off the top-left corner and the game seemed frozen).
+func _center_dialog() -> void:
+	var area: Vector2 = dialog.get_parent_area_size()
+	# low in the screen, just above the action bar, so the people talking stay in view
+	dialog.position = Vector2((area.x - dialog.size.x) * 0.5, area.y - dialog.size.y - 150.0).max(Vector2(8, 8))
+
+
+func _process(_dt: float) -> void:
+	if dialog and dialog.visible:
+		_center_dialog()                      # follows window resizes
 
 
 func close_dialog() -> void:
@@ -320,9 +331,9 @@ func _build_death(root: Control) -> void:
 	death.visible = false
 	root.add_child(death)
 	var col := VBoxContainer.new()
-	col.set_anchors_preset(Control.PRESET_CENTER)
-	col.position = Vector2(-160, -60)
+	col.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_MINSIZE)
 	col.custom_minimum_size = Vector2(320, 0)
+	col.grow_horizontal = Control.GROW_DIRECTION_BOTH; col.grow_vertical = Control.GROW_DIRECTION_BOTH
 	death.add_child(col)
 	var t := _label("YOU DIED", 44, Color(0.85, 0.3, 0.22), stencil)
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -356,6 +367,7 @@ class Slot extends Control:
 	var enabled := true
 	var selected := false
 	var count := -1
+	var pulse := false
 	var label_font: Font
 	var hover := false
 
@@ -367,6 +379,11 @@ class Slot extends Control:
 	func apply(st: Dictionary) -> void:
 		kind = st["kind"]; title = st["title"]; cost = st.get("cost", "")
 		enabled = st.get("enabled", true); selected = st.get("selected", false); count = st.get("count", -1)
+		pulse = st.get("pulse", false)
+		set_process(pulse)
+		queue_redraw()
+
+	func _process(_dt: float) -> void:
 		queue_redraw()
 
 	func _gui_input(e: InputEvent) -> void:
@@ -384,6 +401,9 @@ class Slot extends Control:
 		draw_rect(r, bg)
 		var border := Color(0.95, 0.8, 0.42) if selected else (Color(0.62, 0.52, 0.3) if enabled else Color(0.3, 0.28, 0.22))
 		draw_rect(r, border, false, 2.0)
+		if pulse and not selected:                # "use me": a glowing border that breathes
+			var a := 0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.006)
+			draw_rect(r.grow(2.0 + 3.0 * a), Color(1.0, 0.78, 0.3, 0.35 + 0.55 * a), false, 3.0)
 		var ic := Color(0.9, 0.86, 0.72) if enabled else Color(0.38, 0.36, 0.32)
 		var c := r.get_center()
 		match kind:

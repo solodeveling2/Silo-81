@@ -8,6 +8,8 @@ for p in L["props"]:
 for dr in L["doors"]:
     st = "spr_open" if dr.get("open") else "spr_closed"
     items.append((dr["sort"][1], dr[st]["sprite"], dr[st]["x0"], dr[st]["y0"]))
+for wp in ([] if __import__("os").environ.get("NOWALLS") else L.get("wallparts", [])):
+    items.append((wp["sort"][1], wp["sprite"], wp["x0"], wp["y0"]))
 if "pipe" in L:
     pp = L["pipe"]; items.append((-1e9, pp["broken"]["sprite"], pp["broken"]["x0"], pp["broken"]["y0"]))
 canvas = Image.new("RGBA", bg.size, (28, 28, 30, 255)); canvas.alpha_composite(bg)

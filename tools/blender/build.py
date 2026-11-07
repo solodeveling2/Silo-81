@@ -625,7 +625,10 @@ def wall_material(w):
 
 
 CUT = toon("WallCut", (0.2, 0.2, 0.19))
-for w in LV["walls"]:
+front_walls = []                                    # full height too, but drawn as sorted sprites that fade (see below)
+
+
+def build_wall(w, full=False):
     (ua, va), (ub, vb) = w["a"], w["b"]
     along_u = va == vb
     lo, hi = (min(ua, ub), max(ua, ub)) if along_u else (min(va, vb), max(va, vb))
@@ -637,20 +640,28 @@ for w in LV["walls"]:
     b = Builder("Wall")
     m = wall_material(w)
     z0 = -2.75 if w.get("shaft") else 0.0
+    h = FULL if full else w["h"]
     for (s0, s1) in segs:
         if s1 - s0 < 0.01:
             continue
         if along_u:
-            b.box(s0, s1, va - T / 2, va + T / 2, z0, w["h"], m, top_mat=CUT if w["h"] < FULL else None)
+            b.box(s0, s1, va - T / 2, va + T / 2, z0, h, m, top_mat=CUT if h < FULL else None)
         else:
-            b.box(ua - T / 2, ua + T / 2, s0, s1, z0, w["h"], m, top_mat=CUT if w["h"] < FULL else None)
-    if w["h"] >= FULL:
+            b.box(ua - T / 2, ua + T / 2, s0, s1, z0, h, m, top_mat=CUT if h < FULL else None)
+    if h >= FULL:
         for (t0, t1, _) in ops:                     # lintels over openings in full walls
             if along_u:
-                b.box(t0, t1, va - T / 2, va + T / 2, 2.1, w["h"], m)
+                b.box(t0, t1, va - T / 2, va + T / 2, 2.1, h, m)
             else:
-                b.box(ua - T / 2, ua + T / 2, t0, t1, 2.1, w["h"], m)
-    plan_obj(b, outline=0.012)
+                b.box(ua - T / 2, ua + T / 2, t0, t1, 2.1, h, m)
+    return b
+
+
+for w in LV["walls"]:
+    if w["h"] < FULL:
+        front_walls.append(w)
+        continue
+    plan_obj(build_wall(w), outline=0.012)
 
 
 # ---------- decor builders (background) ----------
@@ -1184,10 +1195,38 @@ for ob in bg_objects:
     ob.hide_render = True
 
 # ============================================================ sprites
+# Furniture made in Tripo from Gemini reference paintings (props3d/*.glb). rot turns each model's
+# front to the kit's +y; fit/size give it real-world scale. Missing files fall back to the kit models.
+GLB_PROPS = {
+    "bunk_a": dict(file="silo81_bunk_a.glb", rot=0, fit="x", L=2.0, D=0.9),
+    "bunk_b": dict(file="silo81_bunk_b.glb", rot=0, fit="x", L=2.0, D=0.9),
+    "bed": dict(file="silo81_bed_player.glb", rot=0, fit="x", L=2.45, D=0.9),
+    "locker": dict(file="silo81_locker.glb", rot=0, fit="z", H=1.85, L=1.0, D=0.5),
+    "stall": dict(file="silo81_toilet_stall.glb", rot=0, fit="z", H=2.05, L=0.9, D=1.2),
+    "shelf": dict(file="silo81_linen_shelf.glb", rot=0, fit="z", H=1.9, L=1.1, D=0.45),
+}
+
+
+def have_glb(key):
+    return os.path.exists(os.path.join(kit.GLB_DIR, GLB_PROPS[key]["file"]))
+
+
+def glb(key):
+    c = GLB_PROPS[key]
+    return kit.glb_prop(key, c["file"], c.get("L", 1.0), c.get("D", 1.0), rot=c["rot"], fit=c["fit"], H=c.get("H"))
+
+
+def bunk_fn(p):
+    if p.get("stripped"):
+        return kit.bunk("Bunk", p.get("k", 0), True)
+    key = "bunk_a" if p.get("k", 0) % 2 == 0 else "bunk_b"
+    return glb(key) if have_glb(key) else kit.bunk("Bunk", p.get("k", 0), False)
+
+
 PROP_FN = {
-    "bunk": lambda p: kit.bunk("Bunk", p.get("k", 0), p.get("stripped", False)),
-    "bed": lambda p: kit.bed("Bed", p.get("k", 1)),
-    "locker": lambda p: kit.locker("Locker", p.get("w", 0.55), p.get("open", False)),
+    "bunk": bunk_fn,
+    "bed": lambda p: glb("bed") if have_glb("bed") else kit.bed("Bed", p.get("k", 1)),
+    "locker": lambda p: glb("locker") if have_glb("locker") and p.get("w", 0.55) >= 0.9 and not p.get("open") else kit.locker("Locker", p.get("w", 0.55), p.get("open", False), p.get("k", 0)),
     "desk": lambda p: kit.desk("Desk"),
     "chair": lambda p: kit.chair("Chair", p.get("overturned", False)),
     "table": lambda p: kit.table("Table", p.get("L", 1.2)),
@@ -1196,9 +1235,9 @@ PROP_FN = {
     "toolbox": lambda p: kit.toolbox("Toolbox"),
     "crate": lambda p: kit.crate("Crate"),
     "bucket": lambda p: kit.bucket("Bucket"),
-    "shelf": lambda p: kit.shelf("Shelf"),
+    "shelf": lambda p: glb("shelf") if p.get("linen") and have_glb("shelf") else kit.shelf("Shelf"),
     "sinks": lambda p: kit.sinks("Sinks", p.get("n", 3)),
-    "stall": lambda p: kit.stall("Stall"),
+    "stall": lambda p: glb("stall") if have_glb("stall") else kit.stall("Stall"),
     "laundry": lambda p: kit.laundry("Laundry", p.get("k", 0)),
     "pump": lambda p: kit.pump("Pump"),
     "workbench": lambda p: kit.workbench("Workbench"),
@@ -1234,6 +1273,14 @@ def sprite_for(sig, build):
 
 
 for i, p in enumerate(LV["props"]):
+    if p["t"] in ("bunk", "curtain", "locker"):
+        p["k"] = int(p.get("k", 0)) * 7 + int(abs(p["u"] * 13 + p["v"] * 29)) % 23
+    if p["t"] == "shelf" and "Linen" in p.get("name", ""):
+        p["linen"] = True                              # (kept in the sprite key: linen and kitchen shelves differ)
+    if p["t"] == "bunk" and not p.get("stripped") and have_glb("bunk_a"):
+        p["k"] = p["k"] % 2                            # two Tripo bunks: only the variant matters
+    if p["t"] == "locker" and have_glb("locker") and p.get("w", 0.55) >= 0.9 and not p.get("open"):
+        p["k"] = 0
     keyargs = tuple(sorted((k, v) for k, v in p.items() if k not in ("u", "v", "name", "text", "id")))
 
     def build(p=p):
@@ -1483,6 +1530,80 @@ if "pipe" in LV:
     srt = scr_uv(pd["u"], pd["v"])
     ent["sort"] = [round(srt[0], 1), round(srt[1], 1)]
     out["pipe"] = ent
+
+# ============================================================ front walls: full height, cut into sorted strips
+# Every wall but the two back walls stands full height. Each is rendered alone and cut into narrow
+# vertical strips (STRIP_M along the wall); each strip sorts with the actors by the point on the wall's
+# centre line under it, so people walk behind and in front of walls correctly, and the game fades the
+# strips that would hide the player or the spot under the cursor.
+from PIL import Image as _PIL
+STRIP_M = 0.45
+out["wallparts"] = []
+for wi, w in enumerate(front_walls):
+    ob = plan_obj(build_wall(w, full=True), outline=0.012)
+    bg_objects.remove(ob)
+    path = os.path.join(DIR, f"wall_{wi:02d}.png")
+    rect = render([ob], path)
+    bpy.data.objects.remove(ob, do_unlink=True)
+    im = _PIL.open(path).convert("RGBA")
+    os.remove(path)
+    (ua, va), (ub, vb) = w["a"], w["b"]
+    along_u = va == vb
+    lo, hi = (min(ua, ub), max(ua, ub)) if along_u else (min(va, vb), max(va, vb))
+    step = max(8, int(round(STRIP_M * kit.R2 * PPM)))
+    x = 0
+    k = 0
+    while x < im.width:
+        xb = min(im.width, x + step)
+        piece = im.crop((x, 0, xb, im.height))
+        bb = piece.getbbox()
+        if bb:
+            piece = piece.crop((0, bb[1], xb - x, bb[3]))
+            xc = rect[0] + (x + xb) / 2.0
+            if along_u:
+                cu, cv = min(hi, max(lo, xc / PPM / kit.R2 + va)), va
+            else:
+                cu, cv = ua, min(hi, max(lo, ua - xc / PPM / kit.R2))
+            srt = scr_uv(cu, cv)
+            f = f"wall_{wi:02d}_{k:02d}.png"
+            piece.save(os.path.join(DIR, f))
+            out["wallparts"].append({"sprite": f, "x0": round(rect[0] + x, 1), "y0": round(rect[1] + bb[1], 1),
+                                     "sort": [round(srt[0], 1), round(srt[1], 1)], "wall": wi})
+            k += 1
+        x = xb
+print("wall strips", len(out["wallparts"]))
+
+# Props that are long (bunks, benches) can't be sorted against narrow wall strips by one point, so
+# clamp each prop's sort line: before every strip of a wall it stands behind, after every strip of a
+# wall it stands in front of, wherever they overlap on screen.
+_strips_by_wall = {}
+for wp in out["wallparts"]:
+    w_ = _PIL.open(os.path.join(DIR, wp["sprite"])).width
+    _strips_by_wall.setdefault(wp["wall"], []).append((wp["x0"], wp["x0"] + w_, wp["sort"][1]))
+def _clamp_sort(entry, fp):
+    if not entry.get("sprite"):
+        return
+    w_ = _PIL.open(os.path.join(DIR, entry["sprite"])).width
+    px0, px1 = entry["x0"], entry["x0"] + w_
+    y = entry["sort"][1]
+    for wi, w in enumerate(front_walls):
+        (ua, va), (ub, vb) = w["a"], w["b"]
+        along_u = va == vb
+        lo, hi = (min(ua, ub), max(ua, ub)) if along_u else (min(va, vb), max(va, vb))
+        a0, a1, c0, c1 = (fp[0], fp[1], fp[2], fp[3]) if along_u else (fp[2], fp[3], fp[0], fp[1])
+        line = va if along_u else ua
+        if a1 < lo - 0.3 or a0 > hi + 0.3:
+            continue
+        over = [sy for (sx0, sx1, sy) in _strips_by_wall.get(wi, []) if sx1 > px0 + 2 and sx0 < px1 - 2]
+        if not over:
+            continue
+        if c0 >= line - 0.05:                         # behind the wall: draw before its strips
+            y = min(y, min(over) - 1.0)
+        elif c1 <= line + 0.05:                       # in front of it: draw after
+            y = max(y, max(over) + 1.0)
+    entry["sort"][1] = round(y, 1)
+for e in out["props"]:
+    _clamp_sort(e, e["footprint"])
 
 json.dump(out, open(os.path.join(DIR, "level.json"), "w"), indent=1)
 print("done", LEVEL, "sprites", len(cache))

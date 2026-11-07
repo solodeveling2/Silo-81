@@ -23,6 +23,7 @@ var props: Array = []               # {data, node, rect}
 var blocked: Array = []             # plan rects
 var dark := {}                      # room id -> {polys, props}
 var pipe := {}
+var wall_parts: Array = []           # {sprite, rect, y, a}: full-height wall strips
 var pipe_node: Sprite2D
 var water = null   # Array of the water particle emitters, made on first use
 
@@ -53,6 +54,18 @@ func build(dir: String, state: Dictionary) -> void:
 		var rect := Rect2(Vector2(p["x0"], p["y0"]), s.texture.get_size())
 		props.append({"data": p, "node": n, "sprite": s, "rect": rect})
 		blocked.append(_grow(p["footprint"], 0.08))
+
+	for wp in data.get("wallparts", []):          # full-height walls, in strips that sort and fade
+		var n := Node2D.new()
+		n.position = Vector2(wp["sort"][0], wp["sort"][1])
+		var s := Sprite2D.new()
+		s.centered = false
+		s.texture = load(dir + "/" + wp["sprite"])
+		s.position = Vector2(wp["x0"], wp["y0"]) - n.position
+		n.add_child(s)
+		sorted.add_child(n)
+		wall_parts.append({"sprite": s, "rect": Rect2(Vector2(wp["x0"], wp["y0"]), s.texture.get_size()),
+						   "y": n.position.y, "a": 1.0})
 
 	for d in data["doors"]:
 		var n := Node2D.new()
@@ -106,6 +119,28 @@ func set_door_open(id: String, open: bool) -> void:
 		for rid in dark.keys():
 			if dark[rid]["door"] == id:
 				reveal(rid)
+
+
+# Fade the wall strips that stand in front of something you need to see (the player, the spot under
+# the cursor, worms): strips drawn after it whose picture overlaps it go see-through, with a soft edge.
+func fade_walls(foci: Array, dt: float) -> void:
+	for wp in wall_parts:
+		var r: Rect2 = wp["rect"]
+		var target := 1.0
+		for f in foci:
+			var fr: Rect2 = f["rect"]
+			if wp["y"] <= f["y"] + 1.0:              # strip is behind it: nothing to hide
+				continue
+			if r.position.y > fr.end.y or r.end.y < fr.position.y:
+				continue
+			var dx: float = abs(r.get_center().x - fr.get_center().x) - (r.size.x + fr.size.x) * 0.5
+			var k: float = clamp((dx + 10.0) / 70.0, 0.0, 1.0)        # soft edge, 70 px wide
+			target = min(target, lerp(0.16, 1.0, k * k * (3.0 - 2.0 * k)))
+		var a: float = wp["a"]
+		a = move_toward(a, target, dt * 4.0)
+		if a != wp["a"]:
+			wp["a"] = a
+			wp["sprite"].modulate.a = a
 
 
 func set_pipe(fixed: bool) -> void:

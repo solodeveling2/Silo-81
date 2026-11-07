@@ -5,6 +5,10 @@ extends Node2D
 
 const PLAYER_JSON := "res://characters/player_male/character.json"
 const WORM_JSON := "res://characters/pipe_worm/character.json"
+const TIBOR_JSON := "res://characters/tibor/character.json"
+const TIBOR_START := Vector2(-3.0, 0.2)         # comes in from the lift landing
+const TIBOR_POST := Vector2(1.2, -0.9)          # then waits in the corridor by the stairs
+const CALL_NO := "81-214"
 const AP_MAX := 8
 const WORM_AP := 6
 const WORM_HP := 14
@@ -40,7 +44,9 @@ var dialog_handler := Callable()
 var rng := RandomNumberGenerator.new()
 var stats := {"hp": 40, "hp_max": 40, "ap": AP_MAX, "str": 6, "lockpick": 45, "medkits": 2, "kit": false}
 var state := {"L2": {}, "L2W": {}, "L3": {"dead": [], "pipe_fixed": false}, "L4W": {}}
-var flags := {"visited_L3": false, "found_leak": false, "seen_worms": false, "door_seen": false}
+var flags := {"visited_L3": false, "found_leak": false, "seen_worms": false, "door_seen": false,
+			  "quest": "none"}        # maintenance call: none -> given -> done (reported back to Tibor)
+var tibor: Actor = null
 
 
 func _ready() -> void:
@@ -59,8 +65,14 @@ func _ready() -> void:
 	mood = CanvasModulate.new()
 	add_child(mood)
 	load_level("L2", Vector2.INF)
-	hud.log_msg("The intercom crackles. MIRA: \"Chief? Pressure on the general circuit is dropping fast. Something's wrong down on Three. Bring your welding kit.\"", Color(0.75, 0.85, 0.95))
 	hud.log_msg("Click to move. 1-5 or click the bar to pick an action, then click a target. Right-click cancels.", Hud.DIM)
+	var testing := false
+	for a in ["--autotest", "--test-commons", "--test-command", "--view-pipe"]:
+		testing = testing or a in OS.get_cmdline_user_args()
+	if testing:
+		flags["quest"] = "given"                     # tests skip the opening scene
+	else:
+		intro.call_deferred()
 	if "--autotest" in OS.get_cmdline_user_args():
 		autotest.call_deferred()
 	elif "--test-commons" in OS.get_cmdline_user_args():
@@ -125,6 +137,15 @@ func load_level(id: String, arrive: Vector2) -> void:
 			a.stepped.connect(_on_worm_step.bind(a))
 			worms.append(a)
 		i += 1
+	tibor = null
+	if id == "L2" and FileAccess.file_exists(TIBOR_JSON):
+		tibor = Actor.new()
+		tibor.setup(TIBOR_JSON, "npc")
+		tibor.team = "friendly"
+		tibor.display_name = "Tibor"
+		level.sorted.add_child(tibor)
+		tibor.place_at_hex(level.nearest_walkable(TIBOR_START if flags["quest"] == "none" else TIBOR_POST))
+		tibor.play("idle", 0 if flags["quest"] == "none" else 2)
 	mood.color = Color(0.86, 0.9, 0.92) if id == "L3" else Color(0.93, 0.94, 1.0)
 	if id == "L3":
 		flags["visited_L3"] = true
@@ -146,6 +167,8 @@ func _unhandled_input(e: InputEvent) -> void:
 			MOUSE_BUTTON_WHEEL_DOWN:
 				cam.zoom = (cam.zoom / 1.1).clamp(Vector2(0.35, 0.35), Vector2(1.1, 1.1))
 			MOUSE_BUTTON_RIGHT:
+				if hud.dialog_open():
+					hud.close_dialog()
 				action = ""
 				refresh()
 			MOUSE_BUTTON_LEFT:
@@ -189,6 +212,8 @@ func _update_hover() -> void:
 		if action in ["", "attack"]:
 			var ok := level.line_of_sight(player.hex, hover_worm.hex)
 			tip += "\nShoot: %d%% to hit, %d AP" % [hit_chance(player.hex, hover_worm.hex), SHOT_AP] if ok else "\nNo clear shot"
+	elif npc_at(world) and mode != "combat":
+		tip = "Tibor, maintenance dispatcher  (click to talk)"
 	elif not hover_target.is_empty():
 		tip = hover_target["name"]
 		if hover_target["kind"] in ["door", "toolbox", "stairs", "pipe"]:
@@ -221,7 +246,15 @@ func occupied(except: Actor) -> Array:
 	for w in worms:
 		if w != except and w.alive:
 			out.append(w.hex)
+	if tibor and tibor != except:
+		out.append(tibor.hex)
 	return out
+
+
+func npc_at(world: Vector2) -> Actor:
+	if tibor and tibor.sprite_rect().grow(-10).has_point(world):
+		return tibor
+	return null
 
 
 func _click() -> void:
@@ -253,6 +286,8 @@ func _click() -> void:
 		_:
 			if worm:
 				attack(worm)
+			elif npc_at(world) and mode != "combat":
+				talk_tibor()
 			elif not target.is_empty():
 				interact(target)
 			else:
@@ -498,7 +533,105 @@ func weld() -> void:
 
 func _finish_job() -> void:
 	hud.show_banner("PRESSURE RESTORED")
-	hud.log_msg("MIRA: \"Pressure's climbing on the general circuit! The dorms will feel that tonight. Come back up when you can, Chief.\"", Color(0.75, 0.85, 0.95))
+	hud.log_msg("MIRA, on the gallery intercom: \"Pressure's climbing on the general circuit! The dorms will feel that tonight.\"", Color(0.75, 0.85, 0.95))
+	hud.log_msg("Report back to Tibor on Level 2 to close the call.", Color(1.0, 0.8, 0.4))
+
+
+# ================================================================== Tibor: the maintenance dispatcher, and the first call
+# The opening scene: Tibor runs in from the landing, shoves your door open and gives you the job.
+# The call is mandatory (it teaches moving, using things, combat, consumables and welding), but how
+# you go about it is yours.
+const TIBOR_TITLE := "TIBOR  -  maintenance dispatcher"
+var _talk_node := ""
+const TALK := {
+	"intro": {"text": "Chief! Good, you're up. Mira's on the line from Engineering: pressure on the general circuit is falling like a stone. Something's gone on Three, in the pipe gallery. If the flow goes, this whole level freezes by morning.",
+			  "options": [["What do we know?", "know"], ["I'm on it.", "go"]]},
+	"know": {"text": "Not much. The gauge in the pump room is dropping and there's water on the gallery floor. Rus swears he heard scratching in the pipes last week. Rus hears a lot of things.",
+			 "options": [["Scratching?", "worms"], ["Right. I'll take a look.", "go"]]},
+	"worms": {"text": "Pipe worms, maybe. They come up the old drains when it's warm, and nothing on Three is warmer than that flow pipe. Take the Tokarev. And a medkit, if you've still got one.",
+			  "options": [["Anything else?", "go"]]},
+	"go": {"text": "Your welding kit's in the toolbox by your bed. Stairs to Three are at the end of the corridor. I'm logging it as maintenance call %s. Go, Chief. I'll keep Mira off your back.",
+		   "options": [["On my way.", "accept"]]},
+	"waiting": {"text": "Still here, Chief? Three. The pipe gallery. Every minute that pipe sprays is a cold night for somebody.",
+				"options": [["Going.", "close"]]},
+	"report": {"text": "Mira says the pressure's back. Worms, was it? The Council will want that in writing, and they'll want it to be somebody else's fault.\nThat's call %s closed. Here: Dr. Kiss left this for whoever came back bleeding. You'll need it more than I will.",
+			   "options": [["Thanks, Tibor.", "closed"]]},
+	"after": {"text": "Three more calls on the board, all marked urgent by the Council, none of them urgent. They'll keep till morning. Get some sleep, if the radiators let you.",
+			  "options": [["Goodnight, Tibor.", "close"]]},
+}
+
+
+func intro() -> void:
+	if tibor == null or flags["quest"] != "none":
+		return
+	busy = true
+	await get_tree().create_timer(0.8).timeout
+	level.set_door_open("door_2_1", true)
+	state["L2"]["door_door_2_1"] = true
+	var target := player.hex
+	var path := level.find_path(tibor.hex, target, [])
+	if path.size() > 1:
+		path = path.slice(0, path.size() - 1)          # stop next to you, not on you
+	focus = tibor
+	tibor.follow(path, "run" if tibor.has_clip("run") else "walk")
+	await tibor.arrived
+	tibor.face_ground(player.ground); tibor.play("idle", tibor.dir)
+	player.face_ground(tibor.ground); player.play("idle", player.dir)
+	focus = player
+	busy = false
+	_say("intro")
+
+
+func talk_tibor() -> void:
+	if await go_near({"plan": Hex.ground_to_plan(tibor.ground)}):
+		tibor.face_ground(player.ground); tibor.play("idle", tibor.dir)
+		if flags["quest"] == "given" and state["L3"]["pipe_fixed"]:
+			_say("report")
+		elif flags["quest"] == "given":
+			_say("waiting")
+		else:
+			_say("after")
+
+
+func _say(node: String) -> void:
+	_talk_node = node
+	var n: Dictionary = TALK[node]
+	var txt: String = n["text"]
+	if "%s" in txt:
+		txt = txt % CALL_NO
+	var opts: Array = []
+	for o in n["options"]:
+		opts.append({"label": o[0]})
+	open_dialog(TIBOR_TITLE, txt, opts, _talk_choice)
+
+
+func _talk_choice(i: int) -> void:
+	var nxt: String = TALK[_talk_node]["options"][i][1]
+	match nxt:
+		"accept":
+			flags["quest"] = "given"
+			hud.show_banner("MAINTENANCE CALL %s: BURST PIPE, LEVEL 3" % CALL_NO)
+			hud.log_msg("New job: maintenance call %s. Your welding kit is in your toolbox (marked)." % CALL_NO, Color(1.0, 0.8, 0.4))
+			_tibor_to_post()
+		"closed":
+			flags["quest"] = "done"
+			stats["medkits"] += 1
+			hud.show_banner("CALL %s CLOSED" % CALL_NO)
+			hud.log_msg("Tibor hands you a medkit. (Medkits: %d)" % stats["medkits"], Hud.GREEN)
+		"close":
+			pass
+		_:
+			_say.call_deferred(nxt)
+	refresh()
+
+
+func _tibor_to_post() -> void:
+	var path := level.find_path(tibor.hex, level.nearest_walkable(TIBOR_POST), [player.hex])
+	if path.is_empty():
+		return
+	tibor.follow(path, "walk")
+	await tibor.arrived
+	tibor.play("idle", 2)
 
 
 # ================================================================== combat
@@ -862,6 +995,8 @@ func _sparks(at: Vector2) -> CPUParticles2D:
 # ================================================================== HUD state
 func objectives() -> Array:
 	var o: Array = []
+	if flags["quest"] == "none":
+		return [{"text": "Hear Tibor out", "done": false}]
 	o.append({"text": "Take the welding kit from your toolbox", "done": stats["kit"]})
 	o.append({"text": "Go down to Level 3", "done": flags["visited_L3"]})
 	if flags["visited_L3"]:
@@ -870,6 +1005,8 @@ func objectives() -> Array:
 		o.append({"text": "Deal with the pipe worms", "done": state["L3"]["dead"].size() >= 3})
 	if flags["found_leak"]:
 		o.append({"text": "Weld the burst pipe", "done": state["L3"]["pipe_fixed"]})
+	if state["L3"]["pipe_fixed"]:
+		o.append({"text": "Report back to Tibor on Level 2", "done": flags["quest"] == "done"})
 	if flags["door_seen"]:
 		o.append({"text": "Optional: get into Room 2-D", "done": state["L2"].get("door_door_2_d", false)})
 	return o
@@ -887,17 +1024,134 @@ func refresh() -> void:
 		{"kind": "attack", "title": "TOKAREV", "cost": "%d AP" % SHOT_AP, "selected": action == "attack"},
 		{"kind": "overwatch", "title": "OVERWATCH", "cost": "ALL AP", "enabled": combat and my_turn and stats["ap"] >= SHOT_AP},
 		{"kind": "inspect", "title": "INSPECT", "selected": action == "inspect"},
-		{"kind": "weld", "title": "WELD KIT", "cost": "%d AP" % WELD_AP, "enabled": stats["kit"], "selected": action == "weld"},
+		{"kind": "weld", "title": "WELD KIT", "cost": "%d AP" % WELD_AP, "enabled": stats["kit"], "selected": action == "weld",
+		 "pulse": _weld_time()},
 		{"kind": "medkit", "title": "MEDKIT", "cost": "%d AP" % MED_AP, "enabled": stats["medkits"] > 0, "count": stats["medkits"]},
 	])
-	hud.set_objectives(level.data["name"] if level else "", objectives())
+	var head: String = ("MAINTENANCE CALL %s" % CALL_NO) if flags["quest"] != "none" else (str(level.data["name"]) if level else "")
+	if flags["quest"] == "done":
+		head = "CALL %s - CLOSED" % CALL_NO
+	hud.set_objectives(head, objectives())
 	if marks:
 		marks.queue_redraw()
+	_update_beacon()
+
+
+# ================================================================== quest guidance
+# A beacon (a bobbing chevron over the thing, a ring on the floor, the thing itself glowing) shows
+# where the current objective is; the weld kit slot breathes when it's time to weld.
+var beacon: Beacon = null
+var beacon_sprite: CanvasItem = null
+
+
+func _weld_time() -> bool:
+	return level != null and level_id == "L3" and stats["kit"] and mode != "combat" \
+		and not state["L3"]["pipe_fixed"] and flags["found_leak"]
+
+
+func _objective_target() -> Dictionary:
+	# returns {pos (screen), sprite (CanvasItem or null), floor (screen point for the ring)}
+	if level == null:
+		return {}
+	if level_id == "L2" and not stats["kit"]:
+		for p in level.props:
+			if p["data"].get("id", "") == "toolbox":
+				var fp: Array = p["data"]["footprint"]
+				var c := Vector2((fp[0] + fp[1]) / 2.0, (fp[2] + fp[3]) / 2.0)
+				return {"pos": Hex.plan_to_screen(c, 0.75), "floor": Hex.plan_to_screen(c, 0.0), "sprite": p["sprite"]}
+	if flags["quest"] == "none":
+		return {}
+	if state["L3"]["pipe_fixed"] and flags["quest"] != "done":
+		if level_id == "L2" and tibor:
+			return {"pos": tibor.position + Vector2(0, -250), "floor": tibor.position, "sprite": tibor.sprite}
+		if level_id == "L3":
+			for st in level.data["stairs"]:
+				if st["to"] == "L2":
+					var cs := Vector2(st["u"], st["v"])
+					return {"pos": Hex.plan_to_screen(cs, 1.0), "floor": Hex.plan_to_screen(cs, 0.0), "sprite": null}
+		return {}
+	if level_id == "L2" and stats["kit"] and not state["L3"]["pipe_fixed"]:
+		for st in level.data["stairs"]:
+			if st["to"] == "L3":
+				var c2 := Vector2(st["u"], st["v"])
+				return {"pos": Hex.plan_to_screen(c2, 1.0), "floor": Hex.plan_to_screen(c2, 0.0), "sprite": null}
+	if level_id == "L3" and not stats["kit"]:
+		for st in level.data["stairs"]:
+			if st["to"] == "L2":
+				var c3 := Vector2(st["u"], st["v"])
+				return {"pos": Hex.plan_to_screen(c3, 1.0), "floor": Hex.plan_to_screen(c3, 0.0), "sprite": null}
+	if _weld_time():
+		var pc := Vector2(level.pipe["u"], level.pipe["v"] - 0.34)
+		return {"pos": Hex.plan_to_screen(pc, 0.95), "floor": Hex.plan_to_screen(Vector2(level.pipe["u"], level.pipe["v"] - 0.7), 0.0),
+				"sprite": level.pipe_node}
+	return {}
+
+
+func _update_beacon() -> void:
+	var t := _objective_target()
+	if beacon_sprite and is_instance_valid(beacon_sprite):
+		beacon_sprite.self_modulate = Color.WHITE
+	beacon_sprite = null
+	if t.is_empty() or mode == "combat":
+		if beacon and is_instance_valid(beacon):
+			beacon.visible = false
+		return
+	if beacon == null or not is_instance_valid(beacon) or beacon.get_parent() != level:
+		beacon = Beacon.new()
+		level.add_child(beacon)
+	beacon.visible = true
+	if _weld_time() and not flags.get("weld_hint", false):
+		flags["weld_hint"] = true
+		hud.log_msg("Now weld it: pick the WELD KIT (4), then click the burst pipe.", Color(1.0, 0.8, 0.4))
+	beacon.top = t["pos"]; beacon.floor_pt = t["floor"]
+	beacon.z_index = 60
+	beacon_sprite = t["sprite"]
+	beacon.glow = beacon_sprite
+
+
+class Beacon extends Node2D:
+	var top := Vector2.ZERO
+	var floor_pt := Vector2.ZERO
+	var glow: CanvasItem = null
+
+	func _process(_dt: float) -> void:
+		queue_redraw()
+		if glow and is_instance_valid(glow):
+			var a := 0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.005)
+			glow.self_modulate = Color(1.0 + 0.45 * a, 1.0 + 0.35 * a, 1.0 + 0.1 * a)
+
+	func _draw() -> void:
+		var ms := Time.get_ticks_msec()
+		var bob := sin(ms * 0.005) * 7.0
+		var a := 0.5 + 0.5 * sin(ms * 0.005)
+		var amber := Color(1.0, 0.76, 0.28)
+		# ring on the floor, flat (2:1)
+		draw_set_transform(floor_pt, 0.0, Vector2(1.0, 0.5))
+		draw_arc(Vector2.ZERO, 34.0 + 6.0 * a, 0.0, TAU, 48, Color(amber, 0.35 + 0.35 * a), 3.0, true)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		# chevron above, pointing down, with a dark edge so it reads on any background
+		var p := top + Vector2(0, -46 + bob)
+		var pts := PackedVector2Array([p + Vector2(-16, -14), p + Vector2(0, 2), p + Vector2(16, -14), p + Vector2(16, -6), p + Vector2(0, 10), p + Vector2(-16, -6)])
+		draw_colored_polygon(pts, amber)
+		var ol := pts.duplicate(); ol.append(pts[0])
+		draw_polyline(ol, Color(0.1, 0.07, 0.03, 0.9), 2.0, true)
 
 
 func _process(delta: float) -> void:
 	if focus and is_instance_valid(focus):
 		cam.position = focus.position + Vector2(0, -80)
+	if level and player:
+		var foci: Array = []
+		var feet := player.global_position - level.global_position
+		foci.append({"y": feet.y, "rect": Rect2(feet + Vector2(-50, -270), Vector2(100, 280))})
+		if not hud.over_ui(get_viewport().get_mouse_position()):
+			var m := get_global_mouse_position() - level.global_position
+			foci.append({"y": m.y, "rect": Rect2(m + Vector2(-45, -150), Vector2(90, 165))})
+		for w in worms:
+			if w.alive:
+				var wf: Vector2 = w.global_position - level.global_position
+				foci.append({"y": wf.y, "rect": Rect2(wf + Vector2(-50, -90), Vector2(100, 100))})
+		level.fade_walls(foci, delta)
 
 
 # ================================================================== hex highlights
@@ -982,6 +1236,20 @@ func autotest() -> void:
 		_on_dialog_choice(0)
 		await get_tree().create_timer(2.0).timeout
 	print("pipe fixed: ", state["L3"]["pipe_fixed"])
+	if state["L3"]["pipe_fixed"]:                    # back up to report to Tibor
+		var up: Dictionary = level.data["stairs"][0]
+		for st in level.data["stairs"]:
+			if st["to"] == "L2":
+				up = st
+		await interact({"kind": "stairs", "id": up["id"], "name": up["name"], "text": up["text"], "plan": Vector2(up["u"], up["v"]), "to": up["to"], "arrive": up["arrive"]})
+		await get_tree().create_timer(0.5).timeout
+		print("back on ", level_id, " tibor ", tibor != null)
+		if tibor:
+			await talk_tibor()
+			print("talking: ", hud.dialog_open(), " node ", _talk_node)
+			_on_dialog_choice(0)
+			await get_tree().create_timer(0.3).timeout
+		print("quest: ", flags["quest"], " medkits ", stats["medkits"])
 	for o in objectives():
 		print("  ", "[x] " if o["done"] else "[ ] ", o["text"])
 	print("AUTOTEST end")

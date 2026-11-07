@@ -335,6 +335,78 @@ steel("pipe_green", C(80, 82, 78), rust_cover=0.7, seed=41, paint=C(86, 104, 92)
 alu_clad("alu_clad", seed=42)
 
 
+# ---------------------------------------------------------------- blankets: wool, plaid, stripes, patchwork, quilts
+def _wool(img, seed, fuzz=0.06):
+    big, speck = grime(seed)
+    x = np.arange(N)
+    weave = (np.sin(x * 2 * np.pi / 4)[None, :] * 0.5 + np.sin(x * 2 * np.pi / 4)[:, None] * 0.5) * 0.04
+    img = img * (1 + weave[..., None] + (noise(1.0, seed=seed + 4)[..., None] - 0.5) * fuzz * 2)
+    img = lerp(img, img * 0.78, smooth(big, 0.5, 0.9) * 0.6)                 # old, slept in, never quite clean
+    return img
+
+
+def plaid(name, base, lines, seed=0):
+    """Tartan: coloured bands crossing at right angles, mixed where they overlap."""
+    yy, xx = np.mgrid[0:N, 0:N]
+    img = np.zeros((N, N, 3), np.float32) + base
+    for (col, pos, w, alpha) in lines:
+        col = np.array(col, np.float32) / 255
+        mx = (np.abs(((xx - pos) % 256) - 0) < w).astype(np.float32)
+        my = (np.abs(((yy - pos) % 256) - 0) < w).astype(np.float32)
+        img = lerp(img, col, mx * alpha); img = lerp(img, col, my * alpha * 0.85)
+    save(name, _wool(img, seed))
+
+
+def stripes(name, base, bands, seed=0):
+    """Wool blanket with coloured bands across it near the ends (Hudson's Bay / army style)."""
+    yy, xx = np.mgrid[0:N, 0:N]
+    img = np.zeros((N, N, 3), np.float32) + base
+    for (col, y0, h) in bands:
+        col = np.array(col, np.float32) / 255
+        img = lerp(img, col, ((yy >= y0) & (yy < y0 + h)).astype(np.float32))
+    save(name, _wool(img, seed))
+
+
+def patchwork(name, cols, seed=0, n=6):
+    r = np.random.default_rng(seed)
+    s_ = N // n
+    img = np.zeros((N, N, 3), np.float32)
+    for i in range(n):
+        for j in range(n):
+            c = np.array(cols[r.integers(len(cols))], np.float32) / 255 * r.uniform(0.85, 1.1)
+            img[i * s_:(i + 1) * s_, j * s_:(j + 1) * s_] = c
+            if r.random() < 0.35:                               # a few patches with a small check
+                yy, xx = np.mgrid[0:s_, 0:s_]
+                chk = (((xx // 16) + (yy // 16)) % 2).astype(np.float32)[..., None]
+                img[i * s_:(i + 1) * s_, j * s_:(j + 1) * s_] *= (1 - chk * 0.18)
+    yy, xx = np.mgrid[0:N, 0:N]
+    seam = (((xx % s_) < 4) | ((yy % s_) < 4)).astype(np.float32)
+    img = lerp(img, img * 0.55, gaussian_filter(seam, 0.8, mode="wrap"))
+    save(name, _wool(img, seed, fuzz=0.04))
+
+
+def quilt(name, base, seed=0, cell=96):
+    yy, xx = np.mgrid[0:N, 0:N].astype(np.float32)
+    a = np.abs(((xx + yy) % cell) - cell / 2) / (cell / 2); b_ = np.abs(((xx - yy) % cell) - cell / 2) / (cell / 2)
+    puff = (1 - np.minimum(a, b_)) ** 0.5
+    img = base * (0.8 + 0.3 * puff[..., None])
+    flowers = smooth(noise(5, seed=seed + 3), 0.8, 0.84)
+    img = lerp(img, base * 1.25 + 0.06, flowers * 0.6)
+    save(name, _wool(img, seed, fuzz=0.03))
+
+
+plaid("blanket_plaid_red", C(126, 34, 32), [((30, 36, 52), 40, 18, 0.8), ((30, 36, 52), 120, 6, 0.7), ((196, 170, 90), 200, 3, 0.8)], seed=50)
+plaid("blanket_plaid_green", C(44, 74, 52), [((24, 30, 46), 60, 22, 0.8), ((150, 40, 36), 160, 4, 0.8), ((20, 40, 28), 220, 10, 0.6)], seed=51)
+plaid("blanket_check_brown", C(120, 84, 54), [((70, 46, 30), 0, 64, 0.6), ((182, 150, 100), 128, 6, 0.6)], seed=52)
+stripes("blanket_stripe_cream", C(198, 184, 150), [(C(34, 70, 120) * 255, 80, 40), (C(196, 150, 40) * 255, 140, 30), (C(150, 40, 34) * 255, 190, 34), (C(40, 90, 60) * 255, 244, 24)], seed=53)
+stripes("blanket_army", C(84, 88, 62), [(C(40, 40, 32) * 255, 100, 26), (C(40, 40, 32) * 255, 150, 26)], seed=54)
+stripes("blanket_grey_wool", C(120, 118, 112), [(C(70, 70, 70) * 255, 60, 18), (C(170, 40, 40) * 255, 92, 10)], seed=55)
+patchwork("blanket_patchwork", [(150, 60, 50), (60, 90, 130), (190, 160, 80), (80, 110, 70), (170, 150, 130), (110, 60, 90)], seed=56)
+quilt("blanket_quilt_blue", C(58, 86, 128), seed=57)
+quilt("blanket_quilt_rose", C(160, 92, 96), seed=58)
+plaid("blanket_plaid_navy", C(36, 44, 74), [((120, 30, 30), 30, 10, 0.8), ((210, 190, 120), 150, 3, 0.9), ((40, 70, 50), 200, 30, 0.6)], seed=59)
+
+
 # linear-light mean colour of every texture, so the kit can tint a texture to a material's designed colour
 import json, glob
 means = {}

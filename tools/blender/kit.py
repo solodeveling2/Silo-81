@@ -432,49 +432,148 @@ BLANKETS = [(0.42, 0.38, 0.33), (0.33, 0.37, 0.42), (0.38, 0.40, 0.30), (0.46, 0
 
 
 # ---------------------------------------------------------------- props (local frame, back at y=0, front +y)
+# ---------------------------------------------------------------- bedding and personal things (dorm remake)
+BLANKET_TEX = ["blanket_plaid_red", "blanket_army", "blanket_quilt_blue", "blanket_check_brown", "blanket_stripe_cream",
+               "blanket_plaid_green", "blanket_patchwork", "blanket_grey_wool", "blanket_quilt_rose", "blanket_plaid_navy"]
+FRAME_PAINT = [("BunkFrame", "steel_grey", (0.32, 0.36, 0.33)), ("BunkFrameGreen", "steel_green", (0.24, 0.34, 0.26)),
+               ("BunkFrameWhite", "paint_white", (0.62, 0.62, 0.58))]
+LOCKER_PAINT = [(0.29, 0.33, 0.24), (0.3, 0.36, 0.42), (0.44, 0.2, 0.15), (0.52, 0.49, 0.4), (0.26, 0.3, 0.3)]
+
+
+def blanket_mat(k):
+    t = BLANKET_TEX[k % len(BLANKET_TEX)]
+    return toon("Blk_" + t, (1.0, 1.0, 1.0), tex=t, tex_scale=0.9)
+
+
+def frame_mat(k):
+    name, tex, rgb = FRAME_PAINT[k % len(FRAME_PAINT)]
+    return toon(name, _detail_tint(tex, rgb), tex=tex, tex_scale=1.4, metal=0.35)
+
+
+def ellipsoid(b, c, r, mat, seg=12):
+    res = bmesh.ops.create_uvsphere(b.bm, u_segments=seg, v_segments=max(4, seg // 2), radius=1.0,
+                                    matrix=Matrix.Translation(c) @ Matrix.Diagonal((r[0], r[1], r[2], 1.0)))
+    idx = b.mi(mat)
+    vs = set(res["verts"])
+    for f in b.bm.faces:
+        if f.verts[0] in vs:
+            f.material_index = idx
+
+
+def cloth(b, x0, x1, y0, y1, z, mat, rng, drape=0.18, messy=0.0, nx=18, ny=10):
+    """A blanket: lies on the mattress with soft folds and hangs down over both long edges.
+    messy pulls part of it into a rumpled heap."""
+    W = y1 - y0
+    ph = rng.random(4) * 6.28
+    lumps = [(rng.uniform(x0, x1), rng.uniform(y0, y1), rng.uniform(0.04, 0.09) * messy) for _ in range(3)]
+    grid = []
+    for i in range(nx + 1):
+        x = x0 + (x1 - x0) * i / nx
+        row = []
+        for j in range(ny + 1):
+            p = -drape + (W + 2 * drape) * j / ny
+            fold = 0.012 * math.sin(x * 9 + ph[0]) + 0.01 * math.sin(x * 4.3 + p * 6 + ph[1])
+            if p < 0:
+                y, zz = y0 - 0.012, z + p * 0.95 + fold * 0.6
+            elif p > W:
+                y, zz = y1 + 0.012, z - (p - W) * 0.95 + fold * 0.6
+            else:
+                y = y0 + p
+                zz = z + 0.02 + fold
+                for (lx, ly, lh) in lumps:
+                    zz += lh * math.exp(-((x - lx) ** 2 / 0.05 + (y - ly) ** 2 / 0.03))
+            row.append(b.bm.verts.new((x, y, zz)))
+        grid.append(row)
+    idx = b.mi(mat)
+    for i in range(nx):
+        for j in range(ny):
+            f = b.bm.faces.new([grid[i][j], grid[i + 1][j], grid[i + 1][j + 1], grid[i][j + 1]]); f.material_index = idx
+
+
+def personal_items(b, rng, L, D, z_low, z_top):
+    """A few things that say someone sleeps here: boots, a book, a mug, folded clothes, a towel."""
+    leather = toon("Leather", (0.2, 0.14, 0.1), noise=0.15, noise_scale=20)
+    picks = rng.permutation(6)[:rng.integers(2, 4)]
+    for p in picks:
+        if p == 0:                                             # boots under the lower bunk, toes out
+            x = rng.uniform(-0.5, 0.4)
+            for dx in (0.0, 0.13):
+                b.box(x + dx, x + dx + 0.1, D - 0.3, D + 0.02, 0.0, 0.12, leather)
+                b.box(x + dx, x + dx + 0.1, D - 0.3, D - 0.16, 0.0, 0.26, leather)
+        elif p == 1:                                           # a book on the top bunk
+            c = toon("BookCover%d" % (rng.integers(4)), [(0.45, 0.14, 0.12), (0.14, 0.24, 0.4), (0.2, 0.32, 0.18), (0.55, 0.45, 0.2)][rng.integers(4)])
+            x = rng.uniform(0.0, 0.6)
+            b.box(x, x + 0.16, 0.3, 0.52, z_top + 0.2, z_top + 0.235, c)
+        elif p == 2:                                           # tin mug on the lower bunk's end
+            b.cyl((L / 2 - 0.25, 0.45, z_low + 0.19), (L / 2 - 0.25, 0.45, z_low + 0.27), 0.04, toon("Mug", (0.62, 0.62, 0.58)), seg=10)
+        elif p == 3:                                           # folded clothes at the foot
+            cols = [(0.3, 0.32, 0.36), (0.42, 0.36, 0.28), (0.5, 0.48, 0.44), (0.24, 0.3, 0.22)]
+            zz = z_low + 0.2
+            for kk in range(rng.integers(2, 4)):
+                c = toon("Folded%d" % (kk % 4), cols[(kk + rng.integers(4)) % 4], noise=0.15, noise_scale=20)
+                b.box(L / 2 - 0.5, L / 2 - 0.2, 0.2, 0.55, zz, zz + 0.05, c); zz += 0.05
+        elif p == 4:                                           # towel over the end rail of the top bunk
+            c = toon("Towel%d" % (rng.integers(3)), [(0.62, 0.6, 0.52), (0.36, 0.46, 0.55), (0.6, 0.42, 0.36)][rng.integers(3)], noise=0.15, noise_scale=20)
+            b.box(L / 2 - 0.02, L / 2 + 0.02, 0.15, 0.55, z_top - 0.35, z_top + 0.02, c)
+        elif p == 5:                                           # a photograph tucked into the frame
+            b.box(-L / 2 + 0.01, -L / 2 + 0.015, 0.25, 0.37, z_top + 0.28, z_top + 0.43, toon("Photo", (0.78, 0.74, 0.62)))
+
+
+
 def bunk(name, k=0, stripped=False):
+    import numpy as np
+    rng = np.random.default_rng(1000 + k)
     b = Builder(name)
-    frame = toon("BunkFrame", (0.32, 0.36, 0.33), noise=0.08)
+    frame = frame_mat(k // 3)
     mat = toon("Mattress", (0.55, 0.52, 0.45), noise=0.1, noise_scale=12)
     L, D = 2.0, 0.9
     for x in (-L / 2 + 0.03, L / 2 - 0.03):
         for y in (0.05, D - 0.05):
-            b.box(x - 0.025, x + 0.025, y - 0.025, y + 0.025, 0, 1.68, frame)
+            b.cyl((x, y, 0), (x, y, 1.68), 0.024, frame, seg=8)
     for zz in (0.36, 1.26):
         b.box(-L / 2, L / 2, 0.02, 0.08, zz - 0.06, zz, frame)
         b.box(-L / 2, L / 2, D - 0.08, D - 0.02, zz - 0.06, zz, frame)
         b.box(-L / 2 + 0.05, L / 2 - 0.05, 0.08, D - 0.08, zz - 0.03, zz, frame)
         b.box(-L / 2 + 0.06, L / 2 - 0.06, 0.08, D - 0.08, zz, zz + 0.12, mat)
         if not stripped:
-            bl = toon(f"Blanket{(k + int(zz * 10)) % 5}", BLANKETS[(k + int(zz * 10)) % 5], noise=0.12, noise_scale=9)
-            b.box(-L / 2 + 0.3, L / 2 - 0.04, 0.06, D - 0.06, zz + 0.12, zz + 0.17, bl)
-            b.box(-L / 2 + 0.3, -L / 2 + 0.36, 0.06, D - 0.06, zz + 0.0, zz + 0.17, bl)
-            b.box(-L / 2 + 0.08, -L / 2 + 0.38, 0.2, D - 0.2, zz + 0.12, zz + 0.22, toon("Pillow", (0.72, 0.7, 0.64)))
+            kk = k * 3 + (1 if zz > 1 else 0) * 5
+            messy = float(rng.random() < 0.45)
+            cloth(b, -L / 2 + 0.32 + 0.2 * rng.random() * messy, L / 2 - 0.04, 0.08, D - 0.08, zz + 0.12, blanket_mat(kk), rng,
+                  drape=0.14 + 0.08 * rng.random(), messy=messy)
+            if rng.random() < 0.85:                         # not everyone still has a pillow
+                pc = [(0.56, 0.54, 0.48), (0.5, 0.52, 0.54), (0.56, 0.5, 0.44)][rng.integers(3)]
+                ellipsoid(b, (-L / 2 + 0.24, D / 2 + rng.uniform(-0.08, 0.08), zz + 0.18), (0.17, 0.27, 0.06),
+                          toon("Pillow%d" % rng.integers(3), pc, noise=0.08, noise_scale=20))
     for zz in (0.6, 0.85, 1.1):                                 # ladder
         b.box(L / 2 - 0.06, L / 2, 0.1, D - 0.1, zz - 0.015, zz + 0.015, frame)
+    if not stripped:
+        personal_items(b, rng, L, D, 0.36, 1.26)
     return b.finish(), (L, D)
 
 
 def bed(name, k=1):
+    import numpy as np
+    rng = np.random.default_rng(2000 + k)
     b = Builder(name)
-    frame = toon("BunkFrame", (0.32, 0.36, 0.33), noise=0.08)
+    frame = frame_mat(k)
     L, D = 2.0, 0.9
     for x in (-L / 2 + 0.03, L / 2 - 0.03):
         for y in (0.05, D - 0.05):
-            b.box(x - 0.025, x + 0.025, y - 0.025, y + 0.025, 0, 0.5 if x < 0 else 0.42, frame)
+            b.cyl((x, y, 0), (x, y, 0.5 if x < 0 else 0.42), 0.024, frame, seg=8)
     b.box(-L / 2, -L / 2 + 0.05, 0.03, D - 0.03, 0.2, 0.75, frame)            # headboard
     b.box(-L / 2, L / 2, 0.05, D - 0.05, 0.34, 0.4, frame)
     b.box(-L / 2 + 0.06, L / 2 - 0.06, 0.08, D - 0.08, 0.4, 0.52, toon("Mattress", (0.55, 0.52, 0.45), noise=0.1, noise_scale=12))
-    bl = toon(f"Blanket{k}", BLANKETS[k], noise=0.12, noise_scale=9)
-    b.box(-L / 2 + 0.35, L / 2 - 0.02, 0.04, D - 0.04, 0.5, 0.57, bl)
-    b.box(L / 2 - 0.06, L / 2 - 0.02, 0.04, D - 0.04, 0.3, 0.57, bl)
-    b.box(-L / 2 + 0.1, -L / 2 + 0.42, 0.2, D - 0.2, 0.52, 0.62, toon("Pillow", (0.72, 0.7, 0.64)))
+    cloth(b, -L / 2 + 0.36, L / 2 - 0.02, 0.08, D - 0.08, 0.52, blanket_mat(k * 7 + 2), rng, drape=0.24, messy=float(k % 2))
+    ellipsoid(b, (-L / 2 + 0.25, D / 2, 0.58), (0.17, 0.28, 0.065), toon("Pillow0", (0.56, 0.54, 0.48), noise=0.08, noise_scale=20))
     return b.finish(), (L, D)
 
 
-def locker(name, width=0.55, open_door=False):
+def locker(name, width=0.55, open_door=False, k=0):
+    import numpy as np
+    rng = np.random.default_rng(3000 + k)
     b = Builder(name)
-    body = toon("Locker", OLIVE, noise=0.1, noise_scale=8)
+    paint = LOCKER_PAINT[k % len(LOCKER_PAINT)]
+    body = toon("Locker%d" % (k % len(LOCKER_PAINT)), _detail_tint("steel_grey", paint), tex="steel_grey", tex_scale=1.2, metal=0.3)
     dark = toon("LockerDark", (0.12, 0.13, 0.1))
     D, H = 0.5, 1.85
     b.box(-width / 2, width / 2, 0.0, D, 0, H, body)
@@ -486,6 +585,16 @@ def locker(name, width=0.55, open_door=False):
         for zz in (1.55, 1.6, 1.65):
             b.box(x0 + 0.1, x0 + w - 0.1, D, D + 0.006, zz, zz + 0.018, dark)            # vents
         b.box(x0 + w - 0.08, x0 + w - 0.05, D, D + 0.03, 0.95, 1.1, toon("Steel", (0.5, 0.5, 0.5)))
+        if rng.random() < 0.7:                                # name on tape
+            b.box(x0 + 0.08, x0 + w - 0.12, D, D + 0.005, 1.42, 1.47, toon("Tape", (0.8, 0.77, 0.66)))
+        if rng.random() < 0.35:                               # padlock
+            b.box(x0 + w - 0.09, x0 + w - 0.04, D + 0.02, D + 0.05, 0.86, 0.94, toon("Padlock", (0.55, 0.45, 0.18)))
+        if rng.random() < 0.3:                                # a photo or a pin-up stuck to the door
+            b.box(x0 + 0.1, x0 + 0.24, D, D + 0.004, 1.1, 1.3, toon("Photo", (0.78, 0.74, 0.62)))
+        if rng.random() < 0.4:                                # a dent, darker
+            zz = rng.uniform(0.3, 0.9)
+            b.box(x0 + 0.12, x0 + 0.3, D - 0.004, D + 0.002, zz, zz + 0.16, toon("Locker%dDent" % (k % len(LOCKER_PAINT)),
+                  tuple(c * 0.7 for c in _detail_tint("steel_grey", paint)), tex="steel_grey", tex_scale=1.2))
     if open_door:
         b.box(width / 2, width / 2 + 0.02, D, D + w, 0.05, H - 0.05, body)
         b.box(-width / 2 + 0.03, width / 2 - 0.03, D - 0.02, D, 0.06, H - 0.06, dark)
@@ -577,7 +686,7 @@ def radiator(name, sections=10, state="working"):
 def curtain(name, k=0, width=0.65, height=1.75):
     """One blanket pinned to a wire: a hanging panel with soft folds (free-standing partition)."""
     b = Builder(name)
-    cloth = toon(f"Blanket{k % 5}", BLANKETS[k % 5], noise=0.12, noise_scale=9)
+    cloth = blanket_mat(k * 3 + 1)
     nx, nz = 10, 6
     grid = []
     for iz in range(nz + 1):
@@ -639,9 +748,8 @@ def shelf(name):
         b.box(-L / 2, L / 2, 0.0, D, zz, zz + 0.025, frame)
     for i, zz in enumerate((0.145, 0.625, 1.125)):
         for j in range(3):
-            c = BLANKETS[(i * 3 + j) % 5]
             b.box(-L / 2 + 0.05 + j * 0.34, -L / 2 + 0.33 + j * 0.34, 0.05, D - 0.05, zz, zz + 0.14 + 0.04 * j,
-                  toon(f"Blanket{(i * 3 + j) % 5}", c, noise=0.12, noise_scale=9))
+                  blanket_mat(i * 4 + j * 3))
     b.box(-0.4, 0.1, 0.05, 0.4, 1.625, 1.85, toon("Carton", (0.55, 0.45, 0.3), noise=0.1))
     return b.finish(), (L, D)
 
@@ -663,12 +771,22 @@ def sinks(name, n=3):
 
 
 def stall(name):
+    """Toilet cubicle: painted steel partitions on legs, a door ajar with a latch, a bowl and a cistern."""
     b = Builder(name)
-    panel = toon("StallPanel", (0.45, 0.5, 0.48), noise=0.08)
-    b.box(-0.45, -0.42, 0, 1.2, 0.12, 1.85, panel)
-    b.box(0.42, 0.45, 0, 1.2, 0.12, 1.85, panel)
-    b.box(-0.42, 0.42, 1.17, 1.2, 0.12, 1.85, panel)
-    b.box(-0.15, 0.15, 0.0, 0.45, 0.0, 0.42, toon("Enamel", (0.8, 0.8, 0.76), noise=0.06))
+    panel = toon("StallPanelPaint", _detail_tint("steel_green", (0.4, 0.5, 0.44)), tex="steel_green", tex_scale=1.2, metal=0.2)
+    leg = toon("Steel", (0.5, 0.5, 0.5))
+    for x0, x1 in ((-0.45, -0.42), (0.42, 0.45)):
+        b.box(x0, x1, 0, 1.2, 0.15, 1.85, panel)
+        for y in (0.05, 1.15):
+            b.box(x0, x1, y - 0.02, y + 0.02, 0, 0.15, leg)
+    b.box(-0.42, 0.42, 1.17, 1.2, 0.15, 1.85, panel)                      # back
+    # door, swung half open into the cubicle
+    M = Matrix.Translation((0.42, 0.0, 0)) @ Matrix.Rotation(math.radians(55), 4, "Z") @ Matrix.Translation((-0.42, 0.0, 0))
+    b.box(-0.4, 0.4, -0.015, 0.015, 0.15, 1.8, panel, M)
+    b.box(-0.36, -0.3, -0.04, -0.015, 0.98, 1.02, leg, M)                   # latch
+    b.box(-0.15, 0.15, 0.7, 1.15, 0.0, 0.42, toon("Enamel", (0.8, 0.8, 0.76), noise=0.06))
+    b.box(-0.2, 0.2, 1.05, 1.17, 1.4, 1.6, toon("Enamel", (0.8, 0.8, 0.76), noise=0.06))      # cistern
+    b.cyl((0.12, 1.12, 1.45), (0.12, 1.12, 1.0), 0.012, leg, seg=6)                       # chain
     return b.finish(), (0.9, 1.2)
 
 
@@ -680,9 +798,10 @@ def laundry(name, k=0):
         b.cyl((x, 0.1, 0), (x, 0.1, 1.8), 0.02, pole, seg=8)
     b.cyl((-L / 2, 0.1, 1.75), (L / 2, 0.1, 1.75), 0.006, pole, seg=6)
     for i in range(3):
-        c = toon(f"Blanket{(k + i) % 5}", BLANKETS[(k + i) % 5], noise=0.12, noise_scale=9)
+        c = blanket_mat(k * 3 + i * 4)
         x = -L / 2 + 0.15 + i * 0.55
         b.box(x, x + 0.45, 0.08, 0.12, 1.0 + 0.1 * (i % 2), 1.75, c)
+        b.box(x + 0.1, x + 0.13, 0.06, 0.14, 1.72, 1.79, toon("Peg", (0.55, 0.42, 0.25)))
     return b.finish(), (L, 0.25)
 
 
@@ -954,3 +1073,73 @@ def lathe(name):
     b.box(-0.1, 0.2, 0.05, D - 0.05, 1.0, 1.12, steel)                       # carriage
     b.box(-0.6, 0.6, D - 0.02, D, 0.3, 0.32, toon("Hazard", (0.75, 0.6, 0.12)))
     return b.finish(), (L, D)
+
+
+# ---------------------------------------------------------------- props made in Tripo (image -> 3D), shaded like the rest
+GLB_DIR = __import__("os").path.join(__import__("os").path.dirname(__file__), "props3d")
+
+
+def _toon_textured(mat):
+    """Painted texture from the model x the kit's three toon bands (same key light as everything else)."""
+    nt = mat.node_tree
+    tex = next((n for n in nt.nodes if n.type == "TEX_IMAGE" and n.image and "base" in n.image.name.lower()), None)
+    tex = tex or next((n for n in nt.nodes if n.type == "TEX_IMAGE"), None)
+    if tex is None:
+        return
+    keep = tex.name
+    for n in list(nt.nodes):
+        if n.name != keep:
+            nt.nodes.remove(n)
+    tex = nt.nodes[keep]
+    out = nt.nodes.new("ShaderNodeOutputMaterial")
+    ramp = _ramp(nt, 1.06, 0.82, 0.6)
+    hsv = nt.nodes.new("ShaderNodeHueSaturation"); hsv.inputs["Saturation"].default_value = 0.85
+    nt.links.new(tex.outputs["Color"], hsv.inputs["Color"])
+    mul = nt.nodes.new("ShaderNodeVectorMath"); mul.operation = "MULTIPLY"
+    nt.links.new(hsv.outputs["Color"], mul.inputs[0]); nt.links.new(ramp.outputs["Color"], mul.inputs[1])
+    em = nt.nodes.new("ShaderNodeEmission"); nt.links.new(mul.outputs[0], em.inputs["Color"])
+    nt.links.new(em.outputs[0], out.inputs["Surface"])
+
+
+def glb_prop(name, file, L, D, rot=0.0, fit="x", H=None, outline=0.01):
+    """A Tripo model as a prop in the kit's frame: length L along x (centred), depth from y=0 back to
+    y=D front, standing on z=0. rot (degrees about z) turns the model's front to +y; fit picks the
+    axis the size comes from ("x" = length L, "z" = height H)."""
+    before = set(bpy.data.objects)
+    bpy.ops.import_scene.gltf(filepath=__import__("os").path.join(GLB_DIR, file))
+    new = [o for o in bpy.data.objects if o not in before]
+    meshes = [o for o in new if o.type == "MESH"]
+    bpy.context.view_layer.update()
+    bm = bmesh.new()
+    mats = []
+    for o in meshes:
+        me = o.data.copy()
+        me.transform(o.matrix_world)
+        slot0 = len(mats)
+        for m in o.data.materials:
+            mats.append(m)
+        tmp = bmesh.new(); tmp.from_mesh(me)
+        for f in tmp.faces:
+            f.material_index += slot0
+        tmp.to_mesh(me); tmp.free()
+        bm.from_mesh(me)
+        bpy.data.meshes.remove(me)
+    for o in new:
+        bpy.data.objects.remove(o, do_unlink=True)
+    bmesh.ops.rotate(bm, verts=bm.verts, cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(rot), 3, "Z"))
+    xs = [v.co.x for v in bm.verts]; ys = [v.co.y for v in bm.verts]; zs = [v.co.z for v in bm.verts]
+    s = (L / (max(xs) - min(xs))) if fit == "x" else (H / (max(zs) - min(zs)))
+    cx = (max(xs) + min(xs)) / 2
+    for v in bm.verts:
+        v.co = Vector(((v.co.x - cx) * s, (v.co.y - min(ys)) * s, (v.co.z - min(zs)) * s))
+    depth = (max(ys) - min(ys)) * s
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    for m in mats:
+        _toon_textured(m)
+        me.materials.append(m)
+    ob = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(ob)
+    if outline:
+        me.materials.append(ink())
+        sol = ob.modifiers.new("Outline", "SOLIDIFY"); sol.thickness = -outline
+        sol.use_flip_normals = True; sol.use_rim = False; sol.material_offset = len(mats)
+    return ob, (L if fit == "x" else (max(xs) - min(xs)) * s, depth)
