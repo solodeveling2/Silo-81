@@ -59,7 +59,7 @@ game/                      Godot project
   scripts/                 game.gd (rules, turns, AI), level.gd (map, hexes, doors),
                            actor.gd (sprites, slide-free movement), hud.gd (UI), hex.gd (coordinates)
   characters/              sprite sheets + character.json (player, pipe worm)
-  levels/L2, levels/L3     pre-rendered background, prop and door sprites, level.json
+  levels/L2, L2W, L3       pre-rendered background, prop and door sprites, level.json
 tools/blender/             art pipeline (Blender 5.2 as the bpy Python module)
   build.py, kit.py         build a level from its plan and render background + sorted sprites
   worm.py, worm_pose.py    procedural pipe worm, animated from spine functions
@@ -70,6 +70,7 @@ tools/blender/             art pipeline (Blender 5.2 as the bpy Python module)
 tools/web/                 web packaging and a headless browser test
 source/models/             player GLBs (Tripo export, and with retargeted pistol clips)
 art/spritecook_pack_v0.2/  the earlier SpriteCook asset pack
+art/concepts/              character concept art (Nano Banana 2.1 via Gemini)
 ```
 
 ### Rebuilding the art

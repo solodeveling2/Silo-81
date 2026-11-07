@@ -575,3 +575,156 @@ def workbench(name):
     b.box(0.5, 0.75, 0.45, 0.65, 0.9, 1.05, steel)                         # vice
     b.box(-0.6, -0.1, 0.1, 0.4, 0.9, 0.95, toon("ToolRed", (0.55, 0.14, 0.1), noise=0.08))
     return b.finish(), (L, D)
+
+
+# ---------------------------------------------------------------- Level 2 west: commons, kitchen, clinic, school, archive
+def bench(name, L=2.2):
+    b = Builder(name)
+    wood = toon("BenchSeat", (0.43, 0.31, 0.19), noise=0.14, noise_scale=10)
+    D = 0.32
+    b.box(-L / 2, L / 2, 0.0, D, 0.42, 0.46, wood)
+    for x in (-L / 2 + 0.12, 0.0, L / 2 - 0.12):
+        b.box(x - 0.03, x + 0.03, 0.04, D - 0.04, 0.0, 0.42, wood)
+    b.box(-L / 2 + 0.1, L / 2 - 0.1, D / 2 - 0.02, D / 2 + 0.02, 0.12, 0.16, wood)      # stretcher
+    b.box(L / 2 - 0.5, L / 2 - 0.36, 0.02, D - 0.02, 0.46, 0.47, toon("PatchWood", (0.56, 0.44, 0.28)))  # a repair
+    return b.finish(), (L, D)
+
+
+def stove(name):
+    """Cast-iron cooking range on legs, two big pots, a flue going up the wall."""
+    b = Builder(name)
+    iron = toon("StoveIron", (0.16, 0.16, 0.15), noise=0.1)
+    steel = toon("Steel", (0.5, 0.5, 0.5))
+    L, D = 1.6, 0.8
+    b.box(-L / 2, L / 2, 0.05, D, 0.12, 0.88, iron)
+    for x in (-L / 2 + 0.06, L / 2 - 0.06):
+        for y in (0.1, D - 0.06):
+            b.box(x - 0.04, x + 0.04, y - 0.04, y + 0.04, 0, 0.12, iron)
+    for x in (-0.55, 0.0, 0.55):                                             # oven doors
+        b.box(x - 0.22, x + 0.22, D, D + 0.02, 0.25, 0.65, toon("StoveDoor", (0.24, 0.23, 0.21)))
+        b.box(x - 0.12, x + 0.12, D + 0.02, D + 0.05, 0.6, 0.62, steel)
+    b.box(-L / 2 + 0.05, L / 2 - 0.05, 0.1, D - 0.05, 0.88, 0.9, toon("Hotplate", (0.3, 0.27, 0.25)))
+    b.cyl((-0.4, 0.45, 0.9), (-0.4, 0.45, 1.25), 0.24, toon("PotAlu", (0.6, 0.6, 0.58), noise=0.08), seg=16)
+    b.cyl((0.35, 0.4, 0.9), (0.35, 0.4, 1.08), 0.2, toon("PotEnamel", (0.55, 0.2, 0.14)), seg=16)
+    b.cyl((0.0, 0.1, 0.9), (0.0, 0.1, 2.6), 0.09, iron)                     # flue
+    return b.finish(), (L, D)
+
+
+def counter(name, L=2.0, hatch=False):
+    """Kitchen or serving counter: steel-topped cupboards; with hatch=True, the Exchange's trading counter."""
+    b = Builder(name)
+    body = toon("CounterBody", (0.38, 0.42, 0.4), noise=0.1)
+    top = toon("CounterTop", (0.58, 0.58, 0.56), noise=0.06)
+    D = 0.62
+    b.box(-L / 2, L / 2, 0.0, D, 0.0, 0.88, body)
+    b.box(-L / 2 - 0.02, L / 2 + 0.02, -0.02, D + 0.03, 0.88, 0.92, top)
+    n = max(1, int(L / 0.6))
+    for i in range(n):
+        x = -L / 2 + (i + 0.5) * L / n
+        b.box(x - L / n / 2 + 0.03, x + L / n / 2 - 0.03, D, D + 0.01, 0.08, 0.8, toon("CounterDoor", (0.33, 0.37, 0.35)))
+        b.box(x - 0.06, x + 0.06, D + 0.01, D + 0.03, 0.7, 0.73, toon("Steel", (0.5, 0.5, 0.5)))
+    if hatch:                                                # goods for trade and a tin cash box
+        for i, c in enumerate([(0.62, 0.22, 0.16), (0.55, 0.5, 0.3), (0.3, 0.35, 0.45)]):
+            b.box(-L / 2 + 0.15 + i * 0.25, -L / 2 + 0.35 + i * 0.25, 0.15, 0.4, 0.92, 1.05 + 0.04 * i, toon(f"Goods{i}", c, noise=0.1))
+        b.box(0.3, 0.6, 0.2, 0.45, 0.92, 1.02, toon("CashTin", (0.42, 0.45, 0.38), noise=0.1))
+        b.box(-L / 2, L / 2, 0.0, 0.05, 0.92, 1.9, toon("HatchFrame", (0.4, 0.31, 0.2), noise=0.12))
+    else:
+        b.cyl((-0.5, 0.3, 0.92), (-0.5, 0.3, 1.1), 0.12, toon("PotAlu", (0.6, 0.6, 0.58), noise=0.08), seg=12)
+        b.box(0.1, 0.55, 0.12, 0.45, 0.92, 0.95, toon("ChopBoard", (0.55, 0.4, 0.24)))
+    return b.finish(), (L, D)
+
+
+def cabinet(name):
+    """Steel filing cabinet, four drawers."""
+    b = Builder(name)
+    body = toon("FilingGrey", (0.45, 0.47, 0.44), noise=0.08)
+    D = 0.62
+    b.box(-0.24, 0.24, 0.0, D, 0.0, 1.32, body)
+    for k in range(4):
+        z = 0.06 + k * 0.32
+        b.box(-0.21, 0.21, D, D + 0.01, z, z + 0.28, toon("FilingDrawer", (0.4, 0.42, 0.39)))
+        b.box(-0.07, 0.07, D + 0.01, D + 0.03, z + 0.2, z + 0.23, toon("Steel", (0.5, 0.5, 0.5)))
+        b.box(-0.05, 0.05, D + 0.01, D + 0.012, z + 0.12, z + 0.16, toon("Paper", (0.85, 0.83, 0.76)))
+    return b.finish(), (0.48, D)
+
+
+def medscreen(name):
+    """Three-leaf folding screen between ward beds."""
+    b = Builder(name)
+    frame = toon("ScreenFrame", (0.6, 0.62, 0.6), noise=0.05)
+    cloth = toon("ScreenCloth", (0.74, 0.78, 0.76), noise=0.1, noise_scale=10)
+    for i, x in enumerate((-0.6, 0.0, 0.6)):
+        y = 0.12 if i == 1 else 0.0
+        b.box(x - 0.29, x + 0.29, y, y + 0.03, 0.18, 1.7, cloth)
+        for xx in (x - 0.3, x + 0.3):
+            b.cyl((xx, y + 0.015, 0.0), (xx, y + 0.015, 1.75), 0.015, frame, seg=6)
+    return b.finish(), (1.8, 0.2)
+
+
+def medcab(name):
+    """White medicine cabinet with glass doors and too few bottles."""
+    b = Builder(name)
+    white = toon("MedWhite", (0.8, 0.8, 0.76), noise=0.08)
+    D = 0.42
+    b.box(-0.45, 0.45, 0.0, D, 0.0, 1.8, white)
+    b.box(-0.41, 0.41, D - 0.01, D + 0.004, 0.95, 1.72, toon("MedGlass", (0.5, 0.6, 0.62)))
+    for k, z in enumerate((1.0, 1.35)):
+        b.box(-0.41, 0.41, 0.05, D - 0.02, z, z + 0.02, white)
+        for j in range(2 + k):
+            x = -0.3 + j * 0.22
+            b.cyl((x, 0.2, z + 0.02), (x, 0.2, z + 0.18), 0.04, toon(f"Bottle{(j + k) % 3}", [(0.45, 0.3, 0.12), (0.3, 0.45, 0.4), (0.75, 0.75, 0.72)][(j + k) % 3]), seg=8)
+    b.box(-0.41, 0.41, D, D + 0.01, 0.06, 0.9, toon("MedDoor", (0.74, 0.74, 0.7)))
+    b.box(-0.1, 0.1, D + 0.01, D + 0.014, 0.6, 0.8, flat("RedCross", (0.7, 0.1, 0.08)))
+    return b.finish(), (0.9, D)
+
+
+def schooldesk(name):
+    """A two-seat school desk with its bench joined on."""
+    b = Builder(name)
+    wood = toon("SchoolWood", (0.5, 0.37, 0.22), noise=0.12, noise_scale=10)
+    frame = toon("SchoolFrame", (0.25, 0.3, 0.28), noise=0.08)
+    L = 1.1
+    b.box(-L / 2, L / 2, 0.0, 0.42, 0.68, 0.72, wood)                       # slanted lid, roughly
+    b.box(-L / 2, L / 2, 0.0, 0.05, 0.72, 0.78, wood)
+    b.box(-L / 2, L / 2, 0.55, 0.85, 0.4, 0.44, wood)                        # seat
+    for x in (-L / 2 + 0.05, L / 2 - 0.05):
+        b.box(x - 0.025, x + 0.025, 0.05, 0.8, 0.0, 0.05, frame)
+        b.box(x - 0.025, x + 0.025, 0.15, 0.2, 0.05, 0.68, frame)
+        b.box(x - 0.025, x + 0.025, 0.68, 0.73, 0.05, 0.4, frame)
+    b.cyl((0.3, 0.12, 0.72), (0.3, 0.12, 0.74), 0.03, toon("Inkwell", (0.15, 0.15, 0.2)), seg=8)
+    b.box(-0.35, -0.05, 0.12, 0.34, 0.72, 0.73, toon("Paper", (0.85, 0.83, 0.76)))
+    return b.finish(), (L, 0.85)
+
+
+def sacks(name):
+    """A pile of grain and potato sacks from the hydroponics bays."""
+    b = Builder(name)
+    for i, (x, y, z, s) in enumerate(((-0.3, 0.25, 0.0, 1.0), (0.25, 0.3, 0.0, 0.95), (0.0, 0.3, 0.32, 0.9))):
+        m = toon(f"Sack{i % 2}", [(0.6, 0.53, 0.38), (0.52, 0.46, 0.33)][i % 2], noise=0.18, noise_scale=12)
+        b.box(x - 0.26 * s, x + 0.26 * s, y - 0.2 * s, y + 0.2 * s, z, z + 0.34 * s, m)
+        b.box(x - 0.1 * s, x + 0.1 * s, y - 0.08 * s, y + 0.08 * s, z + 0.34 * s, z + 0.42 * s, m)
+    return b.finish(), (1.1, 0.6)
+
+
+def file_shelf(name, k=0):
+    """Archive shelving: box files, bundles of paper and a few loose ledgers."""
+    b = Builder(name)
+    frame = toon("ShelfSteel", (0.42, 0.44, 0.42), noise=0.08)
+    L, D = 1.1, 0.42
+    for x in (-L / 2, L / 2):
+        for y in (0.02, D - 0.02):
+            b.box(x - 0.02, x + 0.02, y - 0.02, y + 0.02, 0, 2.0, frame)
+    boxes = [(0.5, 0.42, 0.3), (0.42, 0.4, 0.36), (0.55, 0.5, 0.38), (0.36, 0.33, 0.28)]
+    for i, zz in enumerate((0.1, 0.55, 1.0, 1.45)):
+        b.box(-L / 2, L / 2, 0.0, D, zz, zz + 0.025, frame)
+        x = -L / 2 + 0.04
+        j = 0
+        while x < L / 2 - 0.12:
+            w = 0.08 + 0.03 * ((i * 7 + j * 3 + k) % 3)
+            h = 0.3 - 0.04 * ((i + j + k) % 2)
+            if (i * 5 + j * 2 + k) % 9 == 4:                 # a gap where a file was taken
+                x += w; j += 1; continue
+            c = boxes[(i + j + k) % 4]
+            b.box(x, x + w - 0.01, 0.06, D - 0.06, zz + 0.025, zz + 0.025 + h, toon(f"BoxFile{(i + j + k) % 4}", c, noise=0.1))
+            x += w; j += 1
+    return b.finish(), (L, D)

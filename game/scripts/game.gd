@@ -39,7 +39,7 @@ var path_preview: Array = []
 var dialog_handler := Callable()
 var rng := RandomNumberGenerator.new()
 var stats := {"hp": 40, "hp_max": 40, "ap": AP_MAX, "str": 6, "lockpick": 45, "medkits": 2, "kit": false}
-var state := {"L2": {}, "L3": {"dead": [], "pipe_fixed": false}}
+var state := {"L2": {}, "L2W": {}, "L3": {"dead": [], "pipe_fixed": false}}
 var flags := {"visited_L3": false, "found_leak": false, "seen_worms": false, "door_seen": false}
 
 
@@ -63,6 +63,8 @@ func _ready() -> void:
 	hud.log_msg("Click to move. 1-5 or click the bar to pick an action, then click a target. Right-click cancels.", Hud.DIM)
 	if "--autotest" in OS.get_cmdline_user_args():
 		autotest.call_deferred()
+	elif "--test-commons" in OS.get_cmdline_user_args():
+		test_commons.call_deferred()
 
 
 # ================================================================== levels
@@ -119,7 +121,7 @@ func load_level(id: String, arrive: Vector2) -> void:
 			a.stepped.connect(_on_worm_step.bind(a))
 			worms.append(a)
 		i += 1
-	mood.color = Color(0.93, 0.94, 1.0) if id == "L2" else Color(0.86, 0.9, 0.92)
+	mood.color = Color(0.86, 0.9, 0.92) if id == "L3" else Color(0.93, 0.94, 1.0)
 	if id == "L3":
 		flags["visited_L3"] = true
 	mode = "explore"
@@ -979,4 +981,31 @@ func autotest() -> void:
 	for o in objectives():
 		print("  ", "[x] " if o["done"] else "[ ] ", o["text"])
 	print("AUTOTEST end")
+	get_tree().quit()
+
+
+## Walks from your room through the passage to the commons wing, into every room, and back.
+func test_commons() -> void:
+	await get_tree().create_timer(0.3).timeout
+	var p: Dictionary = level.data["stairs"][1]
+	await interact({"kind": "stairs", "id": p["id"], "name": p["name"], "text": p["text"], "plan": Vector2(p["u"], p["v"]), "to": p["to"], "arrive": p["arrive"]})
+	print("now on ", level_id, " at ", player.hex, " walkable ", level.walkable.size())
+	for room in ["commons", "kitchen", "classroom", "waiting", "clinic", "wash_w", "archive"]:
+		var r: Array = []
+		for rr in level.data["rooms"]:
+			if rr["id"] == room:
+				r = rr["r"]
+		var target := level.nearest_walkable(Vector2((r[0] + r[1]) / 2.0, (r[2] + r[3]) / 2.0), 3.0)
+		if room == "archive":
+			var d: Dictionary = level.doors["door_archive"]["data"]
+			await interact({"kind": "door", "id": "door_archive", "name": d["name"], "text": d["text"], "plan": Vector2(d["u"], d["v"])})
+		var path := level.find_path(player.hex, target, [])
+		print(room, ": target ", target, " path ", path.size())
+		if not path.is_empty():
+			await walk(path)
+		print("  reached ", player.hex == target, "  in room ", level._in_room(Hex.hex_to_plan(player.hex)))
+	var back: Dictionary = level.data["stairs"][0]
+	await interact({"kind": "stairs", "id": back["id"], "name": back["name"], "text": back["text"], "plan": Vector2(back["u"], back["v"]), "to": back["to"], "arrive": back["arrive"]})
+	print("back on ", level_id, " at ", player.hex)
+	print("TEST END")
 	get_tree().quit()

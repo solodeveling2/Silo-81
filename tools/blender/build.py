@@ -67,7 +67,7 @@ def L2():
         dict(a=(22.6, 1.4), b=(22.6, 5.6), h=FULL, face="-u"),
         dict(a=(22.6, -1.4), b=(22.6, 1.4), h=FULL, face="-u"),
         dict(a=(18.6, -5.0), b=(18.6, -1.4), h=STUB),
-        dict(a=(-4.2, -1.4), b=(-4.2, 1.4), h=STUB),
+        dict(a=(-4.2, -1.4), b=(-4.2, 1.4), h=STUB, openings=[(-1.3, -0.1, None)]),
         dict(a=(-4.2, -1.4), b=(1.0, -1.4), h=STUB),
         dict(a=(0.6, 1.4), b=(22.6, 1.4), h=STUB, openings=[(2.1, 3.1, "door_2_1"), (7.4, 8.8, None), (14.4, 15.8, None), (20.1, 21.1, "door_2_d")]),
         dict(a=(0.6, 1.4), b=(0.6, 5.6), h=STUB),
@@ -149,6 +149,7 @@ def L2():
         dict(t="cd_sign", u=E, v=-1.0, f="-u", z=1.9),
         dict(t="stencil", u=E, v=0.0, f="-u", z=2.45, text="LEVEL 2 - DORMITORIES", size=0.13),
         dict(t="floortext", u=-2.0, v=-0.6, text="STAIRS L3"),
+        dict(t="floortext", u=-3.4, v=-0.95, text="< COMMONS"),
         dict(t="intercom", u=1.0, v=WI, f="-v", z=1.45),
         dict(t="drawing", u=21.75, v=WI, f="-v", z=1.25),
         dict(t="mould", u=18.3, v=WI, f="-v"),
@@ -170,7 +171,9 @@ def L2():
         dict(id="drawing", u=21.75, v=5.2, name="Drawing", text="A child's drawing of a sky: blue, with a yellow sun. Nobody in Silo 81 has seen one.", room="room_2_d"),
     ]
     D["stairs"] += [dict(id="stairs_down", u=-0.45, v=0.7, to="L3", arrive=[-0.3, -0.2], name="Stairs down",
-                         text="The stairwell down to Level 3, life support.")]
+                         text="The stairwell down to Level 3, life support."),
+                    dict(id="to_commons", u=-4.0, v=-0.7, to="L2W", arrive=[-5.0, 0.0], name="Commons wing",
+                         text="West, past the dead lift, to the commons, the clinic and the school.")]
     D["spawns"] = {"player": [2.3, 3.5, 5], "worms": []}
     D["bounds"] = [-4.2, 22.6, -5.0, 5.6]
     return D
@@ -232,7 +235,165 @@ def L3():
     return D
 
 
-LV = {"L2": L2, "L3": L3}[LEVEL]()
+def L2W():
+    """Level 2 west of the core: the commons, kitchen, clinic, classroom, Archive and west washroom."""
+    D = {"name": "Level 2 - Commons", "rooms": [], "walls": [], "doors": [], "props": [], "decor": [],
+         "inspect": [], "stairs": [], "spawns": {}, "blocked": []}
+    concrete = dict(rgb=(0.5, 0.49, 0.45), noise=0.18, noise_scale=3.0)
+    lino = dict(rgb=(0.45, 0.33, 0.27), noise=0.12, noise_scale=6, grating=((0.38, 0.27, 0.22), 0.6))
+    tile = dict(rgb=(0.6, 0.62, 0.58), noise=0.08, noise_scale=20, grating=((0.47, 0.49, 0.46), 0.3))
+    clinic = dict(rgb=(0.62, 0.68, 0.64), noise=0.06, noise_scale=20, grating=((0.52, 0.58, 0.55), 0.4))
+    wood = dict(rgb=(0.47, 0.36, 0.25), noise=0.15, noise_scale=8)
+    D["rooms"] += [
+        dict(id="lobby", r=[-8.2, -4.2, -1.4, 1.4], floor=concrete),
+        dict(id="corridor_w", r=[-32.0, -8.2, -1.4, 1.4], floor=concrete),
+        dict(id="commons", name="Commons", r=[-21.0, -8.2, 1.4, 9.4], floor=lino),
+        dict(id="kitchen", name="Kitchen", r=[-26.0, -21.0, 1.4, 9.4], floor=tile),
+        dict(id="classroom", name="Classroom", r=[-32.0, -26.0, 1.4, 7.9], floor=wood),
+        dict(id="waiting", name="Clinic waiting room", r=[-12.0, -8.2, -6.4, -1.4], floor=clinic),
+        dict(id="clinic", name="Clinic and ward", r=[-22.0, -12.0, -8.4, -1.4], floor=clinic),
+        dict(id="wash_w", name="West washroom", r=[-25.5, -22.0, -7.9, -1.4], floor=tile),
+        dict(id="archive", name="Archive", r=[-32.0, -25.5, -7.9, -1.4], floor=wood),
+    ]
+    W = D["walls"]
+    W += [
+        # back walls (north and east faces), full height
+        dict(a=(-21.0, 9.4), b=(-8.2, 9.4), h=FULL, face="-v"),
+        dict(a=(-26.0, 9.4), b=(-21.0, 9.4), h=FULL, face="-v"),
+        dict(a=(-32.0, 7.9), b=(-26.0, 7.9), h=FULL, face="-v"),
+        dict(a=(-8.2, 1.4), b=(-8.2, 9.4), h=FULL, face="-u"),
+        dict(a=(-8.2, 1.4), b=(-4.2, 1.4), h=FULL, face="-v"),
+        dict(a=(-8.2, -6.4), b=(-8.2, -1.4), h=FULL, face="-u"),
+        # everything else cut down
+        dict(a=(-26.0, 7.9), b=(-26.0, 9.4), h=STUB),
+        dict(a=(-32.0, 1.4), b=(-8.2, 1.4), h=STUB, openings=[(-29.75, -28.45, "door_class"), (-24.4, -23.2, None), (-19.4, -17.6, None), (-12.6, -10.8, None)]),
+        dict(a=(-26.0, 1.4), b=(-26.0, 7.9), h=STUB),
+        dict(a=(-21.0, 1.4), b=(-21.0, 9.4), h=STUB, openings=[(6.6, 7.8, None)]),
+        dict(a=(-32.0, 1.4), b=(-32.0, 7.9), h=STUB),
+        dict(a=(-32.0, -1.4), b=(-32.0, 1.4), h=STUB),
+        dict(a=(-32.0, -7.9), b=(-32.0, -1.4), h=STUB),
+        dict(a=(-32.0, -1.4), b=(-8.2, -1.4), h=STUB, openings=[(-29.55, -28.25, "door_archive"), (-24.4, -23.1, None), (-16.15, -14.85, "door_clinic"), (-10.7, -9.5, None)]),
+        dict(a=(-32.0, -7.9), b=(-22.0, -7.9), h=STUB),
+        dict(a=(-25.5, -7.9), b=(-25.5, -1.4), h=STUB),
+        dict(a=(-22.0, -8.4), b=(-22.0, -1.4), h=STUB),
+        dict(a=(-22.0, -8.4), b=(-12.0, -8.4), h=STUB),
+        dict(a=(-12.0, -8.4), b=(-12.0, -1.4), h=STUB, openings=[(-4.4, -3.2, None)]),
+        dict(a=(-12.0, -6.4), b=(-8.2, -6.4), h=STUB),
+        dict(a=(-8.2, -1.4), b=(-4.2, -1.4), h=STUB),
+    ]
+    D["doors"] += [
+        dict(id="door_class", kind="plywood", u=-29.1, v=1.4, axis="u", open=True, locked=False, name="Classroom door",
+             text="Plywood, painted with a sun and a row of handprints at child height."),
+        dict(id="door_archive", kind="plywood", u=-28.9, v=-1.4, axis="u", open=False, locked=False, name="Archive door",
+             text="ARCHIVE - RECORDS, stencilled. Hollo keeps it shut so the paper stays dry."),
+        dict(id="door_clinic", kind="plywood", u=-15.5, v=-1.4, axis="u", open=True, locked=False, name="Clinic door",
+             text="Propped open. The warm air leaks out into the corridor and nobody minds."),
+    ]
+    P = D["props"]
+    CN = 9.4 - T / 2            # commons and kitchen back wall face
+    # commons: three long tables with benches, the Exchange at the kitchen hatch
+    for u in (-18.4, -14.9, -11.4):
+        P += [dict(t="table", u=u, v=3.4, f="+u", L=2.4, name="Canteen table", text="Scrubbed pale. Meals are eaten in three shifts, and you sit where your shift sits."),
+              dict(t="bench", u=u - 0.55, v=4.6, f="+u", L=2.2), dict(t="bench", u=u + 0.95, v=4.6, f="-u", L=2.2)]
+    P += [
+        dict(t="counter", u=-21.0 + T / 2, v=7.2, f="+u", L=1.8, hatch=True, id="exchange", name="The Exchange",
+             text="Kasimir's counter at the old serving hatch. Thread, batteries, a jar of honey that is mostly water. Everything has a price in ration coupons, and the price moves."),
+        dict(t="stool", u=-19.9, v=5.6, f="-u"),
+        dict(t="crate", u=-20.4, v=8.7, f="+u", name="Crate", text="Kasimir's stock. Padlocked."),
+        dict(t="bench", u=-8.2 - T / 2, v=6.2, f="-u", L=2.2, name="Bench", text="By the radiator, the best seat in the commons."),
+    ]
+    # kitchen
+    P += [
+        dict(t="stove", u=-24.6, v=CN, f="-v", name="Cooking range", text="Cast iron, older than anyone. It burns dried stalks from the bays when the hotplates are off."),
+        dict(t="sinks", u=-22.5, v=CN, f="-v", n=2, name="Kitchen sinks", text="Warm water here twice a day, for washing pots, not hands."),
+        dict(t="counter", u=-26.0 + T / 2, v=4.4, f="+u", L=2.4, name="Kitchen counter", text="Knives on chains. Someone has scratched a tally of meals into the steel."),
+        dict(t="sacks", u=-22.3, v=2.0, f="+v", name="Sacks", text="Potatoes and barley from the bays, weighed in, weighed out, signed for by Albu's clerk."),
+        dict(t="shelf", u=-26.0 + T / 2, v=7.4, f="+u", name="Shelves", text="Tins with no labels and a jar of salt counted by the spoon."),
+    ]
+    # classroom
+    CL = 7.9 - T / 2
+    for u in (-30.9, -27.3):
+        for v in (5.4, 4.0, 2.6):
+            P.append(dict(t="schooldesk", u=u, v=v, f="-v", name="School desk", text="Initials carved through three generations of varnish."))
+    P += [dict(t="desk", u=-28.4, v=CL - 0.35, f="-v", name="Teacher's desk", text="Hollo's lesson plan, unchanged since the founders wrote it. Today: the core, and why we do not waste heat.")]
+    # archive
+    AS = -7.9 + T / 2
+    for i, u in enumerate((-31.3, -30.1, -28.9)):
+        P.append(dict(t="files", u=u, v=AS, f="+v", k=i, name="Archive shelves", text="Box files by year. Some years are thinner than others."))
+    P += [
+        dict(t="files", u=-32.0 + T / 2, v=-3.0, f="+u", k=3, id="archive_back", name="Back shelf",
+             text="The last shelf against the wall. Behind the box files, wedged at the back, something hard and square wrapped in a rag."),
+        dict(t="cabinet", u=-26.0, v=AS, f="+v", name="Filing cabinet", text="Ration ledgers, decades of them. Names crossed out in different inks."),
+        dict(t="cabinet", u=-26.6, v=AS, f="+v", name="Filing cabinet", text="Admissions, 1952. The founders numbered the residents by trade."),
+        dict(t="desk", u=-27.4, v=-3.6, f="+u", name="Hollo's desk", text="A black pen, a red pen and a stack of files with strips of paper pasted over lines."),
+        dict(t="chair", u=-26.7, v=-3.6, f="-u"),
+    ]
+    # west washroom
+    P += [dict(t="sinks", u=-25.5 + T / 2, v=-3.6, f="+u", n=2, name="Washbasins", text="Bath day is posted on the door. It is not today.")]
+    for v in (-4.0, -5.2, -6.4):
+        P.append(dict(t="stall", u=-22.0 - T / 2, v=v, f="-u", name="Toilet stall", text="Working, mostly."))
+    # clinic and ward
+    CS = -8.4 + T / 2
+    for i, u in enumerate((-20.7, -18.0, -15.3)):
+        P.append(dict(t="bed", u=u, v=CS, f="+v", k=(i + 2) % 5, name="Ward bed", text="Clean sheets, boiled and dried on the clinic's own radiator."))
+    P[-1].update(id="bed_grigore", name="Grigore's bed",
+                 text="Grigore's bed. Diagrams of the exchanger in pencil on the back of ration forms, under the pillow.")
+    for u in (-19.35, -16.65):
+        P.append(dict(t="medscreen", u=u, v=-6.9, f="+v", name="Screen", text="A folding screen. Privacy, of a kind."))
+    P += [
+        dict(t="medcab", u=-22.0 + T / 2, v=-3.0, f="+u", name="Medicine cabinet", text="Dr. Kiss's stock: aspirin cut in halves, iodine, a bottle of something brown with no label."),
+        dict(t="medcab", u=-22.0 + T / 2, v=-4.1, f="+u", name="Medicine cabinet", text="Bandages washed and rolled for reuse."),
+        dict(t="desk", u=-13.2, v=-2.4, f="-v", name="Dr. Kiss's desk", text="The health-screening schedule. Every resident, every quarter, measured against a list nobody here wrote."),
+        dict(t="chair", u=-13.2, v=-3.2, f="+v"),
+    ]
+    # waiting room
+    P += [
+        dict(t="bench", u=-8.2 - T / 2, v=-3.9, f="-u", L=2.6, name="Waiting bench", text="Full. Half the people here are not ill; they are warm."),
+        dict(t="bench", u=-10.4, v=-6.4 + T / 2, f="+v", L=2.6, name="Waiting bench", text="Someone is asleep on it, coat over their head."),
+    ]
+    D["decor"] += [
+        dict(t="liftdoor", u=-6.2, v=1.4 - T / 2, f="-v"),
+        dict(t="switchboard", u=-4.9, v=-1.4 + T / 2, f="+v", z=0.9),
+        dict(t="noticeboard", u=-7.4, v=-1.4 + T / 2, f="+v", z=1.0, title="LEVEL 2 NOTICES"),
+        dict(t="stencil", u=-14.5, v=CN, f="-v", z=2.45, text="LEVEL 2 - COMMONS", size=0.13),
+        dict(t="tvscreen", u=-14.9, v=CN, f="-v", z=1.85),
+        dict(t="poster", u=-11.0, v=CN, f="-v", z=0.9),
+        dict(t="noticeboard", u=-18.4, v=CN, f="-v", z=1.0, title="ROTAS"),
+        dict(t="rationboard", u=-21.0 + T / 2, v=4.6, f="+u", z=1.1),
+        dict(t="radiator", u=-8.2 - T / 2, v=4.2, f="-u", sections=10, state="working"),
+        dict(t="radiator", u=-16.6, v=CN, f="-v", sections=10, state="dead"),
+        dict(t="blackboard", u=-29.0, v=CL, f="-v", z=0.85, text="THE CORE KEEPS US WARM"),
+        dict(t="drawing", u=-31.3, v=CL, f="-v", z=1.3), dict(t="drawing", u=-26.9, v=CL, f="-v", z=1.4),
+        dict(t="radiator", u=-31.0, v=CL, f="-v", sections=6, state="dead"),
+        dict(t="redcross", u=-8.2 - T / 2, v=-2.6, f="-u", z=1.7),
+        dict(t="radiator", u=-8.2 - T / 2, v=-5.3, f="-u", sections=12, state="working"),
+        dict(t="radiator", u=-12.4, v=-8.4 + T / 2, f="+v", sections=10, state="working"),
+        dict(t="stencil", u=-31.0, v=7.9 - T / 2, f="-v", z=2.45, text="SCHOOL", size=0.13),
+        dict(t="graffiti", u=-27.3, v=CL, f="-v", z=0.55, text="HEAT IS RANK", size=0.16, rot=-6, rgb=(0.6, 0.07, 0.05)),
+        dict(t="rug", u=-28.9, v=-4.6),
+        dict(t="floorline", u0=-31.8, u1=-4.4, v=-0.95),
+        dict(t="floortext", u=-5.6, v=-0.6, text="DORMS >"),
+        dict(t="floortext", u=-11.6, v=0.75, text="COMMONS"), dict(t="floortext", u=-29.1, v=0.75, text="SCHOOL"),
+        dict(t="floortext", u=-15.5, v=-0.75, text="CLINIC"), dict(t="floortext", u=-28.9, v=-0.75, text="ARCHIVE"),
+        dict(t="floortext", u=-23.8, v=-0.75, text="WC"),
+    ]
+    D["inspect"] += [
+        dict(id="screen", u=-14.9, v=8.6, name="The screen", text="The commons screen. At set hours it plays Hollo's history of the silo: the founders, the Frostfall, the Council's wisdom. The rest of the time it is dark."),
+        dict(id="rations", u=-20.4, v=4.6, name="Ration board", text="Numbered portions, chalked weekly. Council members' portions are listed separately, at the bottom, in smaller writing."),
+        dict(id="lift", u=-6.2, v=0.9, name="Lift 2", text="OUT OF ORDER, sprayed across doors that have not opened in forty years. The shaft behind carries the cables now."),
+        dict(id="notices", u=-7.4, v=-0.9, name="Notice board", text="Bath-day rota. Heat hours for the general circuit. A lost glove. A reminder that radiator keys are Council property."),
+        dict(id="blackboard", u=-29.0, v=7.1, name="Blackboard", text="THE CORE KEEPS US WARM, in Hollo's capitals, over a chalk drawing of the exchanger that is almost right."),
+        dict(id="graffiti_w", u=-27.3, v=7.2, name="Graffiti", text="HEAT IS RANK, in red crayon under the blackboard, at the height of a ten-year-old. Someone has tried to scrub it off and given up."),
+        dict(id="clinic_rad", u=-9.0, v=-5.3, name="Radiator", text="Hot to the touch. The clinic is on the priority circuit, and everyone on this level knows it."),
+    ]
+    D["stairs"] += [dict(id="to_dorms", u=-4.7, v=0.0, to="L2", arrive=[-3.4, -0.7], name="Dormitory wing",
+                         text="East, past the stairwell, to the dormitories.")]
+    D["spawns"] = {"player": [-5.0, 0.0, 3], "worms": []}
+    D["bounds"] = [-32.0, -4.2, -8.4, 9.4]
+    return D
+
+
+LV = {"L2": L2, "L3": L3, "L2W": L2W}[LEVEL]()
 
 # ============================================================ background geometry
 bg_objects = []
@@ -483,6 +644,87 @@ def decor(d):
             zb = 0.2 * n * (d["u1"] - uu) / (d["u1"] - d["u0"])
             b.box(uu - 0.025, uu + 0.025, d["v0"] + 0.03, d["v0"] + 0.08, zb, zb + 1.0, rail)
         plan_obj(b, outline=0.01)
+    elif t == "blackboard":
+        b = Builder("Blackboard")
+        b.box(-1.3, 1.3, 0.0, 0.03, -0.05, 1.15, toon("BoardFrame", (0.4, 0.3, 0.18), noise=0.1))
+        b.box(-1.24, 1.24, 0.03, 0.035, 0.0, 1.1, toon("BoardGreen", (0.16, 0.24, 0.2), noise=0.12, noise_scale=6))
+        b.box(-1.2, 1.2, 0.03, 0.08, -0.06, -0.03, toon("BoardFrame", (0.4, 0.3, 0.18), noise=0.1))
+        chalk = flat("ChalkWhite", (0.82, 0.82, 0.76))
+        for k in range(4):                                   # lines of chalk writing
+            b.box(-1.0, -0.2 + 0.12 * (k % 3), 0.036, 0.038, 0.42 - k * 0.1, 0.43 - k * 0.1, chalk)
+        for k in range(10):                                  # a chalk drawing of the core: a circle and pipes
+            a0, a1 = 2 * math.pi * k / 10, 2 * math.pi * (k + 1) / 10
+            b.quad([(0.6 + 0.2 * math.cos(a0), 0.037, 0.55 + 0.2 * math.sin(a0)), (0.6 + 0.2 * math.cos(a1), 0.037, 0.55 + 0.2 * math.sin(a1)),
+                    (0.6 + 0.18 * math.cos(a1), 0.037, 0.55 + 0.18 * math.sin(a1)), (0.6 + 0.18 * math.cos(a0), 0.037, 0.55 + 0.18 * math.sin(a0))], chalk)
+        b.box(0.79, 1.1, 0.037, 0.039, 0.54, 0.56, chalk)
+        b.box(0.79, 1.1, 0.037, 0.039, 0.64, 0.66, chalk)
+        ob = b.finish(outline=0.006)
+        add_on_wall(ob, d["u"], d["v"], d["f"], d.get("z", 0.85))
+        add_text_on_wall(d.get("text", "THE CORE KEEPS US WARM"), MARKER, 0.11, chalk, d["u"] - 0.45, d["v"], d["f"], d.get("z", 0.85) + 0.82, dy=0.04)
+    elif t == "noticeboard":
+        b = Builder("Noticeboard")
+        b.box(-0.65, 0.65, 0.0, 0.03, 0.0, 0.85, toon("Cork", (0.56, 0.4, 0.24), noise=0.2, noise_scale=14))
+        notes = [(-0.45, 0.45, (0.85, 0.83, 0.74)), (-0.1, 0.5, (0.86, 0.8, 0.56)), (0.3, 0.42, (0.85, 0.83, 0.74)),
+                 (-0.35, 0.12, (0.78, 0.82, 0.86)), (0.15, 0.1, (0.85, 0.83, 0.74)), (0.45, 0.15, (0.9, 0.62, 0.55))]
+        for i, (x, z, c) in enumerate(notes):
+            b.box(x - 0.13, x + 0.13, 0.031, 0.034, z, z + 0.26 - 0.04 * (i % 2), flat(f"Note{i}", c))
+            b.box(x - 0.015, x + 0.015, 0.034, 0.04, z + 0.22 - 0.04 * (i % 2), z + 0.25 - 0.04 * (i % 2), flat("Pin", (0.7, 0.12, 0.1)))
+        ob = b.finish(outline=0.006)
+        add_on_wall(ob, d["u"], d["v"], d["f"], d.get("z", 1.0))
+        if d.get("title"):
+            add_text_on_wall(d["title"], STENCIL, 0.09, flat("StencilPaint", (0.12, 0.12, 0.11)), d["u"], d["v"], d["f"], d.get("z", 1.0) + 0.9)
+    elif t == "tvscreen":
+        b = Builder("TVScreen")
+        case = toon("TVCase", (0.32, 0.27, 0.2), noise=0.1)
+        b.box(-0.08, 0.08, 0.0, 0.3, -0.05, 0.03, toon("Steel", (0.5, 0.5, 0.5)))       # bracket
+        b.box(-0.36, 0.36, 0.1, 0.55, 0.03, 0.55, case)
+        b.box(-0.27, 0.2, 0.55, 0.56, 0.1, 0.48, flat("TVGlass", (0.52, 0.6, 0.58)))
+        b.box(-0.22, 0.12, 0.56, 0.562, 0.3, 0.33, flat("TVLine", (0.82, 0.86, 0.8)))
+        b.cyl((0.28, 0.55, 0.38), (0.28, 0.57, 0.38), 0.03, toon("Knob", (0.15, 0.15, 0.14)), seg=8)
+        b.cyl((0.28, 0.55, 0.25), (0.28, 0.57, 0.25), 0.03, toon("Knob", (0.15, 0.15, 0.14)), seg=8)
+        ob = b.finish(outline=0.008)
+        add_on_wall(ob, d["u"], d["v"], d["f"], d.get("z", 1.9))
+    elif t == "liftdoor":
+        b = Builder("LiftDoor")
+        frame = toon("LiftFrame", (0.3, 0.33, 0.3), noise=0.08)
+        b.box(-1.0, 1.0, 0.0, 0.08, 0.0, 2.45, frame)
+        for x in (-0.47, 0.47):
+            b.box(x - 0.46, x + 0.46, 0.08, 0.1, 0.02, 2.2, toon("LiftSteel", (0.42, 0.45, 0.42), noise=0.14, noise_scale=6))
+        b.box(-0.6, 0.6, 0.1, 0.12, 1.1, 1.38, flat("OOOPaper", (0.86, 0.82, 0.7)))
+        b.box(-0.9, 0.9, 0.1, 0.11, 0.3, 0.36, toon("Hazard", (0.75, 0.6, 0.12)))
+        ob = b.finish(outline=0.01)
+        add_on_wall(ob, d["u"], d["v"], d["f"], 0.0)
+        add_text_on_wall("OUT OF ORDER", MARKER, 0.09, flat("Spray", (0.6, 0.07, 0.05)), d["u"], d["v"], d["f"], 1.2, dy=0.13)
+        add_text_on_wall("LIFT 2", STENCIL, 0.16, flat("StencilPaint", (0.12, 0.12, 0.11)), d["u"], d["v"], d["f"], 2.25, dy=0.09)
+    elif t == "redcross":
+        b = Builder("RedCross")
+        b.box(-0.3, 0.3, 0.0, 0.01, -0.3, 0.3, flat("CrossWhite", (0.86, 0.85, 0.8)))
+        b.box(-0.2, 0.2, 0.01, 0.014, -0.06, 0.06, flat("RedCross", (0.7, 0.1, 0.08)))
+        b.box(-0.06, 0.06, 0.01, 0.014, -0.2, 0.2, flat("RedCross", (0.7, 0.1, 0.08)))
+        ob = b.finish(outline=0.006)
+        add_on_wall(ob, d["u"], d["v"], d["f"], d.get("z", 1.7))
+    elif t == "rationboard":
+        b = Builder("RationBoard")
+        b.box(-0.75, 0.75, 0.0, 0.03, 0.0, 1.0, toon("RationBoard", (0.2, 0.22, 0.2), noise=0.1))
+        line = flat("ChalkWhite", (0.82, 0.82, 0.76))
+        for k in range(6):
+            b.box(-0.68, 0.68, 0.031, 0.033, 0.12 + k * 0.13, 0.13 + k * 0.13, line)
+        for x in (-0.25, 0.2):
+            b.box(x, x + 0.01, 0.031, 0.033, 0.1, 0.85, line)
+        for k in range(5):
+            b.box(0.3, 0.3 + 0.06 + 0.04 * (k % 3), 0.033, 0.035, 0.17 + k * 0.13, 0.22 + k * 0.13, line)
+        ob = b.finish(outline=0.006)
+        add_on_wall(ob, d["u"], d["v"], d["f"], d.get("z", 1.1))
+        add_text_on_wall("RATIONS - WEEK 3", STENCIL, 0.08, flat("CrossWhite", (0.86, 0.85, 0.8)), d["u"], d["v"], d["f"], d.get("z", 1.1) + 0.88, dy=0.035)
+    elif t == "switchboard":
+        b = Builder("Switchboard")
+        b.box(-0.35, 0.35, 0.0, 0.18, 0.0, 0.9, toon("SwitchGrey", (0.42, 0.45, 0.43), noise=0.08))
+        for r in range(3):
+            for c in range(5):
+                b.box(-0.27 + c * 0.13, -0.19 + c * 0.13, 0.18, 0.2, 0.15 + r * 0.25, 0.27 + r * 0.25, toon("Breaker", (0.15, 0.15, 0.14)))
+                b.box(-0.26 + c * 0.13, -0.2 + c * 0.13, 0.2, 0.202, 0.2 + r * 0.25, 0.24 + r * 0.25, flat("TapeLabel", (0.86, 0.82, 0.62)))
+        ob = b.finish(outline=0.006)
+        add_on_wall(ob, d["u"], d["v"], d["f"], d.get("z", 0.9))
     elif t == "pipes":
         build_pipes(d)
     elif t == "manifold":
@@ -623,6 +865,15 @@ PROP_FN = {
     "laundry": lambda p: kit.laundry("Laundry", p.get("k", 0)),
     "pump": lambda p: kit.pump("Pump"),
     "workbench": lambda p: kit.workbench("Workbench"),
+    "bench": lambda p: kit.bench("Bench", p.get("L", 2.2)),
+    "stove": lambda p: kit.stove("Stove"),
+    "counter": lambda p: kit.counter("Counter", p.get("L", 2.0), p.get("hatch", False)),
+    "cabinet": lambda p: kit.cabinet("Cabinet"),
+    "medscreen": lambda p: kit.medscreen("Screen"),
+    "medcab": lambda p: kit.medcab("MedCabinet"),
+    "schooldesk": lambda p: kit.schooldesk("SchoolDesk"),
+    "sacks": lambda p: kit.sacks("Sacks"),
+    "files": lambda p: kit.file_shelf("Files", p.get("k", 0)),
 }
 cache = {}
 
@@ -653,7 +904,9 @@ for i, p in enumerate(LV["props"]):
     L, Dp = {"bunk": (2.0, 0.9), "bed": (2.0, 0.9), "locker": (p.get("w", 0.55), 0.5), "desk": (1.2, 0.6), "chair": (0.5, 0.5),
              "table": (p.get("L", 1.2), 0.7), "stool": (0.36, 0.36), "curtain": (0.65, 0.1), "toolbox": (1.0, 0.3), "crate": (0.62, 0.62),
              "bucket": (0.34, 0.34), "shelf": (1.1, 0.45), "sinks": (0.7 * p.get("n", 3), 0.45), "stall": (0.9, 1.2), "laundry": (1.8, 0.25),
-             "pump": (1.2, 0.7), "workbench": (1.8, 0.7)}[p["t"]]
+             "pump": (1.2, 0.7), "workbench": (1.8, 0.7), "bench": (p.get("L", 2.2), 0.32), "stove": (1.6, 0.8),
+             "counter": (p.get("L", 2.0), 0.62), "cabinet": (0.48, 0.62), "medscreen": (1.8, 0.2), "medcab": (0.9, 0.42),
+             "schooldesk": (1.1, 0.85), "sacks": (1.1, 0.6), "files": (1.1, 0.42)}[p["t"]]
     fp = footprint(p["u"], p["v"], p["f"], L, Dp)
     cu, cv = (fp[0] + fp[1]) / 2, (fp[2] + fp[3]) / 2
     sx, sy = scr_uv(p["u"], p["v"])
@@ -666,7 +919,7 @@ for i, p in enumerate(LV["props"]):
     out["props"].append(entry)
 
 
-def door_obj(kind, is_open):
+def door_obj(kind, is_open, label="2-D"):
     b = Builder("Door")
     frame = toon("DoorFrame", (0.3, 0.33, 0.3), noise=0.08)
     W, H = 1.0, 2.05
@@ -693,7 +946,7 @@ def door_obj(kind, is_open):
         b.box(W / 2 - 0.2, W / 2 - 0.05, th / 2, th / 2 + 0.05, 1.1, 1.25, toon("Padlock", (0.55, 0.45, 0.18)), M)
     ob = b.finish(outline=0.01)
     if kind == "steel" and not is_open:
-        txt = text_obj("2-D", STENCIL, 0.2, flat("DoorStencil", (0.82, 0.78, 0.66)))
+        txt = text_obj(label, STENCIL, 0.2, flat("DoorStencil", (0.82, 0.78, 0.66)))
         txt.matrix_world = Matrix.Translation((0, th / 2 + 0.004, 1.6)) @ Matrix.Rotation(math.pi, 4, "Z") @ Matrix.Rotation(math.radians(90), 4, "X")
         return [ob, txt]
     return [ob]
@@ -704,12 +957,12 @@ for d in LV["doors"]:
     ent = {k: d[k] for k in d if k not in ("axis",)}
     for state in ("closed", "open"):
         def build(d=d, state=state, facing=facing):
-            objs = door_obj(d["kind"], state == "open")
+            objs = door_obj(d["kind"], state == "open", d.get("label", "2-D"))
             ang = kit.facing_frame(facing)
             for o in objs:
                 o.matrix_world = Matrix.Rotation(ang, 4, "Z") @ o.matrix_world
             return objs
-        f, off, wh = sprite_for(("door", d["kind"], state, facing), build)
+        f, off, wh = sprite_for(("door", d["kind"], state, facing, d.get("label", "2-D")), build)
         sx, sy = scr_uv(d["u"], d["v"])
         ent["spr_" + state] = {"sprite": f, "x0": round(sx + off[0], 1), "y0": round(sy + off[1], 1)}
     srt = scr_uv(d["u"], d["v"])

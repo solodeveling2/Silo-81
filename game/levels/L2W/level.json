@@ -1,0 +1,1414 @@
+{
+ "level": "L2W",
+ "name": "Level 2 - Commons",
+ "ppm": 165.0,
+ "rooms": [
+  {
+   "id": "lobby",
+   "r": [
+    -8.2,
+    -4.2,
+    -1.4,
+    1.4
+   ]
+  },
+  {
+   "id": "corridor_w",
+   "r": [
+    -32.0,
+    -8.2,
+    -1.4,
+    1.4
+   ]
+  },
+  {
+   "id": "commons",
+   "r": [
+    -21.0,
+    -8.2,
+    1.4,
+    9.4
+   ],
+   "name": "Commons"
+  },
+  {
+   "id": "kitchen",
+   "r": [
+    -26.0,
+    -21.0,
+    1.4,
+    9.4
+   ],
+   "name": "Kitchen"
+  },
+  {
+   "id": "classroom",
+   "r": [
+    -32.0,
+    -26.0,
+    1.4,
+    7.9
+   ],
+   "name": "Classroom"
+  },
+  {
+   "id": "waiting",
+   "r": [
+    -12.0,
+    -8.2,
+    -6.4,
+    -1.4
+   ],
+   "name": "Clinic waiting room"
+  },
+  {
+   "id": "clinic",
+   "r": [
+    -22.0,
+    -12.0,
+    -8.4,
+    -1.4
+   ],
+   "name": "Clinic and ward"
+  },
+  {
+   "id": "wash_w",
+   "r": [
+    -25.5,
+    -22.0,
+    -7.9,
+    -1.4
+   ],
+   "name": "West washroom"
+  },
+  {
+   "id": "archive",
+   "r": [
+    -32.0,
+    -25.5,
+    -7.9,
+    -1.4
+   ],
+   "name": "Archive"
+  }
+ ],
+ "walls": [
+  {
+   "a": [
+    -21.0,
+    9.4
+   ],
+   "b": [
+    -8.2,
+    9.4
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    -26.0,
+    9.4
+   ],
+   "b": [
+    -21.0,
+    9.4
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    -32.0,
+    7.9
+   ],
+   "b": [
+    -26.0,
+    7.9
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    -8.2,
+    1.4
+   ],
+   "b": [
+    -8.2,
+    9.4
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    -8.2,
+    1.4
+   ],
+   "b": [
+    -4.2,
+    1.4
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    -8.2,
+    -6.4
+   ],
+   "b": [
+    -8.2,
+    -1.4
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    -26.0,
+    7.9
+   ],
+   "b": [
+    -26.0,
+    9.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -32.0,
+    1.4
+   ],
+   "b": [
+    -8.2,
+    1.4
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     -29.75,
+     -28.45,
+     "door_class"
+    ],
+    [
+     -24.4,
+     -23.2,
+     null
+    ],
+    [
+     -19.4,
+     -17.6,
+     null
+    ],
+    [
+     -12.6,
+     -10.8,
+     null
+    ]
+   ]
+  },
+  {
+   "a": [
+    -26.0,
+    1.4
+   ],
+   "b": [
+    -26.0,
+    7.9
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -21.0,
+    1.4
+   ],
+   "b": [
+    -21.0,
+    9.4
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     6.6,
+     7.8,
+     null
+    ]
+   ]
+  },
+  {
+   "a": [
+    -32.0,
+    1.4
+   ],
+   "b": [
+    -32.0,
+    7.9
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -32.0,
+    -1.4
+   ],
+   "b": [
+    -32.0,
+    1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -32.0,
+    -7.9
+   ],
+   "b": [
+    -32.0,
+    -1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -32.0,
+    -1.4
+   ],
+   "b": [
+    -8.2,
+    -1.4
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     -29.55,
+     -28.25,
+     "door_archive"
+    ],
+    [
+     -24.4,
+     -23.1,
+     null
+    ],
+    [
+     -16.15,
+     -14.85,
+     "door_clinic"
+    ],
+    [
+     -10.7,
+     -9.5,
+     null
+    ]
+   ]
+  },
+  {
+   "a": [
+    -32.0,
+    -7.9
+   ],
+   "b": [
+    -22.0,
+    -7.9
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -25.5,
+    -7.9
+   ],
+   "b": [
+    -25.5,
+    -1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -22.0,
+    -8.4
+   ],
+   "b": [
+    -22.0,
+    -1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -22.0,
+    -8.4
+   ],
+   "b": [
+    -12.0,
+    -8.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -12.0,
+    -8.4
+   ],
+   "b": [
+    -12.0,
+    -1.4
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     -4.4,
+     -3.2,
+     null
+    ]
+   ]
+  },
+  {
+   "a": [
+    -12.0,
+    -6.4
+   ],
+   "b": [
+    -8.2,
+    -6.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -8.2,
+    -1.4
+   ],
+   "b": [
+    -4.2,
+    -1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  }
+ ],
+ "doors": [
+  {
+   "id": "door_class",
+   "kind": "plywood",
+   "u": -29.1,
+   "v": 1.4,
+   "open": true,
+   "locked": false,
+   "name": "Classroom door",
+   "text": "Plywood, painted with a sun and a row of handprints at child height.",
+   "spr_closed": {
+    "sprite": "spr_030.png",
+    "x0": -3646.5,
+    "y0": 1263.9
+   },
+   "spr_open": {
+    "sprite": "spr_031.png",
+    "x0": -3747.5,
+    "y0": 1209.9
+   },
+   "sort": [
+    -3558.5,
+    1615.9
+   ]
+  },
+  {
+   "id": "door_archive",
+   "kind": "plywood",
+   "u": -28.9,
+   "v": -1.4,
+   "open": false,
+   "locked": false,
+   "name": "Archive door",
+   "text": "ARCHIVE - RECORDS, stencilled. Hollo keeps it shut so the paper stays dry.",
+   "spr_closed": {
+    "sprite": "spr_030.png",
+    "x0": -3296.5,
+    "y0": 1415.6
+   },
+   "spr_open": {
+    "sprite": "spr_031.png",
+    "x0": -3397.5,
+    "y0": 1361.6
+   },
+   "sort": [
+    -3208.5,
+    1767.6
+   ]
+  },
+  {
+   "id": "door_clinic",
+   "kind": "plywood",
+   "u": -15.5,
+   "v": -1.4,
+   "open": true,
+   "locked": false,
+   "name": "Clinic door",
+   "text": "Propped open. The warm air leaks out into the corridor and nobody minds.",
+   "spr_closed": {
+    "sprite": "spr_030.png",
+    "x0": -1733.1,
+    "y0": 633.9
+   },
+   "spr_open": {
+    "sprite": "spr_031.png",
+    "x0": -1834.1,
+    "y0": 579.9
+   },
+   "sort": [
+    -1645.1,
+    985.9
+   ]
+  }
+ ],
+ "props": [
+  {
+   "type": "table",
+   "footprint": [
+    -18.4,
+    -17.7,
+    2.2,
+    4.6
+   ],
+   "sprite": "spr_000.png",
+   "x0": -2691.5,
+   "y0": 636.0,
+   "sort": [
+    -2502.6,
+    854.6
+   ],
+   "name": "Canteen table",
+   "text": "Scrubbed pale. Meals are eaten in three shifts, and you sit where your shift sits."
+  },
+  {
+   "type": "bench",
+   "footprint": [
+    -18.95,
+    -18.63,
+    3.5,
+    5.7
+   ],
+   "sprite": "spr_001.png",
+   "x0": -2883.6,
+   "y0": 679.1,
+   "sort": [
+    -2729.0,
+    827.8
+   ]
+  },
+  {
+   "type": "bench",
+   "footprint": [
+    -17.77,
+    -17.45,
+    3.5,
+    5.7
+   ],
+   "sprite": "spr_002.png",
+   "x0": -2746.6,
+   "y0": 609.6,
+   "sort": [
+    -2591.3,
+    759.0
+   ]
+  },
+  {
+   "type": "table",
+   "footprint": [
+    -14.9,
+    -14.2,
+    2.2,
+    4.6
+   ],
+   "sprite": "spr_000.png",
+   "x0": -2283.1,
+   "y0": 431.9,
+   "sort": [
+    -2094.3,
+    650.4
+   ],
+   "name": "Canteen table",
+   "text": "Scrubbed pale. Meals are eaten in three shifts, and you sit where your shift sits."
+  },
+  {
+   "type": "bench",
+   "footprint": [
+    -15.45,
+    -15.13,
+    3.5,
+    5.7
+   ],
+   "sprite": "spr_001.png",
+   "x0": -2475.3,
+   "y0": 474.9,
+   "sort": [
+    -2320.6,
+    623.6
+   ]
+  },
+  {
+   "type": "bench",
+   "footprint": [
+    -14.27,
+    -13.95,
+    3.5,
+    5.7
+   ],
+   "sprite": "spr_002.png",
+   "x0": -2338.3,
+   "y0": 405.4,
+   "sort": [
+    -2182.9,
+    554.8
+   ]
+  },
+  {
+   "type": "table",
+   "footprint": [
+    -11.4,
+    -10.7,
+    2.2,
+    4.6
+   ],
+   "sprite": "spr_000.png",
+   "x0": -1874.8,
+   "y0": 227.7,
+   "sort": [
+    -1685.9,
+    446.3
+   ],
+   "name": "Canteen table",
+   "text": "Scrubbed pale. Meals are eaten in three shifts, and you sit where your shift sits."
+  },
+  {
+   "type": "bench",
+   "footprint": [
+    -11.95,
+    -11.63,
+    3.5,
+    5.7
+   ],
+   "sprite": "spr_001.png",
+   "x0": -2066.9,
+   "y0": 270.8,
+   "sort": [
+    -1912.3,
+    419.4
+   ]
+  },
+  {
+   "type": "bench",
+   "footprint": [
+    -10.77,
+    -10.45,
+    3.5,
+    5.7
+   ],
+   "sprite": "spr_002.png",
+   "x0": -1929.9,
+   "y0": 201.3,
+   "sort": [
+    -1774.6,
+    350.6
+   ]
+  },
+  {
+   "type": "counter",
+   "footprint": [
+    -20.875,
+    -20.255,
+    6.3,
+    8.1
+   ],
+   "sprite": "spr_003.png",
+   "x0": -3393.6,
+   "y0": 426.7,
+   "sort": [
+    -3239.4,
+    779.7
+   ],
+   "id": "exchange",
+   "name": "The Exchange",
+   "text": "Kasimir's counter at the old serving hatch. Thread, batteries, a jar of honey that is mostly water. Everything has a price in ration coupons, and the price moves."
+  },
+  {
+   "type": "stool",
+   "footprint": [
+    -20.26,
+    -19.9,
+    5.42,
+    5.78
+   ],
+   "sprite": "spr_004.png",
+   "x0": -3043.2,
+   "y0": 750.2,
+   "sort": [
+    -2996.2,
+    844.7
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    -20.4,
+    -19.78,
+    8.39,
+    9.01
+   ],
+   "sprite": "spr_005.png",
+   "x0": -3440.2,
+   "y0": 541.5,
+   "sort": [
+    -3359.0,
+    664.5
+   ],
+   "name": "Crate",
+   "text": "Kasimir's stock. Padlocked."
+  },
+  {
+   "type": "bench",
+   "footprint": [
+    -8.645,
+    -8.325,
+    5.1,
+    7.3
+   ],
+   "sprite": "spr_002.png",
+   "x0": -1868.7,
+   "y0": -16.0,
+   "sort": [
+    -1713.3,
+    133.3
+   ],
+   "name": "Bench",
+   "text": "By the radiator, the best seat in the commons."
+  },
+  {
+   "type": "stove",
+   "footprint": [
+    -25.4,
+    -23.8,
+    8.475,
+    9.275
+   ],
+   "sprite": "spr_006.png",
+   "x0": -4053.3,
+   "y0": 468.0,
+   "sort": [
+    -3905.6,
+    917.3
+   ],
+   "name": "Cooking range",
+   "text": "Cast iron, older than anyone. It burns dried stalks from the bays when the hotplates are off."
+  },
+  {
+   "type": "sinks",
+   "footprint": [
+    -23.2,
+    -21.8,
+    8.825,
+    9.275
+   ],
+   "sprite": "spr_007.png",
+   "x0": -3784.3,
+   "y0": 583.5,
+   "sort": [
+    -3681.0,
+    784.6
+   ],
+   "name": "Kitchen sinks",
+   "text": "Warm water here twice a day, for washing pots, not hands."
+  },
+  {
+   "type": "counter",
+   "footprint": [
+    -25.875,
+    -25.255,
+    3.2,
+    5.6
+   ],
+   "sprite": "spr_008.png",
+   "x0": -3685.3,
+   "y0": 977.8,
+   "sort": [
+    -3496.1,
+    1234.7
+   ],
+   "name": "Kitchen counter",
+   "text": "Knives on chains. Someone has scratched a tally of meals into the steel."
+  },
+  {
+   "type": "sacks",
+   "footprint": [
+    -22.85,
+    -21.75,
+    2.0,
+    2.6
+   ],
+   "sprite": "spr_009.png",
+   "x0": -2966.1,
+   "y0": 1018.2,
+   "sort": [
+    -2870.1,
+    1166.7
+   ],
+   "name": "Sacks",
+   "text": "Potatoes and barley from the bays, weighed in, weighed out, signed for by Albu's clerk."
+  },
+  {
+   "type": "shelf",
+   "footprint": [
+    -25.875,
+    -25.425,
+    6.85,
+    7.95
+   ],
+   "sprite": "spr_010.png",
+   "x0": -3957.3,
+   "y0": 738.8,
+   "sort": [
+    -3856.0,
+    1064.6
+   ],
+   "name": "Shelves",
+   "text": "Tins with no labels and a jar of salt counted by the spoon."
+  },
+  {
+   "type": "schooldesk",
+   "footprint": [
+    -31.45,
+    -30.35,
+    4.55,
+    5.4
+   ],
+   "sprite": "spr_011.png",
+   "x0": -4307.2,
+   "y0": 1335.6,
+   "sort": [
+    -4185.6,
+    1512.4
+   ],
+   "name": "School desk",
+   "text": "Initials carved through three generations of varnish."
+  },
+  {
+   "type": "schooldesk",
+   "footprint": [
+    -31.45,
+    -30.35,
+    3.15,
+    4.0
+   ],
+   "sprite": "spr_011.png",
+   "x0": -4143.9,
+   "y0": 1417.2,
+   "sort": [
+    -4022.3,
+    1594.0
+   ],
+   "name": "School desk",
+   "text": "Initials carved through three generations of varnish."
+  },
+  {
+   "type": "schooldesk",
+   "footprint": [
+    -31.45,
+    -30.35,
+    1.75,
+    2.6
+   ],
+   "sprite": "spr_011.png",
+   "x0": -3980.5,
+   "y0": 1498.9,
+   "sort": [
+    -3858.9,
+    1675.7
+   ],
+   "name": "School desk",
+   "text": "Initials carved through three generations of varnish."
+  },
+  {
+   "type": "schooldesk",
+   "footprint": [
+    -27.85,
+    -26.75,
+    4.55,
+    5.4
+   ],
+   "sprite": "spr_011.png",
+   "x0": -3887.2,
+   "y0": 1125.6,
+   "sort": [
+    -3765.6,
+    1302.4
+   ],
+   "name": "School desk",
+   "text": "Initials carved through three generations of varnish."
+  },
+  {
+   "type": "schooldesk",
+   "footprint": [
+    -27.85,
+    -26.75,
+    3.15,
+    4.0
+   ],
+   "sprite": "spr_011.png",
+   "x0": -3723.9,
+   "y0": 1207.2,
+   "sort": [
+    -3602.3,
+    1384.0
+   ],
+   "name": "School desk",
+   "text": "Initials carved through three generations of varnish."
+  },
+  {
+   "type": "schooldesk",
+   "footprint": [
+    -27.85,
+    -26.75,
+    1.75,
+    2.6
+   ],
+   "sprite": "spr_011.png",
+   "x0": -3560.5,
+   "y0": 1288.9,
+   "sort": [
+    -3438.9,
+    1465.7
+   ],
+   "name": "School desk",
+   "text": "Initials carved through three generations of varnish."
+  },
+  {
+   "type": "desk",
+   "footprint": [
+    -29.0,
+    -27.8,
+    6.825,
+    7.425
+   ],
+   "sprite": "spr_012.png",
+   "x0": -4257.8,
+   "y0": 1008.6,
+   "sort": [
+    -4144.8,
+    1241.1
+   ],
+   "name": "Teacher's desk",
+   "text": "Hollo's lesson plan, unchanged since the founders wrote it. Today: the core, and why we do not waste heat."
+  },
+  {
+   "type": "files",
+   "footprint": [
+    -31.85,
+    -30.75,
+    -7.775,
+    -7.355
+   ],
+   "sprite": "spr_013.png",
+   "x0": -2868.7,
+   "y0": 1927.5,
+   "sort": [
+    -2769.2,
+    2267.2
+   ],
+   "name": "Archive shelves",
+   "text": "Box files by year. Some years are thinner than others."
+  },
+  {
+   "type": "files",
+   "footprint": [
+    -30.65,
+    -29.55,
+    -7.775,
+    -7.355
+   ],
+   "sprite": "spr_014.png",
+   "x0": -2728.7,
+   "y0": 1857.5,
+   "sort": [
+    -2629.2,
+    2197.2
+   ],
+   "name": "Archive shelves",
+   "text": "Box files by year. Some years are thinner than others."
+  },
+  {
+   "type": "files",
+   "footprint": [
+    -29.45,
+    -28.35,
+    -7.775,
+    -7.355
+   ],
+   "sprite": "spr_015.png",
+   "x0": -2588.7,
+   "y0": 1787.5,
+   "sort": [
+    -2489.2,
+    2127.2
+   ],
+   "name": "Archive shelves",
+   "text": "Box files by year. Some years are thinner than others."
+  },
+  {
+   "type": "files",
+   "footprint": [
+    -31.875,
+    -31.455,
+    -3.55,
+    -2.45
+   ],
+   "sprite": "spr_016.png",
+   "x0": -3443.9,
+   "y0": 1682.5,
+   "sort": [
+    -3344.4,
+    2022.2
+   ],
+   "id": "archive_back",
+   "name": "Back shelf",
+   "text": "The last shelf against the wall. Behind the box files, wedged at the back, something hard and square wrapped in a rag."
+  },
+  {
+   "type": "cabinet",
+   "footprint": [
+    -26.24,
+    -25.76,
+    -7.775,
+    -7.155
+   ],
+   "sprite": "spr_017.png",
+   "x0": -2238.4,
+   "y0": 1721.3,
+   "sort": [
+    -2162.5,
+    1952.2
+   ],
+   "name": "Filing cabinet",
+   "text": "Ration ledgers, decades of them. Names crossed out in different inks."
+  },
+  {
+   "type": "cabinet",
+   "footprint": [
+    -26.84,
+    -26.36,
+    -7.775,
+    -7.155
+   ],
+   "sprite": "spr_017.png",
+   "x0": -2308.4,
+   "y0": 1756.3,
+   "sort": [
+    -2232.5,
+    1987.2
+   ],
+   "name": "Filing cabinet",
+   "text": "Admissions, 1952. The founders numbered the residents by trade."
+  },
+  {
+   "type": "desk",
+   "footprint": [
+    -27.4,
+    -26.8,
+    -4.2,
+    -3.0
+   ],
+   "sprite": "spr_018.png",
+   "x0": -2854.8,
+   "y0": 1558.4,
+   "sort": [
+    -2741.8,
+    1790.9
+   ],
+   "name": "Hollo's desk",
+   "text": "A black pen, a red pen and a stack of files with strips of paper pasted over lines."
+  },
+  {
+   "type": "chair",
+   "footprint": [
+    -27.2,
+    -26.7,
+    -3.85,
+    -3.35
+   ],
+   "sprite": "spr_019.png",
+   "x0": -2782.1,
+   "y0": 1621.6,
+   "sort": [
+    -2724.3,
+    1782.2
+   ]
+  },
+  {
+   "type": "sinks",
+   "footprint": [
+    -25.375,
+    -24.925,
+    -4.3,
+    -2.9
+   ],
+   "sprite": "spr_020.png",
+   "x0": -2617.5,
+   "y0": 1475.3,
+   "sort": [
+    -2514.3,
+    1677.2
+   ],
+   "name": "Washbasins",
+   "text": "Bath day is posted on the door. It is not today."
+  },
+  {
+   "type": "stall",
+   "footprint": [
+    -23.325,
+    -22.125,
+    -4.45,
+    -3.55
+   ],
+   "sprite": "spr_021.png",
+   "x0": -2315.7,
+   "y0": 1225.0,
+   "sort": [
+    -2184.7,
+    1559.0
+   ],
+   "name": "Toilet stall",
+   "text": "Working, mostly."
+  },
+  {
+   "type": "stall",
+   "footprint": [
+    -23.325,
+    -22.125,
+    -5.65,
+    -4.75
+   ],
+   "sprite": "spr_021.png",
+   "x0": -2175.7,
+   "y0": 1295.0,
+   "sort": [
+    -2044.7,
+    1629.0
+   ],
+   "name": "Toilet stall",
+   "text": "Working, mostly."
+  },
+  {
+   "type": "stall",
+   "footprint": [
+    -23.325,
+    -22.125,
+    -6.85,
+    -5.95
+   ],
+   "sprite": "spr_021.png",
+   "x0": -2035.7,
+   "y0": 1365.0,
+   "sort": [
+    -1904.7,
+    1699.0
+   ],
+   "name": "Toilet stall",
+   "text": "Working, mostly."
+  },
+  {
+   "type": "bed",
+   "footprint": [
+    -21.7,
+    -19.7,
+    -8.275,
+    -7.375
+   ],
+   "sprite": "spr_022.png",
+   "x0": -1676.7,
+   "y0": 1465.3,
+   "sort": [
+    -1502.2,
+    1664.0
+   ],
+   "name": "Ward bed",
+   "text": "Clean sheets, boiled and dried on the clinic's own radiator."
+  },
+  {
+   "type": "bed",
+   "footprint": [
+    -19.0,
+    -17.0,
+    -8.275,
+    -7.375
+   ],
+   "sprite": "spr_023.png",
+   "x0": -1361.6,
+   "y0": 1307.8,
+   "sort": [
+    -1187.1,
+    1506.5
+   ],
+   "name": "Ward bed",
+   "text": "Clean sheets, boiled and dried on the clinic's own radiator."
+  },
+  {
+   "type": "bed",
+   "footprint": [
+    -16.3,
+    -14.3,
+    -8.275,
+    -7.375
+   ],
+   "sprite": "spr_024.png",
+   "x0": -1046.6,
+   "y0": 1150.3,
+   "sort": [
+    -872.1,
+    1349.0
+   ],
+   "id": "bed_grigore",
+   "name": "Grigore's bed",
+   "text": "Grigore's bed. Diagrams of the exchanger in pencil on the back of ration forms, under the pillow."
+  },
+  {
+   "type": "medscreen",
+   "footprint": [
+    -20.25,
+    -18.45,
+    -6.9,
+    -6.7
+   ],
+   "sprite": "spr_025.png",
+   "x0": -1585.6,
+   "y0": 1210.3,
+   "sort": [
+    -1464.2,
+    1525.5
+   ],
+   "name": "Screen",
+   "text": "A folding screen. Privacy, of a kind."
+  },
+  {
+   "type": "medscreen",
+   "footprint": [
+    -17.55,
+    -15.75,
+    -6.9,
+    -6.7
+   ],
+   "sprite": "spr_025.png",
+   "x0": -1270.6,
+   "y0": 1052.8,
+   "sort": [
+    -1149.2,
+    1368.0
+   ],
+   "name": "Screen",
+   "text": "A folding screen. Privacy, of a kind."
+  },
+  {
+   "type": "medcab",
+   "footprint": [
+    -21.875,
+    -21.455,
+    -3.45,
+    -2.55
+   ],
+   "sprite": "spr_026.png",
+   "x0": -2263.2,
+   "y0": 1134.1,
+   "sort": [
+    -2177.7,
+    1438.9
+   ],
+   "name": "Medicine cabinet",
+   "text": "Dr. Kiss's stock: aspirin cut in halves, iodine, a bottle of something brown with no label."
+  },
+  {
+   "type": "medcab",
+   "footprint": [
+    -21.875,
+    -21.455,
+    -4.55,
+    -3.65
+   ],
+   "sprite": "spr_026.png",
+   "x0": -2134.9,
+   "y0": 1198.3,
+   "sort": [
+    -2049.4,
+    1503.0
+   ],
+   "name": "Medicine cabinet",
+   "text": "Bandages washed and rolled for reuse."
+  },
+  {
+   "type": "desk",
+   "footprint": [
+    -13.8,
+    -12.6,
+    -3.0,
+    -2.4
+   ],
+   "sprite": "spr_012.png",
+   "x0": -1338.1,
+   "y0": 695.0,
+   "sort": [
+    -1225.1,
+    927.5
+   ],
+   "name": "Dr. Kiss's desk",
+   "text": "The health-screening schedule. Every resident, every quarter, measured against a list nobody here wrote."
+  },
+  {
+   "type": "chair",
+   "footprint": [
+    -13.45,
+    -12.95,
+    -3.2,
+    -2.7
+   ],
+   "sprite": "spr_027.png",
+   "x0": -1253.7,
+   "y0": 779.7,
+   "sort": [
+    -1195.9,
+    942.1
+   ]
+  },
+  {
+   "type": "bench",
+   "footprint": [
+    -8.645,
+    -8.325,
+    -5.2,
+    -2.6
+   ],
+   "sprite": "spr_028.png",
+   "x0": -713.3,
+   "y0": 562.2,
+   "sort": [
+    -534.9,
+    722.5
+   ],
+   "name": "Waiting bench",
+   "text": "Full. Half the people here are not ill; they are warm."
+  },
+  {
+   "type": "bench",
+   "footprint": [
+    -11.7,
+    -9.1,
+    -6.275,
+    -5.955
+   ],
+   "sprite": "spr_029.png",
+   "x0": -678.3,
+   "y0": 802.8,
+   "sort": [
+    -499.9,
+    963.4
+   ],
+   "name": "Waiting bench",
+   "text": "Someone is asleep on it, coat over their head."
+  }
+ ],
+ "inspect": [
+  {
+   "id": "screen",
+   "u": -14.9,
+   "v": 8.6,
+   "name": "The screen",
+   "text": "The commons screen. At set hours it plays Hollo's history of the silo: the founders, the Frostfall, the Council's wisdom. The rest of the time it is dark."
+  },
+  {
+   "id": "rations",
+   "u": -20.4,
+   "v": 4.6,
+   "name": "Ration board",
+   "text": "Numbered portions, chalked weekly. Council members' portions are listed separately, at the bottom, in smaller writing."
+  },
+  {
+   "id": "lift",
+   "u": -6.2,
+   "v": 0.9,
+   "name": "Lift 2",
+   "text": "OUT OF ORDER, sprayed across doors that have not opened in forty years. The shaft behind carries the cables now."
+  },
+  {
+   "id": "notices",
+   "u": -7.4,
+   "v": -0.9,
+   "name": "Notice board",
+   "text": "Bath-day rota. Heat hours for the general circuit. A lost glove. A reminder that radiator keys are Council property."
+  },
+  {
+   "id": "blackboard",
+   "u": -29.0,
+   "v": 7.1,
+   "name": "Blackboard",
+   "text": "THE CORE KEEPS US WARM, in Hollo's capitals, over a chalk drawing of the exchanger that is almost right."
+  },
+  {
+   "id": "graffiti_w",
+   "u": -27.3,
+   "v": 7.2,
+   "name": "Graffiti",
+   "text": "HEAT IS RANK, in red crayon under the blackboard, at the height of a ten-year-old. Someone has tried to scrub it off and given up."
+  },
+  {
+   "id": "clinic_rad",
+   "u": -9.0,
+   "v": -5.3,
+   "name": "Radiator",
+   "text": "Hot to the touch. The clinic is on the priority circuit, and everyone on this level knows it."
+  }
+ ],
+ "stairs": [
+  {
+   "id": "to_dorms",
+   "u": -4.7,
+   "v": 0.0,
+   "to": "L2",
+   "arrive": [
+    -3.4,
+    -0.7
+   ],
+   "name": "Dormitory wing",
+   "text": "East, past the stairwell, to the dormitories."
+  }
+ ],
+ "spawns": {
+  "player": [
+   -5.0,
+   0.0,
+   3
+  ],
+  "worms": []
+ },
+ "blocked": [],
+ "bounds": [
+  -32.0,
+  -4.2,
+  -8.4,
+  9.4
+ ],
+ "sprites": [],
+ "bg": {
+  "file": "bg.png",
+  "x0": -4693,
+  "y0": -479
+ }
+}

@@ -164,7 +164,13 @@
     1.4
    ],
    "h": 0.4,
-   "openings": []
+   "openings": [
+    [
+     -1.3,
+     -0.1,
+     null
+    ]
+   ]
   },
   {
    "a": [
@@ -342,50 +348,50 @@
    "kind": "plywood",
    "u": 2.6,
    "v": 1.4,
+   "open": true,
    "locked": false,
    "name": "Door to your room",
    "text": "Plywood on a steel frame. Your door; it has not locked properly in years.",
-   "sort": [
-    140.0,
-    -233.3
-   ],
-   "spr_open": {
-    "sprite": "spr_041.png",
-    "x0": -49.0,
-    "y0": -639.3
-   },
    "spr_closed": {
     "sprite": "spr_040.png",
     "x0": 52.0,
     "y0": -585.3
    },
-   "open": true
+   "spr_open": {
+    "sprite": "spr_041.png",
+    "x0": -49.0,
+    "y0": -639.3
+   },
+   "sort": [
+    140.0,
+    -233.3
+   ]
   },
   {
    "id": "door_2_d",
    "kind": "steel",
    "u": 20.6,
    "v": 1.4,
+   "open": false,
    "locked": true,
    "lock": 45,
    "strength": 6,
    "name": "Room 2-D",
    "text": "A steel door at the cold end of the corridor. Security's padlock is through the hasp. Nobody has lived here for years.",
-   "sort": [
-    2240.1,
-    -1283.4
-   ],
-   "spr_open": {
-    "sprite": "spr_043.png",
-    "x0": 2051.1,
-    "y0": -1689.4
-   },
    "spr_closed": {
     "sprite": "spr_042.png",
     "x0": 2152.1,
     "y0": -1635.4
    },
-   "open": false
+   "spr_open": {
+    "sprite": "spr_043.png",
+    "x0": 2051.1,
+    "y0": -1689.4
+   },
+   "sort": [
+    2240.1,
+    -1283.4
+   ]
   }
  ],
  "props": [
@@ -1343,6 +1349,18 @@
    ],
    "name": "Stairs down",
    "text": "The stairwell down to Level 3, life support."
+  },
+  {
+   "id": "to_commons",
+   "u": -4.0,
+   "v": -0.7,
+   "to": "L2W",
+   "arrive": [
+    -5.0,
+    0.0
+   ],
+   "name": "Commons wing",
+   "text": "West, past the dead lift, to the commons, the clinic and the school."
   }
  ],
  "spawns": {
