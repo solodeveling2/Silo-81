@@ -1219,7 +1219,7 @@ GLB_PROPS = {
     "stove": dict(file="silo81_stove.glb", rot=180, fit="box", L=1.6, D=0.8, H=0.95),
     "counter": dict(file="silo81_counter.glb", rot=180, fit="box", L=2.0, D=0.62, H=0.92),
     "pump": dict(file="silo81_pump.glb", rot=180, fit="x", L=1.2, D=0.7),
-    "toolbox": dict(file="silo81_toolbox.glb", rot=180, fit="x", L=0.56, D=0.26),
+    "toolbox": dict(file="silo81_toolbox.glb", rot=180, fit="x", L=1.0, D=0.3),
     "medcab": dict(file="silo81_medcab.glb", rot=180, fit="z", H=1.8, L=0.9, D=0.42)}
 
 
@@ -1261,11 +1261,7 @@ def sinks_fn(p):
 
 
 def toolbox_fn(p):
-    if not have_glb("toolbox"):
-        return kit.toolbox("Toolbox")
-    box, _ = glb("toolbox")
-    bottles, _ = kit.toolbox_bottles("Bottles")
-    return joined([(box, -0.2), (bottles, 0.0)], "Toolbox"), (1.0, 0.3)
+    return glb("toolbox") if have_glb("toolbox") else kit.toolbox("Toolbox")   # Tripo box includes the gas bottles
 
 
 def have_glb(key):

@@ -15,3 +15,10 @@ turn-based combat only, Wasteland 3-style action bar. See README.md for layout a
 - Don't use or open SpriteCook. Reference images come from Gemini (Nano Banana 2.1) in the browser;
   3D from Tripo Studio.
 - Don't push to GitHub until the user says so.
+
+## Long-running work: use the supervisor (tools/sv)
+- Start anything that can run for more than about 2 minutes (Blender builds and previews, Godot import/export, packaging, asset batches) with `python3 tools/sv/sv.py run NAME --expect S --out FILE -- CMD`, or with `sv batch` for many assets. Do not use plain `&`/nohup.
+- Before starting heavy work, check `sv status` / `sv ps`. Never start a second copy; use `sv wait NAME` instead (it returns within 9 minutes, and a job may legitimately still be running).
+- A job is done only when `sv` says `verified` (its outputs exist, are fresh and pass format checks). `failed` means read `sv status NAME` and fix it. `escalated` means a code bug or used-up retries: report it to the user rather than looping.
+- For a batch, run `sv retry NAME` to re-run only the failed items. Pass `--retries` only for idempotent commands; paid generation steps (Tripo, Gemini) run with `--retries 0`.
+- Details and the hook setup are in tools/sv/README.md. Tests: `python3 tools/sv/test_sv.py`.
