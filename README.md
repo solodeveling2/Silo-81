@@ -78,6 +78,7 @@ art/concepts/              character concept art (Nano Banana 2.1 via Gemini)
 ```
 python3 -I tools/blender/build.py L2 out    # then copy out/L2 to game/levels/L2
 python3 -I tools/blender/build.py L3 out
+python3 -I tools/blender/build.py L2W out   # Level 2 west: commons, kitchen, clinic, school, Archive
 python3 -I tools/blender/latch.py              # pose of the worm latched onto the burst pipe -> latch.json
 python3 -I tools/blender/render_aim.py source/models/player_male_v2.glb aim_out
 python3 tools/blender/package_fire.py aim_out game/characters/player_male
