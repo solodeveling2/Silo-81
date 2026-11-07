@@ -30,21 +30,121 @@ def _ramp(nt, lit, mid, shade):
     return ramp
 
 
+TEX_DIR = __import__("os").path.join(__import__("os").path.dirname(__file__), "tex")
+
+
+def _tex_color(nt, name, scale, pos):
+    """Pack-style texture projected along the plan grid: walls facing u or v and floors each get
+    their own projection, picked by the surface normal. scale = metres per texture repeat."""
+    img = bpy.data.images.get(name + ".png") or bpy.data.images.load(f"{TEX_DIR}/{name}.png")
+    sep = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(pos.outputs["Position"], sep.inputs[0])
+    def lin(a, b, ka, kb):
+        m1 = nt.nodes.new("ShaderNodeMath"); m1.operation = "MULTIPLY_ADD"
+        nt.links.new(a, m1.inputs[0]); m1.inputs[1].default_value = ka
+        m2 = nt.nodes.new("ShaderNodeMath"); m2.operation = "MULTIPLY"
+        nt.links.new(b, m2.inputs[0]); m2.inputs[1].default_value = kb
+        nt.links.new(m2.outputs[0], m1.inputs[2])
+        return m1.outputs[0]
+    k = R2 / scale
+    u = lin(sep.outputs["X"], sep.outputs["Y"], k, k)          # plan u, in texture repeats
+    v = lin(sep.outputs["Y"], sep.outputs["X"], k, -k)
+    zz = nt.nodes.new("ShaderNodeMath"); zz.operation = "MULTIPLY"; zz.inputs[1].default_value = -1.0 / scale
+    nt.links.new(sep.outputs["Z"], zz.inputs[0]); z = zz.outputs[0]
+    def sample(a, b):
+        cx = nt.nodes.new("ShaderNodeCombineXYZ"); nt.links.new(a, cx.inputs[0]); nt.links.new(b, cx.inputs[1])
+        t = nt.nodes.new("ShaderNodeTexImage"); t.image = img; t.interpolation = "Cubic"
+        nt.links.new(cx.outputs[0], t.inputs["Vector"])
+        return t.outputs["Color"]
+    c_floor, c_u, c_v = sample(u, v), sample(v, z), sample(u, z)
+    nrm = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(pos.outputs["Normal"], nrm.inputs[0])
+    nu = lin(nrm.outputs["X"], nrm.outputs["Y"], R2, R2)
+    nv = lin(nrm.outputs["Y"], nrm.outputs["X"], R2, -R2)
+    def absn(x):
+        a = nt.nodes.new("ShaderNodeMath"); a.operation = "ABSOLUTE"; nt.links.new(x, a.inputs[0]); return a.outputs[0]
+    anu, anv, anz = absn(nu), absn(nv), absn(nrm.outputs["Z"])
+    gt = nt.nodes.new("ShaderNodeMath"); gt.operation = "GREATER_THAN"
+    nt.links.new(anu, gt.inputs[0]); nt.links.new(anv, gt.inputs[1])
+    m1 = nt.nodes.new("ShaderNodeMix"); m1.data_type = "RGBA"
+    nt.links.new(gt.outputs[0], m1.inputs["Factor"]); nt.links.new(c_v, m1.inputs[6]); nt.links.new(c_u, m1.inputs[7])
+    fz = nt.nodes.new("ShaderNodeMapRange"); fz.inputs[1].default_value = 0.6; fz.inputs[2].default_value = 0.75
+    nt.links.new(anz, fz.inputs[0])
+    m2 = nt.nodes.new("ShaderNodeMix"); m2.data_type = "RGBA"
+    nt.links.new(fz.outputs[0], m2.inputs["Factor"]); nt.links.new(m1.outputs[2], m2.inputs[6]); nt.links.new(c_floor, m2.inputs[7])
+    return m2.outputs[2]
+
+
+# shared materials that take the asset pack's look: name -> (texture, metres per repeat, tint)
+TEX_FOR = {
+    "PipeSteel": ("steel_rust", 0.7, (1.0, 1.0, 1.0)),
+    "RustPipe": ("steel_rust", 0.5, (1.25, 0.8, 0.6)),
+    "Lagging": ("lagging", 0.8, (1.0, 1.0, 1.0)),
+    "LagBand": ("steel_rust", 0.4, (0.7, 0.7, 0.7)),
+    "Bracket": ("steel_rust", 0.6, (0.85, 0.85, 0.85)),
+    "Flange": ("steel_rust", 0.4, (0.9, 0.85, 0.8)),
+    "ValveRed": ("valve_red", 0.35, (1.0, 1.0, 1.0)),
+    "Steel": ("steel_rust", 0.6, (1.2, 1.2, 1.2)),
+    "SteelDoor": ("steel_green", 1.2, (1.0, 1.0, 1.0)),
+}
+
+
+# kit materials that keep their designed colour but take the pack's surface wear from a texture
+DETAIL = {}
+for _t, _names in {
+    "wood_grain": "TableWood DeskWood ChairWood BenchWood SchoolWood CrateWood CrateDark PatchWood PlyDoor CounterDoor ChopBoard BoardFrame Pegboard",
+    "steel_grey": "Locker LockerDark FilingGrey FilingDrawer ShelfSteel BunkFrame SchoolFrame TermCase TVCase SwitchGrey RadioGrey "
+                  "IntercomGrey PumpGrey CounterBody LiftSteel LiftFrame DoorFrame Railing HatchFrame StallPanel ScreenFrame ToolSteel Zinc",
+    "steel_green": "MachineGreen PumpGreen SafeGreen SafeDoor LampGreen",
+    "steel_rust": "StoveIron StoveDoor BlastSteel Rivet Breaker GasBottle DrainGrate Hotplate",
+    "paint_white": "MedWhite MedDoor Enamel SinkDark PotEnamel",
+    "fabric": "Mattress Pillow Rug RugInner ScreenCloth",
+    "concrete_wall": "ConcretePlinth",
+}.items():
+    for _n in _names.split():
+        DETAIL[_n] = _t
+_MEANS = None
+
+
+def _detail_tint(texname, rgb, keep=0.75):
+    """Tint so the texture averages to the material's designed colour (keep=1) or stays as painted (keep=0)."""
+    global _MEANS
+    if _MEANS is None:
+        import json, os
+        _MEANS = json.load(open(os.path.join(TEX_DIR, "means.json")))
+    m = _MEANS[texname]
+    return tuple((1 - keep) + keep * (c / max(mc, 1e-3)) for c, mc in zip(rgb, m))
+
+
 def toon(name, rgb, noise=0.0, noise_scale=6.0, lit=1.04, mid=0.84, shade=0.66, alpha_noise=None,
-         dado=None, frost=None, grating=None, stripes=None):
+         dado=None, frost=None, grating=None, stripes=None, tex=None, tex_scale=1.0):
     """Emission toon material. Options:
     noise: colour variation strength.  dado: (lower_rgb, height) painted lower wall.
     frost: (u_start, u_full, frost_rgb) frost creeping in along +u.  grating: (bar_rgb, pitch) steel floor grate.
-    alpha_noise: (threshold, scale) cut out by noise, for stains and decals."""
+    alpha_noise: (threshold, scale) cut out by noise, for stains and decals.
+    tex: name of a texture in tex/ (made by textures.py); rgb then tints it (1,1,1 = as painted).
+    With dado, the lower colour tints the same texture too."""
     key = name
     if key in _mats:
         return _mats[key]
+    if tex is None and name in TEX_FOR:
+        tex, tex_scale, rgb = TEX_FOR[name]
+        noise = 0.0
+    elif tex is None and name in DETAIL:
+        tex = DETAIL[name]; tex_scale = 1.4
+        rgb = _detail_tint(tex, rgb); noise = 0.0
+    if tex:
+        grating = None
     m = bpy.data.materials.new(name); m.use_nodes = True
     nt = m.node_tree; nt.nodes.clear()
     out = nt.nodes.new("ShaderNodeOutputMaterial")
     pos = nt.nodes.new("ShaderNodeNewGeometry")
     col = nt.nodes.new("ShaderNodeRGB"); col.outputs[0].default_value = (*rgb, 1)
     cur = col.outputs[0]
+    tcol = None
+    if tex:
+        tcol = _tex_color(nt, tex, tex_scale, pos)
+        tm = nt.nodes.new("ShaderNodeVectorMath"); tm.operation = "MULTIPLY"
+        nt.links.new(tcol, tm.inputs[0]); nt.links.new(col.outputs[0], tm.inputs[1])
+        cur = tm.outputs[0]
 
     def mix(a, b, fac):
         mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"
@@ -55,9 +155,13 @@ def toon(name, rgb, noise=0.0, noise_scale=6.0, lit=1.04, mid=0.84, shade=0.66, 
     if dado:
         lower, h = dado
         lc = nt.nodes.new("ShaderNodeRGB"); lc.outputs[0].default_value = (*lower, 1)
+        lower_col = lc.outputs[0]
+        if tcol is not None:
+            lm = nt.nodes.new("ShaderNodeVectorMath"); lm.operation = "MULTIPLY"
+            nt.links.new(tcol, lm.inputs[0]); nt.links.new(lc.outputs[0], lm.inputs[1]); lower_col = lm.outputs[0]
         lt = nt.nodes.new("ShaderNodeMath"); lt.operation = "LESS_THAN"; lt.inputs[1].default_value = h
         nt.links.new(sep.outputs["Z"], lt.inputs[0])
-        cur = mix(cur, lc.outputs[0], lt.outputs[0])
+        cur = mix(cur, lower_col, lt.outputs[0])
         # dark painted line on top of the dado
         band = nt.nodes.new("ShaderNodeMath"); band.operation = "COMPARE"
         band.inputs[1].default_value = h + 0.02; band.inputs[2].default_value = 0.025

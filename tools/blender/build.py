@@ -47,15 +47,15 @@ def scr_uv(u, v, z=0.0):
 def L2():
     D = {"name": "Level 2 - Dormitories", "rooms": [], "walls": [], "doors": [], "props": [], "decor": [],
          "inspect": [], "stairs": [], "spawns": {}, "blocked": []}
-    concrete = dict(rgb=(0.5, 0.49, 0.45), noise=0.18, noise_scale=3.0)
+    concrete = dict(rgb=(0.5, 0.49, 0.45), noise=0.18, noise_scale=3.0, tex="concrete_floor", ts=1.5)
     D["rooms"] += [
         dict(id="landing", r=[-4.2, 0.0, -1.4, 1.4], floor=concrete),
         dict(id="corridor", r=[0.0, 22.6, -1.4, 1.4], floor=dict(concrete, frost=(15.0, 22.0))),
-        dict(id="room_2_1", name="Your room", r=[0.6, 4.6, 1.4, 5.6], floor=dict(rgb=(0.44, 0.36, 0.28), noise=0.15, noise_scale=8)),
+        dict(id="room_2_1", name="Your room", r=[0.6, 4.6, 1.4, 5.6], floor=dict(rgb=(0.44, 0.36, 0.28), noise=0.15, noise_scale=8, tex="wood_planks", ts=2.4)),
         dict(id="dorm_2a", name="Dormitory 2-A", r=[4.6, 11.6, 1.4, 5.6], floor=concrete),
         dict(id="dorm_2b", name="Dormitory 2-B", r=[11.6, 18.6, 1.4, 5.6], floor=dict(concrete, frost=(16.0, 21.0))),
         dict(id="room_2_d", name="Room 2-D", r=[18.6, 22.6, 1.4, 5.6], floor=dict(concrete, frost=(18.0, 20.0)), dark=True),
-        dict(id="washroom", name="Washroom", r=[1.0, 7.0, -5.0, -1.4], floor=dict(rgb=(0.62, 0.66, 0.62), noise=0.08, noise_scale=20, grating=((0.48, 0.52, 0.49), 0.3))),
+        dict(id="washroom", name="Washroom", r=[1.0, 7.0, -5.0, -1.4], floor=dict(rgb=(0.62, 0.66, 0.62), noise=0.08, noise_scale=20, grating=((0.48, 0.52, 0.49), 0.3), tex="tile_frosted", ts=1.2)),
         dict(id="dorm_2c", name="Dormitory 2-C", r=[7.0, 14.0, -5.0, -1.4], floor=concrete),
         dict(id="linen", name="Linen store", r=[14.0, 18.6, -5.0, -1.4], floor=dict(concrete, frost=(17.0, 22.0))),
     ]
@@ -182,10 +182,10 @@ def L2():
 def L3():
     D = {"name": "Level 3 - Pipe gallery", "rooms": [], "walls": [], "doors": [], "props": [], "decor": [],
          "inspect": [], "stairs": [], "spawns": {}, "blocked": []}
-    raw = dict(rgb=(0.47, 0.46, 0.43), noise=0.2, noise_scale=3.0)
+    raw = dict(rgb=(0.47, 0.46, 0.43), noise=0.2, noise_scale=3.0, tex="concrete_floor", ts=1.5)
     D["rooms"] += [
         dict(id="landing", r=[-4.2, 0.0, -1.6, 1.8], floor=raw),
-        dict(id="gallery", name="Pipe gallery", r=[0.0, 18.0, -1.6, 1.8], floor=dict(rgb=(0.2, 0.21, 0.2), noise=0.1, noise_scale=6, grating=((0.42, 0.43, 0.41), 0.35))),
+        dict(id="gallery", name="Pipe gallery", r=[0.0, 18.0, -1.6, 1.8], floor=dict(rgb=(0.2, 0.21, 0.2), noise=0.1, noise_scale=6, grating=((0.42, 0.43, 0.41), 0.35), tex="grating", ts=2.0)),
         dict(id="pumps", name="Pump room 3-P", r=[9.0, 18.0, -6.0, -1.6], floor=dict(raw, rgb=(0.45, 0.44, 0.41))),
     ]
     D["holes"] = []
@@ -243,11 +243,11 @@ def L2W():
     """Level 2 west of the core: the commons, kitchen, clinic, classroom, Archive and west washroom."""
     D = {"name": "Level 2 - Commons", "rooms": [], "walls": [], "doors": [], "props": [], "decor": [],
          "inspect": [], "stairs": [], "spawns": {}, "blocked": []}
-    concrete = dict(rgb=(0.5, 0.49, 0.45), noise=0.18, noise_scale=3.0)
-    lino = dict(rgb=(0.45, 0.33, 0.27), noise=0.12, noise_scale=6, grating=((0.38, 0.27, 0.22), 0.6))
-    tile = dict(rgb=(0.6, 0.62, 0.58), noise=0.08, noise_scale=20, grating=((0.47, 0.49, 0.46), 0.3))
-    clinic = dict(rgb=(0.62, 0.68, 0.64), noise=0.06, noise_scale=20, grating=((0.52, 0.58, 0.55), 0.4))
-    wood = dict(rgb=(0.47, 0.36, 0.25), noise=0.15, noise_scale=8)
+    concrete = dict(rgb=(0.5, 0.49, 0.45), noise=0.18, noise_scale=3.0, tex="concrete_floor", ts=1.5)
+    lino = dict(rgb=(0.45, 0.33, 0.27), noise=0.12, noise_scale=6, grating=((0.38, 0.27, 0.22), 0.6), tex="lino", ts=1.6)
+    tile = dict(rgb=(0.6, 0.62, 0.58), noise=0.08, noise_scale=20, grating=((0.47, 0.49, 0.46), 0.3), tex="tile_white", ts=1.6)
+    clinic = dict(rgb=(0.62, 0.68, 0.64), noise=0.06, noise_scale=20, grating=((0.52, 0.58, 0.55), 0.4), tex="tile_clinic", ts=1.2)
+    wood = dict(rgb=(0.47, 0.36, 0.25), noise=0.15, noise_scale=8, tex="wood_planks", ts=2.4)
     D["rooms"] += [
         dict(id="lobby", r=[-8.2, -4.2, -1.4, 1.4], floor=concrete),
         dict(id="corridor_w", r=[-32.0, -8.2, -1.4, 1.4], floor=concrete),
@@ -402,9 +402,9 @@ def L4W():
     the radio room and the duty quarters. Everything here is on the priority circuit."""
     D = {"name": "Level 4 - Command", "rooms": [], "walls": [], "doors": [], "props": [], "decor": [],
          "inspect": [], "stairs": [], "spawns": {}, "blocked": []}
-    concrete = dict(rgb=(0.5, 0.49, 0.45), noise=0.18, noise_scale=3.0)
-    plant = dict(rgb=(0.42, 0.43, 0.4), noise=0.14, noise_scale=4, grating=((0.33, 0.34, 0.32), 0.5))
-    parquet = dict(rgb=(0.46, 0.32, 0.2), noise=0.14, noise_scale=8, grating=((0.38, 0.26, 0.16), 0.4))
+    concrete = dict(rgb=(0.5, 0.49, 0.45), noise=0.18, noise_scale=3.0, tex="concrete_floor", ts=1.5)
+    plant = dict(rgb=(0.42, 0.43, 0.4), noise=0.14, noise_scale=4, grating=((0.33, 0.34, 0.32), 0.5), tex="diamond_plate", ts=1.2)
+    parquet = dict(rgb=(0.46, 0.32, 0.2), noise=0.14, noise_scale=8, grating=((0.38, 0.26, 0.16), 0.4), tex="parquet", ts=1.6)
     D["rooms"] += [
         dict(id="landing4", r=[-4.2, 0.0, -1.5, 1.5], floor=concrete),
         dict(id="corridor4", r=[-30.0, -4.2, -1.5, 1.5], floor=concrete),
@@ -562,6 +562,9 @@ def plan_obj(b, outline=0.012):
 
 
 def floor_mat(spec, rid):
+    if spec.get("tex"):                         # painted texture in the asset pack's palette (textures.py)
+        return toon(f"Floor_{LEVEL}_{rid}", spec.get("tint", (1.0, 1.0, 1.0)), tex=spec["tex"], tex_scale=spec.get("ts", 1.2),
+                    frost=(spec["frost"][0], spec["frost"][1], (0.78, 0.84, 0.88)) if spec.get("frost") else None, lit=1.0)
     return toon(f"Floor_{LEVEL}_{rid}", spec["rgb"], noise=spec.get("noise", 0.1), noise_scale=spec.get("noise_scale", 4),
                 frost=(spec["frost"][0], spec["frost"][1], (0.78, 0.84, 0.88)) if spec.get("frost") else None,
                 grating=spec.get("grating"), lit=1.0)
@@ -606,18 +609,18 @@ for w in LV["walls"]:
 
 
 def wall_material(w):
+    # textures from textures.py, in the asset pack's palette; the rgb values tint them
     if w.get("mat") == "panel":                 # Council rooms: wood panelling under cream paint
-        return toon(f"WallPanel_{LEVEL}", (0.78, 0.74, 0.64), noise=0.1, noise_scale=3.0,
-                    dado=((0.36, 0.25, 0.16), 1.1))
+        return toon(f"WallPanel_{LEVEL}", (1.0, 1.0, 1.0), tex="plaster_cream", tex_scale=2.0,
+                    dado=((0.62, 0.42, 0.26), 1.1))
     if w.get("mat") == "machine":               # plant rooms: machinery green under grey
-        return toon(f"WallMachine_{LEVEL}", (0.6, 0.6, 0.56), noise=0.18, noise_scale=2.5,
-                    dado=((0.3, 0.38, 0.32), 1.3))
+        return toon(f"WallMachine_{LEVEL}", (1.05, 1.05, 1.02), tex="concrete_wall", tex_scale=2.2,
+                    dado=((0.7, 0.92, 0.74), 1.3))
     if w.get("mat") == "raw":
-        return toon(f"WallRaw_{LEVEL}", (0.56, 0.55, 0.51), noise=0.22, noise_scale=2.5,
-                    frost=None)
+        return toon(f"WallRaw_{LEVEL}", (1.0, 1.0, 1.0), tex="concrete_wall", tex_scale=2.2)
     frost = (16.5, 23.0, (0.8, 0.86, 0.9), 1.1) if LEVEL == "L2" else None
-    return toon(f"WallDado_{LEVEL}", (0.76, 0.74, 0.67), noise=0.12, noise_scale=3.0,
-                dado=((0.38, 0.47, 0.42), 1.25), frost=frost)
+    return toon(f"WallDado_{LEVEL}", (1.0, 1.0, 1.0), tex="plaster_cream", tex_scale=2.0,
+                dado=((0.55, 0.78, 0.66), 1.25), frost=frost)
 
 
 CUT = toon("WallCut", (0.2, 0.2, 0.19))
@@ -948,14 +951,44 @@ def decor(d):
 
 
 def pipe_run(b, u0, u1, v, z, r, lag, label_mat=None):
+    """A pipe in the asset pack's style: rusty steel, wrapped in canvas lagging in sections,
+    with bare steel and a bolted flange pair showing at every joint."""
     steel = toon("PipeSteel", (0.38, 0.38, 0.36), noise=0.08)
     lagging = toon("Lagging", (0.72, 0.7, 0.62), noise=0.14, noise_scale=9)
     band = toon("LagBand", (0.32, 0.33, 0.31))
-    b.cyl((u0, v, z), (u1, v, z), lag, lagging, seg=16)
-    u = u0 + 0.5
-    while u < u1 - 0.2:
-        b.cyl((u, v, z), (u + 0.04, v, z), lag + 0.006, band, seg=16)
-        u += 1.0
+    flange = toon("Flange", (0.35, 0.33, 0.3))
+    b.cyl((u0, v, z), (u1, v, z), r, steel, seg=16)
+    SEC, JOINT = 2.6, 0.34
+    u = u0 + 0.12
+    while u < u1 - 0.3:
+        e = min(u + SEC, u1 - 0.12)
+        b.cyl((u, v, z), (e, v, z), lag, lagging, seg=16)
+        for x in (u, e - 0.035):                              # wire bands holding the wrap at each end
+            b.cyl((x, v, z), (x + 0.035, v, z), lag + 0.006, band, seg=16)
+        mid = (u + SEC * 0.5)
+        if mid < e - 0.2:
+            b.cyl((mid, v, z), (mid + 0.03, v, z), lag + 0.005, band, seg=16)
+        j = e + JOINT / 2
+        if j < u1 - 0.2:                                      # flange pair at the joint
+            b.cyl((j - 0.045, v, z), (j - 0.005, v, z), r + 0.045, flange, seg=16)
+            b.cyl((j + 0.005, v, z), (j + 0.045, v, z), r + 0.045, flange, seg=16)
+        u = e + JOINT
+
+
+def valve_wheel(b, u, v, z, rad=0.15, axis_len=0.17):
+    """Hand wheel facing the camera side (-v): rim, three spokes and a hub, like the pack's valve."""
+    steel = toon("PipeSteel", (0.38, 0.38, 0.36), noise=0.08)
+    red = toon("ValveRed", (0.5, 0.12, 0.1))
+    b.cyl((u, v, z), (u, v - axis_len, z), 0.025, steel)
+    y = v - axis_len
+    n = 14
+    for k in range(n):                                       # rim from short segments
+        a0, a1 = 2 * math.pi * k / n, 2 * math.pi * (k + 1) / n
+        b.cyl((u + rad * math.cos(a0), y, z + rad * math.sin(a0)), (u + rad * math.cos(a1), y, z + rad * math.sin(a1)), 0.018, red, seg=8)
+    for k in range(3):
+        a = 2 * math.pi * k / 3 + 0.5
+        b.cyl((u, y, z), (u + rad * math.cos(a), y, z + rad * math.sin(a)), 0.012, red, seg=6)
+    b.cyl((u, y + 0.02, z), (u, y - 0.03, z), 0.035, red, seg=10)
 
 
 def build_pipes(d):
@@ -976,8 +1009,8 @@ def build_pipes(d):
         u += 2.0
     for u in (2.9, 3.5):                                                       # valve wheels
         z = PIPE_Z[1] if u < 3.2 else PIPE_Z[2]
-        b.cyl((u, v - 0.13, z), (u, v - 0.3, z), 0.03, steel)
-        b.cyl((u, v - 0.3, z), (u, v - 0.33, z), 0.16, toon("ValveRed", (0.5, 0.12, 0.1)), seg=16)
+        b.cyl((u - 0.09, v, z), (u + 0.09, v, z), 0.15, toon("Flange", (0.35, 0.33, 0.3)), seg=16)   # valve body
+        valve_wheel(b, u, v - 0.12, z, rad=0.14, axis_len=0.2)
     for u in (6.0, 14.0):                                                      # gauges
         b.cyl((u, v - 0.1, 1.75), (u, v - 0.25, 1.95), 0.012, steel)
         b.cyl((u, v - 0.24, 1.98), (u, v - 0.29, 1.98), 0.08, flat("GaugeFace", (0.86, 0.85, 0.8)), seg=16)
