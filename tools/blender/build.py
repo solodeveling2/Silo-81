@@ -104,7 +104,7 @@ def L2():
     P += [
         dict(t="table", u=8.1, v=2.0, f="+v", L=1.2),
         dict(t="stool", u=7.6, v=3.05, f="-v"), dict(t="stool", u=8.6, v=3.05, f="-v"),
-        dict(t="locker", u=4.6 + T / 2, v=2.3, f="+u", w=0.55), dict(t="locker", u=4.6 + T / 2, v=2.9, f="+u", w=0.55),
+        dict(t="locker", u=4.6 + T / 2, v=2.6, f="+u", w=1.0, name="Lockers", text="Two doors, two names on tape, one padlock between them."),
     ]
     for i, u in enumerate((12.75, 15.1, 17.45)):
         P.append(dict(t="bunk", u=u, v=WI, f="-v", k=i + 2, name="Bunk", text="The mattress is damp. Frost has got as far as the wall behind it."))
@@ -1198,12 +1198,12 @@ for ob in bg_objects:
 # Furniture made in Tripo from Gemini reference paintings (props3d/*.glb). rot turns each model's
 # front to the kit's +y; fit/size give it real-world scale. Missing files fall back to the kit models.
 GLB_PROPS = {
-    "bunk_a": dict(file="silo81_bunk_a.glb", rot=0, fit="x", L=2.0, D=0.9),
-    "bunk_b": dict(file="silo81_bunk_b.glb", rot=0, fit="x", L=2.0, D=0.9),
-    "bed": dict(file="silo81_bed_player.glb", rot=0, fit="x", L=2.45, D=0.9),
-    "locker": dict(file="silo81_locker.glb", rot=0, fit="z", H=1.85, L=1.0, D=0.5),
-    "stall": dict(file="silo81_toilet_stall.glb", rot=0, fit="z", H=2.05, L=0.9, D=1.2),
-    "shelf": dict(file="silo81_linen_shelf.glb", rot=0, fit="z", H=1.9, L=1.1, D=0.45),
+    "bunk_a": dict(file="silo81_bunk_a.glb", rot=180, fit="x", L=2.0, D=0.9),
+    "bunk_b": dict(file="silo81_bunk_b.glb", rot=180, fit="x", L=2.0, D=0.9),
+    "bed": dict(file="silo81_bed_player.glb", rot=180, fit="x", L=2.0, D=0.9),
+    "locker": dict(file="silo81_locker.glb", rot=180, fit="x", L=1.0, D=0.5),
+    "stall": dict(file="silo81_toilet_stall.glb", rot=180, fit="z", H=2.05, L=0.9, D=1.2),
+    "shelf": dict(file="silo81_linen_shelf.glb", rot=180, fit="z", H=1.9, L=1.1, D=0.45),
 }
 
 
@@ -1211,21 +1211,23 @@ def have_glb(key):
     return os.path.exists(os.path.join(kit.GLB_DIR, GLB_PROPS[key]["file"]))
 
 
-def glb(key):
+def glb(key, mirror=False):
     c = GLB_PROPS[key]
-    return kit.glb_prop(key, c["file"], c.get("L", 1.0), c.get("D", 1.0), rot=c["rot"], fit=c["fit"], H=c.get("H"))
+    return kit.glb_prop(key, c["file"], c.get("L", 1.0), c.get("D", 1.0), rot=c["rot"], fit=c["fit"], H=c.get("H"), mirror=mirror)
 
 
 def bunk_fn(p):
     if p.get("stripped"):
         return kit.bunk("Bunk", p.get("k", 0), True)
     key = "bunk_a" if p.get("k", 0) % 2 == 0 else "bunk_b"
-    return glb(key) if have_glb(key) else kit.bunk("Bunk", p.get("k", 0), False)
+    if not have_glb(key):
+        key = "bunk_a" if have_glb("bunk_a") else "bunk_b"
+    return glb(key, mirror=p.get("k", 0) % 4 >= 2) if have_glb(key) else kit.bunk("Bunk", p.get("k", 0), False)
 
 
 PROP_FN = {
     "bunk": bunk_fn,
-    "bed": lambda p: glb("bed") if have_glb("bed") else kit.bed("Bed", p.get("k", 1)),
+    "bed": lambda p: glb("bed") if p.get("mine") and have_glb("bed") else kit.bed("Bed", p.get("k", 1)),
     "locker": lambda p: glb("locker") if have_glb("locker") and p.get("w", 0.55) >= 0.9 and not p.get("open") else kit.locker("Locker", p.get("w", 0.55), p.get("open", False), p.get("k", 0)),
     "desk": lambda p: kit.desk("Desk"),
     "chair": lambda p: kit.chair("Chair", p.get("overturned", False)),
@@ -1275,10 +1277,12 @@ def sprite_for(sig, build):
 for i, p in enumerate(LV["props"]):
     if p["t"] in ("bunk", "curtain", "locker"):
         p["k"] = int(p.get("k", 0)) * 7 + int(abs(p["u"] * 13 + p["v"] * 29)) % 23
+    if p["t"] == "bed" and p.get("id") == "bed_player":
+        p["mine"] = True                               # the Tripo bed (granny-square blanket) is only yours
     if p["t"] == "shelf" and "Linen" in p.get("name", ""):
         p["linen"] = True                              # (kept in the sprite key: linen and kitchen shelves differ)
     if p["t"] == "bunk" and not p.get("stripped") and have_glb("bunk_a"):
-        p["k"] = p["k"] % 2                            # two Tripo bunks: only the variant matters
+        p["k"] = p["k"] % 4                            # two Tripo bunks, each plain or mirrored
     if p["t"] == "locker" and have_glb("locker") and p.get("w", 0.55) >= 0.9 and not p.get("open"):
         p["k"] = 0
     keyargs = tuple(sorted((k, v) for k, v in p.items() if k not in ("u", "v", "name", "text", "id")))

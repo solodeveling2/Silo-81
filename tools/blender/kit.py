@@ -437,7 +437,7 @@ BLANKET_TEX = ["blanket_plaid_red", "blanket_army", "blanket_quilt_blue", "blank
                "blanket_plaid_green", "blanket_patchwork", "blanket_grey_wool", "blanket_quilt_rose", "blanket_plaid_navy"]
 FRAME_PAINT = [("BunkFrame", "steel_grey", (0.32, 0.36, 0.33)), ("BunkFrameGreen", "steel_green", (0.24, 0.34, 0.26)),
                ("BunkFrameWhite", "paint_white", (0.62, 0.62, 0.58))]
-LOCKER_PAINT = [(0.29, 0.33, 0.24), (0.3, 0.36, 0.42), (0.44, 0.2, 0.15), (0.52, 0.49, 0.4), (0.26, 0.3, 0.3)]
+LOCKER_PAINT = [(0.29, 0.33, 0.24), (0.26, 0.3, 0.27), (0.31, 0.34, 0.33), (0.24, 0.28, 0.22)]   # olive and grey, like the Tripo locker
 
 
 def blanket_mat(k):
@@ -1101,7 +1101,7 @@ def _toon_textured(mat):
     nt.links.new(em.outputs[0], out.inputs["Surface"])
 
 
-def glb_prop(name, file, L, D, rot=0.0, fit="x", H=None, outline=0.01):
+def glb_prop(name, file, L, D, rot=0.0, fit="x", H=None, outline=0.01, mirror=False):
     """A Tripo model as a prop in the kit's frame: length L along x (centred), depth from y=0 back to
     y=D front, standing on z=0. rot (degrees about z) turns the model's front to +y; fit picks the
     axis the size comes from ("x" = length L, "z" = height H)."""
@@ -1127,6 +1127,10 @@ def glb_prop(name, file, L, D, rot=0.0, fit="x", H=None, outline=0.01):
     for o in new:
         bpy.data.objects.remove(o, do_unlink=True)
     bmesh.ops.rotate(bm, verts=bm.verts, cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(rot), 3, "Z"))
+    if mirror:                                   # a mirrored copy for variety (ladder on the other end)
+        for v in bm.verts:
+            v.co.x = -v.co.x
+        bmesh.ops.reverse_faces(bm, faces=bm.faces, flip_multires=False)
     xs = [v.co.x for v in bm.verts]; ys = [v.co.y for v in bm.verts]; zs = [v.co.z for v in bm.verts]
     s = (L / (max(xs) - min(xs))) if fit == "x" else (H / (max(zs) - min(zs)))
     cx = (max(xs) + min(xs)) / 2

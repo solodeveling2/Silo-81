@@ -1153,10 +1153,10 @@ func _process(delta: float) -> void:
 	if level and player:
 		var foci: Array = []
 		var feet := player.global_position - level.global_position
-		foci.append({"y": feet.y, "rect": Rect2(feet + Vector2(-50, -270), Vector2(100, 280))})
+		foci.append({"y": feet.y + 40.0, "rect": Rect2(feet + Vector2(-210, -320), Vector2(420, 380))})
 		if not hud.over_ui(get_viewport().get_mouse_position()):
 			var m := get_global_mouse_position() - level.global_position
-			foci.append({"y": m.y, "rect": Rect2(m + Vector2(-45, -150), Vector2(90, 165))})
+			foci.append({"y": m.y, "rect": Rect2(m + Vector2(-110, -190), Vector2(220, 210))})
 		for w in worms:
 			if w.alive:
 				var wf: Vector2 = w.global_position - level.global_position

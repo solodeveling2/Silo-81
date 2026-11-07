@@ -134,7 +134,7 @@ func fade_walls(foci: Array, dt: float) -> void:
 			if r.position.y > fr.end.y or r.end.y < fr.position.y:
 				continue
 			var dx: float = abs(r.get_center().x - fr.get_center().x) - (r.size.x + fr.size.x) * 0.5
-			var k: float = clamp((dx + 10.0) / 70.0, 0.0, 1.0)        # soft edge, 70 px wide
+			var k: float = clamp((dx + 10.0) / 120.0, 0.0, 1.0)       # soft edge, 120 px wide
 			target = min(target, lerp(0.16, 1.0, k * k * (3.0 - 2.0 * k)))
 		var a: float = wp["a"]
 		a = move_toward(a, target, dt * 4.0)
