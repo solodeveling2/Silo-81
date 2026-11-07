@@ -11,7 +11,7 @@ Usage: python3 -I build.py L2|L3 out_dir [--quick]
 import sys, os, json, math
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import bpy
+import bpy, bmesh
 from mathutils import Vector, Matrix
 import kit
 from kit import Builder, toon, flat, text_obj, g, place, footprint, FACING
@@ -185,7 +185,7 @@ def L3():
     raw = dict(rgb=(0.47, 0.46, 0.43), noise=0.2, noise_scale=3.0, tex="concrete_floor", ts=1.5)
     D["rooms"] += [
         dict(id="landing", r=[-4.2, 0.0, -1.6, 1.8], floor=raw),
-        dict(id="gallery", name="Pipe gallery", r=[0.0, 18.0, -1.6, 1.8], floor=dict(rgb=(0.2, 0.21, 0.2), noise=0.1, noise_scale=6, grating=((0.42, 0.43, 0.41), 0.35), tex="grating", ts=2.0)),
+        dict(id="gallery", name="Pipe gallery", r=[0.0, 18.0, -1.6, 1.8], floor=dict(rgb=(0.2, 0.21, 0.2), tex="concrete_floor", ts=1.5, tint=(0.8, 0.82, 0.84))),
         dict(id="pumps", name="Pump room 3-P", r=[9.0, 18.0, -6.0, -1.6], floor=dict(raw, rgb=(0.45, 0.44, 0.41))),
     ]
     D["holes"] = []
@@ -208,7 +208,8 @@ def L3():
         dict(t="stencil", u=1.8, v=WI, f="-v", z=2.35, text="LEVEL 3 - LIFE SUPPORT", size=0.15),
         dict(t="stencil", u=18.0 - T / 2, v=-3.6, f="-u", z=2.3, text="PUMP ROOM 3-P", size=0.15),
         dict(t="manifold", u=18.0 - T / 2, v=-2.6, f="-u"),
-        dict(t="puddle", u=8.95, v=0.75, r=0.9), dict(t="puddle", u=7.8, v=0.3, r=0.5),
+        dict(t="puddle", u=8.95, v=0.82, ru=0.9, rv=0.55), dict(t="puddle", u=8.75, v=-0.35, ru=0.22, rv=0.7),
+        dict(t="puddle", u=7.7, v=0.45, ru=0.45, rv=0.3), dict(t="puddle", u=9.2, v=-1.05, ru=0.6, rv=0.22),
         dict(t="drain", u0=0.0, u1=18.0, v=-1.2),
         dict(t="cd_sign", u=18.0 - T / 2, v=0.8, f="-u", z=1.9),
         dict(t="mould", u=4.0, v=WI, f="-v"),
@@ -676,6 +677,65 @@ def add_on_wall(builder_fn, u, v, facing, z=0.0):
     return ob
 
 
+def puddle_mat(name, cu, cv, ru, rv, kind):
+    """Shader for a puddle in plan space (object coords are plan u, v, z): kind 'water' or 'wet'."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree; nt.nodes.clear()
+    L = nt.links.new
+    out = nt.nodes.new("ShaderNodeOutputMaterial")
+    tc = nt.nodes.new("ShaderNodeTexCoord")
+    sep = nt.nodes.new("ShaderNodeSeparateXYZ"); L(tc.outputs["Object"], sep.inputs[0])
+    def lin(src, c, r):
+        a = nt.nodes.new("ShaderNodeMath"); a.operation = "SUBTRACT"; L(src, a.inputs[0]); a.inputs[1].default_value = c
+        m_ = nt.nodes.new("ShaderNodeMath"); m_.operation = "DIVIDE"; L(a.outputs[0], m_.inputs[0]); m_.inputs[1].default_value = r
+        return m_.outputs[0]
+    cx = nt.nodes.new("ShaderNodeCombineXYZ"); L(lin(sep.outputs["X"], cu, ru), cx.inputs[0]); L(lin(sep.outputs["Y"], cv, rv), cx.inputs[1])
+    ln = nt.nodes.new("ShaderNodeVectorMath"); ln.operation = "LENGTH"; L(cx.outputs[0], ln.inputs[0])
+    nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 3.2; nz.inputs["Detail"].default_value = 4.0
+    L(tc.outputs["Object"], nz.inputs["Vector"])
+    wob = nt.nodes.new("ShaderNodeMapRange"); wob.inputs[3].default_value = 0.7; wob.inputs[4].default_value = 1.35
+    L(nz.outputs["Fac"], wob.inputs[0])
+    dd = nt.nodes.new("ShaderNodeMath"); dd.operation = "MULTIPLY"; L(ln.outputs["Value"], dd.inputs[0]); L(wob.outputs[0], dd.inputs[1])
+    d2 = dd.outputs[0]
+    tr = nt.nodes.new("ShaderNodeBsdfTransparent")
+    em = nt.nodes.new("ShaderNodeEmission")
+    mix = nt.nodes.new("ShaderNodeMixShader")
+    a = nt.nodes.new("ShaderNodeMapRange"); a.interpolation_type = "SMOOTHSTEP"; L(d2, a.inputs[0])
+    if kind == "wet":                       # darkened, damp concrete fading out softly
+        a.inputs[1].default_value = 0.3; a.inputs[2].default_value = 1.0
+        a.inputs[3].default_value = 0.42; a.inputs[4].default_value = 0.0
+        em.inputs["Color"].default_value = (0.03, 0.03, 0.03, 1)
+    else:
+        a.inputs[1].default_value = 0.78; a.inputs[2].default_value = 0.95
+        a.inputs[3].default_value = 1.0; a.inputs[4].default_value = 0.0
+        # reflections: the lamps above smeared into streaks along the screen vertical (plan u+v)
+        sx = nt.nodes.new("ShaderNodeMath"); sx.operation = "SUBTRACT"; L(sep.outputs["X"], sx.inputs[0]); L(sep.outputs["Y"], sx.inputs[1])
+        sy = nt.nodes.new("ShaderNodeMath"); sy.operation = "ADD"; L(sep.outputs["X"], sy.inputs[0]); L(sep.outputs["Y"], sy.inputs[1])
+        sy2 = nt.nodes.new("ShaderNodeMath"); sy2.operation = "MULTIPLY"; L(sy.outputs[0], sy2.inputs[0]); sy2.inputs[1].default_value = 0.18
+        sv = nt.nodes.new("ShaderNodeCombineXYZ"); L(sx.outputs[0], sv.inputs[0]); L(sy2.outputs[0], sv.inputs[1])
+        st = nt.nodes.new("ShaderNodeTexNoise"); st.inputs["Scale"].default_value = 2.2; st.inputs["Detail"].default_value = 2.0
+        L(sv.outputs[0], st.inputs["Vector"])
+        hi = nt.nodes.new("ShaderNodeMapRange"); hi.interpolation_type = "SMOOTHSTEP"
+        hi.inputs[1].default_value = 0.55; hi.inputs[2].default_value = 0.68; L(st.outputs["Fac"], hi.inputs[0])
+        # bright meniscus near the edge
+        rim = nt.nodes.new("ShaderNodeMapRange"); rim.interpolation_type = "SMOOTHSTEP"
+        rim.inputs[1].default_value = 0.74; rim.inputs[2].default_value = 0.88; rim.inputs[4].default_value = 0.2; L(d2, rim.inputs[0])
+        tot = nt.nodes.new("ShaderNodeMath"); tot.operation = "ADD"; tot.use_clamp = True
+        L(hi.outputs[0], tot.inputs[0]); L(rim.outputs[0], tot.inputs[1])
+        cm = nt.nodes.new("ShaderNodeMix"); cm.data_type = "RGBA"; L(tot.outputs[0], cm.inputs["Factor"])
+        cm.inputs[6].default_value = (0.03, 0.04, 0.046, 1)            # dark: the unlit ceiling, reflected
+        cm.inputs[7].default_value = (0.5, 0.58, 0.62, 1)              # lamp light on the water
+        L(cm.outputs[2], em.inputs["Color"])
+        op = nt.nodes.new("ShaderNodeMapRange"); op.inputs[3].default_value = 0.42; op.inputs[4].default_value = 0.85
+        L(tot.outputs[0], op.inputs[0])
+        af = nt.nodes.new("ShaderNodeMath"); af.operation = "MULTIPLY"
+        L(a.outputs[0], af.inputs[0]); L(op.outputs[0], af.inputs[1])
+        a = af
+    L(a.outputs[0], mix.inputs["Fac"]); L(tr.outputs[0], mix.inputs[1]); L(em.outputs[0], mix.inputs[2])
+    L(mix.outputs[0], out.inputs["Surface"])
+    return m
+
+
 def decor(d):
     t = d["t"]
     if t == "radiator":
@@ -767,14 +827,24 @@ def decor(d):
         ob.matrix_world = Matrix.Translation((x, y, 0.004)) @ Matrix.Rotation(math.radians(45), 4, "Z")
         bg_objects.append(ob)
     elif t == "puddle":
-        b = Builder("Puddle")
-        m = toon("Puddle", (0.12, 0.16, 0.17), alpha_noise=(0.45, 2.2))
-        r = d["r"]
-        b.box(d["u"] - r, d["u"] + r, d["v"] - r * 0.7, d["v"] + r * 0.7, 0.0, 0.006, m)
-        plan_obj(b, outline=0)
+        # water lying on the floor: soft wavy edge, a dark wet halo, and the ceiling lamps reflected as streaks
+        u0, v0, ru, rv = d["u"], d["v"], d["ru"], d["rv"]
+        for kind, sc_, z in (("wet", 1.45, 0.002), ("water", 1.0, 0.004)):
+            b = Builder("Puddle_" + kind)
+            m = puddle_mat(f"Puddle_{kind}_{u0}_{v0}", u0, v0, ru * sc_, rv * sc_, kind)
+            n = 48
+            b.quad([(u0 + ru * sc_ * 1.15 * math.cos(2 * math.pi * k / n), v0 + rv * sc_ * 1.15 * math.sin(2 * math.pi * k / n), z) for k in range(n)], m)
+            plan_obj(b, outline=0)
     elif t == "drain":
+        # floor drain channel: a dark slot under a row of steel bars
         b = Builder("Drain")
-        b.box(d["u0"], d["u1"], d["v"] - 0.18, d["v"] + 0.18, 0.0, 0.004, toon("DrainGrate", (0.12, 0.12, 0.11), grating=((0.36, 0.36, 0.34), 0.12)))
+        b.box(d["u0"], d["u1"], d["v"] - 0.17, d["v"] + 0.17, -0.01, 0.002, flat("DrainSlot", (0.025, 0.025, 0.028)))
+        b.box(d["u0"], d["u1"], d["v"] - 0.2, d["v"] - 0.17, 0.0, 0.008, toon("Bracket", (0.3, 0.3, 0.28)))
+        b.box(d["u0"], d["u1"], d["v"] + 0.17, d["v"] + 0.2, 0.0, 0.008, toon("Bracket", (0.3, 0.3, 0.28)))
+        u = d["u0"] + 0.03
+        while u < d["u1"] - 0.02:
+            b.box(u, u + 0.025, d["v"] - 0.17, d["v"] + 0.17, 0.0, 0.007, toon("Bracket", (0.3, 0.3, 0.28)))
+            u += 0.07
         plan_obj(b, outline=0)
     elif t == "stairs_down":
         b = Builder("StairsDown")
@@ -950,29 +1020,51 @@ def decor(d):
         add_on_wall(ob, d["u"], d["v"], d["f"])
 
 
-def pipe_run(b, u0, u1, v, z, r, lag, label_mat=None):
-    """A pipe in the asset pack's style: rusty steel, wrapped in canvas lagging in sections,
-    with bare steel and a bolted flange pair showing at every joint."""
-    steel = toon("PipeSteel", (0.38, 0.38, 0.36), noise=0.08)
-    lagging = toon("Lagging", (0.72, 0.7, 0.62), noise=0.14, noise_scale=9)
-    band = toon("LagBand", (0.32, 0.33, 0.31))
-    flange = toon("Flange", (0.35, 0.33, 0.3))
-    b.cyl((u0, v, z), (u1, v, z), r, steel, seg=16)
-    SEC, JOINT = 2.6, 0.34
-    u = u0 + 0.12
+PIPE_STYLE = [   # the three gallery runs, top to bottom; radius of what you see, and its look
+    dict(name="bore water", r=0.07, mat="PipeWater", joint=3.0, bands=None),
+    dict(name="heating return", r=0.13, mat="PipeClad", joint=1.0, bands=None, core=0.09),
+    dict(name="heating flow", r=0.1, mat="PipeFlow", joint=3.0, bands="PipeBandRed"),
+]
+FLOW_R = PIPE_STYLE[2]["r"]
+
+
+def flange_pair(b, u, v, z, r, bolts=6):
+    fl = toon("Flange", (0.35, 0.33, 0.3)); bolt = toon("Bolt", (0.3, 0.3, 0.3))
+    R = r + 0.045
+    b.cyl((u - 0.05, v, z), (u - 0.008, v, z), R, fl, seg=20)
+    b.cyl((u + 0.008, v, z), (u + 0.05, v, z), R, fl, seg=20)
+    for k in range(bolts):                                    # bolts through both flanges
+        a = 2 * math.pi * (k + 0.5) / bolts
+        dv, dz = math.cos(a) * (R - 0.022), math.sin(a) * (R - 0.022)
+        b.cyl((u - 0.075, v + dv, z + dz), (u + 0.075, v + dv, z + dz), 0.011, bolt, seg=6)
+
+
+def pipe_run(b, u0, u1, v, z, style, phase=0.0):
+    """One gallery pipe in its own metal: painted steel, aluminium-clad, or bare black steel with
+    red marker bands. Flange pairs at the joints."""
+    r = style["r"]
+    m = toon(style["mat"], (0.4, 0.4, 0.4))
+    if style.get("core"):                                     # cladding: sheet sections with lapped seams
+        u = u0
+        while u < u1 - 0.01:
+            e = min(u + style["joint"], u1)
+            b.cyl((u, v, z), (e, v, z), r, m, seg=20)
+            b.cyl((e - 0.03, v, z), (e, v, z), r + 0.006, m, seg=20)
+            u = e
+        u = u0 + 3.0 + phase
+        while u < u1 - 0.3:
+            b.cyl((u - 0.12, v, z), (u + 0.12, v, z), style["core"] + 0.012, toon("PipeSteel", (0.38, 0.38, 0.36)), seg=16)
+            flange_pair(b, u, v, z, style["core"])
+            u += 3.0
+        return
+    b.cyl((u0, v, z), (u1, v, z), r, m, seg=20)
+    u = u0 + style["joint"] * 0.6 + phase
     while u < u1 - 0.3:
-        e = min(u + SEC, u1 - 0.12)
-        b.cyl((u, v, z), (e, v, z), lag, lagging, seg=16)
-        for x in (u, e - 0.035):                              # wire bands holding the wrap at each end
-            b.cyl((x, v, z), (x + 0.035, v, z), lag + 0.006, band, seg=16)
-        mid = (u + SEC * 0.5)
-        if mid < e - 0.2:
-            b.cyl((mid, v, z), (mid + 0.03, v, z), lag + 0.005, band, seg=16)
-        j = e + JOINT / 2
-        if j < u1 - 0.2:                                      # flange pair at the joint
-            b.cyl((j - 0.045, v, z), (j - 0.005, v, z), r + 0.045, flange, seg=16)
-            b.cyl((j + 0.005, v, z), (j + 0.045, v, z), r + 0.045, flange, seg=16)
-        u = e + JOINT
+        flange_pair(b, u, v, z, r)
+        if style.get("bands"):                                 # identification bands either side of the joint
+            for du in (-0.55, 0.42):
+                b.cyl((u + du, v, z), (u + du + 0.13, v, z), r + 0.003, toon(style["bands"], (0.5, 0.1, 0.1)), seg=20)
+        u += style["joint"]
 
 
 def valve_wheel(b, u, v, z, rad=0.15, axis_len=0.17):
@@ -996,33 +1088,38 @@ def build_pipes(d):
     steel = toon("PipeSteel", (0.38, 0.38, 0.36), noise=0.08)
     v = d["v"] - 0.24
     gap = d.get("gap")
-    runs = [(PIPE_Z[0], 0.07, 0.1), (PIPE_Z[1], 0.09, 0.13), (PIPE_Z[2], 0.09, 0.13)]
-    for k, (z, r, lag) in enumerate(runs):
+    for k, z in enumerate(PIPE_Z):
+        st = PIPE_STYLE[k]
         if k == d.get("gap_run", 1) and gap:
-            pipe_run(b, d["u0"], gap[0], v, z, r, lag); pipe_run(b, gap[1], d["u1"], v, z, r, lag)
+            pipe_run(b, d["u0"], gap[0], v, z, st, phase=0.3 * k); pipe_run(b, gap[1], d["u1"], v, z, st, phase=0.3 * k)
         else:
-            pipe_run(b, d["u0"], d["u1"], v, z, r, lag)
-        b.cyl((d["u0"], v, z), (d["u0"], d["v"], z), r, steel)              # into the wall
+            pipe_run(b, d["u0"], d["u1"], v, z, st, phase=0.3 * k)
+        b.cyl((d["u0"], v, z), (d["u0"], d["v"], z), st.get("core", st["r"]), steel)     # into the wall
     u = d["u0"] + 0.8
-    while u < d["u1"]:
-        b.box(u - 0.04, u + 0.04, v, d["v"], 0.3, 1.95, toon("Bracket", (0.3, 0.3, 0.28), noise=0.1))
+    while u < d["u1"]:                                         # wall brackets with a strap round each pipe
+        b.box(u - 0.04, u + 0.04, v + 0.05, d["v"], 0.25, 1.95, toon("Bracket", (0.3, 0.3, 0.28), noise=0.1))
+        for k, z in enumerate(PIPE_Z):
+            rr = PIPE_STYLE[k]["r"] + 0.012
+            b.cyl((u - 0.025, v, z), (u + 0.025, v, z), rr, toon("Bracket", (0.3, 0.3, 0.28)), seg=16)
         u += 2.0
-    for u in (2.9, 3.5):                                                       # valve wheels
-        z = PIPE_Z[1] if u < 3.2 else PIPE_Z[2]
-        b.cyl((u - 0.09, v, z), (u + 0.09, v, z), 0.15, toon("Flange", (0.35, 0.33, 0.3)), seg=16)   # valve body
-        valve_wheel(b, u, v - 0.12, z, rad=0.14, axis_len=0.2)
-    for u in (6.0, 14.0):                                                      # gauges
-        b.cyl((u, v - 0.1, 1.75), (u, v - 0.25, 1.95), 0.012, steel)
-        b.cyl((u, v - 0.24, 1.98), (u, v - 0.29, 1.98), 0.08, flat("GaugeFace", (0.86, 0.85, 0.8)), seg=16)
+    for u in (2.9, 3.5):                                       # valves
+        k = 1 if u < 3.2 else 2
+        z = PIPE_Z[k]
+        b.cyl((u - 0.1, v, z), (u + 0.1, v, z), PIPE_STYLE[k]["r"] + 0.05, toon("Flange", (0.35, 0.33, 0.3)), seg=16)
+        valve_wheel(b, u, v - PIPE_STYLE[k]["r"] + 0.02, z, rad=0.14, axis_len=0.16)
+    for u in (6.0, 14.0):                                      # gauges on the bore-water line
+        b.cyl((u, v - 0.06, 1.75), (u, v - 0.22, 1.95), 0.012, steel)
+        b.cyl((u, v - 0.21, 1.98), (u, v - 0.27, 1.98), 0.08, flat("GaugeFace", (0.86, 0.85, 0.8)), seg=16)
+        b.cyl((u, v - 0.2, 1.98), (u, v - 0.215, 1.98), 0.088, toon("Flange", (0.35, 0.33, 0.3)), seg=16)
     ob = b.finish(outline=0.01)
     ob.matrix_world = ROT45 @ ob.matrix_world
     bg_objects.append(ob)
-    # labels on the pipe lagging, facing the camera side (-v)
-    lab = flat("PipeLabel", (0.1, 0.1, 0.1))
-    for (u, z, txt) in ((1.5, PIPE_Z[0], "BORE WATER  >>"), (1.5, PIPE_Z[1], "<<  HEATING RETURN"), (4.3, PIPE_Z[2], "HEATING FLOW - GENERAL CIRCUIT  >> L2"),
-                        (11.5, PIPE_Z[1], "<<  HEATING RETURN"), (11.5, PIPE_Z[2], "HEATING FLOW - GENERAL CIRCUIT  >> L2")):
-        lag = 0.1 if z > 1.5 else 0.13
-        add_text_on_wall(txt, STENCIL, 0.085, lab, u, v - lag - 0.012, "-v", z - 0.04, dy=0.0, align="LEFT")
+    # stencilled labels on the camera side (-v): dark on the green and the aluminium, white on the black steel
+    dark, white = flat("PipeLabel", (0.08, 0.08, 0.08)), flat("PipeLabelW", (0.82, 0.8, 0.74))
+    for (u, k, txt) in ((1.5, 0, "BORE WATER  >>"), (1.5, 1, "<<  HEATING RETURN"), (4.3, 2, "HEATING FLOW - GENERAL CIRCUIT  >> L2"),
+                        (11.5, 1, "<<  HEATING RETURN"), (11.5, 2, "HEATING FLOW - GENERAL CIRCUIT  >> L2")):
+        z = PIPE_Z[k]; r = PIPE_STYLE[k]["r"]
+        add_text_on_wall(txt, STENCIL, 0.07 if k == 0 else 0.085, white if k == 2 else dark, u, v - r - 0.004, "-v", z - 0.035, dy=0.0, align="LEFT")
 
 
 for d in LV["decor"]:
@@ -1223,48 +1320,158 @@ if "pipe" in LV:
     Z = pd["z"]
     hu = pd["u"]                                          # centre of the hole
 
-    def scraps(b, lag):
-        """Chewed lagging on the floor under the breach: it stays after the repair."""
+    R_OUT, R_IN = FLOW_R, FLOW_R - 0.013
+    BITE_U = hu + 0.02
+    D = Vector((0.0, -1.0, -0.12)).normalized()             # the worm bit from the front, a little low
+    T2 = D.cross(Vector((1.0, 0.0, 0.0))).normalized()
+    C0 = Vector((BITE_U, v, Z)) + D * R_OUT
+
+    def tube(b, u0, u1, outer, inner, seg=40):
+        """Hollow pipe section in plan space (axis along u), open ends capped with rings."""
+        bm = b.bm
+        io, ii = b.mi(outer), b.mi(inner)
+        def ring(u, r):
+            return [bm.verts.new((u, v + r * math.cos(2 * math.pi * k / seg), Z + r * math.sin(2 * math.pi * k / seg))) for k in range(seg)]
+        o0, o1, i0, i1 = ring(u0, R_OUT), ring(u1, R_OUT), ring(u0, R_IN), ring(u1, R_IN)
+        for k in range(seg):
+            k2 = (k + 1) % seg
+            bm.faces.new([o0[k], o0[k2], o1[k2], o1[k]]).material_index = io
+            bm.faces.new([i0[k], i1[k], i1[k2], i0[k2]]).material_index = ii
+            bm.faces.new([o0[k], i0[k], i0[k2], o0[k2]]).material_index = io
+            bm.faces.new([o1[k], o1[k2], i1[k2], i1[k]]).material_index = io
+
+    def bite_cutter():
+        """Overlapping spheres: one deep bite plus a ring of tooth scallops and shallow tooth gouges."""
+        bm = bmesh.new()
+        rng = np.random.default_rng(7)
+        def sph(c, r):
+            bmesh.ops.create_uvsphere(bm, u_segments=18, v_segments=10, radius=r, matrix=Matrix.Translation(c))
+        sph(C0 + D * 0.045, 0.072)
+        n = 11
+        for k in range(n):
+            a = 2 * math.pi * k / n
+            c = C0 + Vector((1, 0, 0)) * (0.085 * math.cos(a)) + T2 * (0.052 * math.sin(a)) + D * (0.012 + 0.008 * rng.random())
+            sph(c, 0.026 + 0.008 * rng.random())
+        for k in range(9):                                    # tooth gouges around the bite
+            a = 2 * math.pi * (k + 0.5) / 9 + rng.normal(0, 0.15)
+            c = C0 + Vector((1, 0, 0)) * (0.13 * math.cos(a)) + T2 * (0.085 * math.sin(a)) + D * 0.006
+            sph(c, 0.011 + 0.004 * rng.random())
+        me = bpy.data.meshes.new("BiteCutter"); bm.to_mesh(me); bm.free()
+        me.materials.append(toon("BiteSteel", (0.7, 0.7, 0.72)))
+        ob = bpy.data.objects.new("BiteCutter", me); sc.collection.objects.link(ob)
+        return ob
+
+    def outlined(ob, outline=0.01):
+        ob.data.materials.append(kit.ink())
+        sol = ob.modifiers.new("Outline", "SOLIDIFY"); sol.thickness = -outline
+        sol.use_flip_normals = True; sol.use_rim = False; sol.material_offset = len(ob.data.materials) - 1
+
+    def scraps(b):
+        """Steel shavings and chips of black paint under the breach: they stay after the repair."""
         rng = np.random.default_rng(81)
-        for k in range(12):
-            uu = hu - 0.45 + rng.random() * 0.9
-            vv = v - 0.2 - rng.random() * 0.5
+        mats = (toon("BiteSteel", (0.7, 0.7, 0.72)), toon("PipeFlow", (0.4, 0.4, 0.4)))
+        for k in range(16):
+            uu = hu - 0.4 + rng.random() * 0.8
+            vv = v - 0.25 - rng.random() * 0.55
             a = rng.random() * math.pi
-            l = 0.03 + rng.random() * 0.07
-            r = 0.01 + rng.random() * 0.012
+            l = 0.012 + rng.random() * 0.025
             du, dv = math.cos(a) * l / 2, math.sin(a) * l / 2
-            b.cyl((uu - du, vv - dv, r * 0.6), (uu + du, vv + dv, r * 0.6), r, lag, seg=4)
+            b.cyl((uu - du, vv - dv, 0.004), (uu + du, vv + dv, 0.006), 0.0035, mats[k % 2], seg=5)
+
+    def bitten_tube(b):
+        """The pipe section with a bite out of it: a fine grid of the steel surface, faces inside a
+        scalloped outline (one scallop per tooth) removed, a raw steel wall round the torn edge and
+        the dark inside of the pipe showing through."""
+        bm = b.bm
+        pf, bs = b.mi(toon("PipeFlow", (0.4, 0.4, 0.4))), b.mi(toon("BiteSteel", (0.7, 0.7, 0.72)))
+        inside = b.mi(toon("PipeInsideRust", (0.2, 0.11, 0.06), noise=0.35, noise_scale=40, lit=0.9, mid=0.75, shade=0.6))
+        NU, NA = 120, 72
+        us = [gap[0] + (gap[1] - gap[0]) * i / NU for i in range(NU + 1)]
+        ang = [2 * math.pi * k / NA for k in range(NA)]
+        a_bite = math.atan2(D.z, D.y)                         # angle of the bite centre round the pipe
+        rng = np.random.default_rng(11)
+        jit = rng.normal(0, 0.06, 64)
+        def inside_bite(u, a, grow=1.0):
+            du = (u - BITE_U) / 0.13
+            da = math.atan2(math.sin(a - a_bite), math.cos(a - a_bite)) * R_OUT / 0.075
+            r = math.hypot(du, da); th = math.atan2(da, du)
+            scallop = 0.16 * abs(math.sin(th * 4.5)) + jit[int((th + math.pi) / (2 * math.pi) * 63)]
+            return r < (0.84 + scallop) * grow
+        def vtx(u, a, r):
+            return bm.verts.new((u, v + r * math.cos(a), Z + r * math.sin(a)))
+        O = [[vtx(u, a, R_OUT) for a in ang] for u in us]
+        I = [[vtx(u, a, R_IN) for a in ang] for u in us]
+        hole = set()
+        for i in range(NU):
+            for k in range(NA):
+                k2 = (k + 1) % NA
+                uc, ac = (us[i] + us[i + 1]) / 2, ang[k] + math.pi / NA
+                if inside_bite(uc, ac):
+                    hole.add((i, k)); continue
+                scraped = inside_bite(uc, ac, 1.28)   # paint scraped off by the teeth
+                bm.faces.new([O[i][k], O[i][k2], O[i + 1][k2], O[i + 1][k]]).material_index = bs if scraped else pf
+        for i in range(NU):
+            for k in range(NA):
+                k2 = (k + 1) % NA
+                bm.faces.new([I[i][k], I[i + 1][k], I[i + 1][k2], I[i][k2]]).material_index = inside
+        # raw steel wall along every edge between a kept face and a bitten one
+        for (i, k) in hole:
+            k2 = (k + 1) % NA
+            for (j, kk), (ea, eb) in (((i - 1, k), (O[i][k], O[i][k2])), ((i + 1, k), (O[i + 1][k2], O[i + 1][k])),
+                                      ((i, (k - 1) % NA), (O[i + 1][k], O[i][k])), ((i, k2), (O[i][k2], O[i + 1][k2]))):
+                if (j, kk) in hole or j < 0 or j >= NU:
+                    continue
+                ia = Vector(ea.co); ib = Vector(eb.co)
+                def inward(p):
+                    c = Vector((p.x, v, Z)); return c + (p - c) * (R_IN / R_OUT)
+                f = bm.faces.new([bm.verts.new(ia), bm.verts.new(ib), bm.verts.new(inward(ib)), bm.verts.new(inward(ia))])
+                f.material_index = bs
+        for i in (0, NU):                                     # end rings
+            for k in range(NA):
+                k2 = (k + 1) % NA
+                f = bm.faces.new([O[i][k], O[i][k2], I[i][k2], I[i][k]]) if i == 0 else bm.faces.new([O[i][k2], O[i][k], I[i][k], I[i][k2]])
+                f.material_index = pf
+        # bright tooth scratches in the paint around the bite
+        for k in range(10):
+            th = 2 * math.pi * k / 10 + rng.normal(0, 0.2)
+            uu = BITE_U + math.cos(th) * 0.2
+            aa = a_bite + math.sin(th) * 0.12 / R_OUT
+            ln = 0.025 + 0.02 * rng.random()
+            p0 = Vector((uu, v + (R_OUT + 0.0015) * math.cos(aa), Z + (R_OUT + 0.0015) * math.sin(aa)))
+            dirv = Vector((math.cos(th), 0, 0)) * ln
+            n = (p0 - Vector((uu, v, Z))).normalized()
+            side = n.cross(Vector((1, 0, 0))).normalized() * 0.004
+            f = bm.faces.new([bm.verts.new(p0 - side), bm.verts.new(p0 + side), bm.verts.new(p0 + side + dirv), bm.verts.new(p0 - side + dirv)])
+            f.material_index = bs
 
     def build_broken():
         b = Builder("PipeBroken")
-        lag = toon("Lagging", (0.72, 0.7, 0.62), noise=0.14, noise_scale=9)
-        dark = toon("PipeHole", (0.06, 0.05, 0.05))
-        b.cyl((gap[0], v, Z), (gap[1], v, Z), 0.09, toon("RustPipe", kit.RUST, noise=0.2, noise_scale=12), seg=16)
-        b.cyl((gap[0], v, Z), (gap[0] + 0.25, v, Z), 0.13, lag, seg=16)
-        b.cyl((gap[1] - 0.2, v, Z), (gap[1], v, Z), 0.13, lag, seg=16)
-        rag = toon("LaggingRag", (0.52, 0.5, 0.44), noise=0.2, noise_scale=14)
-        for u0, n in ((gap[0] + 0.25, 1), (gap[1] - 0.2, -1)):        # torn flaps at the chewed ends
-            for k in range(3):
-                uu = u0 + n * (0.01 + 0.035 * k)
-                drop = 0.05 + 0.04 * ((k * 7 + (n > 0)) % 3)
-                b.cyl((uu, v - 0.11, Z - 0.08), (uu + n * 0.02, v - 0.13, Z - 0.08 - drop), 0.012, rag, seg=6)
-        b.box(hu - 0.13, hu + 0.12, v - 0.095, v - 0.08, Z - 0.07, Z + 0.05, dark)
-        b.box(hu - 0.08, hu + 0.07, v - 0.1, v - 0.085, Z - 0.15, Z - 0.07, dark)
-        scraps(b, rag)
-        ob = b.finish(outline=0.01)
-        ob.matrix_world = ROT45 @ ob.matrix_world
-        return [ob]
+        bitten_tube(b)
+        b.bm.normal_update()
+        me = bpy.data.meshes.new("PipeBroken"); b.bm.to_mesh(me); b.bm.free()
+        for m in b.mats:
+            me.materials.append(m)
+        ob = bpy.data.objects.new("PipeBroken", me); sc.collection.objects.link(ob)
+        ob.matrix_world = ROT45
+        outlined(ob, 0.008)
+        b3 = Builder("Shavings")
+        scraps(b3)
+        sh = b3.finish(outline=0.004); sh.matrix_world = ROT45
+        return [ob, sh]
 
     def build_fixed():
         b = Builder("PipeFixed")
-        lag = toon("LaggingNew", (0.8, 0.78, 0.68), noise=0.08, noise_scale=9)
-        old = toon("Lagging", (0.72, 0.7, 0.62), noise=0.14, noise_scale=9)
-        steel = toon("PipeSteel", (0.38, 0.38, 0.36), noise=0.08)
-        b.cyl((gap[0], v, Z), (gap[1], v, Z), 0.13, old, seg=16)
-        b.cyl((hu - 0.32, v, Z), (hu + 0.33, v, Z), 0.135, lag, seg=16)
-        for uu in (hu - 0.3, hu + 0.28):
-            b.cyl((uu, v, Z), (uu + 0.05, v, Z), 0.145, steel, seg=16)
-        scraps(b, toon("LaggingRag", (0.52, 0.5, 0.44), noise=0.2, noise_scale=14))
+        pf = toon("PipeFlow", (0.4, 0.4, 0.4))
+        tube(b, gap[0], gap[1], pf, flat("PipeInside", (0.03, 0.03, 0.035)))
+        patch = toon("WeldPatch", (0.5, 0.5, 0.5))
+        bead = toon("WeldBead", (0.22, 0.17, 0.12), metal=0.5)
+        b.cyl((BITE_U - 0.16, v, Z), (BITE_U + 0.16, v, Z), R_OUT + 0.007, patch, seg=32)      # sleeve over the bite
+        for uu in (BITE_U - 0.16, BITE_U + 0.16):                                              # weld bead, lumpy
+            for k in range(20):
+                a = 2 * math.pi * k / 20
+                b.cyl((uu - 0.012, v + (R_OUT + 0.006) * math.cos(a), Z + (R_OUT + 0.006) * math.sin(a)),
+                      (uu + 0.012, v + (R_OUT + 0.006) * math.cos(a + 0.35), Z + (R_OUT + 0.006) * math.sin(a + 0.35)), 0.009, bead, seg=6)
+        scraps(b)
         ob = b.finish(outline=0.01)
         ob.matrix_world = ROT45 @ ob.matrix_world
         return [ob]

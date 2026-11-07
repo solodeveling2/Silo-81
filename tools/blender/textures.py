@@ -306,6 +306,35 @@ steel("steel_grey", C(96, 96, 92), rust_cover=0.8, seed=31, paint=C(132, 134, 12
 steel("paint_white", C(96, 96, 92), rust_cover=0.82, seed=32, paint=C(196, 196, 186), pit=0.2, rust_sigma=30, chip_at=0.76)
 fabric("fabric", C(150, 144, 128), seed=33)
 
+
+
+
+# ---------------------------------------------------------------- pipe metals (three runs, each its own look)
+def alu_clad(name, seed=0):
+    """Aluminium sheet cladding over pipe insulation: brushed, dented, overlapping seams."""
+    base = C(168, 170, 168)
+    brush = noise(1.0, seed=seed + 1, aniso=(1, 80))
+    big, speck = grime(seed)
+    img = base * (0.9 + 0.14 * brush[..., None])
+    dents = fbm([(34, 1), (14, 0.5)], seed + 3)
+    img = lerp(img, img * 0.8, smooth(dents, 0.55, 0.85) * 0.7)          # soft dents, a dark side and a lit side
+    img = lerp(img, img * 1.1, smooth(np.roll(dents, -10, 0), 0.55, 0.85) * 0.5)
+    img = lerp(img, C(110, 104, 92), smooth(big, 0.55, 0.9) * 0.55)        # grime and oxide
+    x = np.arange(N)
+    seam = np.exp(-((x - N // 2) / 4.0) ** 2) + np.exp(-((x - N // 2 - 9) / 2.0) ** 2) * 0.6
+    img = lerp(img, img * 0.45, np.tile(seam[None, :], (N, 1)))           # sheet overlap, one per half tile
+    rivet = np.zeros((N, N), np.float32)
+    for yy in range(16, N, 128):
+        rivet[yy - 3:yy + 3, N // 2 + 14:N // 2 + 20] = 1
+    img = lerp(img, img * 0.5, gaussian_filter(rivet, 1.0, mode="wrap"))
+    save(name, img)
+
+
+steel("steel_black", C(62, 61, 62), rust_cover=0.62, seed=40, pit=0.6, rust_sigma=14)
+steel("pipe_green", C(80, 82, 78), rust_cover=0.7, seed=41, paint=C(86, 104, 92), pit=0.4, rust_sigma=16, chip_at=0.68)
+alu_clad("alu_clad", seed=42)
+
+
 # linear-light mean colour of every texture, so the kit can tint a texture to a material's designed colour
 import json, glob
 means = {}

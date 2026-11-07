@@ -7,6 +7,7 @@ from mathutils import Vector, Matrix
 
 R2 = 1 / math.sqrt(2)
 LIGHT = Vector((-0.55, -0.55, 0.63)).normalized()
+HALF = (LIGHT + Vector((0.0, -0.866, 0.5))).normalized()     # between the key light and the camera
 
 
 def g(u, v):
@@ -74,16 +75,24 @@ def _tex_color(nt, name, scale, pos):
 
 
 # shared materials that take the asset pack's look: name -> (texture, metres per repeat, tint)
-TEX_FOR = {
-    "PipeSteel": ("steel_rust", 0.7, (1.0, 1.0, 1.0)),
+TEX_FOR = {      # name: (texture, metres per repeat, tint[, metal sheen 0..1])
+    "PipeSteel": ("steel_rust", 0.7, (1.0, 1.0, 1.0), 0.5),
     "RustPipe": ("steel_rust", 0.5, (1.25, 0.8, 0.6)),
     "Lagging": ("lagging", 0.8, (1.0, 1.0, 1.0)),
-    "LagBand": ("steel_rust", 0.4, (0.7, 0.7, 0.7)),
-    "Bracket": ("steel_rust", 0.6, (0.85, 0.85, 0.85)),
-    "Flange": ("steel_rust", 0.4, (0.9, 0.85, 0.8)),
-    "ValveRed": ("valve_red", 0.35, (1.0, 1.0, 1.0)),
-    "Steel": ("steel_rust", 0.6, (1.2, 1.2, 1.2)),
-    "SteelDoor": ("steel_green", 1.2, (1.0, 1.0, 1.0)),
+    "LagBand": ("steel_rust", 0.4, (0.7, 0.7, 0.7), 0.5),
+    "Bracket": ("steel_rust", 0.6, (0.85, 0.85, 0.85), 0.4),
+    "Flange": ("steel_rust", 0.4, (0.9, 0.85, 0.8), 0.6),
+    "ValveRed": ("valve_red", 0.35, (1.0, 1.0, 1.0), 0.4),
+    "Steel": ("steel_rust", 0.6, (1.2, 1.2, 1.2), 0.5),
+    "SteelDoor": ("steel_green", 1.2, (1.0, 1.0, 1.0), 0.3),
+    # the three pipe-gallery runs, each its own metal
+    "PipeWater": ("pipe_green", 0.9, (1.0, 1.0, 1.0), 0.6),       # bore water: painted steel
+    "PipeClad": ("alu_clad", 1.0, (0.8, 0.82, 0.84), 0.9),          # heating return: aluminium cladding
+    "PipeFlow": ("steel_black", 0.8, (1.0, 1.0, 1.0), 0.8),       # heating flow: bare black steel
+    "PipeBandRed": ("valve_red", 0.3, (1.15, 1.0, 1.0), 0.5),     # flow marker bands
+    "Bolt": ("steel_rust", 0.2, (1.0, 1.0, 1.0), 0.6),
+    "BiteSteel": ("steel_grey", 0.15, (1.5, 1.5, 1.55), 1.0),     # fresh steel where the worm bit through
+    "WeldPatch": ("steel_rust", 0.3, (1.15, 1.1, 1.05), 0.8),
 }
 
 
@@ -115,7 +124,7 @@ def _detail_tint(texname, rgb, keep=0.75):
 
 
 def toon(name, rgb, noise=0.0, noise_scale=6.0, lit=1.04, mid=0.84, shade=0.66, alpha_noise=None,
-         dado=None, frost=None, grating=None, stripes=None, tex=None, tex_scale=1.0):
+         dado=None, frost=None, grating=None, stripes=None, tex=None, tex_scale=1.0, metal=0.0):
     """Emission toon material. Options:
     noise: colour variation strength.  dado: (lower_rgb, height) painted lower wall.
     frost: (u_start, u_full, frost_rgb) frost creeping in along +u.  grating: (bar_rgb, pitch) steel floor grate.
@@ -126,8 +135,11 @@ def toon(name, rgb, noise=0.0, noise_scale=6.0, lit=1.04, mid=0.84, shade=0.66, 
     if key in _mats:
         return _mats[key]
     if tex is None and name in TEX_FOR:
-        tex, tex_scale, rgb = TEX_FOR[name]
+        tex, tex_scale, rgb = TEX_FOR[name][:3]
+        metal = TEX_FOR[name][3] if len(TEX_FOR[name]) > 3 else metal
         noise = 0.0
+    if metal:                                    # harder light/shadow split, like polished metal
+        lit, mid, shade = 1.06, 0.78, 0.5
     elif tex is None and name in DETAIL:
         tex = DETAIL[name]; tex_scale = 1.4
         rgb = _detail_tint(tex, rgb); noise = 0.0
@@ -234,7 +246,28 @@ def toon(name, rgb, noise=0.0, noise_scale=6.0, lit=1.04, mid=0.84, shade=0.66, 
     ramp = _ramp(nt, lit, mid, shade)
     mul = nt.nodes.new("ShaderNodeVectorMath"); mul.operation = "MULTIPLY"
     nt.links.new(cur, mul.inputs[0]); nt.links.new(ramp.outputs["Color"], mul.inputs[1])
-    em = nt.nodes.new("ShaderNodeEmission"); nt.links.new(mul.outputs[0], em.inputs["Color"])
+    lit_col = mul.outputs[0]
+    if metal:
+        # specular glint: normal close to the half vector between the key light and the camera
+        geo2 = nt.nodes.new("ShaderNodeNewGeometry")
+        hd = nt.nodes.new("ShaderNodeVectorMath"); hd.operation = "DOT_PRODUCT"
+        hd.inputs[1].default_value = HALF
+        nt.links.new(geo2.outputs["Normal"], hd.inputs[0])
+        mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs[1].default_value = 0.9; mr.inputs[2].default_value = 0.955
+        mr.inputs[4].default_value = metal * 0.75
+        nt.links.new(hd.outputs["Value"], mr.inputs[0])
+        glint = nt.nodes.new("ShaderNodeMix"); glint.data_type = "RGBA"
+        nt.links.new(mr.outputs[0], glint.inputs["Factor"]); nt.links.new(lit_col, glint.inputs[6])
+        glint.inputs[7].default_value = (0.92, 0.93, 0.95, 1)
+        lit_col = glint.outputs[2]
+        # dark reflection band just below the glint (rim of the cylinder facing away from the sky)
+        mr2 = nt.nodes.new("ShaderNodeMapRange"); mr2.inputs[1].default_value = 0.55; mr2.inputs[2].default_value = 0.72
+        mr2.inputs[3].default_value = 1.0; mr2.inputs[4].default_value = 1.0 - metal * 0.25
+        nt.links.new(hd.outputs["Value"], mr2.inputs[0])
+        dk = nt.nodes.new("ShaderNodeVectorMath"); dk.operation = "SCALE"
+        nt.links.new(lit_col, dk.inputs[0]); nt.links.new(mr2.outputs[0], dk.inputs["Scale"])
+        lit_col = dk.outputs[0]
+    em = nt.nodes.new("ShaderNodeEmission"); nt.links.new(lit_col, em.inputs["Color"])
     shader = em.outputs[0]
     if alpha_noise:
         th, scale = alpha_noise

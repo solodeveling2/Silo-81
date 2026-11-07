@@ -67,6 +67,8 @@ func _ready() -> void:
 		test_commons.call_deferred()
 	elif "--test-command" in OS.get_cmdline_user_args():
 		test_command.call_deferred()
+	elif "--view-pipe" in OS.get_cmdline_user_args():           # debug: start at the burst pipe on Level 3
+		load_level.call_deferred("L3", Vector2(6.6, -0.2))
 
 
 # ================================================================== levels

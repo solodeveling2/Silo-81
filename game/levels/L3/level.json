@@ -338,13 +338,13 @@
   "fixed_text": "Welded. The bead is ugly but it holds, and the gauge needle is climbing back.",
   "broken": {
    "sprite": "spr_004.png",
-   "x0": 772,
-   "y0": -734
+   "x0": 776,
+   "y0": -728
   },
   "fixed": {
    "sprite": "spr_005.png",
-   "x0": 770,
-   "y0": -737
+   "x0": 773,
+   "y0": -731
   },
   "sort": [
    837.1,

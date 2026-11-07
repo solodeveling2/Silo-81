@@ -24,7 +24,7 @@ var blocked: Array = []             # plan rects
 var dark := {}                      # room id -> {polys, props}
 var pipe := {}
 var pipe_node: Sprite2D
-var steam: CPUParticles2D
+var water = null   # Array of the water particle emitters, made on first use
 
 
 func build(dir: String, state: Dictionary) -> void:
@@ -112,32 +112,100 @@ func set_pipe(fixed: bool) -> void:
 	var info: Dictionary = pipe["fixed" if fixed else "broken"]
 	pipe_node.texture = load(level_dir + "/" + info["sprite"])
 	pipe_node.position = Vector2(info["x0"], info["y0"]) - pipe_node.get_parent().position
-	if steam == null:
-		steam = CPUParticles2D.new()
-		var grad := GradientTexture2D.new()
-		grad.fill = GradientTexture2D.FILL_RADIAL
-		grad.fill_from = Vector2(0.5, 0.5); grad.fill_to = Vector2(1.0, 0.5)
-		var g := Gradient.new()
-		g.set_color(0, Color(1, 1, 1, 0.9)); g.set_color(1, Color(1, 1, 1, 0))
-		grad.gradient = g
-		grad.width = 32; grad.height = 32
-		steam.texture = grad
-		steam.amount = 40
-		steam.lifetime = 1.6
-		steam.direction = Vector2(-0.3, 1.0)
-		steam.spread = 25.0
-		steam.initial_velocity_min = 60.0
-		steam.initial_velocity_max = 110.0
-		steam.gravity = Vector2(0, -40)
-		steam.scale_amount_min = 1.0
-		steam.scale_amount_max = 2.6
-		var cr := Gradient.new()
-		cr.set_color(0, Color(0.95, 0.97, 1.0, 0.75)); cr.set_color(1, Color(0.9, 0.93, 0.96, 0.0))
-		steam.color_ramp = cr
-		steam.z_index = 5
-		steam.position = Hex.plan_to_screen(Vector2(pipe["u"], pipe["v"] - 0.37), pipe.get("z", 1.15))
-		add_child(steam)
-	steam.emitting = not fixed
+	if water == null:
+		_make_water()
+	for p in water:
+		p.emitting = not fixed
+
+
+# Water from the bitten pipe: a jet of drops arcing down from the hole, a splash
+# where it lands, and ripple rings spreading on the puddle (drawn on the floor, under the actors).
+func _make_water() -> void:
+	water = []
+	# the bite is on the front of the heating flow, 0.34 m in front of the wall line
+	var hole := Hex.plan_to_screen(Vector2(pipe["u"] + 0.02, pipe["v"] - 0.34), pipe.get("z", 0.45) - 0.01)
+	var land := Hex.plan_to_screen(Vector2(pipe["u"] + 0.05, pipe["v"] - 0.83), 0.0)
+	var t := 0.32                                         # flight time of a drop, seconds
+	var g := 1100.0
+	var v0 := Vector2((land.x - hole.x) / t, (land.y - hole.y - 0.5 * g * t * t) / t)
+	var stream := WaterStream.new()                        # jet, droplets and splash, simulated and drawn here
+	stream.hole = hole; stream.land = land; stream.v0 = v0; stream.g = g; stream.t = t
+	stream.z_index = 5
+	add_child(stream); water.append(stream)
+	var rings := WaterRipples.new()                        # rings on the puddle, on the floor under the actors
+	rings.position = land
+	add_child(rings); move_child(rings, marks.get_index())
+	water.append(rings)
+
+
+class WaterStream extends Node2D:
+	var hole := Vector2.ZERO
+	var land := Vector2.ZERO
+	var v0 := Vector2.ZERO
+	var g := 1100.0
+	var t := 0.32
+	var emitting := true:
+		set(value):
+			emitting = value; visible = value
+	var clock := 0.0
+	const DROPS := 26
+	const SPLASH := 14
+
+	func _process(dt: float) -> void:
+		clock += dt
+		queue_redraw()
+
+	func _at(s: float, spread: float) -> Vector2:
+		return hole + v0 * s * spread + Vector2(0, 0.5 * g * s * s)
+
+	func _draw() -> void:
+		# the unbroken first part of the jet: a tapered arc that wobbles a little
+		var n := 12
+		var tc := t * 0.5
+		var prev := hole
+		for i in range(1, n + 1):
+			var f := float(i) / n
+			var p := _at(tc * f, 1.0) + Vector2(sin(clock * 37.0 + i * 1.7) * 0.9 * f, 0)
+			draw_line(prev, p, Color(0.78, 0.88, 0.98, 0.6 * (1.0 - f * 0.5)), 5.0 * (1.0 - f * 0.45), true)
+			draw_line(prev, p, Color(0.96, 0.98, 1.0, 0.85 * (1.0 - f * 0.7)), 1.6, true)
+			prev = p
+		# the jet breaking up into drops further along
+		for k in DROPS:
+			var h := fmod(k * 0.618034, 1.0)
+			var f := fmod(clock / t + h, 1.0)
+			if f < 0.35:
+				continue
+			var p := _at(t * f, 0.94 + 0.12 * fmod(k * 0.377, 1.0))
+			draw_circle(p, 1.2 + 1.4 * fmod(k * 0.29, 1.0), Color(0.86, 0.93, 1.0, 0.75))
+		# splash: short hops of spray where the jet hits the puddle
+		for k in SPLASH:
+			var h := fmod(k * 0.7548, 1.0)
+			var life := 0.34
+			var f := fmod(clock / life + h, 1.0)
+			var ang := -PI * 0.5 + (fmod(k * 0.41, 1.0) - 0.5) * 2.2
+			var sp := 50.0 + 70.0 * fmod(k * 0.53, 1.0)
+			var tt := f * life
+			var p := land + Vector2(cos(ang), sin(ang)) * sp * tt + Vector2(0, 0.5 * 700.0 * tt * tt)
+			draw_circle(p, 0.9 + 0.8 * fmod(k * 0.31, 1.0), Color(0.9, 0.95, 1.0, 0.8 * (1.0 - f)))
+
+
+class WaterRipples extends Node2D:
+	var emitting := true:
+		set(value):
+			emitting = value; visible = value
+	var clock := 0.0
+
+	func _process(dt: float) -> void:
+		clock += dt
+		queue_redraw()
+
+	func _draw() -> void:
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.5))      # flat on the floor
+		for k in 4:
+			var f := fmod(clock / 1.3 + k * 0.25, 1.0)
+			var r := 6.0 + 46.0 * f
+			var off := Vector2(sin(k * 2.1) * 8.0, cos(k * 1.3) * 10.0)
+			draw_arc(off, r, 0.0, TAU, 40, Color(0.85, 0.92, 1.0, 0.42 * (1.0 - f)), 1.6, true)
 
 
 # ------------------------------------------------------------------ walls and grid
