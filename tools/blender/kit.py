@@ -132,14 +132,180 @@ def _detail_tint(texname, rgb, keep=0.75):
     return tuple((1 - keep) + keep * (c / max(mc, 1e-3)) for c, mc in zip(rgb, m))
 
 
+# ---------------------------------------------------------------- aged walls
+# Wear profiles: how a room's walls have aged. All values 0..1 except the colours. Every layer is a
+# procedural mask in world space (no UVs, so it runs continuously across wall pieces and corners), and
+# every feature is at least ~0.15 m: at the game zoom a metre is about 100 px, finer detail is noise.
+#   drift    large, soft tonal variation of the paint (several metres across)
+#   warm     how far the drift leans to yellowed / brownish paint
+#   repaint  share of the wall covered by later, mismatched repaint patches
+#   peel     paint worn or peeled back to the concrete
+#   grime    dirt rising from the floor, darkest in the bottom 0.4 m
+#   scuff    horizontal scuffs at hip height (trolleys, shoulders, stretchers)
+#   stains   water streaks running down from the top of the wall
+#   damp     damp / mould blotches near the floor
+#   rust     rust bleed (streaks and spots)
+#   cracks   repaired cracks (filler lines)
+#   seed     offsets the patterns so neighbouring rooms don't share them
+AGE_PROFILES = {
+    "corridor":    dict(drift=0.5, warm=0.35, repaint=0.4, peel=0.22, grime=0.55, scuff=0.7, stains=0.35, damp=0.12, rust=0.12, cracks=0.35),
+    "sleeping":    dict(drift=0.7, warm=0.6, repaint=0.25, peel=0.38, grime=0.5, scuff=0.2, stains=0.5, damp=0.25, rust=0.08, cracks=0.45),
+    "storage":     dict(drift=0.6, warm=0.45, repaint=0.08, peel=0.5, grime=0.8, scuff=0.35, stains=0.55, damp=0.4, rust=0.35, cracks=0.3, shade=0.88),
+    "maintenance": dict(drift=0.6, warm=0.4, repaint=0.3, peel=0.7, grime=0.75, scuff=0.4, stains=0.6, damp=0.3, rust=0.75, cracks=0.6, shade=0.92),
+    "wet":         dict(drift=0.5, warm=0.3, repaint=0.2, peel=0.45, grime=0.55, scuff=0.1, stains=0.7, damp=0.7, rust=0.3, cracks=0.35),
+    "public":      dict(drift=0.45, warm=0.4, repaint=0.35, peel=0.18, grime=0.35, scuff=0.45, stains=0.25, damp=0.1, rust=0.06, cracks=0.3),
+    "kept":        dict(drift=0.3, warm=0.3, repaint=0.15, peel=0.06, grime=0.2, scuff=0.15, stains=0.1, damp=0.04, rust=0.03, cracks=0.12),
+}
+CONCRETE_BARE = (0.53, 0.5, 0.45)          # the substrate under the paint: warm, dirty grey
+GRIME_RGB = (0.5, 0.42, 0.33)               # floor dirt and scuffs: brown-grey, multiplied in
+STAIN_RGB = (0.62, 0.53, 0.4)               # water streaks: tea-brown
+DAMP_RGB = (0.36, 0.38, 0.27)               # mould / damp: dark olive
+RUST_RGB = (0.5, 0.27, 0.13)
+FILLER_RGB = (0.9, 0.88, 0.82)              # crack filler: multiplied, so it reads as a pale, slightly greyer line
+
+
+def _age(nt, cur, pos, a, tcol=None, dado_h=None):
+    """Layer a wall's history over its paint colour `cur` (a colour socket). Returns the new socket."""
+    N = nt.nodes.new
+    L = nt.links.new
+    seed = a.get("seed", 0.0)
+    P = N("ShaderNodeVectorMath"); P.operation = "ADD"; L(pos.outputs["Position"], P.inputs[0])
+    P.inputs[1].default_value = (seed * 17.3, seed * 9.1, seed * 3.7)
+    P = P.outputs[0]
+    sep = N("ShaderNodeSeparateXYZ"); L(P, sep.inputs[0]); Z = sep.outputs["Z"]
+
+    def noise(vec, scale, detail=2.0, rough=0.5, dist=0.0, stretch=None):
+        v = vec
+        if stretch:
+            m = N("ShaderNodeVectorMath"); m.operation = "MULTIPLY"; m.inputs[1].default_value = stretch
+            L(vec, m.inputs[0]); v = m.outputs[0]
+        t = N("ShaderNodeTexNoise"); t.inputs["Scale"].default_value = scale
+        t.inputs["Detail"].default_value = detail; t.inputs["Roughness"].default_value = rough
+        t.inputs["Distortion"].default_value = dist
+        L(v, t.inputs["Vector"]); return t.outputs["Fac"]
+
+    def math(op, a_, b_=None, c_=None):
+        m = N("ShaderNodeMath"); m.operation = op
+        for i, x in enumerate((a_, b_, c_)):
+            if x is None:
+                continue
+            if isinstance(x, (int, float)):
+                m.inputs[i].default_value = x
+            else:
+                L(x, m.inputs[i])
+        return m.outputs[0]
+
+    def ramp(x, lo, hi):                      # smooth 0..1 between lo and hi
+        r = N("ShaderNodeMapRange"); r.interpolation_type = "SMOOTHSTEP"
+        r.inputs[1].default_value = lo; r.inputs[2].default_value = hi
+        L(x, r.inputs[0]); return r.outputs[0]
+
+    def rgb(c):
+        n = N("ShaderNodeRGB"); n.outputs[0].default_value = (*c, 1); return n.outputs[0]
+
+    def mix(a_, b_, fac, blend="MIX"):
+        m = N("ShaderNodeMix"); m.data_type = "RGBA"; m.blend_type = blend; m.clamp_result = True
+        L(fac, m.inputs["Factor"]); L(a_, m.inputs[6]); L(b_, m.inputs[7]); return m.outputs[2]
+
+    def scaled(x, k):
+        return math("MULTIPLY", x, k)
+
+    # 1. drift: large, soft variation of the paint, some of it yellowed
+    big = noise(P, 0.22, 2.0, 0.4)
+    tone = N("ShaderNodeMapRange"); tone.inputs[1].default_value = 0.36; tone.inputs[2].default_value = 0.64
+    tone.inputs[3].default_value = 1.0 - 0.28 * a["drift"]; tone.inputs[4].default_value = 1.0 + 0.08 * a["drift"]
+    L(big, tone.inputs[0])
+    m = N("ShaderNodeVectorMath"); m.operation = "MULTIPLY"; L(cur, m.inputs[0]); L(tone.outputs[0], m.inputs[1]); cur = m.outputs[0]
+    yel = scaled(ramp(noise(P, 0.35, 1.0), 0.42, 0.6), 0.45 * a["warm"])
+    cur = mix(cur, rgb((0.86, 0.78, 0.6)), yel, "MULTIPLY")
+    if a.get("shade", 1.0) != 1.0:
+        sh = N("ShaderNodeVectorMath"); sh.operation = "SCALE"; L(cur, sh.inputs[0]); sh.inputs["Scale"].default_value = a["shade"]
+        cur = sh.outputs[0]
+
+    # 2. repaint: blocky later patches in a slightly different, fresher paint (Chebyshev Voronoi = rectangles)
+    if a["repaint"] > 0:
+        vo = N("ShaderNodeTexVoronoi"); vo.distance = "CHEBYCHEV"; vo.inputs["Scale"].default_value = 0.55
+        st = N("ShaderNodeVectorMath"); st.operation = "MULTIPLY"; st.inputs[1].default_value = (1.0, 1.0, 1.6)
+        L(P, st.inputs[0]); L(st.outputs[0], vo.inputs["Vector"])
+        cell = N("ShaderNodeSeparateColor"); L(vo.outputs["Color"], cell.inputs[0])
+        patch = math("GREATER_THAN", cell.outputs[0], 1.0 - 0.45 * a["repaint"])
+        cur = mix(cur, rgb((1.1, 1.12, 1.07)), patch, "MULTIPLY")       # cleaner, slightly cooler paint
+
+    # 3. peel: paint worn back to concrete, in clusters, more near the floor and at hip height
+    if a["peel"] > 0:
+        cluster = ramp(noise(P, 0.4, 2.0), 0.53 - 0.06 * a["peel"], 0.62 - 0.06 * a["peel"])   # a few worn zones
+        shape = noise(P, 2.0, 3.0, 0.55, 0.3)
+        low = ramp(math("SUBTRACT", 1.4, Z), 0.0, 1.2)                      # 1 at the floor .. 0 above 1.4 m
+        amount = math("MULTIPLY", cluster, math("ADD", 0.55, scaled(low, 0.45)))
+        cut = math("SUBTRACT", 0.74, scaled(amount, 0.12 + 0.12 * a["peel"]))
+        bare = math("GREATER_THAN", shape, cut)
+        rim = math("SUBTRACT", math("GREATER_THAN", shape, math("SUBTRACT", cut, 0.03)), bare)
+        conc = rgb(CONCRETE_BARE)
+        if tcol is not None:
+            cm = N("ShaderNodeVectorMath"); cm.operation = "MULTIPLY"; L(tcol, cm.inputs[0]); L(conc, cm.inputs[1]); conc = cm.outputs[0]
+        cur = mix(cur, conc, bare)
+        cur = mix(cur, rgb((0.55, 0.5, 0.44)), scaled(rim, 0.8), "MULTIPLY")   # the broken paint edge
+
+    # 4. grime from the floor, uneven
+    if a["grime"] > 0:
+        rise = ramp(math("SUBTRACT", 0.55, Z), 0.0, 0.55)
+        var = ramp(noise(P, 1.1, 2.0), 0.3, 0.75)
+        g = math("MULTIPLY", math("MULTIPLY", rise, math("ADD", 0.45, scaled(var, 0.55))), 0.8 * a["grime"])
+        cur = mix(cur, rgb(GRIME_RGB), g, "MULTIPLY")
+        top = ramp(math("SUBTRACT", Z, 2.25), 0.0, 0.45)                 # soot / dust under the ceiling
+        cur = mix(cur, rgb((0.75, 0.72, 0.66)), scaled(top, 0.6 * a["grime"]), "MULTIPLY")
+
+    # 5. scuffs: horizontal smears at hip height
+    if a["scuff"] > 0:
+        band = math("MULTIPLY", ramp(Z, 0.55, 0.75), ramp(math("SUBTRACT", 1.25, Z), 0.0, 0.25))
+        smear = ramp(noise(P, 1.0, 2.0, 0.5, 0.0, (1.0, 1.0, 9.0)), 0.5, 0.64)
+        sc = math("MULTIPLY", math("MULTIPLY", band, smear), 0.55 * a["scuff"])
+        cur = mix(cur, rgb(GRIME_RGB), sc, "MULTIPLY")
+
+    # 6. water streaks: long vertical runs from a few leak points, fading towards the floor
+    if a["stains"] > 0:
+        runs = ramp(noise(P, 1.6, 1.0, 0.5, 0.0, (1.0, 1.0, 0.07)), 0.5, 0.6)
+        where = ramp(noise(P, 0.3, 1.0), 0.44, 0.56)
+        fade = ramp(Z, 0.2, 2.2)
+        st_ = math("MULTIPLY", math("MULTIPLY", runs, where), math("MULTIPLY", fade, 0.95 * a["stains"]))
+        cur = mix(cur, rgb(STAIN_RGB), st_, "MULTIPLY")
+        tide = math("MULTIPLY", math("MULTIPLY", ramp(noise(P, 0.6, 2.0), 0.5, 0.58), ramp(math("SUBTRACT", 0.9, Z), 0.0, 0.25)),
+                    0.5 * a["stains"])                                    # a tide line where water once stood
+        cur = mix(cur, rgb(STAIN_RGB), scaled(math("MULTIPLY", tide, ramp(Z, 0.5, 0.75)), 1.0), "MULTIPLY")
+
+    # 7. damp and mould: blotches near the floor and in the lower corners of the wall
+    if a["damp"] > 0:
+        blot = ramp(noise(P, 1.3, 3.0, 0.6, 0.3), 0.54, 0.62)
+        low = ramp(math("SUBTRACT", 1.0, Z), 0.0, 0.9)
+        dm = math("MULTIPLY", math("MULTIPLY", blot, low), math("MULTIPLY", ramp(noise(P, 0.35), 0.46, 0.58), 0.95 * a["damp"]))
+        cur = mix(cur, rgb(DAMP_RGB), dm, "MULTIPLY")
+
+    # 8. rust bleed: spots and short streaks
+    if a["rust"] > 0:
+        spot = ramp(noise(P, 1.8, 2.0, 0.6, 0.5), 0.62, 0.68)
+        drip = ramp(noise(P, 3.0, 1.0, 0.5, 0.0, (1.0, 1.0, 0.12)), 0.54, 0.64)
+        src = ramp(noise(P, 0.5, 1.0), 0.54, 0.62)
+        r_ = math("MAXIMUM", spot, math("MULTIPLY", drip, src))
+        cur = mix(cur, rgb(RUST_RGB), math("MULTIPLY", r_, 0.75 * a["rust"]), "MULTIPLY")
+
+    # 9. repaired cracks: thin light filler lines (a ridge of distorted noise), only in some areas
+    if a["cracks"] > 0:
+        cr = noise(P, 0.55, 2.0, 0.5, 0.5)
+        line = math("LESS_THAN", math("ABSOLUTE", math("SUBTRACT", cr, 0.5)), 0.006)
+        area = ramp(noise(P, 0.2, 1.0), 0.6 - 0.06 * a["cracks"], 0.63 - 0.06 * a["cracks"])
+        cur = mix(cur, rgb(FILLER_RGB), math("MULTIPLY", line, scaled(area, 0.9)), "MULTIPLY")
+    return cur
+
+
 def toon(name, rgb, noise=0.0, noise_scale=6.0, lit=1.04, mid=0.84, shade=0.66, alpha_noise=None,
-         dado=None, frost=None, grating=None, stripes=None, tex=None, tex_scale=1.0, metal=0.0):
+         dado=None, frost=None, grating=None, stripes=None, tex=None, tex_scale=1.0, metal=0.0, age=None):
     """Emission toon material. Options:
     noise: colour variation strength.  dado: (lower_rgb, height) painted lower wall.
     frost: (u_start, u_full, frost_rgb) frost creeping in along +u.  grating: (bar_rgb, pitch) steel floor grate.
     alpha_noise: (threshold, scale) cut out by noise, for stains and decals.
     tex: name of a texture in tex/ (made by textures.py); rgb then tints it (1,1,1 = as painted).
-    With dado, the lower colour tints the same texture too."""
+    With dado, the lower colour tints the same texture too.
+    age: a wear profile (dict, see AGE_PROFILES) layered over the paint: see _age()."""
     key = name
     if key in _mats:
         return _mats[key]
@@ -181,12 +347,20 @@ def toon(name, rgb, noise=0.0, noise_scale=6.0, lit=1.04, mid=0.84, shade=0.66, 
             lm = nt.nodes.new("ShaderNodeVectorMath"); lm.operation = "MULTIPLY"
             nt.links.new(tcol, lm.inputs[0]); nt.links.new(lc.outputs[0], lm.inputs[1]); lower_col = lm.outputs[0]
         lt = nt.nodes.new("ShaderNodeMath"); lt.operation = "LESS_THAN"; lt.inputs[1].default_value = h
-        nt.links.new(sep.outputs["Z"], lt.inputs[0])
+        zsrc = sep.outputs["Z"]
+        if age:                                  # hand-painted: the dado line wanders a few cm
+            wn = nt.nodes.new("ShaderNodeTexNoise"); wn.inputs["Scale"].default_value = 1.3; wn.inputs["Detail"].default_value = 1.0
+            nt.links.new(pos.outputs["Position"], wn.inputs["Vector"])
+            wm = nt.nodes.new("ShaderNodeMath"); wm.operation = "MULTIPLY_ADD"; wm.inputs[1].default_value = 0.12; wm.inputs[2].default_value = -0.06
+            nt.links.new(wn.outputs["Fac"], wm.inputs[0])
+            wa = nt.nodes.new("ShaderNodeMath"); wa.operation = "ADD"
+            nt.links.new(sep.outputs["Z"], wa.inputs[0]); nt.links.new(wm.outputs[0], wa.inputs[1]); zsrc = wa.outputs[0]
+        nt.links.new(zsrc, lt.inputs[0])
         cur = mix(cur, lower_col, lt.outputs[0])
         # dark painted line on top of the dado
         band = nt.nodes.new("ShaderNodeMath"); band.operation = "COMPARE"
         band.inputs[1].default_value = h + 0.02; band.inputs[2].default_value = 0.025
-        nt.links.new(sep.outputs["Z"], band.inputs[0])
+        nt.links.new(zsrc, band.inputs[0])
         dk = nt.nodes.new("ShaderNodeRGB"); dk.outputs[0].default_value = (lower[0] * 0.45, lower[1] * 0.45, lower[2] * 0.45, 1)
         cur = mix(cur, dk.outputs[0], band.outputs[0])
     if grating:
@@ -252,6 +426,8 @@ def toon(name, rgb, noise=0.0, noise_scale=6.0, lit=1.04, mid=0.84, shade=0.66, 
         soft = nt.nodes.new("ShaderNodeMath"); soft.operation = "MULTIPLY"; soft.inputs[1].default_value = 0.75
         nt.links.new(st.outputs[0], soft.inputs[0])
         cur = mix(cur, fc.outputs[0], soft.outputs[0])
+    if age:
+        cur = _age(nt, cur, pos, age, tcol, (dado[1] if dado else None))
     ramp = _ramp(nt, lit, mid, shade)
     mul = nt.nodes.new("ShaderNodeVectorMath"); mul.operation = "MULTIPLY"
     nt.links.new(cur, mul.inputs[0]); nt.links.new(ramp.outputs["Color"], mul.inputs[1])
@@ -341,7 +517,8 @@ class Builder:
             self.mats.append(mat)
         return self.mats.index(mat)
 
-    def box(self, x0, x1, y0, y1, z0, z1, mat, M=None, top_mat=None):
+    def box(self, x0, x1, y0, y1, z0, z1, mat, M=None, top_mat=None, faces_mat=None):
+        """faces_mat: optional {face index: material}; faces are 0 -x, 1 +x, 2 -y, 3 +y, 4 bottom, 5 top."""
         vs = []
         for x in (x0, x1):
             for y in (y0, y1):
@@ -351,9 +528,10 @@ class Builder:
         faces = [(0, 1, 3, 2), (4, 6, 7, 5), (0, 4, 5, 1), (2, 3, 7, 6), (0, 2, 6, 4), (1, 5, 7, 3)]
         idx = self.mi(mat)
         tidx = self.mi(top_mat) if top_mat else idx
+        fm = {k: self.mi(m_) for k, m_ in (faces_mat or {}).items()}
         for k, f in enumerate(faces):
             face = self.bm.faces.new([vs[i] for i in f])
-            face.material_index = tidx if k == 5 else idx
+            face.material_index = fm.get(k, tidx if k == 5 else idx)
         return vs
 
     def cyl(self, p0, p1, r, mat, seg=12, cap=True, r1=None):

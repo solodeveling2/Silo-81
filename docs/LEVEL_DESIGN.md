@@ -33,6 +33,33 @@ These rules come from the Level 2 and Level 3 rework (47° camera, 3.5 m corrido
 - When a room exists to show something along its back wall (pipe galleries, plant rooms, anything the player has to read at a glance), give the level `front_h` (Level 3 uses 1.1 m). Its camera-side walls then stay low permanently, with a dark sawn top; back walls keep full height.
 - Keep tall furniture off camera-side walls where it would be hidden. Put it against back walls or free-standing.
 
+## Wall materials: aged, per room (kit.py `_age`, build.py `wall_material`)
+Every new room uses this by default.
+- **One building, a few paints.** `PAINT` in build.py gives each room type its upper paint, its dado colour and its dado height: institutional cream over green in corridors, yellowed beige over faded green in quarters, a paler and higher dado in wet rooms, thin paint over concrete in storage and maintenance. Keep new paints muted and close to these.
+- **Each wall face ages like the room it looks into** (`wall_rooms` picks the room on each side). A partition between a dormitory and a store is clean-ish on one side and grimy on the other.
+- **Room type → wear profile** (`room_profile`, by room id/name, or set `age="storage"` on a room): `corridor`, `sleeping`, `storage`, `maintenance`, `wet`, `public`, `kept` (rooms people with power keep up).
+- **Wear profile controls** (kit.py `AGE_PROFILES`, each 0..1):
+
+  | Control | What it does |
+  |---|---|
+  | `drift` | large, soft tonal zones in the paint |
+  | `warm` | how much of that drift is yellowed |
+  | `repaint` | later rectangular repaint patches in fresher paint |
+  | `peel` | paint worn back to concrete, in a few clusters, mostly low down |
+  | `grime` | dirt rising from the floor, and dust under the ceiling |
+  | `scuff` | hip-height smears |
+  | `stains` | water runs from the top, plus a tide line |
+  | `damp` | mould blotches near the floor |
+  | `rust` | rust spots and drips |
+  | `cracks` | rare, pale filler lines |
+  | `shade` | darkens the whole wall (storage, maintenance) |
+  | `seed` | set per room, so neighbouring rooms don't repeat |
+
+- **Colours of the layers** are constants next to the profiles (`CONCRETE_BARE`, `GRIME_RGB`, `STAIN_RGB`, `DAMP_RGB`, `RUST_RGB`, `FILLER_RGB`).
+- **Scale rule:** at the game zoom, 1 m is about 100 px. Nothing in a material may be finer than about 0.15 m, or it reads as noise. Judge materials only in renders from the game camera (`exp_camera.py`, `--shot`), never in close-ups.
+- **No bump or roughness:** walls use the flat toon style (colour times light bands), so material identity comes from colour layers.
+- **Not every wall is dirty.** Profiles keep large clean stretches. Raise a control for a specific room rather than globally.
+
 ## Changing a layout
 - Move whole sides of a level with helpers like `shift_south(D, line, dv)` rather than editing coordinates one by one. Doors keep their positions along the corridor, rooms keep their sizes, and props, decor, inspect points, stairs, spawns, holes and bounds move with them.
 - The game's collision, pathfinding and the autotest read positions from the level data, so they follow automatically. Check spawns and quest positions after any move.

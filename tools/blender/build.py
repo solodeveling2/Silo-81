@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bpy, bmesh
 from mathutils import Vector, Matrix
 import kit
-from kit import Builder, toon, flat, text_obj, g, place, footprint, FACING
+from kit import Builder, toon, flat, text_obj, g, place, footprint, FACING, AGE_PROFILES
 
 LEVEL, OUT = sys.argv[1], sys.argv[2]
 QUICK = "--quick" in sys.argv
@@ -648,19 +648,76 @@ for w in LV["walls"]:
         plan_obj(b, outline=0)
 
 
-def wall_material(w):
+def room_profile(room):
+    """Which wear profile a room's walls get (kit.AGE_PROFILES), from what the room is for."""
+    if room is None:
+        return "corridor"
+    if room.get("age"):
+        return room["age"]                       # explicit, per room
+    k = (room.get("id", "") + " " + room.get("name", "")).lower()
+    for words, prof in ((("council", "varga", "office"), "kept"),
+                        (("pump", "engineering", "valve", "gallery", "plant", "boiler", "radio"), "maintenance"),
+                        (("wash", "wc", "shower", "toilet"), "wet"),
+                        (("linen", "store", "archive", "kitchen", "pantry"), "storage"),
+                        (("corridor", "landing", "lobby"), "corridor"),
+                        (("dorm", "room", "quarters", "duty", "bunk"), "sleeping"),
+                        (("commons", "classroom", "clinic", "waiting", "school"), "public")):
+        if any(w_ in k for w_ in words):
+            return prof
+    return "public"
+
+
+# Palette: one building, a few related paints. (upper tint, dado colour, dado height) per profile, over
+# the cream plaster texture; storage and maintenance show more of the concrete under thinner paint.
+PAINT = {"corridor":    ((1.0, 1.0, 1.0), (0.55, 0.78, 0.66), 1.25),       # institutional cream over green
+         "public":      ((1.0, 0.99, 0.96), (0.55, 0.76, 0.64), 1.25),
+         "sleeping":    ((1.0, 0.94, 0.82), (0.6, 0.72, 0.6), 1.1),         # yellowed beige, faded green
+         "wet":         ((0.95, 0.98, 0.96), (0.62, 0.8, 0.76), 1.5),       # paler, cooler, a higher dado
+         "storage":     ((0.86, 0.84, 0.8), (0.56, 0.6, 0.54), 1.0),        # dull, almost unpainted
+         "maintenance": ((0.92, 0.91, 0.88), (0.6, 0.72, 0.62), 1.3),
+         "kept":        ((1.0, 1.0, 0.97), (0.55, 0.76, 0.64), 1.25)}
+
+
+def wall_material(w, room=None):
+    """The material of one face of a wall: the wall's own type (panel / machine / raw / painted) aged
+    like the room the face looks into. One material per (type, room), cached by name."""
+    prof = room_profile(room)
+    rid = room["id"] if room else "out"
+    seed = (sum(map(ord, rid)) % 97) / 9.7
+    age = dict(AGE_PROFILES[prof], seed=seed)
     # textures from textures.py, in the asset pack's palette; the rgb values tint them
     if w.get("mat") == "panel":                 # Council rooms: wood panelling under cream paint
-        return toon(f"WallPanel_{LEVEL}", (1.0, 1.0, 1.0), tex="plaster_cream", tex_scale=2.0,
-                    dado=((0.62, 0.42, 0.26), 1.1))
+        return toon(f"WallPanel_{LEVEL}_{rid}", (1.0, 1.0, 1.0), tex="plaster_cream", tex_scale=2.0,
+                    dado=((0.62, 0.42, 0.26), 1.1), age=dict(age, peel=age["peel"] * 0.3))
     if w.get("mat") == "machine":               # plant rooms: machinery green under grey
-        return toon(f"WallMachine_{LEVEL}", (1.05, 1.05, 1.02), tex="concrete_wall", tex_scale=2.2,
-                    dado=((0.7, 0.92, 0.74), 1.3))
+        return toon(f"WallMachine_{LEVEL}_{rid}", (1.0, 1.0, 0.97), tex="concrete_wall", tex_scale=2.2,
+                    dado=((0.68, 0.86, 0.7), 1.3), age=age)
     if w.get("mat") == "raw":
-        return toon(f"WallRaw_{LEVEL}", (1.0, 1.0, 1.0), tex="concrete_wall", tex_scale=2.2)
+        return toon(f"WallRaw_{LEVEL}_{rid}", (0.97, 0.95, 0.9), tex="concrete_wall", tex_scale=2.2,
+                    age=dict(age, peel=0.0, repaint=0.0))
+    up, low, h = PAINT[prof]
     frost = (16.5, 23.0, (0.8, 0.86, 0.9), 1.1) if LEVEL == "L2" else None
-    return toon(f"WallDado_{LEVEL}", (1.0, 1.0, 1.0), tex="plaster_cream", tex_scale=2.0,
-                dado=((0.55, 0.78, 0.66), 1.25), frost=frost)
+    if prof in ("storage", "maintenance"):
+        return toon(f"WallDado_{LEVEL}_{rid}", up, tex="concrete_wall", tex_scale=2.2, dado=(low, h), frost=frost, age=age)
+    return toon(f"WallDado_{LEVEL}_{rid}", up, tex="plaster_cream", tex_scale=2.0, dado=(low, h), frost=frost, age=age)
+
+
+def wall_rooms(w):
+    """(room on the -side, room on the +side) at the middle of the wall: -v/+v for walls along u,
+    -u/+u for walls along v. None where there is no room (outside the shelter)."""
+    (ua, va), (ub, vb) = w["a"], w["b"]
+    along_u = va == vb
+    out = []
+    for s_ in (-0.3, 0.3):
+        best = None
+        for t in (0.5, 0.3, 0.7, 0.15, 0.85):
+            pu, pv = ua + (ub - ua) * t, va + (vb - va) * t
+            qu, qv = (pu, pv + s_) if along_u else (pu + s_, pv)
+            hit = [r for r in LV["rooms"] if r["r"][0] <= qu <= r["r"][1] and r["r"][2] <= qv <= r["r"][3]]
+            if hit:
+                best = hit[0]; break
+        out.append(best)
+    return out[0], out[1]
 
 
 CUT = toon("WallCut", (0.2, 0.2, 0.19))
@@ -711,7 +768,11 @@ def build_wall(w, full=False):
         segs.append((cur, t0)); cur = t1
     segs.append((cur, hi + t / 2))
     b = Builder("Wall")
-    m = wall_material(w)
+    r_minus, r_plus = wall_rooms(w)
+    m_minus = wall_material(w, r_minus or r_plus)
+    m_plus = wall_material(w, r_plus or r_minus)
+    m = m_minus
+    faces = {2: m_minus, 3: m_plus} if along_u else {0: m_minus, 1: m_plus}
     z0 = -2.75 if w.get("shaft") else 0.0
     tall = full or w["h"] >= FULL
     h = K["h"] if tall else w["h"]
@@ -720,11 +781,13 @@ def build_wall(w, full=False):
         h, tall = LV["front_h"], False
 
     def box(s0, s1, half, za, zb, mat, top=None):
-        """A box along the wall: s along it, `half` the half-thickness across it."""
+        """A box along the wall: s along it, `half` the half-thickness across it. Wall-material boxes
+        get each long face from the room it looks into."""
+        fm = faces if mat is m else None
         if along_u:
-            b.box(s0, s1, va - half, va + half, za, zb, mat, top_mat=top)
+            b.box(s0, s1, va - half, va + half, za, zb, mat, top_mat=top, faces_mat=fm)
         else:
-            b.box(ua - half, ua + half, s0, s1, za, zb, mat, top_mat=top)
+            b.box(ua - half, ua + half, s0, s1, za, zb, mat, top_mat=top, faces_mat=fm)
 
     for (s0, s1) in segs:
         if s1 - s0 < 0.01:

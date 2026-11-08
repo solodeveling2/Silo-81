@@ -39,6 +39,18 @@ wall = toon("Wall", (1.0, 1.0, 1.0), tex="plaster_cream", tex_scale=2.0, dado=((
 shell = toon("Shell", (0.96, 0.95, 0.92), tex="concrete_wall", tex_scale=2.2, dado=((0.55, 0.78, 0.66), 1.25))
 top = toon("Top", (0.055, 0.052, 0.048))
 top_part = toon("TopPart", (0.11, 0.105, 0.1))  # thin partitions: a lighter, finer cap line
+AGED = os.environ.get("AGE") == "1"
+PAINT = {"corridor": ((1.0, 1.0, 1.0), (0.55, 0.78, 0.66), 1.25), "sleeping": ((1.0, 0.94, 0.82), (0.6, 0.72, 0.6), 1.1),
+         "wet": ((0.95, 0.98, 0.96), (0.62, 0.8, 0.76), 1.5), "out": ((1.0, 1.0, 1.0), (0.55, 0.78, 0.66), 1.25)}
+
+
+def face_mat(prof, seed):
+    """Same recipe as build.py's wall_material for painted walls."""
+    if not AGED:
+        return wall
+    up, low, h = PAINT[prof]
+    return toon(f"Aged_{prof}_{seed}", up, tex="plaster_cream", tex_scale=2.0, dado=(low, h),
+                age=dict(kit.AGE_PROFILES[prof if prof != "out" else "corridor"], seed=seed))
 skirt = toon("Skirt", (0.22, 0.23, 0.21))
 jamb = toon("Jamb", (0.42, 0.42, 0.4), tex="concrete_wall", tex_scale=1.2)
 floor_c = toon("FloorC", (0.5, 0.49, 0.45), tex="concrete_floor", tex_scale=1.5)
@@ -63,19 +75,25 @@ b.box(-1.0, 11.6, sv(-1.4), 1.4, -0.05, 0.0, floor_c)
 CORRIDOR = plan_ob(b.finish())
 
 
-def wallrun(b, a, c, kind, gaps=()):
+def wallrun(b, a, c, kind, gaps=(), sides=None):
     t, h, post = kind["t"], kind["h"], kind["post"]
     mat = shell if kind is STRUCT else wall
+    fm = None
+    if AGED and sides:
+        ma, mb = face_mat(*sides[0]), face_mat(*sides[1])
+        mat = ma
+        fm = {2: ma, 3: mb} if a[1] == c[1] else {0: ma, 1: mb}
     cap = top if t >= 0.18 else top_part
     (ua, va), (ub, vb) = a, c
     along_u = va == vb
     lo, hi = (min(ua, ub), max(ua, ub)) if along_u else (min(va, vb), max(va, vb))
 
     def box(s0, s1, half, z0, z1, m, tm=None):
+        f_ = fm if m is mat else None
         if along_u:
-            b.box(s0, s1, va - half, va + half, z0, z1, m, top_mat=tm)
+            b.box(s0, s1, va - half, va + half, z0, z1, m, top_mat=tm, faces_mat=f_)
         else:
-            b.box(ua - half, ua + half, s0, s1, z0, z1, m, top_mat=tm)
+            b.box(ua - half, ua + half, s0, s1, z0, z1, m, top_mat=tm, faces_mat=f_)
     cur = lo - t / 2
     for g0, g1 in sorted(gaps) + [(hi + t / 2, None)]:
         if g0 - cur > 0.01:
@@ -94,13 +112,13 @@ def wallrun(b, a, c, kind, gaps=()):
 
 
 b = Builder("Walls")
-wallrun(b, (0.6, 5.6), (11.6, 5.6), STRUCT)                          # back: shelter shell
-wallrun(b, (0.6, 1.4), (0.6, 5.6), STRUCT)                           # left: shell (landing side)
-wallrun(b, (4.6, 1.4), (4.6, 5.6), PART)                             # your room | dorm 2-A
-wallrun(b, (0.6, 1.4), (11.6, 1.4), CORR, gaps=[(2.1, 3.1), (7.4, 8.8)])
-wallrun(b, (1.0, sv(-1.4)), (11.6, sv(-1.4)), CORR, gaps=[(3.6, 4.6), (9.4, 10.4)])
-wallrun(b, (7.0, sv(-5.0)), (7.0, sv(-1.4)), PART)                   # washroom | dorm 2-C
-wallrun(b, (1.0, sv(-5.0)), (1.0, sv(-1.4)), STRUCT)
+wallrun(b, (0.6, 5.6), (11.6, 5.6), STRUCT, sides=[("sleeping", 1.1), ("out", 0.0)])       # back: shelter shell
+wallrun(b, (0.6, 1.4), (0.6, 5.6), STRUCT, sides=[("out", 0.0), ("sleeping", 1.1)])        # left: shell (landing side)
+wallrun(b, (4.6, 1.4), (4.6, 5.6), PART, sides=[("sleeping", 1.1), ("sleeping", 4.3)])     # your room | dorm 2-A
+wallrun(b, (0.6, 1.4), (11.6, 1.4), CORR, gaps=[(2.1, 3.1), (7.4, 8.8)], sides=[("corridor", 2.2), ("sleeping", 1.1)])
+wallrun(b, (1.0, sv(-1.4)), (11.6, sv(-1.4)), CORR, gaps=[(3.6, 4.6), (9.4, 10.4)], sides=[("wet", 6.6), ("corridor", 2.2)])
+wallrun(b, (7.0, sv(-5.0)), (7.0, sv(-1.4)), PART, sides=[("wet", 6.6), ("sleeping", 7.7)])   # washroom | dorm 2-C
+wallrun(b, (1.0, sv(-5.0)), (1.0, sv(-1.4)), STRUCT, sides=[("out", 0.0), ("wet", 6.6)])
 plan_ob(b.finish())
 
 # ---- furniture through the game's own placement (back of the prop at (u, v), front facing f)
@@ -166,6 +184,14 @@ view = Vector((0, math.cos(E), -math.sin(E)))
 cam.location = centre - view * 60
 sc.render.filepath = PREFIX + "_full.png"
 bpy.ops.render.render(write_still=True)
+
+if os.environ.get("SAVE_BLEND"):                 # a self-contained .blend of this section, for opening in Blender
+    try:
+        bpy.ops.file.pack_all()
+    except Exception as e:
+        print("pack_all:", e)
+    bpy.ops.wm.save_as_mainfile(filepath=os.environ["SAVE_BLEND"], compress=True)
+    print("saved", os.environ["SAVE_BLEND"])
 
 # ---- how much corridor floor can be seen: a mask pass (corridor white, everything else black)
 white = bpy.data.materials.new("MaskW"); white.use_nodes = True
