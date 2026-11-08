@@ -88,7 +88,7 @@ python3 -I tools/blender/worm.py worm_out && python3 tools/blender/package_worm.
 
 ## How it is drawn
 
-Everything uses one camera: orthographic, 30 degrees above the ground (2:1 isometric), at 165 px per metre.
+Everything uses one camera: orthographic, 47 degrees above the ground (tools/blender/camera.json), at 165 px per metre, and one look (docs/VISUAL_DIRECTION.md).
 
 - **Walls.** Interior walls are cut down to stubs, dollhouse style, so rooms stay readable. Only the outer back walls stand full height.
 - **Draw order.** Props, doors and characters are separate sprites, sorted by their footprint.
