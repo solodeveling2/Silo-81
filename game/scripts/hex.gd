@@ -2,13 +2,17 @@ class_name Hex
 ## Coordinates shared by the level renders and the game.
 ## plan (u, v): the 45-degree grid the rooms are laid out on.
 ## ground (x, y): metres, x to screen right, y north (away from the camera).
-## screen: Godot pixels at 165 px per metre, camera 30 degrees above the ground.
+## screen: Godot pixels at 165 px per metre, camera ELEV_DEG above the ground (level/camera.json).
 ## Hexes are pointy-topped in ground space, 0.64 m apart (14 frames of the walk cycle).
 
 const PPM := 165.0
 const S := 0.6396
 const R2 := 0.70710678
-const COS30 := 0.8660254
+const COS30 := 0.8660254                  # hexagon geometry, not the camera
+const ELEV_DEG := 47.0                     # must match level/camera.json (level.gd checks each level)
+const SIN_E := 0.7313537                   # sin(47): ground depth on screen
+const COS_E := 0.6819984                   # cos(47): height on screen
+const VSCALE := COS_E / COS30              # screen heights relative to the old 30-degree view
 const DIRS := [Vector2i(1, 0), Vector2i(1, -1), Vector2i(0, -1), Vector2i(-1, 0), Vector2i(-1, 1), Vector2i(0, 1)]
 
 
@@ -21,11 +25,11 @@ static func ground_to_plan(g: Vector2) -> Vector2:
 
 
 static func ground_to_screen(g: Vector2, z: float = 0.0) -> Vector2:
-	return Vector2(g.x * PPM, -(g.y * 0.5 + z * COS30) * PPM)
+	return Vector2(g.x * PPM, -(g.y * SIN_E + z * COS_E) * PPM)
 
 
 static func screen_to_ground(p: Vector2) -> Vector2:
-	return Vector2(p.x / PPM, -p.y / (0.5 * PPM))
+	return Vector2(p.x / PPM, -p.y / (SIN_E * PPM))
 
 
 static func plan_to_screen(p: Vector2, z: float = 0.0) -> Vector2:

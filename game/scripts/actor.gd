@@ -337,7 +337,7 @@ func _draw() -> void:
 	if ring_color.a > 0.0 and alive:
 		var pts := PackedVector2Array()
 		var rx := 0.34 * Hex.PPM
-		var ry := rx * 0.5
+		var ry := rx * Hex.SIN_E                 # a ground circle seen from the camera
 		for k in 33:
 			var a := TAU * k / 32.0
 			pts.append(Vector2(cos(a) * rx, sin(a) * ry))

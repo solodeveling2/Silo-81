@@ -7,7 +7,9 @@ from mathutils import Vector, Matrix
 
 R2 = 1 / math.sqrt(2)
 LIGHT = Vector((-0.55, -0.55, 0.63)).normalized()
-HALF = (LIGHT + Vector((0.0, -0.866, 0.5))).normalized()     # between the key light and the camera
+import json as _json, os as _os
+_E = math.radians(_json.load(open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "camera.json")))["elev_deg"])
+HALF = (LIGHT + Vector((0.0, -math.cos(_E), math.sin(_E)))).normalized()     # between the key light and the camera
 
 
 def g(u, v):

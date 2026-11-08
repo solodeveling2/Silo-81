@@ -130,7 +130,7 @@ func load_level(id: String, arrive: Vector2) -> void:
 	player.play("idle", int(sp[2]) if arrive == Vector2.INF else 5)
 	player.stepped.connect(_on_player_step)
 	focus = player
-	cam.position = player.position + Vector2(0, -80)
+	cam.position = player.position + Vector2(0, Hex.VSCALE * -80)
 	cam.reset_smoothing()
 	var bg: Dictionary = level.data["bg"]
 	var tex: Texture2D = level.get_child(0).texture
@@ -761,7 +761,7 @@ func shoot(w: Actor, penalty: int) -> void:
 	if hit:
 		damage(w, rng.randi_range(5, 9))
 	else:
-		_float(w.position + Vector2(0, -60), "MISS", Hud.DIM)
+		_float(w.position + Vector2(0, Hex.VSCALE * -60), "MISS", Hud.DIM)
 	await player.anim_done
 	if not player.alive:
 		return
@@ -775,7 +775,7 @@ func shoot(w: Actor, penalty: int) -> void:
 func damage(a: Actor, dmg: int) -> void:
 	if a == player:
 		stats["hp"] = maxi(0, stats["hp"] - dmg)
-		_float(a.position + Vector2(0, -300), "-%d" % dmg, Hud.RED)
+		_float(a.position + Vector2(0, Hex.VSCALE * -300), "-%d" % dmg, Hud.RED)
 		a.flash(Color(1.0, 0.45, 0.4))
 		if stats["hp"] <= 0:
 			player.alive = false
@@ -787,7 +787,7 @@ func damage(a: Actor, dmg: int) -> void:
 		refresh()
 		return
 	a.hp -= dmg
-	_float(a.position + Vector2(0, -70), "-%d" % dmg, Color(1.0, 0.85, 0.4))
+	_float(a.position + Vector2(0, Hex.VSCALE * -70), "-%d" % dmg, Color(1.0, 0.85, 0.4))
 	a.flash(Color(1.0, 0.5, 0.45))
 	if a.hp <= 0:
 		a.alive = false
@@ -848,7 +848,7 @@ func use_medkit() -> void:
 	stats["medkits"] -= 1
 	var healed := mini(12, stats["hp_max"] - stats["hp"])
 	stats["hp"] += healed
-	_float(player.position + Vector2(0, -300), "+%d" % healed, Hud.GREEN)
+	_float(player.position + Vector2(0, Hex.VSCALE * -300), "+%d" % healed, Hud.GREEN)
 	hud.log_msg("You patch yourself up. (+%d HP)" % healed, Hud.GREEN)
 	refresh()
 
@@ -949,7 +949,7 @@ func bite(w: Actor) -> void:
 		hud.log_msg("A worm bites you for %d." % dmg, Hud.RED)
 		damage(player, dmg)
 	else:
-		_float(player.position + Vector2(0, -300), "MISS", Hud.DIM)
+		_float(player.position + Vector2(0, Hex.VSCALE * -300), "MISS", Hud.DIM)
 	await w.anim_done
 	if w.alive:
 		w.play("idle", w.dir)
@@ -1093,7 +1093,7 @@ func _objective_target() -> Dictionary:
 		return {}
 	if state["L3"]["pipe_fixed"] and flags["quest"] != "done":
 		if level_id == "L2" and tibor:
-			return {"pos": tibor.position + Vector2(0, -250), "floor": tibor.position, "sprite": tibor.sprite}
+			return {"pos": tibor.position + Vector2(0, Hex.VSCALE * -250), "floor": tibor.position, "sprite": tibor.sprite}
 		if level_id == "L3":
 			for st in level.data["stairs"]:
 				if st["to"] == "L2":
@@ -1169,16 +1169,16 @@ class Beacon extends Node2D:
 
 func _process(delta: float) -> void:
 	if focus and is_instance_valid(focus):
-		cam.position = focus.position + Vector2(0, -80)
+		cam.position = focus.position + Vector2(0, Hex.VSCALE * -80)
 	if level and player:
 		var foci: Array = []
 		var feet := player.global_position - level.global_position
-		foci.append({"y": feet.y, "rect": Rect2(feet + Vector2(-34, -178), Vector2(68, 182))})   # the player's silhouette
+		foci.append({"y": feet.y, "rect": Rect2(feet + Vector2(-34, -178 * Hex.VSCALE), Vector2(68, 182 * Hex.VSCALE))})   # the player's silhouette
 		if mode == "combat":                             # enemies stay visible while they can be targeted
 			for w in worms:
 				if w.alive:
 					var wf: Vector2 = w.global_position - level.global_position
-					foci.append({"y": wf.y, "rect": Rect2(wf + Vector2(-46, -70), Vector2(92, 76))})
+					foci.append({"y": wf.y, "rect": Rect2(wf + Vector2(-46, -70 * Hex.VSCALE), Vector2(92, 76 * Hex.VSCALE))})
 		level.fade_walls(foci, delta)
 
 

@@ -31,6 +31,8 @@ var water = null   # Array of the water particle emitters, made on first use
 func build(dir: String, state: Dictionary) -> void:
 	level_dir = dir
 	data = JSON.parse_string(FileAccess.get_file_as_string(dir + "/level.json"))
+	if abs(float(data.get("elev_deg", 30.0)) - Hex.ELEV_DEG) > 0.01:
+		push_warning("%s was rendered at %s degrees but the game projects at %s: rebuild it" % [dir, data.get("elev_deg", 30.0), Hex.ELEV_DEG])
 	var bg := Sprite2D.new()
 	bg.centered = false
 	bg.texture = load(dir + "/" + data["bg"]["file"])
@@ -131,7 +133,7 @@ func set_door_open(id: String, open: bool) -> void:
 # A wall strip that stands between the camera and an actor is cut down to a low opaque wall with a
 # solid top edge (the Fallout / Wasteland cutaway), never made translucent: nothing behind it can show
 # through a wall that is still standing, and walls that hide nobody stay whole.
-const PX_PER_M := 165.0 * 0.866              # screen px per metre of height (30 degree camera)
+const PX_PER_M := Hex.PPM * Hex.COS_E          # screen px per metre of height
 const WALL_FULL_PX := 2.7 * PX_PER_M + 40.0  # above the wall top: nothing cut
 const WALL_STUB_PX := 0.55 * PX_PER_M        # a cut wall keeps this much
 const CUT_WINDOW := 70.0                     # px either side of the silhouette that also open, so the cut reads as a clean gap
@@ -292,7 +294,7 @@ class WaterRipples extends Node2D:
 		queue_redraw()
 
 	func _draw() -> void:
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.5))      # flat on the floor
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, Hex.SIN_E))      # flat on the floor
 		for k in 4:
 			var f := fmod(clock / 1.3 + k * 0.25, 1.0)
 			var r := 6.0 + 46.0 * f

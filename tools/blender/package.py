@@ -3,8 +3,8 @@ character.json, which the Godot script reads (fps, loop, frame size, feet anchor
 import os, json, math, glob
 from PIL import Image
 
-SRC = "out"
-DST = "pkg/Silo81_Player/characters/player_male"
+SRC = os.environ.get("PKG_SRC", "out")
+DST = os.environ.get("PKG_DST", "pkg/Silo81_Player/characters/player_male")
 os.makedirs(DST, exist_ok=True)
 steps = json.load(open(os.path.join(SRC, "steps.json")))
 COLS = 8
@@ -12,7 +12,7 @@ PAD = 2
 data = {"name": "player_male", "pixels_per_metre": steps["pixels_per_metre"],
         "direction_order": "0=right, then counter-clockwise: 1=up-right, 2=up-left, 3=left, 4=down-left, 5=down-right",
         "animations": {}}
-KEEP = ["walk", "run", "idle", "hit", "pistol_idle", "pistol_attack", "death", "fall"]
+KEEP = os.environ.get("PKG_KEEP", "walk run idle hit pistol_idle pistol_attack death fall").split()
 ACTION_FRAME = {"pistol_attack": 8, "hit": 0, "death": 0}
 for anim in KEEP:
     meta = steps["animations"][anim]

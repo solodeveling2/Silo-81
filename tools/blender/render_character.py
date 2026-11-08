@@ -21,7 +21,8 @@ MODEL, OUT = sys.argv[1], sys.argv[2]
 ONLY = set(sys.argv[3:])
 HEIGHT_M = 1.75            # real-world height the character is scaled to
 PPM = 165.0                # screen pixels per metre: a 1.75 m person is about 250 px tall on screen
-ELEV = math.radians(30)    # 2:1 isometric
+import json as _json
+ELEV = math.radians(_json.load(open(os.environ.get("SILO_CAMERA", os.path.join(os.path.dirname(os.path.abspath(__file__)), "camera.json"))))["elev_deg"])   # shared view (camera.json)
 SAMPLES = 10
 # name prefix -> settings. fps = sprite playback rate; src frames are 24 fps
 ANIMS = {
@@ -202,7 +203,7 @@ if any(k in GUN_ANIMS for k in ANIMS) and "pistol_aim" in bpy.data.actions:
     print("pistol prop attached to mixamorig:RightHand")
 
 def render_clips():
-    summary = {"pixels_per_metre": PPM, "camera_elevation_deg": 30, "height_m": HEIGHT_M, "animations": {}}
+    summary = {"pixels_per_metre": PPM, "camera_elevation_deg": round(math.degrees(ELEV), 2), "height_m": HEIGHT_M, "animations": {}}
     for key, cfg in ANIMS.items():
         if ONLY and key not in ONLY:
             continue
@@ -276,7 +277,10 @@ def render_clips():
             print(key, "dir", d, entry)
         summary["animations"][key] = meta
         rig.rotation_euler = (0, 0, 0); arm.location = arm_base_loc
+        save_steps(summary)                 # after every clip, so a later failure keeps finished work
 
+
+def save_steps(summary):
     prev = {}
     p = os.path.join(OUT, "steps.json")
     if os.path.exists(p):

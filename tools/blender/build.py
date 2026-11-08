@@ -4,7 +4,7 @@ Outputs (in OUT/LEVEL):
   bg.png                     floor, walls, stairs, pipes and everything fixed to a back wall or the floor
   spr_*.png                  free-standing props, doors (open/closed) and pipe states, one image per variant
   level.json                 rooms, walls, doors, props, interactables and spawns, plus sprite placement
-Screen space (Godot pixels): sx = x * PPM, sy = -(y * 0.5 + z * 0.866) * PPM, ground origin at (0, 0).
+Screen space (Godot pixels): sx = x * PPM, sy = -(y * sin(e) + z * cos(e)) * PPM, e = camera.json elev_deg.
 
 Usage: python3 -I build.py L2|L3 out_dir [--quick]
 """
@@ -19,7 +19,9 @@ from kit import Builder, toon, flat, text_obj, g, place, footprint, FACING
 LEVEL, OUT = sys.argv[1], sys.argv[2]
 QUICK = "--quick" in sys.argv
 PPM = 165.0
-SIN, COS = 0.5, math.sqrt(3) / 2
+CAMERA = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "camera.json")))
+ELEV = math.radians(CAMERA["elev_deg"])
+SIN, COS = math.sin(ELEV), math.cos(ELEV)            # ground depth and height factors on screen
 T = 0.25                     # wall thickness
 FULL, STUB = 2.7, 0.4
 PIPE_Z = (1.75, 1.15, 0.45)  # pipe gallery runs, top to bottom: bore water, heating return, heating flow        # back walls stand full height; the rest are cut away like a dollhouse
@@ -176,6 +178,42 @@ def L2():
                          text="West, past the dead lift, to the commons, the clinic and the school.")]
     D["spawns"] = {"player": [2.3, 3.5, 5], "worms": []}
     D["bounds"] = [-4.2, 22.6, -5.0, 5.6]
+    labels = [d for d in D["decor"] if d["t"] == "floortext" and d.get("v") == -0.75]
+    lines = [d for d in D["decor"] if d["t"] == "floorline"]
+    D = shift_south(D, -1.4, L2_WIDEN)
+    for d in labels:                    # door labels on the corridor floor follow the south wall
+        d["v"] = -0.75 - L2_WIDEN
+    for d in lines:                     # the painted guide line stays mid-way across the wider corridor
+        d["v"] = -0.95 - L2_WIDEN / 2
+    return D
+
+
+L2_WIDEN = 0.7                 # corridor 2.8 -> 3.5 m: the south wall and every room behind it move away
+
+
+def shift_south(D, line, dv):
+    """Move everything at or beyond plan v = line (the corridor's camera-side wall and the rooms behind
+    it) by -dv. Door positions along the corridor and every room's size are unchanged."""
+    f = lambda v: v - dv if v <= line + 1e-6 else v
+    for r in D["rooms"]:
+        r["r"] = [r["r"][0], r["r"][1], f(r["r"][2]), f(r["r"][3])]
+    for w in D["walls"]:
+        w["a"], w["b"] = (w["a"][0], f(w["a"][1])), (w["b"][0], f(w["b"][1]))
+        if w["a"][0] == w["b"][0] and w.get("openings"):          # wall along v: openings are v ranges
+            w["openings"] = [(f(o[0]), f(o[1]), o[2]) for o in w["openings"]]
+    for key in ("doors", "props", "decor", "inspect", "stairs"):
+        for d in D[key]:
+            for k in ("v", "v0", "v1"):
+                if k in d:
+                    d[k] = f(d[k])
+            if "arrive" in d:
+                d["arrive"] = [d["arrive"][0], f(d["arrive"][1])]
+    for key in ("holes", "blocked"):
+        D[key] = [[h[0], h[1], f(h[2]), f(h[3])] for h in D.get(key, [])]
+    sp = D["spawns"].get("player")
+    if sp:
+        sp[1] = f(sp[1])
+    D["bounds"] = [D["bounds"][0], D["bounds"][1], f(D["bounds"][2]), D["bounds"][3]]
     return D
 
 
@@ -625,29 +663,57 @@ def wall_material(w):
 
 
 CUT = toon("WallCut", (0.2, 0.2, 0.19))
-# Architecture: dark wall tops separate rooms at a glance (the Wasteland 3 read), a dark skirting band
-# separates floor from wall, square posts mark corners and wall ends, concrete jambs frame openings.
+# Wall hierarchy. The shelter's shell keeps its full height and weight; corridor walls are full height
+# but lighter; partitions between rooms are thin and stop short of the slab. Each wall's dark top is
+# its own thickness, so caps are proportional; posts only stand at the shell's corners.
 TOP = toon("WallTop", (0.055, 0.052, 0.048), noise=0.1, noise_scale=9)
+TOP_PART = toon("WallTopPart", (0.11, 0.105, 0.1), noise=0.08, noise_scale=9)
 SKIRT = toon("Skirting", (0.22, 0.23, 0.21), noise=0.06)
-JAMB = toon("DoorJamb", (0.56, 0.56, 0.53), tex="concrete_wall", tex_scale=1.2)
-POST, SK_H, SK_D = T + 0.1, 0.13, 0.025
+JAMB = toon("DoorJamb", (0.42, 0.42, 0.4), tex="concrete_wall", tex_scale=1.2)
+WALL_KIND = {"struct": dict(t=0.30, h=FULL, top=TOP, post=True),
+             "corr": dict(t=0.18, h=FULL, top=TOP, post=False),
+             "part": dict(t=0.12, h=2.35, top=TOP_PART, post=False)}
+SK_H, SK_D = 0.12, 0.02
 front_walls = []                                    # full height too, but drawn as sorted sprites that fade (see below)
+
+
+def wall_kind(w):
+    """struct: open space on one side (the shell). corr: a corridor/landing on one side. part: rooms both sides."""
+    if w.get("kind"):
+        return w["kind"]
+    (ua, va), (ub, vb) = w["a"], w["b"]
+    along_u = va == vb
+    sides = [set(), set()]
+    for t in (0.2, 0.5, 0.8):
+        pu, pv = ua + (ub - ua) * t, va + (vb - va) * t
+        for k, s_ in enumerate((-0.3, 0.3)):
+            qu, qv = (pu, pv + s_) if along_u else (pu + s_, pv)
+            hit = [r for r in LV["rooms"] if r["r"][0] <= qu <= r["r"][1] and r["r"][2] <= qv <= r["r"][3]]
+            if not hit and not any(h[0] <= qu <= h[1] and h[2] <= qv <= h[3] for h in LV.get("holes", [])):
+                return "struct"
+            sides[k].update(r["id"] for r in hit)
+    ids = sides[0] | sides[1]
+    if any(any(x in i for x in ("corridor", "landing", "lobby", "gallery")) for i in ids):
+        return "corr"
+    return "part"
 
 
 def build_wall(w, full=False):
     (ua, va), (ub, vb) = w["a"], w["b"]
     along_u = va == vb
     lo, hi = (min(ua, ub), max(ua, ub)) if along_u else (min(va, vb), max(va, vb))
+    K = WALL_KIND[wall_kind(w)]
+    t = K["t"]
     ops = sorted(w.get("openings", []))
-    segs, cur = [], lo - T / 2
+    segs, cur = [], lo - t / 2
     for (t0, t1, _) in ops:
         segs.append((cur, t0)); cur = t1
-    segs.append((cur, hi + T / 2))
+    segs.append((cur, hi + t / 2))
     b = Builder("Wall")
     m = wall_material(w)
     z0 = -2.75 if w.get("shaft") else 0.0
-    h = FULL if full else w["h"]
-    tall = h >= FULL
+    tall = full or w["h"] >= FULL
+    h = K["h"] if tall else w["h"]
 
     def box(s0, s1, half, za, zb, mat, top=None):
         """A box along the wall: s along it, `half` the half-thickness across it."""
@@ -659,17 +725,19 @@ def build_wall(w, full=False):
     for (s0, s1) in segs:
         if s1 - s0 < 0.01:
             continue
-        box(s0, s1, T / 2, z0, h, m, CUT if not tall else TOP)
+        box(s0, s1, t / 2, z0, h, m, K["top"] if tall else CUT)
         if not w.get("shaft"):
-            box(s0, s1, T / 2 + SK_D, 0.0, SK_H, SKIRT, SKIRT)          # skirting on both faces
+            box(s0, s1, t / 2 + SK_D, 0.0, SK_H, SKIRT, SKIRT)          # skirting on both faces
     if tall:
-        for (t0, t1, _) in ops:                     # lintels and jambs round openings in full walls
-            box(t0, t1, T / 2, 2.1, h, m, TOP)
-            box(t0 - 0.06, t1 + 0.06, T / 2 + 0.04, 2.1, 2.24, JAMB, JAMB)
+        for (t0, t1, _) in ops:                     # lintel, and a slim frame sized to this wall
+            if h > 2.1:
+                box(t0, t1, t / 2, 2.1, h, m, K["top"])
+            box(t0 - 0.05, t1 + 0.05, t / 2 + 0.025, 2.1, 2.2, JAMB, JAMB)
             for e in (t0, t1):
-                box(e - 0.07, e + 0.07, T / 2 + 0.04, 0.0, 2.24, JAMB, JAMB)
-        for e in (lo, hi):                          # corner / end posts, a little proud of both faces
-            box(e - POST / 2, e + POST / 2, POST / 2, z0, h + 0.03, m, TOP)
+                box(e - 0.05, e + 0.05, t / 2 + 0.025, 0.0, 2.2, JAMB, JAMB)
+        if K["post"]:
+            for e in (lo, hi):                      # shell corners and ends, a little proud of both faces
+                box(e - (t + 0.1) / 2, e + (t + 0.1) / 2, (t + 0.1) / 2, z0, h + 0.03, m, TOP)
     return b
 
 
@@ -1155,7 +1223,7 @@ for d in LV["decor"]:
 # ============================================================ camera and rendering
 cam = bpy.data.objects.new("Cam", bpy.data.cameras.new("Cam")); sc.collection.objects.link(cam)
 cam.data.type = "ORTHO"
-cam.rotation_euler = (math.radians(60), 0, 0)
+cam.rotation_euler = (math.pi / 2 - ELEV, 0, 0)
 sc.camera = cam
 sc.render.engine = "CYCLES"
 sc.cycles.device = "CPU"; sc.cycles.samples = 4 if QUICK else 10; sc.cycles.use_denoising = False
@@ -1196,7 +1264,7 @@ def render(objs, path, rect=None):
     return rect
 
 
-out = {"level": LEVEL, "name": LV["name"], "ppm": PPM, "rooms": [], "walls": [], "doors": [], "props": [],
+out = {"level": LEVEL, "name": LV["name"], "ppm": PPM, "elev_deg": CAMERA["elev_deg"], "rooms": [], "walls": [], "doors": [], "props": [],
        "inspect": LV["inspect"], "stairs": LV["stairs"], "spawns": LV["spawns"], "blocked": LV["blocked"] + LV.get("holes", []),
        "bounds": LV["bounds"], "sprites": []}
 for r in LV["rooms"]:

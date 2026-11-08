@@ -1,7 +1,7 @@
 """Preview Tripo GLBs under the game's camera (30 degree iso, toon shading) at four turns, so you can
 see what each model is and which turn puts its front towards the room (the kit's +y).
 Usage: python3 -I glb_preview.py out.png model1.glb [model2.glb ...]"""
-import sys, os, math
+import sys, os, math, json
 import bpy
 from mathutils import Vector, Matrix
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -18,9 +18,10 @@ for r, f in enumerate(FILES):
         ob.matrix_world = Matrix.Translation((c * 3.4, -r * 3.4, 0)) @ Matrix.Rotation(math.radians(180 + 45), 4, "Z") @ ob.matrix_world
         objs.append(ob)
 cam = bpy.data.objects.new("Cam", bpy.data.cameras.new("Cam")); sc.collection.objects.link(cam)
-cam.data.type = "ORTHO"; cam.rotation_euler = (math.radians(60), 0, 0); sc.camera = cam
+_E = math.radians(json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "camera.json")))["elev_deg"])
+cam.data.type = "ORTHO"; cam.rotation_euler = (math.pi / 2 - _E, 0, 0); sc.camera = cam
 cx, cy = 1.5 * 3.4, -(len(FILES) - 1) * 1.7
-cam.location = Vector((cx, cy, 0.6)) - Vector((0, math.cos(math.radians(30)), -math.sin(math.radians(30)))) * 40
+cam.location = Vector((cx, cy, 0.6)) - Vector((0, math.cos(_E), -math.sin(_E))) * 40
 cam.data.ortho_scale = max(14.0, len(FILES) * 4.0)
 sc.render.engine = "CYCLES"; sc.cycles.samples = 4; sc.cycles.max_bounces = 0
 sc.render.resolution_x, sc.render.resolution_y = 1400, max(500, 380 * len(FILES))
