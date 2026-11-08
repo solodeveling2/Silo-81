@@ -178,6 +178,13 @@ def L2():
                          text="West, past the dead lift, to the commons, the clinic and the school.")]
     D["spawns"] = {"player": [2.3, 3.5, 5], "worms": []}
     D["bounds"] = [-4.2, 22.6, -5.0, 5.6]
+    # light: the dormitories are short of heat (a slightly cool base), dim bulbs along the corridor,
+    # cold pockets at the frozen north end; Room 2-D stays unlit
+    D["light"] = dict(ambient=(0.96, 0.98, 1.02),
+                      lamps=[(u, -0.35, 2.5, 3.2, "bulb") for u in (2.0, 7.5, 13.0)] +
+                            [(8.1, 3.4, 2.4, 3.0, "bulb"), (15.1, 3.4, 2.4, 2.6, "bulb"), (4.0, -3.2, 2.4, 2.8, "bulb"),
+                             (10.5, -3.2, 2.4, 2.8, "bulb"), (2.6, 3.6, 2.3, 2.4, "bulb"),
+                             (19.5, 0.0, 1.0, 4.0, "cold"), (20.6, 3.5, 1.0, 3.2, "cold"), (17.0, -3.2, 1.0, 3.0, "cold")])
     labels = [d for d in D["decor"] if d["t"] == "floortext" and d.get("v") == -0.75]
     lines = [d for d in D["decor"] if d["t"] == "floorline"]
     D = shift_south(D, -1.4, L2_WIDEN)
@@ -189,6 +196,20 @@ def L2():
 
 
 L2_WIDEN = 0.7                 # corridor 2.8 -> 3.5 m: the south wall and every room behind it move away
+
+
+def widen(D, line, dv, label_v):
+    """Widen a level's main corridor by moving its camera-side wall (plan v = line) and everything
+    behind it by -dv; the door labels painted next to that wall (at v = label_v) follow it."""
+    labels = [d for d in D["decor"] if d["t"] == "floortext" and abs(d.get("v", 99) - label_v) < 1e-6]
+    mounted = [d for k in ("decor", "props", "inspect") for d in D[k]          # hung on the wall's corridor face
+               if d.get("f") == "+v" and "v" in d and line < d["v"] <= line + 0.3]
+    D = shift_south(D, line, dv)
+    for d in mounted:                      # after the shift, so they move exactly once
+        d["v"] -= dv
+    for d in labels:
+        d["v"] = label_v - dv
+    return D
 
 
 def shift_south(D, line, dv):
@@ -276,6 +297,10 @@ def L3():
     D["spawns"] = {"player": [-0.3, 0.0, 0], "worms": [[8.32, 1.08, 1, "chew"], [5.4, 0.85, 2], [13.1, -3.0, 1]]}
     D["bounds"] = [-4.2, 18.0, -6.0, 1.8]
     D["front_h"] = 1.1           # the gallery's camera-side wall stays waist high: the pipes are the point
+    # light: the heating mains keep the gallery warm; caged work lamps along it and over the pumps
+    D["light"] = dict(ambient=(1.02, 1.0, 0.96),
+                      lamps=[(u, 1.0, 2.4, 3.2, "work") for u in (2.5, 8.5, 14.5)] +
+                            [(11.5, -3.6, 2.4, 3.6, "work"), (16.0, -4.5, 2.4, 2.8, "bulb"), (-2.0, 0.0, 2.4, 2.6, "bulb")])
     return D
 
 
@@ -434,6 +459,14 @@ def L2W():
                          text="East, past the stairwell, to the dormitories.")]
     D["spawns"] = {"player": [-5.0, 0.0, 3], "worms": []}
     D["bounds"] = [-32.0, -4.2, -8.4, 9.4]
+    D = widen(D, -1.4, 0.7, -0.75)               # the corridor continues Level 2's 3.5 m one
+    # light (after the widening, so south-side lamps are in the moved rooms): shared heat in the
+    # commons, the clinic on the priority circuit, a working kitchen, the west washroom unheated
+    D["light"] = dict(ambient=(0.99, 0.99, 1.0),
+                      lamps=[(u, -0.35, 2.5, 3.2, "bulb") for u in (-10.0, -17.0, -24.0, -30.0)] +
+                            [(-12.0, 5.0, 2.5, 3.6, "amber"), (-17.5, 5.0, 2.5, 3.6, "amber"), (-23.5, 5.4, 2.4, 3.2, "work"),
+                             (-29.0, 4.6, 2.5, 3.2, "bulb"), (-17.0, -5.6, 2.5, 4.2, "amber"), (-10.1, -4.6, 2.4, 2.8, "bulb"),
+                             (-28.7, -5.3, 2.4, 2.8, "bulb"), (-23.7, -5.3, 1.0, 3.0, "cold")])
     return D
 
 
@@ -585,10 +618,33 @@ def L4W():
                          text="Up to Level 3, life support.")]
     D["spawns"] = {"player": [-0.3, -0.6, 3], "worms": []}
     D["bounds"] = [-30.0, 0.0, -8.0, 10.0]
+    D = widen(D, -1.5, 0.5, -0.95)               # 3.0 -> 3.5 m, the main spine of the command level
+    # light: the warm levels. Warm base, work lamps in the valve gallery and engineering, the council
+    # and Varga's office lit like the rooms of people with power
+    D["light"] = dict(ambient=(1.03, 1.0, 0.95),
+                      lamps=[(u, -0.25, 2.5, 3.2, "bulb") for u in (-8.0, -15.0, -22.0, -28.0)] +
+                            [(-8.0, 4.7, 2.4, 3.6, "work"), (-8.0, -5.2, 2.4, 3.8, "work"), (-18.0, 5.7, 2.6, 4.6, "amber"),
+                             (-27.0, 5.7, 2.5, 3.8, "amber"), (-27.0, -5.2, 2.4, 3.0, "bulb"),
+                             (-22.0, -4.7, 2.3, 2.6, "bulb"), (-18.0, -4.7, 2.3, 2.6, "bulb"), (-14.0, -4.7, 2.3, 2.6, "bulb")])
     return D
 
 
 LV = {"L2": L2, "L3": L3, "L2W": L2W, "L4W": L4W}[LEVEL]()
+
+# ---------- light (docs/VISUAL_DIRECTION.md): the level's base tone, its lamps and its cold pockets.
+# Desks with a lamp and standing lamps light themselves; "lamps" adds ceiling bulbs, work lamps and
+# cold pockets: (u, v, height, radius, kind).
+LAMP = {"amber": kit.AMBER, "work": tuple(c * 1.15 for c in kit.AMBER), "bulb": tuple(c * 0.6 for c in kit.AMBER),
+        "desk": tuple(c * 0.75 for c in kit.AMBER), "cold": kit.COLD}
+_light = LV.get("light", {})
+kit.AMBIENT = _light.get("ambient", (1.0, 1.0, 1.0))
+kit.PRACTICALS[:] = [(*g(u, v), z, r, LAMP[kd]) for (u, v, z, r, kd) in _light.get("lamps", [])]
+for p in LV["props"]:
+    if p["t"] == "desk" and not p.get("dark_lamp"):
+        kit.PRACTICALS.append((*g(p["u"], p["v"]), 0.95, 1.7, LAMP["desk"]))
+    if p["t"] == "floorlamp":
+        kit.PRACTICALS.append((*g(p["u"], p["v"]), 1.5, 2.8, LAMP["amber"]))
+print("light: ambient", kit.AMBIENT, "lamps", len(kit.PRACTICALS))
 
 # ============================================================ background geometry
 bg_objects = []
@@ -1364,12 +1420,12 @@ GLB_PROPS = {
     "bench": dict(file="silo81_bench.glb", rot=180, fit="box", L=2.2, D=0.32, H=0.45),
     "crate": dict(file="silo81_crate.glb", rot=180, fit="x", L=0.62, D=0.62),
     "washbasin": dict(file="silo81_washbasin.glb", rot=180, fit="z", H=0.5, L=0.56, D=0.45, lift=0.38),
-    "kshelf": dict(file="silo81_shelf.glb", rot=180, fit="z", H=1.8, L=1.1, D=0.45),
-    "files": dict(file="silo81_filing.glb", rot=0, fit="box", L=1.1, D=0.42, H=1.9),
+    "kshelf": dict(file="silo81_shelf.glb", rot=180, fit="z", H=1.8, L=1.1, D=0.45, tint=(0.93, 0.98, 1.05)),
+    "files": dict(file="silo81_filing.glb", rot=0, fit="box", L=1.1, D=0.42, H=1.9, tint=(0.92, 0.98, 1.06)),
     "workbench": dict(file="silo81_workbench.glb", rot=180, fit="box", L=1.8, D=0.7, H=0.95),
-    "stove": dict(file="silo81_stove.glb", rot=180, fit="box", L=1.6, D=0.8, H=0.95),
+    "stove": dict(file="silo81_stove.glb", rot=180, fit="box", L=1.6, D=0.8, H=0.95, tint=(0.9, 0.96, 1.06)),
     "counter": dict(file="silo81_counter.glb", rot=180, fit="box", L=2.0, D=0.62, H=0.92),
-    "pump": dict(file="silo81_pump.glb", rot=180, fit="x", L=1.2, D=0.7),
+    "pump": dict(file="silo81_pump.glb", rot=180, fit="x", L=1.2, D=0.7, tint=(0.82, 1.04, 1.06)),        # industrial teal
     "toolbox": dict(file="silo81_toolbox.glb", rot=180, fit="x", L=1.0, D=0.3),
     "medcab": dict(file="silo81_medcab.glb", rot=180, fit="z", H=1.8, L=0.9, D=0.42)}
 
@@ -1377,7 +1433,7 @@ GLB_PROPS = {
 def glb_box(key, L=None, D=None, H=None):
     """A "box"-fit GLB stretched to this instance's size (long tables, short counters)."""
     c = dict(GLB_PROPS[key]); c.update({k: v for k, v in (("L", L), ("D", D), ("H", H)) if v is not None})
-    return kit.glb_prop(key, c["file"], c["L"], c["D"], rot=c["rot"], fit=c["fit"], H=c.get("H"))
+    return kit.glb_prop(key, c["file"], c["L"], c["D"], rot=c["rot"], fit=c["fit"], H=c.get("H"), tint=c.get("tint"))
 
 
 def joined(parts, name):
@@ -1421,7 +1477,8 @@ def have_glb(key):
 
 def glb(key, mirror=False):
     c = GLB_PROPS[key]
-    ob, size = kit.glb_prop(key, c["file"], c.get("L", 1.0), c.get("D", 1.0), rot=c["rot"], fit=c["fit"], H=c.get("H"), mirror=mirror)
+    ob, size = kit.glb_prop(key, c["file"], c.get("L", 1.0), c.get("D", 1.0), rot=c["rot"], fit=c["fit"], H=c.get("H"), mirror=mirror,
+                            tint=c.get("tint"))
     if c.get("lift"):                                  # wall-hung (washbasins)
         ob.data.transform(Matrix.Translation((0, 0, c["lift"])))
     return ob, size

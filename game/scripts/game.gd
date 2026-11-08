@@ -167,7 +167,7 @@ func load_level(id: String, arrive: Vector2) -> void:
 		level.sorted.add_child(tibor)
 		tibor.place_at_hex(level.nearest_walkable(TIBOR_START if flags["quest"] == "none" else TIBOR_POST))
 		tibor.play("idle", 0 if flags["quest"] == "none" else 2)
-	mood.color = Color(0.86, 0.9, 0.92) if id == "L3" else Color(0.93, 0.94, 1.0)
+	mood.color = Color.WHITE      # no screen-wide grade: each level's light is baked into its render (docs/VISUAL_DIRECTION.md)
 	if id == "L3":
 		flags["visited_L3"] = true
 	mode = "explore"

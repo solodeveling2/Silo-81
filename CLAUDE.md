@@ -16,6 +16,12 @@ turn-based combat only, Wasteland 3-style action bar. See README.md for layout a
   seen, aged wall materials chosen by what each room is for (each face ages like the room it faces: wear
   profiles in kit.py `AGE_PROFILES`, paints in build.py `PAINT`), and testing one section from the game
   camera before regenerating everything.
+- **Visual direction (very important):** every level, room, prop, machine and character follows
+  `docs/VISUAL_DIRECTION.md`, so the whole game reads as one building under one light: no screen-wide
+  tint or grading, the v2 shading model (warm key / cool blue-grey shade, GLB colour and metal/roughness
+  kept), light baked per level (base tone, amber lamps where things work and people live, cold pockets
+  where heat is short), and the muted industrial palette (teal, blue-grey, olive, rust, restrained hazard
+  yellow) used for separation, not decoration. Check new work at the gameplay camera before rolling it out.
 - Movement and attack animations must never slide: keep feet anchors and per-frame steps.
 - The silo is a believable civilian Cold War shelter, not a dungeon built from game-design checklists.
   Heat inequality comes from infrastructure and politics.

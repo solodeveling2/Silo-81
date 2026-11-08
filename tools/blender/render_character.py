@@ -91,15 +91,17 @@ def toon_from(mat):
     dot.inputs[1].default_value = Vector((-0.55, -0.55, 0.63)).normalized()     # key light: top-left-front
     ramp = nt.nodes.new("ShaderNodeValToRGB"); ramp.color_ramp.interpolation = "CONSTANT"
     e = ramp.color_ramp.elements
-    e[0].position, e[0].color = 0.0, (0.55, 0.55, 0.6, 1)       # shadow, slightly cool
-    e[1].position, e[1].color = 0.45, (1.08, 1.06, 1.0, 1)      # lit, slightly warm
-    mid = e.new(0.12); mid.color = (0.8, 0.8, 0.82, 1)
+    # bands matched to the environment's v2 look (docs/VISUAL_DIRECTION.md): warm key, cool blue-grey
+    # shade; the shade sits a touch lighter than the props' so faces stay readable
+    e[0].position, e[0].color = 0.0, (0.47, 0.5, 0.57, 1)       # shade: cool blue-grey
+    e[1].position, e[1].color = 0.45, (1.09, 1.04, 0.96, 1)     # lit: slightly warm
+    mid = e.new(0.12); mid.color = (0.79, 0.79, 0.8, 1)
     mul = nt.nodes.new("ShaderNodeVectorMath"); mul.operation = "MULTIPLY"     # texture x toon band
     emi = nt.nodes.new("ShaderNodeEmission")
     nt.links.new(geo.outputs["Normal"], dot.inputs[0])
     nt.links.new(dot.outputs["Value"], ramp.inputs["Fac"])
     hsv = nt.nodes.new("ShaderNodeHueSaturation")                              # mute towards the Silo 81 palette
-    hsv.inputs["Saturation"].default_value = 0.78
+    hsv.inputs["Saturation"].default_value = 0.88         # muted, but not greyer than the rooms
     nt.links.new(tex.outputs["Color"], hsv.inputs["Color"])
     nt.links.new(hsv.outputs["Color"], mul.inputs[0])
     nt.links.new(ramp.outputs["Color"], mul.inputs[1])

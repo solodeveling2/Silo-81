@@ -84,10 +84,11 @@ rule above is being deliberately changed.
    (copies walk, run, idle, hit, fall onto any Mixamo rig), so every human moves the same way.
    Creatures get their own animation, at the same frame rate and the same level of polish
    (idle loop, locomotion without sliding, attack, hit, death).
-4. **Render** - only through `tools/blender/render_character.py`: orthographic, 30 degree elevation
-   (2:1 iso), 165 px per metre, six hex directions, key light from top-left-front, three toon bands
-   over the painted texture, the same ink outline and the same saturation reduction. Never light or
-   shade one character differently from the rest.
+4. **Render** - only through `tools/blender/render_character.py`: orthographic, the shared camera
+   (`tools/blender/camera.json`, 47 degrees), 165 px per metre, six hex directions, key light from
+   top-left-front, three toon bands over the painted texture, the same ink outline and the same
+   saturation reduction. Never light or shade one character differently from the rest, and keep the
+   bands in line with the environment's v2 look (`docs/VISUAL_DIRECTION.md`).
 5. **Pack** - `tools/blender/package_npc.py` (or the player's packer), then quantise the sheets to
    256 colours. Keep feet anchors and per-frame steps, so movement never slides.
 6. **Check** - `python3 tools/lineup.py lineup.png` puts every character's idle frame side by side

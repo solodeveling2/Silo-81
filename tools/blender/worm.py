@@ -135,8 +135,9 @@ def toon_flat(name, rgb, lit=0.62, midp=0.3):
     dot.inputs[1].default_value = Vector((-0.55, -0.55, 0.63)).normalized()
     ramp = t.nodes.new("ShaderNodeValToRGB"); ramp.color_ramp.interpolation = "CONSTANT"
     e = ramp.color_ramp.elements
-    e[0].position, e[0].color = 0.0, (*[c * 0.55 for c in rgb], 1)
-    e[1].position, e[1].color = lit, (*[min(1, c * 1.15) for c in rgb], 1)
+    # v2 bands (docs/VISUAL_DIRECTION.md): warm key, cool blue-grey shade, like the rooms and the people
+    e[0].position, e[0].color = 0.0, (*[c * k for c, k in zip(rgb, (0.47, 0.5, 0.57))], 1)
+    e[1].position, e[1].color = lit, (*[min(1, c * k) for c, k in zip(rgb, (1.17, 1.12, 1.04))], 1)
     mid = e.new(midp); mid.color = (*[c * 0.8 for c in rgb], 1)
     em = t.nodes.new("ShaderNodeEmission")
     t.links.new(geo.outputs["Normal"], dot.inputs[0]); t.links.new(dot.outputs["Value"], ramp.inputs["Fac"])

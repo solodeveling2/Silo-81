@@ -24,7 +24,7 @@ _mats = {}
 # v1: the original flat toon look. v2: more contrast, warm key light / cool blue-grey shade, coloured
 # light pools from practical lamps, and GLB props keep their colour and their metal/roughness.
 # Chosen per build with SILO_LOOK=v2 (so levels change only when they are rebuilt on purpose).
-LOOK = __import__("os").environ.get("SILO_LOOK", "v1")
+LOOK = __import__("os").environ.get("SILO_LOOK", "v2")      # v2 is the game's look (docs/VISUAL_DIRECTION.md)
 V2_LIT = (1.07, 1.02, 0.94)        # key light: slightly warm
 V2_MID = (0.79, 0.79, 0.8)
 V2_SHADE = (0.46, 0.49, 0.56)      # shade side: cool blue-grey, much darker than v1 (0.66 grey)
