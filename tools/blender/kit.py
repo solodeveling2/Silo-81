@@ -20,15 +20,76 @@ def g(u, v):
 _mats = {}
 
 
+# ---------------------------------------------------------------- look (lighting model)
+# v1: the original flat toon look. v2: more contrast, warm key light / cool blue-grey shade, coloured
+# light pools from practical lamps, and GLB props keep their colour and their metal/roughness.
+# Chosen per build with SILO_LOOK=v2 (so levels change only when they are rebuilt on purpose).
+LOOK = __import__("os").environ.get("SILO_LOOK", "v1")
+V2_LIT = (1.07, 1.02, 0.94)        # key light: slightly warm
+V2_MID = (0.79, 0.79, 0.8)
+V2_SHADE = (0.46, 0.49, 0.56)      # shade side: cool blue-grey, much darker than v1 (0.66 grey)
+AMBIENT = (1.0, 1.0, 1.0)          # per level: cooler in unheated areas, e.g. (0.9, 0.95, 1.04)
+PRACTICALS = []                    # [(x, y, z, radius_m, (r, g, b) added at the centre)], ground coordinates
+AMBER = (0.5, 0.3, 0.08)           # a working lamp: amber light added to whatever it falls on
+COLD = (-0.1, -0.05, 0.04)         # an unheated pocket: pulls towards blue-grey
+
+
+# v2 palette for kit-made objects (muted: industrial teal, dark blue-grey, faded olive, hazard yellow)
+V2_PALETTE = {
+    "PumpGreen": (0.17, 0.33, 0.33), "MachineGreen": (0.2, 0.34, 0.32),        # industrial teal
+    "FilingGrey": (0.3, 0.34, 0.38), "RadioGrey": (0.26, 0.3, 0.34), "SwitchGrey": (0.3, 0.34, 0.38),   # blue-grey
+    "SafeGreen": (0.22, 0.27, 0.17), "LockerDark": (0.13, 0.15, 0.09),          # faded olive
+    "Hazard": (0.7, 0.52, 0.08),                                                # restrained hazard yellow
+}
+
+
+def _light(nt):
+    """Ambient x practical pools for the surface point, as a colour socket (v2 only)."""
+    geo = nt.nodes.new("ShaderNodeNewGeometry")
+    acc = nt.nodes.new("ShaderNodeRGB"); acc.outputs[0].default_value = (*AMBIENT, 1)
+    cur = acc.outputs[0]
+    for (x, y, z, r, c) in PRACTICALS:
+        # a pool, not a sphere: height counts for less, so the light reaches the floor under the lamp
+        sub = nt.nodes.new("ShaderNodeVectorMath"); sub.operation = "SUBTRACT"; sub.inputs[1].default_value = (x, y, z)
+        nt.links.new(geo.outputs["Position"], sub.inputs[0])
+        flat_ = nt.nodes.new("ShaderNodeVectorMath"); flat_.operation = "MULTIPLY"; flat_.inputs[1].default_value = (1.0, 1.0, 0.45)
+        nt.links.new(sub.outputs[0], flat_.inputs[0])
+        d = nt.nodes.new("ShaderNodeVectorMath"); d.operation = "LENGTH"; nt.links.new(flat_.outputs[0], d.inputs[0])
+        sq = nt.nodes.new("ShaderNodeMapRange"); sq.interpolation_type = "SMOOTHSTEP"
+        sq.inputs[1].default_value = r; sq.inputs[2].default_value = 0.0
+        nt.links.new(d.outputs["Value"], sq.inputs[0])
+        sc = nt.nodes.new("ShaderNodeVectorMath"); sc.operation = "SCALE"; sc.inputs[0].default_value = c
+        nt.links.new(sq.outputs[0], sc.inputs["Scale"])
+        ad = nt.nodes.new("ShaderNodeVectorMath"); ad.operation = "ADD"
+        nt.links.new(cur, ad.inputs[0]); nt.links.new(sc.outputs[0], ad.inputs[1]); cur = ad.outputs[0]
+    return cur
+
+
+def _shade(nt, lit, mid, shade):
+    """The toon light bands x (v2) ambient and practical pools: a colour socket to multiply albedo by."""
+    ramp = _ramp(nt, lit, mid, shade)
+    if LOOK != "v2":
+        return ramp.outputs["Color"]
+    m = nt.nodes.new("ShaderNodeVectorMath"); m.operation = "MULTIPLY"
+    nt.links.new(ramp.outputs["Color"], m.inputs[0]); nt.links.new(_light(nt), m.inputs[1])
+    return m.outputs[0]
+
+
 def _ramp(nt, lit, mid, shade):
     geo = nt.nodes.new("ShaderNodeNewGeometry")
     dot = nt.nodes.new("ShaderNodeVectorMath"); dot.operation = "DOT_PRODUCT"
     dot.inputs[1].default_value = LIGHT
     ramp = nt.nodes.new("ShaderNodeValToRGB"); ramp.color_ramp.interpolation = "CONSTANT"
     e = ramp.color_ramp.elements
-    e[0].position, e[0].color = 0.0, (shade, shade, shade * 1.04, 1)
-    e[1].position, e[1].color = 0.45, (lit, lit * 0.99, lit * 0.96, 1)
-    m = e.new(0.12); m.color = (mid, mid, mid * 1.02, 1)
+    if LOOK == "v2":                         # same relative bands as the material asked for, v2 colours
+        k = shade / 0.66
+        e[0].position, e[0].color = 0.0, (*(c * k for c in V2_SHADE), 1)
+        e[1].position, e[1].color = 0.45, (*(c * lit / 1.04 for c in V2_LIT), 1)
+        m = e.new(0.12); m.color = (*(c * mid / 0.84 for c in V2_MID), 1)
+    else:
+        e[0].position, e[0].color = 0.0, (shade, shade, shade * 1.04, 1)
+        e[1].position, e[1].color = 0.45, (lit, lit * 0.99, lit * 0.96, 1)
+        m = e.new(0.12); m.color = (mid, mid, mid * 1.02, 1)
     nt.links.new(geo.outputs["Normal"], dot.inputs[0]); nt.links.new(dot.outputs["Value"], ramp.inputs["Fac"])
     return ramp
 
@@ -309,6 +370,8 @@ def toon(name, rgb, noise=0.0, noise_scale=6.0, lit=1.04, mid=0.84, shade=0.66, 
     key = name
     if key in _mats:
         return _mats[key]
+    if LOOK == "v2" and name in V2_PALETTE:      # v2 palette: separate machinery, cabinets and markings
+        rgb = V2_PALETTE[name]
     if tex is None and name in TEX_FOR:
         tex, tex_scale, rgb = TEX_FOR[name][:3]
         metal = TEX_FOR[name][3] if len(TEX_FOR[name]) > 3 else metal
@@ -428,9 +491,9 @@ def toon(name, rgb, noise=0.0, noise_scale=6.0, lit=1.04, mid=0.84, shade=0.66, 
         cur = mix(cur, fc.outputs[0], soft.outputs[0])
     if age:
         cur = _age(nt, cur, pos, age, tcol, (dado[1] if dado else None))
-    ramp = _ramp(nt, lit, mid, shade)
+    shading = _shade(nt, lit, mid, shade)
     mul = nt.nodes.new("ShaderNodeVectorMath"); mul.operation = "MULTIPLY"
-    nt.links.new(cur, mul.inputs[0]); nt.links.new(ramp.outputs["Color"], mul.inputs[1])
+    nt.links.new(cur, mul.inputs[0]); nt.links.new(shading, mul.inputs[1])
     lit_col = mul.outputs[0]
     if metal:
         # specular glint: normal close to the half vector between the key light and the camera
@@ -1276,29 +1339,89 @@ def lathe(name):
 GLB_DIR = __import__("os").path.join(__import__("os").path.dirname(__file__), "props3d")
 
 
-def _toon_textured(mat):
-    """Painted texture from the model x the kit's three toon bands (same key light as everything else)."""
+def _toon_textured(mat, tint=None):
+    """Painted texture from the model x the kit's toon bands (same key light as everything else).
+    v2 also reads the model's glTF metal/roughness: metal is darker with a bright, tight highlight,
+    smooth paint gets a soft one, rough rubber, fabric and wood get none."""
     nt = mat.node_tree
     tex = next((n for n in nt.nodes if n.type == "TEX_IMAGE" and n.image and "base" in n.image.name.lower()), None)
     tex = tex or next((n for n in nt.nodes if n.type == "TEX_IMAGE"), None)
     if tex is None:
         return
-    keep = tex.name
+    mr_tex, metal_f, rough_f = None, 0.0, 1.0
+    bsdf = next((n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"), None)
+    if bsdf is not None:
+        metal_f = bsdf.inputs["Metallic"].default_value; rough_f = bsdf.inputs["Roughness"].default_value
+
+        def upstream_image(sock):
+            for l_ in sock.links:
+                n = l_.from_node
+                if n.type == "TEX_IMAGE":
+                    return n
+                for i in n.inputs:
+                    r = upstream_image(i)
+                    if r:
+                        return r
+            return None
+        mr_tex = upstream_image(bsdf.inputs["Metallic"]) or upstream_image(bsdf.inputs["Roughness"])
+        if mr_tex is not None:
+            metal_f, rough_f = 1.0, 1.0
+    keep = {tex.name} | ({mr_tex.name} if (mr_tex is not None and LOOK == "v2") else set())
     for n in list(nt.nodes):
-        if n.name != keep:
+        if n.name not in keep:
             nt.nodes.remove(n)
-    tex = nt.nodes[keep]
+    tex = nt.nodes[tex.name]
     out = nt.nodes.new("ShaderNodeOutputMaterial")
-    ramp = _ramp(nt, 1.06, 0.82, 0.6)
-    hsv = nt.nodes.new("ShaderNodeHueSaturation"); hsv.inputs["Saturation"].default_value = 0.85
+    shading = _shade(nt, 1.06, 0.82, 0.6)
+    hsv = nt.nodes.new("ShaderNodeHueSaturation")
+    hsv.inputs["Saturation"].default_value = 1.0 if LOOK == "v2" else 0.85
     nt.links.new(tex.outputs["Color"], hsv.inputs["Color"])
+    base = hsv.outputs["Color"]
     mul = nt.nodes.new("ShaderNodeVectorMath"); mul.operation = "MULTIPLY"
-    nt.links.new(hsv.outputs["Color"], mul.inputs[0]); nt.links.new(ramp.outputs["Color"], mul.inputs[1])
-    em = nt.nodes.new("ShaderNodeEmission"); nt.links.new(mul.outputs[0], em.inputs["Color"])
+    if LOOK == "v2":
+        # metal (B) and roughness (G) of the glTF map, or the material's constant factors
+        if mr_tex is not None:
+            mr = nt.nodes[mr_tex.name]
+            mr.image.colorspace_settings.name = "Non-Color"
+            sp = nt.nodes.new("ShaderNodeSeparateColor"); nt.links.new(mr.outputs["Color"], sp.inputs[0])
+            metal, rough = sp.outputs[2], sp.outputs[1]
+        else:
+            v1_ = nt.nodes.new("ShaderNodeValue"); v1_.outputs[0].default_value = metal_f
+            v2_ = nt.nodes.new("ShaderNodeValue"); v2_.outputs[0].default_value = rough_f
+            metal, rough = v1_.outputs[0], v2_.outputs[0]
+        dark = nt.nodes.new("ShaderNodeMapRange"); dark.inputs[3].default_value = 1.0; dark.inputs[4].default_value = 0.68
+        nt.links.new(metal, dark.inputs[0])                                      # metal: darker body colour
+        bm = nt.nodes.new("ShaderNodeVectorMath"); bm.operation = "SCALE"
+        nt.links.new(base, bm.inputs[0]); nt.links.new(dark.outputs[0], bm.inputs["Scale"]); base = bm.outputs[0]
+    if LOOK == "v2" and tint:                    # per-asset paint correction (authored-grey machinery)
+        tn = nt.nodes.new("ShaderNodeVectorMath"); tn.operation = "MULTIPLY"; tn.inputs[1].default_value = tint
+        nt.links.new(base, tn.inputs[0]); base = tn.outputs[0]
+    nt.links.new(base, mul.inputs[0]); nt.links.new(shading, mul.inputs[1])
+    col = mul.outputs[0]
+    if LOOK == "v2":
+        geo = nt.nodes.new("ShaderNodeNewGeometry")
+        hd = nt.nodes.new("ShaderNodeVectorMath"); hd.operation = "DOT_PRODUCT"; hd.inputs[1].default_value = HALF
+        nt.links.new(geo.outputs["Normal"], hd.inputs[0])
+        band = nt.nodes.new("ShaderNodeMapRange"); band.interpolation_type = "SMOOTHSTEP"
+        band.inputs[1].default_value = 0.76; band.inputs[2].default_value = 0.9
+        nt.links.new(hd.outputs["Value"], band.inputs[0])
+        gloss = nt.nodes.new("ShaderNodeMapRange"); gloss.inputs[1].default_value = 0.75; gloss.inputs[2].default_value = 0.25
+        nt.links.new(rough, gloss.inputs[0])                                     # 0 when rough, 1 when smooth
+        w = nt.nodes.new("ShaderNodeMath"); w.operation = "MULTIPLY_ADD"; w.inputs[1].default_value = 0.9; w.inputs[2].default_value = 0.18
+        nt.links.new(metal, w.inputs[0])                                         # metal shines more than paint
+        s1 = nt.nodes.new("ShaderNodeMath"); s1.operation = "MULTIPLY"
+        nt.links.new(band.outputs[0], s1.inputs[0]); nt.links.new(gloss.outputs[0], s1.inputs[1])
+        s2 = nt.nodes.new("ShaderNodeMath"); s2.operation = "MULTIPLY"
+        nt.links.new(s1.outputs[0], s2.inputs[0]); nt.links.new(w.outputs[0], s2.inputs[1])
+        hl = nt.nodes.new("ShaderNodeMix"); hl.data_type = "RGBA"
+        nt.links.new(s2.outputs[0], hl.inputs["Factor"]); nt.links.new(col, hl.inputs[6])
+        hl.inputs[7].default_value = (0.96, 0.93, 0.86, 1)
+        col = hl.outputs[2]
+    em = nt.nodes.new("ShaderNodeEmission"); nt.links.new(col, em.inputs["Color"])
     nt.links.new(em.outputs[0], out.inputs["Surface"])
 
 
-def glb_prop(name, file, L, D, rot=0.0, fit="x", H=None, outline=0.01, mirror=False):
+def glb_prop(name, file, L, D, rot=0.0, fit="x", H=None, outline=0.01, mirror=False, tint=None):
     """A Tripo model as a prop in the kit's frame: length L along x (centred), depth from y=0 back to
     y=D front, standing on z=0. rot (degrees about z) turns the model's front to +y; fit picks the
     axis the size comes from ("x" = length L, "z" = height H)."""
@@ -1339,7 +1462,7 @@ def glb_prop(name, file, L, D, rot=0.0, fit="x", H=None, outline=0.01, mirror=Fa
     depth = (max(ys) - min(ys)) * sy
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
     for m in mats:
-        _toon_textured(m)
+        _toon_textured(m, tint)
         me.materials.append(m)
     ob = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(ob)
     if outline:
