@@ -275,6 +275,7 @@ def L3():
                          text="Down to Level 4: engineering and command. The air gets warmer on every step.")]
     D["spawns"] = {"player": [-0.3, 0.0, 0], "worms": [[8.32, 1.08, 1, "chew"], [5.4, 0.85, 2], [13.1, -3.0, 1]]}
     D["bounds"] = [-4.2, 18.0, -6.0, 1.8]
+    D["front_h"] = 1.1           # the gallery's camera-side wall stays waist high: the pipes are the point
     return D
 
 
@@ -714,6 +715,9 @@ def build_wall(w, full=False):
     z0 = -2.75 if w.get("shaft") else 0.0
     tall = full or w["h"] >= FULL
     h = K["h"] if tall else w["h"]
+    low_front = full and LV.get("front_h") and w["h"] < FULL    # this level keeps its camera-side walls low
+    if low_front:
+        h, tall = LV["front_h"], False
 
     def box(s0, s1, half, za, zb, mat, top=None):
         """A box along the wall: s along it, `half` the half-thickness across it."""
@@ -725,7 +729,7 @@ def build_wall(w, full=False):
     for (s0, s1) in segs:
         if s1 - s0 < 0.01:
             continue
-        box(s0, s1, t / 2, z0, h, m, K["top"] if tall else CUT)
+        box(s0, s1, t / 2, z0, h, m, K["top"] if tall else CUT)          # low walls show a sawn dark top
         if not w.get("shaft"):
             box(s0, s1, t / 2 + SK_D, 0.0, SK_H, SKIRT, SKIRT)          # skirting on both faces
     if tall:

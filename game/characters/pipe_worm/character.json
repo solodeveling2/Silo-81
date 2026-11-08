@@ -12,12 +12,12 @@
      "sheet": "idle_dir0.png",
      "frame_size": [
       194,
-      94
+      84
      ],
      "columns": 8,
      "feet_anchor": [
       110.0,
-      85.6
+      72.5
      ],
      "step_px": [
       0.0,
@@ -28,12 +28,12 @@
      "sheet": "idle_dir1.png",
      "frame_size": [
       122,
-      158
+      178
      ],
      "columns": 8,
      "feet_anchor": [
       69.0,
-      112.6
+      113.5
      ],
      "step_px": [
       0.0,
@@ -44,12 +44,12 @@
      "sheet": "idle_dir2.png",
      "frame_size": [
       108,
-      162
+      185
      ],
      "columns": 8,
      "feet_anchor": [
       60.0,
-      110.6
+      110.5
      ],
      "step_px": [
       -0.0,
@@ -59,13 +59,13 @@
     "3": {
      "sheet": "idle_dir3.png",
      "frame_size": [
-      194,
-      98
+      196,
+      90
      ],
      "columns": 8,
      "feet_anchor": [
-      84.0,
-      82.6
+      85.0,
+      68.5
      ],
      "step_px": [
       -0.0,
@@ -76,12 +76,12 @@
      "sheet": "idle_dir4.png",
      "frame_size": [
       122,
-      71
+      89
      ],
      "columns": 8,
      "feet_anchor": [
       53.0,
-      60.6
+      70.5
      ],
      "step_px": [
       -0.0,
@@ -92,12 +92,12 @@
      "sheet": "idle_dir5.png",
      "frame_size": [
       108,
-      70
+      98
      ],
      "columns": 8,
      "feet_anchor": [
       48.0,
-      58.6
+      78.5
      ],
      "step_px": [
       0.0,
@@ -114,13 +114,13 @@
     "0": {
      "sheet": "crawl_dir0.png",
      "frame_size": [
-      214,
+      213,
       69
      ],
      "columns": 8,
      "feet_anchor": [
       109.0,
-      55.6
+      50.5
      ],
      "step_px": [
       8.794,
@@ -131,44 +131,44 @@
      "sheet": "crawl_dir1.png",
      "frame_size": [
       128,
-      141
+      172
      ],
      "columns": 8,
      "feet_anchor": [
       59.0,
-      92.6
+      103.5
      ],
      "step_px": [
       4.397,
-      -3.808
+      -5.57
      ]
     },
     "2": {
      "sheet": "crawl_dir2.png",
      "frame_size": [
       128,
-      141
+      172
      ],
      "columns": 8,
      "feet_anchor": [
       69.0,
-      92.6
+      103.5
      ],
      "step_px": [
       -4.397,
-      -3.808
+      -5.57
      ]
     },
     "3": {
      "sheet": "crawl_dir3.png",
      "frame_size": [
       214,
-      69
+      70
      ],
      "columns": 8,
      "feet_anchor": [
       105.0,
-      55.6
+      50.5
      ],
      "step_px": [
       -8.794,
@@ -179,32 +179,32 @@
      "sheet": "crawl_dir4.png",
      "frame_size": [
       129,
-      83
+      122
      ],
      "columns": 8,
      "feet_anchor": [
       70.0,
-      57.6
+      72.5
      ],
      "step_px": [
       -4.397,
-      3.808
+      5.57
      ]
     },
     "5": {
      "sheet": "crawl_dir5.png",
      "frame_size": [
       128,
-      82
+      123
      ],
      "columns": 8,
      "feet_anchor": [
       59.0,
-      56.6
+      73.5
      ],
      "step_px": [
       4.397,
-      3.808
+      5.57
      ]
     }
    }
@@ -217,13 +217,13 @@
     "0": {
      "sheet": "bite_dir0.png",
      "frame_size": [
-      222,
-      94
+      220,
+      86
      ],
      "columns": 8,
      "feet_anchor": [
-      111.0,
-      83.6
+      110.0,
+      70.5
      ],
      "step_px": [
       0.0,
@@ -234,12 +234,12 @@
      "sheet": "bite_dir1.png",
      "frame_size": [
       133,
-      158
+      184
      ],
      "columns": 8,
      "feet_anchor": [
       69.0,
-      112.6
+      119.5
      ],
      "step_px": [
       0.0,
@@ -250,12 +250,12 @@
      "sheet": "bite_dir2.png",
      "frame_size": [
       132,
-      161
+      188
      ],
      "columns": 8,
      "feet_anchor": [
       84.0,
-      109.6
+      113.5
      ],
      "step_px": [
       -0.0,
@@ -265,13 +265,13 @@
     "3": {
      "sheet": "bite_dir3.png",
      "frame_size": [
-      222,
-      104
+      221,
+      98
      ],
      "columns": 8,
      "feet_anchor": [
-      111.0,
-      88.6
+      110.0,
+      76.5
      ],
      "step_px": [
       -0.0,
@@ -282,12 +282,12 @@
      "sheet": "bite_dir4.png",
      "frame_size": [
       133,
-      111
+      132
      ],
      "columns": 8,
      "feet_anchor": [
       64.0,
-      74.6
+      70.5
      ],
      "step_px": [
       -0.0,
@@ -298,12 +298,12 @@
      "sheet": "bite_dir5.png",
      "frame_size": [
       132,
-      100
+      132
      ],
      "columns": 8,
      "feet_anchor": [
       48.0,
-      69.6
+      78.5
      ],
      "step_px": [
       0.0,
@@ -322,12 +322,12 @@
      "sheet": "hit_dir0.png",
      "frame_size": [
       192,
-      97
+      92
      ],
      "columns": 8,
      "feet_anchor": [
       110.0,
-      82.6
+      70.5
      ],
      "step_px": [
       0.0,
@@ -338,12 +338,12 @@
      "sheet": "hit_dir1.png",
      "frame_size": [
       123,
-      155
+      173
      ],
      "columns": 8,
      "feet_anchor": [
       69.0,
-      109.6
+      108.5
      ],
      "step_px": [
       0.0,
@@ -354,12 +354,12 @@
      "sheet": "hit_dir2.png",
      "frame_size": [
       104,
-      159
+      181
      ],
      "columns": 8,
      "feet_anchor": [
       56.0,
-      107.6
+      106.5
      ],
      "step_px": [
       -0.0,
@@ -370,12 +370,12 @@
      "sheet": "hit_dir3.png",
      "frame_size": [
       193,
-      104
+      99
      ],
      "columns": 8,
      "feet_anchor": [
       82.0,
-      88.6
+      77.5
      ],
      "step_px": [
       -0.0,
@@ -386,12 +386,12 @@
      "sheet": "hit_dir4.png",
      "frame_size": [
       123,
-      81
+      87
      ],
      "columns": 8,
      "feet_anchor": [
       54.0,
-      71.6
+      70.5
      ],
      "step_px": [
       -0.0,
@@ -401,13 +401,13 @@
     "5": {
      "sheet": "hit_dir5.png",
      "frame_size": [
-      105,
-      79
+      104,
+      100
      ],
      "columns": 8,
      "feet_anchor": [
       48.0,
-      65.6
+      78.5
      ],
      "step_px": [
       0.0,
@@ -425,13 +425,13 @@
     "0": {
      "sheet": "death_dir0.png",
      "frame_size": [
-      217,
-      111
+      215,
+      114
      ],
      "columns": 8,
      "feet_anchor": [
-      111.0,
-      84.6
+      110.0,
+      75.5
      ],
      "step_px": [
       0.0,
@@ -442,12 +442,12 @@
      "sheet": "death_dir1.png",
      "frame_size": [
       132,
-      158
+      184
      ],
      "columns": 8,
      "feet_anchor": [
       70.0,
-      112.6
+      118.5
      ],
      "step_px": [
       0.0,
@@ -458,12 +458,12 @@
      "sheet": "death_dir2.png",
      "frame_size": [
       141,
-      160
+      184
      ],
      "columns": 8,
      "feet_anchor": [
       72.0,
-      108.6
+      109.5
      ],
      "step_px": [
       -0.0,
@@ -474,12 +474,12 @@
      "sheet": "death_dir3.png",
      "frame_size": [
       216,
-      115
+      114
      ],
      "columns": 8,
      "feet_anchor": [
       105.0,
-      91.6
+      80.5
      ],
      "step_px": [
       -0.0,
@@ -490,12 +490,12 @@
      "sheet": "death_dir4.png",
      "frame_size": [
       133,
-      113
+      132
      ],
      "columns": 8,
      "feet_anchor": [
       63.0,
-      73.6
+      76.5
      ],
      "step_px": [
       -0.0,
@@ -506,12 +506,12 @@
      "sheet": "death_dir5.png",
      "frame_size": [
       142,
-      108
+      135
      ],
      "columns": 8,
      "feet_anchor": [
       69.0,
-      69.6
+      78.5
      ],
      "step_px": [
       0.0,
@@ -529,13 +529,13 @@
     "0": {
      "sheet": "chew_dir0.png",
      "frame_size": [
-      211,
-      95
+      212,
+      90
      ],
      "columns": 8,
      "feet_anchor": [
       110.0,
-      91.6
+      83.5
      ],
      "step_px": [
       0.0,
@@ -546,12 +546,12 @@
      "sheet": "chew_dir1.png",
      "frame_size": [
       122,
-      162
+      181
      ],
      "columns": 8,
      "feet_anchor": [
       69.0,
-      116.6
+      116.5
      ],
      "step_px": [
       0.0,
@@ -562,12 +562,12 @@
      "sheet": "chew_dir2.png",
      "frame_size": [
       124,
-      163
+      188
      ],
      "columns": 8,
      "feet_anchor": [
       76.0,
-      111.6
+      113.5
      ],
      "step_px": [
       -0.0,
@@ -577,13 +577,13 @@
     "3": {
      "sheet": "chew_dir3.png",
      "frame_size": [
-      212,
-      94
+      213,
+      86
      ],
      "columns": 8,
      "feet_anchor": [
       102.0,
-      75.6
+      59.5
      ],
      "step_px": [
       -0.0,
@@ -594,12 +594,12 @@
      "sheet": "chew_dir4.png",
      "frame_size": [
       122,
-      58
+      107
      ],
      "columns": 8,
      "feet_anchor": [
       53.0,
-      50.6
+      70.5
      ],
      "step_px": [
       -0.0,
@@ -610,12 +610,12 @@
      "sheet": "chew_dir5.png",
      "frame_size": [
       124,
-      64
+      104
      ],
      "columns": 8,
      "feet_anchor": [
       48.0,
-      59.6
+      78.5
      ],
      "step_px": [
       0.0,
@@ -633,12 +633,12 @@
      "sheet": "release_dir0.png",
      "frame_size": [
       202,
-      100
+      93
      ],
      "columns": 8,
      "feet_anchor": [
       110.0,
-      93.6
+      82.5
      ],
      "step_px": [
       0.0,
@@ -649,12 +649,12 @@
      "sheet": "release_dir1.png",
      "frame_size": [
       118,
-      163
+      181
      ],
      "columns": 8,
      "feet_anchor": [
       69.0,
-      117.6
+      116.5
      ],
      "step_px": [
       0.0,
@@ -665,12 +665,12 @@
      "sheet": "release_dir2.png",
      "frame_size": [
       117,
-      163
+      184
      ],
      "columns": 8,
      "feet_anchor": [
       69.0,
-      111.6
+      109.5
      ],
      "step_px": [
       -0.0,
@@ -680,13 +680,13 @@
     "3": {
      "sheet": "release_dir3.png",
      "frame_size": [
-      203,
-      98
+      202,
+      90
      ],
      "columns": 8,
      "feet_anchor": [
-      93.0,
-      81.6
+      92.0,
+      66.5
      ],
      "step_px": [
       -0.0,
@@ -697,12 +697,12 @@
      "sheet": "release_dir4.png",
      "frame_size": [
       119,
-      71
+      99
      ],
      "columns": 8,
      "feet_anchor": [
       50.0,
-      61.6
+      70.5
      ],
      "step_px": [
       -0.0,
@@ -713,12 +713,12 @@
      "sheet": "release_dir5.png",
      "frame_size": [
       117,
-      75
+      97
      ],
      "columns": 8,
      "feet_anchor": [
       48.0,
-      63.6
+      78.5
      ],
      "step_px": [
       0.0,

@@ -13,7 +13,7 @@ OUT = sys.argv[1]
 ONLY = set(sys.argv[2:])
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from worm_pose import PPM, L, R_MAX, HEX, NS, S, RAD, RIDGE, smooth, spine_from, TAIL0, REST, rest_params, lerp_pose, LATCH_FILE
-ELEV = math.radians(30)
+ELEV = math.radians(json.load(open(os.environ.get("SILO_CAMERA", "/home/claude/level/camera.json")))["elev_deg"])   # shared view (camera.json)
 SAMPLES = 10
 CANVAS = 384
 NA = 16                       # vertices per ring
@@ -265,7 +265,7 @@ def set_pose(anim, i, n):
     tco = teeth_coords(hf, p["mouth"])
     teeth_me.vertices.foreach_set("co", tco.astype(np.float32).ravel()); teeth_me.update()
 
-summary = {"pixels_per_metre": PPM, "camera_elevation_deg": 30, "animations": {}}
+summary = {"pixels_per_metre": PPM, "camera_elevation_deg": round(math.degrees(ELEV), 2), "animations": {}}
 anchor = None
 for key, cfg in ANIMS.items():
     if ONLY and key not in ONLY:
