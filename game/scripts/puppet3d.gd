@@ -17,6 +17,7 @@ var BIG_H := 600
 var BIG_FOOT_Y := 340
 var LYING := ["death", "fall"]
 const TOON := preload("res://shaders/toon_v2.gdshader")
+const TOON_2SIDE := preload("res://shaders/toon_v2_2side.gdshader")
 const INK := preload("res://shaders/ink_outline.gdshader")
 
 var vp: SubViewport
@@ -116,7 +117,7 @@ func _setup_flipbook(bin_path: String) -> void:
 						used.append(vi)
 					idx.append(remap[vi])
 			var mat := ShaderMaterial.new()
-			mat.shader = TOON
+			mat.shader = TOON_2SIDE
 			var md: Dictionary = sd["material"]
 			mat.set_shader_parameter("has_tex", false)
 			mat.set_shader_parameter("albedo_color", Color.WHITE)
@@ -129,7 +130,7 @@ func _setup_flipbook(bin_path: String) -> void:
 			mat.set_shader_parameter("t_lit", float(md["t_lit"]))
 			var ink := ShaderMaterial.new()
 			ink.shader = INK
-			ink.set_shader_parameter("thickness_m", float(cfg.get("outline_m", {}).get(k, 0.011)) * 0.73)
+			ink.set_shader_parameter("thickness_m", float(cfg.get("outline_m", {}).get(k, 0.011)))
 			mat.next_pass = ink
 			_toon_mats.append(mat)
 			surfs.append({"used": used, "idx": idx, "mat": mat})
