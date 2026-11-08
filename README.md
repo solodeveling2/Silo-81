@@ -33,6 +33,8 @@ Combat gives you 8 action points (AP) per turn:
 
 Overwatch spends what is left of your AP on reaction shots at anything that moves. All of these numbers are placeholders, to be balanced later.
 
+See `HANDOFF.md` for the current state, the traps and how to verify changes.
+
 ## Running it
 
 1. Install [Godot 4.3](https://godotengine.org/download/archive/4.3-stable/).
