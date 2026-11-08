@@ -1,0 +1,15 @@
+{
+ "fps_src": 24,
+ "clips": {
+  "walk": "walk",
+  "run": "run",
+  "idle": "idle",
+  "hit": "hit",
+  "fall": "fall"
+ },
+ "idle_loop_src": [
+  0,
+  48
+ ],
+ "height_m": 1.75
+}

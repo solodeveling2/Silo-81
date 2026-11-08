@@ -113,6 +113,24 @@ gun.scale = gun.scale / s_                     # the pistol is in real metres, n
 arm.location = arm.location - Vector((0, 0, min(zs) * s_))
 print("height scale", s_)
 
+def slim_materials(max_px=1024):
+    """The game's toon shader reads only base colour: drop normal / metal / roughness maps and
+    cap the colour texture, so the web download carries nothing unused."""
+    for m in bpy.data.materials:
+        if not m.use_nodes:
+            continue
+        nt = m.node_tree
+        for n in list(nt.nodes):
+            if n.type == "BSDF_PRINCIPLED":
+                for name in ("Normal", "Metallic", "Roughness"):
+                    for l in list(n.inputs[name].links):
+                        nt.links.remove(l)
+    for img in bpy.data.images:
+        if img.users and img.size[0] > max_px:
+            img.scale(max_px, max(1, img.size[1] * max_px // img.size[0]))
+
+
+slim_materials()
 # ---- export (every action) and the sidecar the game reads
 for a in bpy.data.actions:
     a.use_fake_user = True

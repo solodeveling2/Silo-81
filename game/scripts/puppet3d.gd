@@ -9,13 +9,13 @@ extends Node2D
 ## so stride, shot timing and the "no sliding" rule are unchanged; the puppet only replaces the picture.
 ## Facing turns smoothly to any angle, and the aim pitch is applied continuously on the spine and arms.
 
-const W := 384
-const H := 416
-const FOOT_Y := 368                     # where the feet sit in the viewport (px from the top)
-const BIG_W := 720
-const BIG_H := 600
-const BIG_FOOT_Y := 340
-const LYING := ["death", "fall"]
+var W := 384
+var H := 416
+var FOOT_Y := 368                       # where the feet sit in the viewport (px from the top)
+var BIG_W := 720
+var BIG_H := 600
+var BIG_FOOT_Y := 340
+var LYING := ["death", "fall"]
 const TOON := preload("res://shaders/toon_v2.gdshader")
 const INK := preload("res://shaders/ink_outline.gdshader")
 
@@ -38,6 +38,8 @@ var _inplace := {}                      # clip -> [start offset, travel per loop
 var _shares: Array = []                 # [[bone index, share]]
 var _toon_mats: Array = []
 var _last_key := ""
+var _yaw_offset := 0.0                  # model forward: +Z (Mixamo) = 0; +X (the worm) = -90 degrees
+var flip: Dictionary = {}                # mesh flipbook (the worm): frame data, meshes, cached frames
 var _dirty := 2                          # frames still to re-render after a resize
 
 
@@ -56,11 +58,26 @@ func setup(glb_path: String, json_path: String) -> void:
 	cam.near = 0.05
 	cam.far = 80.0
 	vp.add_child(cam)
-	var scene: PackedScene = load(glb_path)
 	model = Node3D.new()
 	vp.add_child(model)
 	shift = Node3D.new()
 	model.add_child(shift)
+	if glb_path.ends_with(".bin"):
+		_setup_flipbook(glb_path)
+	else:
+		_setup_rig(glb_path)
+	view = Sprite2D.new()
+	view.centered = false
+	var pm := CanvasItemMaterial.new()
+	pm.blend_mode = CanvasItemMaterial.BLEND_MODE_PREMULT_ALPHA   # rendered over transparent black
+	view.material = pm
+	view.texture = vp.get_texture()
+	add_child(view)
+	_frame(false)
+
+
+func _setup_rig(glb_path: String) -> void:
+	var scene: PackedScene = load(glb_path)
 	var inst: Node3D = scene.instantiate()
 	shift.add_child(inst)
 	anim = _find(inst, "AnimationPlayer") as AnimationPlayer
@@ -72,14 +89,117 @@ func setup(glb_path: String, json_path: String) -> void:
 		var b := _bone(str(s[0]))
 		if b >= 0:
 			_shares.append([b, float(s[1])])
-	view = Sprite2D.new()
-	view.centered = false
-	var pm := CanvasItemMaterial.new()
-	pm.blend_mode = CanvasItemMaterial.BLEND_MODE_PREMULT_ALPHA   # rendered over transparent black
-	view.material = pm
-	view.texture = vp.get_texture()
-	add_child(view)
-	_frame(false)
+
+
+# ------------------------------------------------------------------ mesh flipbook (no rig: the worm)
+func _setup_flipbook(bin_path: String) -> void:
+	"""Every frame is a full set of vertex positions on one topology (tools/blender/worm_live.py).
+	Frames are turned into meshes the first time they are shown, then kept."""
+	flip = {"data": FileAccess.get_file_as_bytes(bin_path), "parts": [], "cache": {}}
+	_yaw_offset = -PI * 0.5 if str(cfg.get("forward", "+z")) == "+x" else 0.0
+	var off := 0
+	for k in ["body", "teeth"]:
+		var m: Dictionary = cfg["meshes"][k]
+		var nv := int(m["verts"])
+		var surfs := []
+		for sd in m["surfaces"]:
+			# each surface keeps only the vertices it uses
+			var remap := {}
+			var used := PackedInt32Array()
+			var idx := PackedInt32Array()
+			var src: Array = sd["indices"]
+			for t in range(0, src.size(), 3):
+				for c in [0, 2, 1]:                      # Blender winds front faces anticlockwise, Godot clockwise
+					var vi := int(src[t + c])
+					if not remap.has(vi):
+						remap[vi] = used.size()
+						used.append(vi)
+					idx.append(remap[vi])
+			var mat := ShaderMaterial.new()
+			mat.shader = TOON
+			var md: Dictionary = sd["material"]
+			mat.set_shader_parameter("has_tex", false)
+			mat.set_shader_parameter("albedo_color", Color.WHITE)
+			mat.set_shader_parameter("saturation", 1.0)
+			mat.set_shader_parameter("flat_shade", true)          # worm.py renders flat facets
+			mat.set_shader_parameter("shade_col", Vector3(md["shade"][0], md["shade"][1], md["shade"][2]))
+			mat.set_shader_parameter("mid_col", Vector3(md["mid"][0], md["mid"][1], md["mid"][2]))
+			mat.set_shader_parameter("lit_col", Vector3(md["lit"][0], md["lit"][1], md["lit"][2]))
+			mat.set_shader_parameter("t_mid", float(md["t_mid"]))
+			mat.set_shader_parameter("t_lit", float(md["t_lit"]))
+			var ink := ShaderMaterial.new()
+			ink.shader = INK
+			ink.set_shader_parameter("thickness_m", float(cfg.get("outline_m", {}).get(k, 0.011)) * 0.73)
+			mat.next_pass = ink
+			_toon_mats.append(mat)
+			surfs.append({"used": used, "idx": idx, "mat": mat})
+		var mi := MeshInstance3D.new()
+		shift.add_child(mi)
+		flip["parts"].append({"off": off, "n": nv, "surfs": surfs, "mi": mi})
+		off += nv * 15
+	_fit_view_to_extents()
+
+
+func _flip_mesh(part: Dictionary, frame: int) -> ArrayMesh:
+	var key := "%d_%d" % [part["off"], frame]
+	if flip["cache"].has(key):
+		return flip["cache"][key]
+	var data: PackedByteArray = flip["data"]
+	var base := int(cfg["frame_bytes"]) * frame + int(part["off"])
+	var n: int = part["n"]
+	var f := data.slice(base, base + n * 12).to_float32_array()
+	var nb := base + n * 12
+	var am := ArrayMesh.new()
+	for sf in part["surfs"]:
+		var used: PackedInt32Array = sf["used"]
+		var pos := PackedVector3Array(); pos.resize(used.size())
+		var nor := PackedVector3Array(); nor.resize(used.size())
+		for j in used.size():
+			var v := used[j]
+			pos[j] = Vector3(f[v * 3], f[v * 3 + 1], f[v * 3 + 2])
+			nor[j] = Vector3(data.decode_s8(nb + v * 3), data.decode_s8(nb + v * 3 + 1), data.decode_s8(nb + v * 3 + 2)).normalized()
+		var arr := []
+		arr.resize(Mesh.ARRAY_MAX)
+		arr[Mesh.ARRAY_VERTEX] = pos
+		arr[Mesh.ARRAY_NORMAL] = nor
+		arr[Mesh.ARRAY_INDEX] = sf["idx"]
+		am.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arr)
+		am.surface_set_material(am.get_surface_count() - 1, sf["mat"])
+	flip["cache"][key] = am
+	return am
+
+
+func _fit_view_to_extents() -> void:
+	"""Size the view to everything the model ever covers (all frames, any facing), plus the outline."""
+	var r := 0.0
+	var top := 0.0
+	var data: PackedByteArray = flip["data"]
+	var fb := int(cfg["frame_bytes"])
+	for fr in range(0, int(cfg["frames"]), 3):
+		for part in flip["parts"]:
+			var base: int = fb * fr + int(part["off"])
+			var f := data.slice(base, base + int(part["n"]) * 12).to_float32_array()
+			for j in range(0, f.size(), 3):
+				r = maxf(r, Vector2(f[j], f[j + 2]).length())
+				top = maxf(top, f[j + 1])
+	var e := deg_to_rad(Hex.ELEV_DEG)
+	var m := 12
+	W = int(ceil(2.0 * r * Hex.PPM)) + 2 * m
+	var below := r * sin(e) * Hex.PPM
+	var above := (r * sin(e) + top * cos(e)) * Hex.PPM
+	H = int(ceil(above + below)) + 2 * m
+	FOOT_Y = int(ceil(above)) + m
+	BIG_W = W; BIG_H = H; BIG_FOOT_Y = FOOT_Y
+	LYING = []
+
+
+func _sync_flipbook(clip: String, t_frames: float) -> void:
+	var c: Dictionary = cfg["clips"].get(clip, cfg["clips"].get("idle"))
+	var n := int(c["frames"])
+	var k := int(t_frames)
+	k = posmod(k, n) if c["loop"] else clampi(k, 0, n - 1)
+	for part in flip["parts"]:
+		(part["mi"] as MeshInstance3D).mesh = _flip_mesh(part, int(c["first"]) + k)
 
 
 func _frame(big: bool) -> void:
@@ -141,7 +261,7 @@ func set_flash(c: Color) -> void:
 ## clip: the Actor's clip name; t_frames: its frame + progress; fps: the clip's playback rate;
 ## facing_deg: ground facing (0 = screen right, counter-clockwise); pitch: held aim in degrees (NAN = none).
 func sync(clip: String, t_frames: float, fps: float, facing_deg: float, pitch: float, delta: float) -> void:
-	if not _measured and is_inside_tree() and anim and anim.is_node_ready():
+	if not _measured and is_inside_tree() and anim and anim.is_node_ready() and skel:
 		_measured = true
 		for c in ["walk", "run"]:
 			_measure_inplace(c)
@@ -160,6 +280,9 @@ func sync(clip: String, t_frames: float, fps: float, facing_deg: float, pitch: f
 	_frame(clip in LYING)
 	vp.render_target_update_mode = SubViewport.UPDATE_ONCE
 	model.rotation.y = _yaw
+	if not flip.is_empty():
+		_sync_flipbook(clip, t_frames)
+		return
 	var src_fps := float(cfg.get("fps_src", 24))
 	var name := ""
 	var t := 0.0
@@ -189,7 +312,7 @@ func sync(clip: String, t_frames: float, fps: float, facing_deg: float, pitch: f
 			anim.play(name)
 		anim.seek(minf(t, anim.current_animation_length), true)
 		anim.pause()
-	if anim == null or not anim.is_node_ready():
+	if anim != null and not anim.is_node_ready():
 		_last_key = ""                                     # not posed yet: try again next frame
 	_apply_inplace(clip, t)
 	if gun:
@@ -200,7 +323,7 @@ func sync(clip: String, t_frames: float, fps: float, facing_deg: float, pitch: f
 
 func _yaw_for(facing_deg: float) -> float:
 	var g := Vector2(cos(deg_to_rad(facing_deg)), sin(deg_to_rad(facing_deg)))
-	return atan2(g.x, -g.y)                                    # the model faces +Z; ground y is -Z
+	return atan2(g.x, -g.y) + _yaw_offset                      # +Z forward models; ground y is -Z
 
 
 # ------------------------------------------------------------------ in place and aim

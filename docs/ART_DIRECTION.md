@@ -92,9 +92,14 @@ rule above is being deliberately changed.
    `shaders/ink_outline.gdshader`). Locomotion is played in place; the Actor moves the character, so
    feet never slide. Static scenery stays pre-rendered. Sprite renders (step 5) are a fallback and
    the reference the live look is checked against.
-   Status (Nov 2026): the player is live 3D (`game/characters/player_3d`, checked against the sprites
-   with `game/tools/puppet_test.gd`: six facings, walk, aim pitch -60..+40, death). Tibor and the worm
-   still use sprites until their live exports exist. Launch with `-- --sprites` to compare.
+   Status (Nov 2026): the player, Tibor and the pipe worm are live 3D (`game/characters/*_3d`),
+   each checked against its sprites with `CHAR=<folder> godot --script tools/puppet_test.gd`.
+   Rigged characters: `tools/blender/export_live.py` (player, with pistol and aim) and
+   `export_live_npc.py` (any Mixamo NPC). Rig-less creatures built in code (the worm): export every
+   frame's vertices (`worm_live.py`) and the puppet plays them as a mesh flipbook.
+   The toon shader takes Blender's bands as linear values (it converts them, because the
+   Compatibility renderer shades in sRGB) and only base colour: exporters drop normal and
+   roughness maps and cap textures at 1024 px. Launch with `-- --sprites` to compare.
 5. **Render (fallback / reference)** - only through `tools/blender/render_character.py`: orthographic, the shared camera
    (`tools/blender/camera.json`, 47 degrees), 165 px per metre, six hex directions, key light from
    top-left-front, three toon bands over the painted texture, the same ink outline and the same

@@ -7,3 +7,4 @@ build/
 *.key
 .env
 .sv/
+__pycache__/

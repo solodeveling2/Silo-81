@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dk748jmm0jb6f"
-path="res://.godot/imported/player_silo81_player_male_normal.jpg-a8bc127ff000964a84844cc0c30601dd.ctex"
+uid="uid://cgfu424xqa55l"
+path="res://.godot/imported/tibor_construction_worker_3d_model_basecolor.jpg-fe8b4ac0646f58a4221d1c9ef8fd92c1.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "adcce4a9085a4d6cd52c06934d9adfc9"
+"md5": "9be17b022eea52d5ab341ffa9333af70"
 }
 
 [deps]
 
-source_file="res://characters/player_3d/player_silo81_player_male_normal.jpg"
-dest_files=["res://.godot/imported/player_silo81_player_male_normal.jpg-a8bc127ff000964a84844cc0c30601dd.ctex"]
+source_file="res://characters/tibor_3d/tibor_construction_worker_3d_model_basecolor.jpg"
+dest_files=["res://.godot/imported/tibor_construction_worker_3d_model_basecolor.jpg-fe8b4ac0646f58a4221d1c9ef8fd92c1.ctex"]
 
 [params]
 

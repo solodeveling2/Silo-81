@@ -20,7 +20,12 @@ var anim := "idle"
 var dir := 4
 var sprite: AnimatedSprite2D
 var puppet: Puppet3D                              # live 3D body when the character has one (sprite = clock)
-const LIVE_3D := {"player": ["res://characters/player_3d/player.glb", "res://characters/player_3d/player.json"]}
+## live 3D models, by the character's sprite json (the sprites stay as the clock and the fallback)
+const LIVE_3D := {
+	"res://characters/player_male/character.json": ["res://characters/player_3d/player.glb", "res://characters/player_3d/player.json"],
+	"res://characters/tibor/character.json": ["res://characters/tibor_3d/tibor.glb", "res://characters/tibor_3d/tibor.json"],
+	"res://characters/pipe_worm/character.json": ["res://characters/pipe_worm_3d/worm.bin", "res://characters/pipe_worm_3d/worm.json"],
+}
 var ground := Vector2.ZERO      # metres
 var hex := Vector2i.ZERO
 var path: Array = []            # ground points still to reach
@@ -51,9 +56,9 @@ func setup(json_path: String, actor_kind: String) -> void:
 		if data["animations"].has(clip):
 			var s: Array = data["animations"][clip]["directions"]["0"]["step_px"]
 			_per_frame[clip] = absf(float(s[0])) / Hex.PPM
-	if LIVE_3D.has(kind) and not "--sprites" in OS.get_cmdline_user_args():
+	if LIVE_3D.has(json_path) and not "--sprites" in OS.get_cmdline_user_args():
 		puppet = Puppet3D.new()
-		puppet.setup(LIVE_3D[kind][0], LIVE_3D[kind][1])
+		puppet.setup(LIVE_3D[json_path][0], LIVE_3D[json_path][1])
 		add_child(puppet)
 		sprite.self_modulate.a = 0.0             # still the clock and the picking rect, just not drawn
 	sprite.frame_changed.connect(_on_frame_changed)

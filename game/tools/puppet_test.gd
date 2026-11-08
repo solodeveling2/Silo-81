@@ -5,7 +5,9 @@ func _init() -> void:
 	get_root().add_child(root)
 	if OS.has_environment("ZOOM"): root.scale = Vector2.ONE * float(OS.get_environment("ZOOM"))
 	RenderingServer.set_default_clear_color(Color(0.45, 0.42, 0.38))
-	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://characters/player_male/character.json"))
+	var cj := "res://characters/%s/character.json" % OS.get_environment("CHAR") if OS.has_environment("CHAR") else "res://characters/player_male/character.json"
+	var live: Array = Actor.LIVE_3D[cj]
+	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(cj))
 	var pups := []
 	var args := OS.get_cmdline_user_args()
 	var clip: String = args[0] if args.size() > 0 else "idle"
@@ -20,18 +22,18 @@ func _init() -> void:
 			f = hp.find(-60.0 + 20.0 * d) if hp.find(-60.0 + 20.0 * d) >= 0 else hp.find(int(-60 + 20 * d))
 		fr.append([di, f])
 		var info: Dictionary = data["animations"][clip]["directions"][str(di)]
-		var sheet: Texture2D = load("res://characters/player_male/" + info["sheet"])
+		var sheet: Texture2D = load(cj.get_base_dir() + "/" + info["sheet"])
 		var at := AtlasTexture.new(); at.atlas = sheet
 		var cols: int = info["columns"]; var fw: int = info["frame_size"][0]; var fh: int = info["frame_size"][1]
 		at.region = Rect2((f % cols) * fw, (f / cols) * fh, fw, fh)
 		var s := Sprite2D.new(); s.texture = at; s.centered = false
 		s.position = Vector2(110 + d * 200, 330); s.offset = -Vector2(info["feet_anchor"][0], info["feet_anchor"][1])
 		if not OS.has_environment("NOSPR"): root.add_child(s)
-		var p := Puppet3D.new(); p.setup("res://characters/player_3d/player.glb", "res://characters/player_3d/player.json")
+		var p := Puppet3D.new(); p.setup(live[0], live[1])
 		p.position = Vector2(110 + d * 200, 680); root.add_child(p); pups.append(p)
 	for i in 30:
 		for d in 6:
 			pups[d].sync(clip, fr[d][1], float(data["animations"][clip]["fps"]), fr[d][0] * 60.0, (-60.0 + 20.0 * d) if clip == "pistol_hold" else pitch, 1.0)
 		await process_frame
-	get_root().get_texture().get_image().save_png("/tmp/puppet_%s.png" % clip)
+	get_root().get_texture().get_image().save_png("/tmp/puppet_%s_%s.png" % [OS.get_environment("CHAR"), clip])
 	quit()
