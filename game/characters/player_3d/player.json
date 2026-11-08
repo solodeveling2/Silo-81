@@ -1,0 +1,97 @@
+{
+ "fps_src": 24,
+ "clips": {
+  "walk": "walk",
+  "run": "run",
+  "idle": "idle",
+  "hit": "hit_chest",
+  "pistol_idle": "pistol_idle",
+  "pistol_attack": "pistol_attack",
+  "death": "death",
+  "fall": "fall"
+ },
+ "idle_loop_src": [
+  0,
+  95
+ ],
+ "aim": {
+  "anim": "aim_seq",
+  "raise": [
+   0,
+   4
+  ],
+  "shot": [
+   3,
+   21
+  ],
+  "lower": [
+   20,
+   27
+  ],
+  "hold": 20,
+  "weights": [
+   0.1562,
+   0.5,
+   0.8438,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   0.9259,
+   0.7407,
+   0.5,
+   0.2593,
+   0.0741,
+   0.0
+  ]
+ },
+ "pitch_shares": [
+  [
+   "mixamorig_Spine",
+   0.12
+  ],
+  [
+   "mixamorig_Spine1",
+   0.12
+  ],
+  [
+   "mixamorig_Spine2",
+   0.12
+  ],
+  [
+   "mixamorig_Neck",
+   0.3
+  ],
+  [
+   "mixamorig_LeftArm",
+   0.64
+  ],
+  [
+   "mixamorig_RightArm",
+   0.64
+  ]
+ ],
+ "gun_clips": [
+  "pistol_idle",
+  "pistol_attack",
+  "pistol_raise",
+  "pistol_shot",
+  "pistol_lower",
+  "pistol_hold"
+ ],
+ "height_m": 1.75
+}

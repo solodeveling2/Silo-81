@@ -84,14 +84,25 @@ rule above is being deliberately changed.
    (copies walk, run, idle, hit, fall onto any Mixamo rig), so every human moves the same way.
    Creatures get their own animation, at the same frame rate and the same level of polish
    (idle loop, locomotion without sliding, attack, hit, death).
-4. **Render** - only through `tools/blender/render_character.py`: orthographic, the shared camera
+4. **In game: live 3D (general rule).** Everything that moves is drawn live from its GLB, not from
+   sprites: export it game-ready (feet at z=0, real height, all clips, held items attached; see
+   `tools/blender/export_live.py` for the player) with a sidecar JSON mapping the Actor's clip names to its actions,
+   and show it through `scripts/puppet3d.gd` (orthographic camera at the shared 47 degrees, 165 px per
+   metre, `shaders/toon_v2.gdshader` with the same three bands and saturation, plus
+   `shaders/ink_outline.gdshader`). Locomotion is played in place; the Actor moves the character, so
+   feet never slide. Static scenery stays pre-rendered. Sprite renders (step 5) are a fallback and
+   the reference the live look is checked against.
+   Status (Nov 2026): the player is live 3D (`game/characters/player_3d`, checked against the sprites
+   with `game/tools/puppet_test.gd`: six facings, walk, aim pitch -60..+40, death). Tibor and the worm
+   still use sprites until their live exports exist. Launch with `-- --sprites` to compare.
+5. **Render (fallback / reference)** - only through `tools/blender/render_character.py`: orthographic, the shared camera
    (`tools/blender/camera.json`, 47 degrees), 165 px per metre, six hex directions, key light from
    top-left-front, three toon bands over the painted texture, the same ink outline and the same
    saturation reduction. Never light or shade one character differently from the rest, and keep the
    bands in line with the environment's v2 look (`docs/VISUAL_DIRECTION.md`).
-5. **Pack** - `tools/blender/package_npc.py` (or the player's packer), then quantise the sheets to
+6. **Pack** - `tools/blender/package_npc.py` (or the player's packer), then quantise the sheets to
    256 colours. Keep feet anchors and per-frame steps, so movement never slides.
-6. **Check** - `python3 tools/lineup.py lineup.png` puts every character's idle frame side by side
+7. **Check** - `python3 tools/lineup.py lineup.png` puts every character's idle frame side by side
    at the game camera's zoom on a Silo 81 floor. A new character is done only when it passes the
    final quality test in that line-up and in the game itself.
 

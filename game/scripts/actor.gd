@@ -19,6 +19,8 @@ var data: Dictionary
 var anim := "idle"
 var dir := 4
 var sprite: AnimatedSprite2D
+var puppet: Puppet3D                              # live 3D body when the character has one (sprite = clock)
+const LIVE_3D := {"player": ["res://characters/player_3d/player.glb", "res://characters/player_3d/player.json"]}
 var ground := Vector2.ZERO      # metres
 var hex := Vector2i.ZERO
 var path: Array = []            # ground points still to reach
@@ -49,6 +51,11 @@ func setup(json_path: String, actor_kind: String) -> void:
 		if data["animations"].has(clip):
 			var s: Array = data["animations"][clip]["directions"]["0"]["step_px"]
 			_per_frame[clip] = absf(float(s[0])) / Hex.PPM
+	if LIVE_3D.has(kind) and not "--sprites" in OS.get_cmdline_user_args():
+		puppet = Puppet3D.new()
+		puppet.setup(LIVE_3D[kind][0], LIVE_3D[kind][1])
+		add_child(puppet)
+		sprite.self_modulate.a = 0.0             # still the clock and the picking rect, just not drawn
 	sprite.frame_changed.connect(_on_frame_changed)
 	sprite.animation_finished.connect(func() -> void: anim_done.emit(anim))
 	play("idle", dir)
@@ -320,6 +327,9 @@ func flash(c: Color) -> void:
 	var tw := create_tween()
 	sprite.modulate = c
 	tw.tween_property(sprite, "modulate", Color.WHITE, 0.35)
+	if puppet:
+		var tp := create_tween()
+		tp.tween_method(puppet.set_flash, c, Color.WHITE, 0.35)
 
 
 func sprite_rect() -> Rect2:
@@ -329,7 +339,10 @@ func sprite_rect() -> Rect2:
 	return Rect2(position + sprite.offset, tex.get_size())
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	if puppet:
+		var fps := float(data["animations"].get(anim, {}).get("fps", 24))
+		puppet.sync(anim, sprite.frame + sprite.frame_progress, fps, dir * 60.0, aim_pitch, delta)
 	queue_redraw()
 
 

@@ -23,6 +23,12 @@ turn-based combat only, Wasteland 3-style action bar. See README.md for layout a
   where heat is short), and the muted industrial palette (teal, blue-grey, olive, rust, restrained hazard
   yellow) used for separation, not decoration. Check new work at the gameplay camera before rolling it out.
 - Movement and attack animations must never slide: keep feet anchors and per-frame steps.
+- **Anything that moves is live 3D:** characters, creatures and other moving things (the player, NPCs,
+  the worm, future enemies, moving machines) are drawn in the game from their 3D models (GLB) through
+  `game/scripts/puppet3d.gd`, with the shared toon_v2 + ink_outline shaders at the 47-degree camera, not from
+  pre-rendered sprite sheets. Static things (levels, walls, furniture, props) stay pre-rendered 2D.
+  The Actor keeps driving clip, frame, facing and aim, so stride and timing are unchanged. Sprite sheets
+  are only a fallback until a model has its live export. See `docs/ART_DIRECTION.md`.
 - The silo is a believable civilian Cold War shelter, not a dungeon built from game-design checklists.
   Heat inequality comes from infrastructure and politics.
 - Don't use or open SpriteCook. Reference images come from Gemini (Nano Banana 2.1) in the browser;
