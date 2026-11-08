@@ -74,11 +74,37 @@ the welding kit, goes down to Level 3 (pipe gallery), fights pipe worms, welds a
 Done: 47-degree camera, wall hierarchy and cutaway, 3.5 m corridors, aged per-room walls, v2 light on all
 four levels (L2, L3, L2W, L4W), live 3D player / Tibor / worm, web build published.
 
-Next, in this order:
-1. The user tests the live 3D characters in the browser (smoothness in Level 3 with three worms).
-2. Known issues: Tibor reads a little darker than the player; the table GLB is missing (the table is
-   still procedural); floor labels on camera-side walls are hidden at 47 degrees.
-3. New characters and enemies: live 3D from the start (rule in `CLAUDE.md`).
+Next, in this order (one milestone at a time; show the user the result before starting the next):
+
+**Milestone 1 - make the live 3D characters solid (small, do first)**
+1. Browser check with the user: smoothness in Level 3 (player + three worms). If it stutters on weaker
+   machines, add a settings toggle that falls back to the sprites (`--sprites` already does this).
+2. Fix known issues: Tibor reads a little darker than the player; the missing table GLB (table is still
+   procedural); floor labels on camera-side walls hidden at 47 degrees.
+3. Re-run the line-up (`tools/lineup.py`) with the live characters and fix anything that stands out.
+
+**Milestone 2 - the second NPC: Mira (engineering, already heard on the intercom)**
+- Concept in Gemini/Nano Banana with the approved characters as reference, model in Tripo
+  (same settings as Tibor), animate with `tools/blender/retarget.py`, export with
+  `export_live_npc.py`, add to `LIVE_3D`. Proves the whole new-character pipeline end to end.
+- Give her a short dialogue and a place in an existing level.
+
+**Milestone 3 - systems the next quests need**
+- Save / load (level, position, quest flags, inventory, HP).
+- Inventory screen and item pickups (the action bar already has slots).
+- Dialogue moved into data files (one JSON per NPC) instead of code, so new quests do not touch game.gd.
+
+**Milestone 4 - the next quest, using levels L2W / L4W**
+- Write the quest outline with the user first (story and politics of heat are theirs to decide).
+- New rooms follow `docs/LEVEL_DESIGN.md`: test one section at the gameplay camera before building the rest.
+- One new enemy or hostile human, live 3D from the start, at the same polish as the worm.
+
+**Milestone 5 - feel**
+- Sound: footsteps, gunshot, worm noises, room ambience (pipes, ventilation).
+- Small feedback: hit flash, damage numbers, camera nudge on shots.
+
+Every milestone ends with: autotest passing, screenshots at the gameplay camera, a local commit, and the
+user's OK before pushing.
 
 ## 7. Working rules with this user
 
