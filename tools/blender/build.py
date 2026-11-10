@@ -1,4 +1,4 @@
-﻿"""Build one Silo 81 level in Blender and render it for Godot.
+"""Build one Silo 81 level in Blender and render it for Godot.
 
 Outputs (in OUT/LEVEL):
   bg.png                     floor, walls, stairs, pipes and everything fixed to a back wall or the floor
@@ -1094,7 +1094,7 @@ def L1():
              text="Descend via the personnel lift to Level 4 Command (Valve Gallery)."),
         dict(id="to_l5_from_l1", u=0.0, v=1.3, to="L5", arrive=[20.8, 0.0], name="Freight Lift (Sub-Level 4)",
              text="Descend via the heavy freight lift to Sub-Level 4: Deep Storage & Geotherm Ring."),
-        dict(id="to_jt_from_l1", u=-2.6, v=-1.4, to="JT", arrive=[12.0, 0.0], name="Snow road to Junk Town",
+        dict(id="to_jt_from_l1", u=-2.6, v=-1.4, to="ROAD", arrive=[4.0, 0.0], name="Snow road to Junk Town",
              text="The surface blast gate opens onto the snow road east, toward Junk Town."),
     ]
     D["spawns"] = {"player": [-2.6, 0.6, 0], "worms": []}
@@ -1158,6 +1158,8 @@ def JT():
     P.append(dict(t="bucket", u=8.0, v=0.2, f="+u"))
     P.append(dict(t="crate", u=14.6, v=-1.2, f="-v"))
     P.append(dict(t="sacks", u=9.2, v=-2.0, f="+u"))
+    D["stairs"] += [dict(id="to_l1_from_jt", u=2.0, v=8.0, to="ROAD", arrive=[68.0, 0.0],
+                         name="Snow road to Silo 81", text="The gate back onto the snow road west.")]
     D["light"] = dict(ambient=(0.84, 0.92, 1.06),
                       lamps=[(6.0, 4.0, 3.6, 6.0, "amber"),
                              (15.0, 2.0, 3.2, 5.0, "work"),
@@ -1166,7 +1168,55 @@ def JT():
     return D
 
 
-LV = {"L2": L2, "L3": L3, "L2W": L2W, "L4W": L4W, "L4E": L4E, "L5": L5, "L1": L1, "JT": JT}[LEVEL]()
+def ROAD():
+    """The snow road from Silo 81 to Junk Town: first outdoor playable stretch.
+    A straight, compact 72 m road with wrecks and a Junk Town gate at the east end."""
+    D = {"name": "The Snow Road - Silo 81 to Junk Town", "rooms": [], "walls": [], "doors": [], "props": [],
+         "decor": [], "inspect": [], "stairs": [], "spawns": {}, "blocked": []}
+    asphalt = dict(rgb=(0.13, 0.14, 0.15), noise=0.22, noise_scale=5.0, tex="concrete_floor", ts=1.5)
+    snow = dict(rgb=(0.74, 0.78, 0.82), noise=0.2, noise_scale=4.0, tex="concrete_floor", ts=1.8)
+    D["rooms"] += [
+        dict(id="road", name="Snow road", r=[0.0, 72.0, -3.0, 3.0], floor=asphalt),
+        dict(id="north_bank", name="North snowbank", r=[0.0, 72.0, 3.0, 12.0], floor=snow),
+        dict(id="south_bank", name="South snowbank", r=[0.0, 72.0, -10.0, -3.0], floor=snow),
+    ]
+    D["holes"] = []
+    D["bounds"] = [0.0, 72.0, -10.0, 12.0]
+    P = D["props"]
+    P.append(dict(t="silo_hatch", u=2.2, v=0.0, f="+u", name="Silo 81 surface hatch",
+                  text="The blast door is sealed behind you. The snow road runs east."))
+    P.append(dict(t="road_line", u=34.0, v=0.0, f="+u", L=68.0, name="Road centre line"))
+    P.append(dict(t="snowbank", u=34.0, v=3.6, f="+u", L=68.0, name="North snowbank"))
+    P.append(dict(t="snowbank", u=34.0, v=-3.6, f="+u", L=68.0, name="South snowbank"))
+    # wrecks along the road
+    P.append(dict(t="jt_car", u=18.0, v=4.6, f="-u", name="Crashed sedan"))
+    P.append(dict(t="jt_van_blue", u=32.0, v=-4.8, f="+u", name="Frozen blue van"))
+    P.append(dict(t="jt_van_rust", u=46.0, v=4.4, f="-u", name="Rusted van"))
+    P.append(dict(t="jt_van_white", u=58.0, v=-4.4, f="+u", name="Patched van"))
+    P.append(dict(t="road_billboard", u=64.0, v=7.2, f="-v", name="Road billboard",
+                  text="NEW MERIDIAN 40. The paint has mostly gone."))
+    # Junk Town gate at the east end
+    P.append(dict(t="jt_carwall", u=70.0, v=-4.2, f="-u", L=4.4, name="Junk Town wall, south"))
+    P.append(dict(t="jt_carwall", u=70.0, v=4.2, f="-u", L=4.4, name="Junk Town wall, north"))
+    P.append(dict(t="junk_gate", u=70.0, v=0.0, f="-u", name="Junk Town gate",
+                  text="A gate of truck-box leaves and scrap, watched from two towers."))
+    P.append(dict(t="jt_tower_a", u=67.5, v=-6.0, f="-u", name="South gate tower"))
+    P.append(dict(t="jt_tower_b", u=67.5, v=6.0, f="-u", name="North gate tower"))
+    P.append(dict(t="sacks", u=8.0, v=2.6, f="+u"))
+    P.append(dict(t="crate", u=12.0, v=-3.8, f="+u"))
+    D["stairs"] += [
+        dict(id="to_l1_from_road", u=2.0, v=0.0, to="L1", arrive=[-2.6, 0.6],
+             name="Silo 81 hatch", text="The blast door back into the Surface Transit Depot."),
+        dict(id="to_jt_from_road", u=70.0, v=0.0, to="JT", arrive=[12.0, 0.0],
+             name="Junk Town gate", text="Knock, and the gate watch will open up."),
+    ]
+    D["spawns"] = {"player": [4.0, 0.0, 5], "worms": []}
+    D["light"] = dict(ambient=(0.82, 0.91, 1.06),
+                      lamps=[(70.0, 0.0, 4.0, 7.0, "amber"), (30.0, 0.0, 3.0, 6.0, "cold")])
+    return D
+
+
+LV = {"L2": L2, "L3": L3, "L2W": L2W, "L4W": L4W, "L4E": L4E, "L5": L5, "L1": L1, "JT": JT, "ROAD": ROAD}[LEVEL]()
 
 # ---------- light (docs/VISUAL_DIRECTION.md): the level's base tone, its lamps and its cold pockets.
 # Desks with a lamp and standing lamps light themselves; "lamps" adds ceiling bulbs, work lamps and
@@ -2103,6 +2153,10 @@ PROP_FN = {
     "goat": lambda p: kit.goat("Goat", p.get("pose", 0)),
     "junk_car_wall": lambda p: kit.junk_car_wall("CarWall", p.get("L", 6.0)),
     "junk_gate": lambda p: kit.junk_gate("JunkGate"),
+    "silo_hatch": lambda p: kit.silo_hatch("SiloHatch"),
+    "road_billboard": lambda p: kit.road_billboard("RoadBillboard"),
+    "road_line": lambda p: kit.road_line("RoadLine", p.get("L", 68.0)),
+    "snowbank": lambda p: kit.snowbank("SnowBank", p.get("L", 68.0)),
     "jt_carwall": lambda p: glb_box("jt_carwall", L=p.get("L", 6.0)),
     "jt_fence": lambda p: glb("jt_fence"),
     "jt_tower_a": lambda p: glb("jt_tower_a"),
@@ -2164,7 +2218,9 @@ for i, p in enumerate(LV["props"]):
              "junk_car_wall": (p.get("L", 6.0), 1.8), "junk_gate": (4.6, 0.4),
              "jt_carwall": (6.0, 1.8), "jt_fence": (4.0, 0.18), "jt_tower_a": (2.4, 2.4),
              "jt_tower_b": (3.0, 3.0), "jt_van_blue": (3.6, 1.6), "jt_van_rust": (3.6, 1.6),
-             "jt_car": (3.2, 1.5), "jt_van_white": (3.6, 1.6)}[p["t"]]
+             "jt_car": (3.2, 1.5), "jt_van_white": (3.6, 1.6),
+             "silo_hatch": (3.6, 1.0), "road_billboard": (2.9, 0.3),
+             "road_line": (p.get("L", 68.0), 0.15), "snowbank": (p.get("L", 68.0), 1.0)}[p["t"]]
     fp = footprint(p["u"], p["v"], p["f"], L, Dp)
     cu, cv = (fp[0] + fp[1]) / 2, (fp[2] + fp[3]) / 2
     sx, sy = scr_uv(p["u"], p["v"])

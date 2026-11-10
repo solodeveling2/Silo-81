@@ -27,6 +27,7 @@ echo   8. Junk Town - animal pen
 echo   9. Junk Town - god mode
 echo  10. Level 2 West - commons / kitchen / clinic
 echo  11. Administration Office (Overseer)
+echo  12. The snow road to Junk Town
 echo   0. Run autotest (headless)
 echo   Q. Quit
 echo ============================================================
@@ -43,6 +44,7 @@ if /i "%pick%"=="8" ( start "" "%GODOT%" --path "%GAME%" -- --start=JT,19,-4 & e
 if /i "%pick%"=="9" ( start "" "%GODOT%" --path "%GAME%" -- --start=JT,12,0 --god & exit /b 0 )
 if /i "%pick%"=="10" ( start "" "%GODOT%" --path "%GAME%" -- --start=L2W & exit /b 0 )
 if /i "%pick%"=="11" ( start "" "%GODOT%" --path "%GAME%" -- --start=L4W,-27.8,7.2 & exit /b 0 )
+if /i "%pick%"=="12" ( start "" "%GODOT%" --path "%GAME%" -- --start=ROAD,4,0 & exit /b 0 )
 if /i "%pick%"=="0" (
   "%GODOT%" --headless --fixed-fps 60 --path "%GAME%" -- --autotest
   echo.
@@ -51,5 +53,6 @@ if /i "%pick%"=="0" (
 )
 if /i "%pick%"=="q" exit /b 0
 goto menu
+
 
 

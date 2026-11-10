@@ -46,7 +46,7 @@ var path_preview: Array = []
 var dialog_handler := Callable()
 var rng := RandomNumberGenerator.new()
 var stats := {"hp": 40, "hp_max": 40, "ap": AP_MAX, "str": 6, "lockpick": 45, "medkits": 2, "kit": false}
-var state := {"L2": {}, "L2W": {}, "L3": {"dead": [], "pipe_fixed": false}, "L4W": {}, "L4E": {}, "L5": {}, "L1": {}, "JT": {}}
+var state := {"L2": {}, "L2W": {}, "L3": {"dead": [], "pipe_fixed": false}, "L4W": {}, "L4E": {}, "L5": {}, "L1": {}, "JT": {}, "ROAD": {}}
 var flags := {"visited_L3": false, "found_leak": false, "seen_worms": false, "door_seen": false,
 			  "quest": "none", "cold_quest": "none", "long_cold": "none", "visited_L4E": false,
 			  "visited_L5": false, "visited_L1": false, "left_silo": false,
@@ -92,7 +92,7 @@ func _ready() -> void:
 		var lvl: String = sp[0] if sp.size() > 0 else "L2"
 		var at := Vector2(float(sp[1]), float(sp[2])) if sp.size() >= 3 else Vector2.INF
 		flags["quest"] = "given"
-		if lvl == "JT" or lvl == "L1":
+		if lvl == "JT" or lvl == "L1" or lvl == "ROAD":
 			flags["long_cold"] = "active"
 		load_level(lvl, at)
 		hud.log_msg("Playtest: jumped to %s." % lvl, Color(0.55, 0.85, 1.0))
@@ -138,7 +138,7 @@ func _shot(spec: String) -> void:
 
 # ================================================================== levels
 func load_level(id: String, arrive: Vector2) -> void:
-	if id == "JT" and flags["long_cold"] == "active":
+	if id == "ROAD" and flags["long_cold"] == "active":
 		flags["left_silo"] = true
 	if level:
 		level.queue_free()
@@ -667,7 +667,7 @@ const TALK := {
 				 "options": [["Thanks, Tibor.", "report_3"]]},
 	"report_3": {"text": "And before you disappear again, the Overseer wants to see you. He's been asking about you over the intercom.\n\n[A short pause.]\n\nWouldn't keep him waiting if I were you.",
 				 "options": [["I'll head down to Administration.", "closed"]]},
-	"long_cold": {"text": "Outside. Of course he did.\n\nJunk Town's the only light between here and the city. Keep to the road, Chief. And if something out there stands too still — don't wave at it.",
+	"long_cold": {"text": "Outside. Of course he did.\n\nJunk Town's the only light between here and the city. Keep to the road, Chief. And if something out there stands too still â€” don't wave at it.",
 				  "options": [["I'll be back before the pipes freeze.", "lc_ack"]]},
 	"lc_ack": {"text": "See that you are. I'll keep the kettle on.", "options": [["[Leave]", "close"]]},
 	"after": {"text": "The Overseer's waiting for you down in the Administration Office on Level 4. Wouldn't keep him waiting if I were you.",
@@ -695,9 +695,9 @@ const OVERSEER_TALK := {
 					"options": [["The spares rack is empty. The last replacement core in the silo was used six years ago.", "ov_report_3"]]},
 	"ov_report_3": {"text": "No spare cores. Then we have forty-eight hours before the residential levels start to freeze.\n\nThe only plant that ever cast those cores is in New Meridian. The city.",
 					"options": [["New Meridian?", "ov_report_4"]]},
-	"ov_report_4": {"text": "Forty kilometres of frozen road and whatever else is out there. I'm sending you anyway.\n\nJunk Town first — the only roof between us and the city. Find Mara, the mechanic. She knows the road.",
+	"ov_report_4": {"text": "Forty kilometres of frozen road and whatever else is out there. I'm sending you anyway.\n\nJunk Town first â€” the only roof between us and the city. Find Mara, the mechanic. She knows the road.",
 					"options": [["I'll go.", "ov_expedition"]]},
-	"ov_expedition": {"text": "Take what you need from stores. Tell Tibor. And Chief — the Silo stays warm only if you come back.",
+	"ov_expedition": {"text": "Take what you need from stores. Tell Tibor. And Chief â€” the Silo stays warm only if you come back.",
 					"options": [["I'll bring back the parts.", "ov_finish"]]},
 	"ov_done": {"text": "Still here? The road won't walk itself. Junk Town, then New Meridian.",
 				"options": [["On my way.", "ov_close"]]},
@@ -874,7 +874,7 @@ func heating_assembly_dialog(t: Dictionary) -> void:
 
 
 func heating_instability_dialog(t: Dictionary) -> void:
-	var body := "You examine the fractured primary pressure regulator and compare it against the Engineering Crew's diagnostic notes on the workstation:\n\n1. SOURCE OF INSTABILITY: The cast-iron governor core and diaphragm seat inside the main thermal pressure regulator have cracked through from decades of thermal fatigue. The engineers' improvised weld shims have sheared clean off, and cast-iron this fatigued cannot hold another weld.\n\n2. SPARES INVENTORY: The Silo 81 engineering ledger lists 'PRIMARY REGULATOR CORE — STOCK: 0'. The last spare assembly in the bunker was used six years ago. No replacement components exist locally."
+	var body := "You examine the fractured primary pressure regulator and compare it against the Engineering Crew's diagnostic notes on the workstation:\n\n1. SOURCE OF INSTABILITY: The cast-iron governor core and diaphragm seat inside the main thermal pressure regulator have cracked through from decades of thermal fatigue. The engineers' improvised weld shims have sheared clean off, and cast-iron this fatigued cannot hold another weld.\n\n2. SPARES INVENTORY: The Silo 81 engineering ledger lists 'PRIMARY REGULATOR CORE â€” STOCK: 0'. The last spare assembly in the bunker was used six years ago. No replacement components exist locally."
 	open_dialog(
 		t["name"],
 		body,
@@ -1370,6 +1370,12 @@ func _objective_target() -> Dictionary:
 	if level == null:
 		return {}
 	if flags["long_cold"] == "active":
+		if level_id == "ROAD":
+			for st in level.data["stairs"]:
+				if st["id"] == "to_jt_from_road":
+					var rs := Vector2(st["u"], st["v"])
+					return {"pos": Hex.plan_to_screen(rs, 1.0), "floor": Hex.plan_to_screen(rs, 0.0), "sprite": null}
+			return {}
 		if level_id != "L1":
 			return _stairs_beacon("L1")
 		for st in level.data["stairs"]:
@@ -1758,3 +1764,4 @@ func test_new_levels() -> void:
 		print("  reached ", player.hex == target, "  in room ", level._in_room(Hex.hex_to_plan(player.hex)))
 	print("TEST NEW LEVELS END")
 	get_tree().quit()
+

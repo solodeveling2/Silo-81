@@ -1,0 +1,295 @@
+{
+ "level": "ROAD",
+ "name": "The Snow Road - Silo 81 to Junk Town",
+ "ppm": 165.0,
+ "elev_deg": 47.0,
+ "rooms": [
+  {
+   "id": "road",
+   "r": [
+    0.0,
+    72.0,
+    -3.0,
+    3.0
+   ],
+   "name": "Snow road"
+  },
+  {
+   "id": "north_bank",
+   "r": [
+    0.0,
+    72.0,
+    3.0,
+    12.0
+   ],
+   "name": "North snowbank"
+  },
+  {
+   "id": "south_bank",
+   "r": [
+    0.0,
+    72.0,
+    -10.0,
+    -3.0
+   ],
+   "name": "South snowbank"
+  }
+ ],
+ "walls": [],
+ "doors": [],
+ "props": [
+  {
+   "type": "jt_car",
+   "footprint": [
+    16.5,
+    18.0,
+    3.0,
+    6.2
+   ],
+   "sprite": "spr_001.png",
+   "x0": 1182.4,
+   "y0": -2248.4,
+   "sort": [
+    1475.9,
+    -1864.4
+   ],
+   "name": "Crashed sedan"
+  },
+  {
+   "type": "jt_van_blue",
+   "footprint": [
+    32.0,
+    33.6,
+    -6.6,
+    -3.0
+   ],
+   "sprite": "spr_002.png",
+   "x0": 4142.6,
+   "y0": -2892.9,
+   "sort": [
+    4386.9,
+    -2389.2
+   ],
+   "name": "Frozen blue van"
+  },
+  {
+   "type": "jt_van_rust",
+   "footprint": [
+    44.4,
+    46.0,
+    2.6,
+    6.2
+   ],
+   "sprite": "spr_003.png",
+   "x0": 4366.6,
+   "y0": -4688.6,
+   "sort": [
+    4760.2,
+    -4232.3
+   ],
+   "name": "Rusted van"
+  },
+  {
+   "type": "jt_van_white",
+   "footprint": [
+    58.0,
+    59.6,
+    -6.2,
+    -2.6
+   ],
+   "sprite": "spr_004.png",
+   "x0": 7089.4,
+   "y0": -5135.6,
+   "sort": [
+    7373.7,
+    -4641.9
+   ],
+   "name": "Patched van"
+  },
+  {
+   "type": "road_billboard",
+   "footprint": [
+    62.55,
+    65.45,
+    6.9,
+    7.2
+   ],
+   "sprite": "spr_005.png",
+   "x0": 6456.0,
+   "y0": -6597.4,
+   "sort": [
+    6644.5,
+    -6062.6
+   ],
+   "name": "Road billboard",
+   "text": "NEW MERIDIAN 40. The paint has mostly gone."
+  },
+  {
+   "type": "jt_carwall",
+   "footprint": [
+    68.2,
+    70.0,
+    -7.2,
+    -1.2
+   ],
+   "sprite": "spr_006.png",
+   "x0": 8182.1,
+   "y0": -6114.6,
+   "sort": [
+    8552.1,
+    -5537.8
+   ],
+   "name": "Junk Town wall, south"
+  },
+  {
+   "type": "jt_carwall",
+   "footprint": [
+    68.2,
+    70.0,
+    1.2,
+    7.2
+   ],
+   "sprite": "spr_006.png",
+   "x0": 7202.1,
+   "y0": -6831.4,
+   "sort": [
+    7572.1,
+    -6254.6
+   ],
+   "name": "Junk Town wall, north"
+  },
+  {
+   "type": "junk_gate",
+   "footprint": [
+    69.6,
+    70.0,
+    -2.3,
+    2.3
+   ],
+   "sprite": "spr_007.png",
+   "x0": 7858.1,
+   "y0": -6592.0,
+   "sort": [
+    8143.7,
+    -5956.0
+   ],
+   "name": "Junk Town gate",
+   "text": "A gate of truck-box leaves and scrap, watched from two towers."
+  },
+  {
+   "type": "jt_tower_a",
+   "footprint": [
+    65.1,
+    67.5,
+    -7.2,
+    -4.8
+   ],
+   "sprite": "spr_008.png",
+   "x0": 8310.4,
+   "y0": -5831.7,
+   "sort": [
+    8435.4,
+    -5145.3
+   ],
+   "name": "South gate tower"
+  },
+  {
+   "type": "jt_tower_b",
+   "footprint": [
+    64.5,
+    67.5,
+    4.5,
+    7.5
+   ],
+   "sprite": "spr_009.png",
+   "x0": 6748.4,
+   "y0": -6930.7,
+   "sort": [
+    7000.4,
+    -6143.7
+   ],
+   "name": "North gate tower"
+  },
+  {
+   "type": "sacks",
+   "footprint": [
+    8.0,
+    8.6,
+    2.05,
+    3.15
+   ],
+   "sprite": "spr_010.png",
+   "x0": 562.0,
+   "y0": -1081.5,
+   "sort": [
+    665.0,
+    -930.1
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    12.0,
+    12.62,
+    -4.11,
+    -3.49
+   ],
+   "sprite": "spr_011.png",
+   "x0": 1798.4,
+   "y0": -811.7,
+   "sort": [
+    1879.6,
+    -726.1
+   ]
+  }
+ ],
+ "inspect": [],
+ "stairs": [
+  {
+   "id": "to_l1_from_road",
+   "u": 2.0,
+   "v": 0.0,
+   "to": "L1",
+   "arrive": [
+    -2.6,
+    0.6
+   ],
+   "name": "Silo 81 hatch",
+   "text": "The blast door back into the Surface Transit Depot."
+  },
+  {
+   "id": "to_jt_from_road",
+   "u": 70.0,
+   "v": 0.0,
+   "to": "JT",
+   "arrive": [
+    12.0,
+    0.0
+   ],
+   "name": "Junk Town gate",
+   "text": "Knock, and the gate watch will open up."
+  }
+ ],
+ "spawns": {
+  "player": [
+   8.0,
+   0.0,
+   5
+  ],
+  "worms": []
+ },
+ "blocked": [],
+ "bounds": [
+  0.0,
+  72.0,
+  -10.0,
+  12.0
+ ],
+ "sprites": [],
+ "bg": {
+  "file": "bg.png",
+  "x0": -1407,
+  "y0": -7174
+ },
+ "wallparts": []
+}

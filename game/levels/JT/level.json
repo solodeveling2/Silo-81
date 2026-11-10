@@ -421,12 +421,12 @@
    "id": "to_l1_from_jt",
    "u": 2.0,
    "v": 8.0,
-   "to": "L1",
+   "to": "ROAD",
    "arrive": [
-    -2.6,
-    0.6
+    68.0,
+    0.0
    ],
-   "name": "Silo 81 gate",
+   "name": "Snow road to Silo 81",
    "text": "The blast gate back down to the Silo 81 surface depot."
   }
  ],

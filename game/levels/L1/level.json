@@ -885,9 +885,9 @@
    "id": "to_jt_from_l1",
    "u": -2.6,
    "v": -1.4,
-   "to": "JT",
+   "to": "ROAD",
    "arrive": [
-    12.0,
+    8.0,
     0.0
    ],
    "name": "Snow road to Junk Town",

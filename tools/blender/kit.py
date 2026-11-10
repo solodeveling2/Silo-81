@@ -1855,3 +1855,56 @@ def goat(name, pose=0):
         x0, x1 = sorted((sx * 0.075, sx * 0.18))
         b.box(x0, x1, 0.53, 0.57, 0.76, 0.80, dark, M=M)
     return b.finish(), (0.95, 0.60)
+
+def silo_hatch(name):
+    """Concrete surface hatch with a steel blast door; the Silo 81 end of the snow road."""
+    b = Builder(name); m = _junk_mats()
+    concrete = toon("HatchConcrete", (0.46, 0.47, 0.46), noise=0.16, noise_scale=5.0, tex="concrete_floor", tex_scale=1.2)
+    steel = toon("HatchSteel", (0.30, 0.33, 0.34), noise=0.1, metal=0.3)
+    b.box(-1.8, 1.8, 0, 0.8, 0, 2.8, concrete)
+    b.box(-1.3, 1.3, 0.8, 0.86, 0.1, 2.5, steel)
+    b.box(-0.9, 0.9, 0.86, 0.90, 0.25, 2.35, m["dark"])
+    b.box(-1.6, 1.6, 0, 0.85, 2.8, 3.0, concrete)
+    for x in (-1.6, 1.6):
+        b.box(x - 0.12, x + 0.12, 0, 0.95, 0, 3.1, steel)
+    b.box(-1.5, 1.5, 0.80, 0.88, 2.3, 2.45, toon("HatchStripe", (0.62, 0.48, 0.10)))
+    return b.finish(), (3.6, 1.0)
+
+
+def road_billboard(name):
+    """Weathered roadside billboard on two posts, with a faded red band."""
+    b = Builder(name); m = _junk_mats()
+    wood = toon("BillboardWood", (0.30, 0.24, 0.17), noise=0.18)
+    board = toon("BillboardBoard", (0.55, 0.53, 0.46), noise=0.14)
+    red = toon("BillboardRed", (0.45, 0.16, 0.12), noise=0.12)
+    for x in (-1.1, 1.1):
+        b.box(x - 0.07, x + 0.07, 0, 0.1, 0, 2.2, wood)
+    b.box(-1.4, 1.4, 0.0, 0.12, 2.0, 3.4, board)
+    b.box(-1.25, 1.25, 0.12, 0.15, 2.55, 2.95, red)
+    b.box(-1.4, 1.4, 0.02, 0.1, 3.4, 3.5, m["snow"])
+    return b.finish(), (2.9, 0.3)
+
+def road_line(name, L=68.0):
+    """Faded dashed centre line for the snow road."""
+    b = Builder(name)
+    paint = toon("RoadPaint", (0.62, 0.52, 0.18), noise=0.12)
+    x = -L / 2 + 1.0
+    while x < L / 2 - 1.0:
+        b.box(x, x + 2.0, -0.07, 0.07, 0.012, 0.02, paint)
+        x += 4.5
+    return b.finish(outline=0), (L, 0.15)
+
+
+def snowbank(name, L=68.0):
+    """A low ploughed snow ridge along the road edge."""
+    b = Builder(name)
+    snow = toon("PloughSnow", (0.74, 0.78, 0.82), noise=0.16, noise_scale=4.0)
+    x = -L / 2
+    i = 0
+    while x < L / 2:
+        w = 3.0 + (i % 3) * 0.6
+        h = 0.42 + ((i * 7) % 5) * 0.06
+        b.box(x, min(L / 2, x + w), -0.5, 0.5, 0.0, h, snow)
+        x += w * 0.82
+        i += 1
+    return b.finish(outline=0.008), (L, 1.0)
