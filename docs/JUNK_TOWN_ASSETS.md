@@ -88,3 +88,32 @@ body/neck proportions are placeholder. The head nod works mechanically, but the 
 (smaller head, visible neck, longer body, shorter legs) before it looks like a goat.
 
 Full --autotest still passes; JT loads with 819 walkable hexes.
+
+## Tripo FBX set — integrated (10 Nov 2026)
+
+Claude's downloaded junktown2_*.fbx set was converted with **FBX2glTF** (no Blender 4.x needed):
+8 final textured models now live in source/props3d/junk_town/ as GLB:
+
+| GLB | Model |
+|---|---|
+| jt_18e9601d... | car-body wall section |
+| jt_7dbe901d... | chain-link fence panel |
+| jt_8785b52a... | small scrap watchtower |
+| jt_d84d152f... | large wooden watchtower |
+| jt_8b45d3f8... | blue snow-covered van |
+| jt_9ab7da92... | rusted van |
+| jt_b181aea4... | sedan |
+| jt_f57b9508... | patched white van |
+
+They are wired into uild.py as GLB_PROPS (jt_carwall, jt_fence, jt_tower_a/b,
+jt_van_blue/rust/white, jt_car) and placed in the JT plan. Render:
+
+`
+blender -b -P tools/blender/build.py -- JT out/JT
+`
+
+Preview: docs/JUNK_TOWN_TRIPO.png.
+
+Known issues: the chain-link fence sits at the far edge and reads as floating; one van overlaps a
+shack roof; the gate and shacks are still procedural. Next pass should move the fence to a side
+perimeter, separate the van from the shack, and replace the gate with a Tripo-compatible gate.

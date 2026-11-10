@@ -1125,15 +1125,21 @@ def JT():
     D["bounds"] = [0.0, 24.0, -8.0, 9.0]
     P = D["props"]
     # north perimeter: car-body wall, gate in the middle
-    P.append(dict(t="junk_car_wall", u=2.4, v=8.8, f="-v", L=4.8, name="Car wall, west"))
+    P.append(dict(t="jt_carwall", u=2.2, v=8.8, f="-v", L=4.4, name="Car wall, west"))
     P.append(dict(t="junk_gate", u=7.0, v=8.8, f="-v", name="Junk Town gate",
                   text="Two truck-box leaves on a timber frame, scraped shut every night."))
-    P.append(dict(t="junk_car_wall", u=11.6, v=8.8, f="-v", L=4.8, name="Car wall, east"))
-    # gate towers
-    P.append(dict(t="junk_watchtower", u=1.8, v=7.8, f="-v", name="West gate tower",
+    P.append(dict(t="jt_carwall", u=11.8, v=8.8, f="-v", L=4.4, name="Car wall, east"))
+    # gate towers (Tripo watchtowers)
+    P.append(dict(t="jt_tower_a", u=1.8, v=7.8, f="-v", name="West gate tower",
                   text="Scaffold, car seats and a corrugated roof. A bell hangs from the rail."))
-    P.append(dict(t="junk_watchtower", u=11.4, v=7.8, f="-v", name="East gate tower",
+    P.append(dict(t="jt_tower_b", u=11.4, v=7.8, f="-v", name="East gate tower",
                   text="The gate watch keeps a rifle and a kettle up here."))
+    # perimeter fence and vehicles pulled into the yard
+    P.append(dict(t="jt_fence", u=23.4, v=2.0, f="-u", name="Chain-link fence"))
+    P.append(dict(t="jt_van_blue", u=3.6, v=2.6, f="+u", name="Snow-covered van"))
+    P.append(dict(t="jt_van_rust", u=9.8, v=2.0, f="-u", name="Rusted van"))
+    P.append(dict(t="jt_car", u=7.6, v=-5.4, f="+v", name="Salvaged sedan"))
+    P.append(dict(t="jt_van_white", u=14.0, v=1.8, f="+v", name="Patched van"))
     # shacks around the yard
     P.append(dict(t="junk_shack", u=16.0, v=4.6, f="-v", name="Mara's garage",
                   text="Half workshop, half home: a vice, a parts shelf and a stove."))
@@ -1981,7 +1987,16 @@ GLB_PROPS = {
     "counter": dict(file="silo81_counter.glb", rot=180, fit="box", L=2.0, D=0.62, H=0.92),
     "pump": dict(file="silo81_pump.glb", rot=180, fit="x", L=1.2, D=0.7, tint=(0.82, 1.04, 1.06)),        # industrial teal
     "toolbox": dict(file="silo81_toolbox.glb", rot=180, fit="x", L=1.0, D=0.3),
-    "medcab": dict(file="silo81_medcab.glb", rot=180, fit="z", H=1.8, L=0.9, D=0.42)}
+    "medcab": dict(file="silo81_medcab.glb", rot=180, fit="z", H=1.8, L=0.9, D=0.42),
+    # Junk Town 2 (Tripo FBX -> GLB, 1 m normalised on import; scaled to real metres here)
+    "jt_carwall": dict(file="junk_town/jt_18e9601d-9ea4-4375-9b50-66204d166421.glb", rot=180, fit="box", L=6.0, D=1.8, H=2.7),
+    "jt_fence": dict(file="junk_town/jt_7dbe901d-65de-46da-b90e-f87f2bf23433.glb", rot=180, fit="box", L=4.0, D=0.18, H=2.2),
+    "jt_tower_a": dict(file="junk_town/jt_8785b52a-41ee-4b35-9cf3-5692f915be52.glb", rot=180, fit="z", H=4.4, L=2.4, D=2.4),
+    "jt_tower_b": dict(file="junk_town/jt_d84d152f-e826-4837-81d5-739b53a0c4b1.glb", rot=180, fit="z", H=4.6, L=3.0, D=3.0),
+    "jt_van_blue": dict(file="junk_town/jt_8b45d3f8-b39e-4568-bc4c-00b22b1cd533.glb", rot=180, fit="x", L=4.8, D=2.0),
+    "jt_van_rust": dict(file="junk_town/jt_9ab7da92-22c5-47f7-92d0-02f853ea0ee9.glb", rot=180, fit="x", L=4.8, D=2.0),
+    "jt_car": dict(file="junk_town/jt_b181aea4-5625-444d-af37-2005a11bd46b.glb", rot=180, fit="x", L=4.2, D=1.8),
+    "jt_van_white": dict(file="junk_town/jt_f57b9508-2629-4697-914a-afa8cfbee9ff.glb", rot=180, fit="x", L=4.8, D=2.0)}
 
 
 def glb_box(key, L=None, D=None, H=None):
@@ -2088,6 +2103,14 @@ PROP_FN = {
     "goat": lambda p: kit.goat("Goat", p.get("pose", 0)),
     "junk_car_wall": lambda p: kit.junk_car_wall("CarWall", p.get("L", 6.0)),
     "junk_gate": lambda p: kit.junk_gate("JunkGate"),
+    "jt_carwall": lambda p: glb_box("jt_carwall", L=p.get("L", 6.0)),
+    "jt_fence": lambda p: glb("jt_fence"),
+    "jt_tower_a": lambda p: glb("jt_tower_a"),
+    "jt_tower_b": lambda p: glb("jt_tower_b"),
+    "jt_van_blue": lambda p: glb("jt_van_blue"),
+    "jt_van_rust": lambda p: glb("jt_van_rust"),
+    "jt_car": lambda p: glb("jt_car"),
+    "jt_van_white": lambda p: glb("jt_van_white"),
     "boiler_assembly": lambda p: kit.boiler_assembly("BoilerAssembly"),
     "control_panel": lambda p: kit.control_panel("ControlPanel"),
     "temp_monitor": lambda p: kit.temp_monitor("TempMonitor"),
@@ -2138,7 +2161,10 @@ for i, p in enumerate(LV["props"]):
              "monitors": (1.3, 0.65), "boiler_assembly": (3.4, 1.6), "control_panel": (1.8, 0.62), "temp_monitor": (1.5, 0.65),
              "corrugated_fence": (p.get("L", 2.6), 0.14), "junk_watchtower": (2.4, 2.4), "junk_shack": (3.0, 2.4),
              "animal_pen": (4.2, 3.0), "goat": (0.95, 0.60),
-             "junk_car_wall": (p.get("L", 6.0), 1.8), "junk_gate": (4.6, 0.4)}[p["t"]]
+             "junk_car_wall": (p.get("L", 6.0), 1.8), "junk_gate": (4.6, 0.4),
+             "jt_carwall": (6.0, 1.8), "jt_fence": (4.0, 0.18), "jt_tower_a": (2.4, 2.4),
+             "jt_tower_b": (3.0, 3.0), "jt_van_blue": (4.8, 2.0), "jt_van_rust": (4.8, 2.0),
+             "jt_car": (4.2, 1.8), "jt_van_white": (4.8, 2.0)}[p["t"]]
     fp = footprint(p["u"], p["v"], p["f"], L, Dp)
     cu, cv = (fp[0] + fp[1]) / 2, (fp[2] + fp[3]) / 2
     sx, sy = scr_uv(p["u"], p["v"])
