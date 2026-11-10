@@ -92,7 +92,7 @@ func _ready() -> void:
 		var lvl: String = sp[0] if sp.size() > 0 else "L2"
 		var at := Vector2(float(sp[1]), float(sp[2])) if sp.size() >= 3 else Vector2.INF
 		flags["quest"] = "given"
-		if lvl == "JT":
+		if lvl == "JT" or lvl == "L1":
 			flags["long_cold"] = "active"
 		load_level(lvl, at)
 		hud.log_msg("Playtest: jumped to %s." % lvl, Color(0.55, 0.85, 1.0))
@@ -138,7 +138,7 @@ func _shot(spec: String) -> void:
 
 # ================================================================== levels
 func load_level(id: String, arrive: Vector2) -> void:
-	if id == "L1" and flags["long_cold"] == "active":
+	if id == "JT" and flags["long_cold"] == "active":
 		flags["left_silo"] = true
 	if level:
 		level.queue_free()
@@ -224,6 +224,8 @@ func load_level(id: String, arrive: Vector2) -> void:
 	if id == "L1" and not flags["visited_L1"]:
 		flags["visited_L1"] = true
 		hud.log_msg("Level 1: Surface Transit Depot. Freezing drafts seep from the snow-buried rail switchyard, countered only by the watchpost stove.", Color(0.72, 0.86, 1.0))
+	if id == "L1" and flags["long_cold"] == "active":
+		hud.log_msg("The snow road to Junk Town leaves from the west surface airlock. Follow the beacon.", Color(1.0, 0.82, 0.45))
 	mode = "explore"
 	my_turn = true
 	action = ""
@@ -1370,6 +1372,10 @@ func _objective_target() -> Dictionary:
 	if flags["long_cold"] == "active":
 		if level_id != "L1":
 			return _stairs_beacon("L1")
+		for st in level.data["stairs"]:
+			if st["id"] == "to_jt_from_l1":
+				var cs := Vector2(st["u"], st["v"])
+				return {"pos": Hex.plan_to_screen(cs, 1.0), "floor": Hex.plan_to_screen(cs, 0.0), "sprite": null}
 		return {}
 	if level_id == "L2" and not stats["kit"]:
 		return _prop_beacon("toolbox", 0.75)
