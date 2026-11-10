@@ -1,4 +1,4 @@
-"""Build one Silo 81 level in Blender and render it for Godot.
+﻿"""Build one Silo 81 level in Blender and render it for Godot.
 
 Outputs (in OUT/LEVEL):
   bg.png                     floor, walls, stairs, pipes and everything fixed to a back wall or the floor
@@ -909,7 +909,7 @@ def L5():
     ]
     D["inspect"] += [
         dict(id="borehead_inspect", u=6.0, v=4.4, name="Geothermal borehead",
-             text="Deep geothermal intake pipes bringing 142 C water from the bedrock. The heat source is strong and steady — proving the silo's heating crisis is purely mechanical."),
+             text="Deep geothermal intake pipes bringing 142 C water from the bedrock. The heat source is strong and steady â€” proving the silo's heating crisis is purely mechanical."),
         dict(id="stores_ledger", u=19.8, v=3.2, name="Master spare-parts ledger",
              text="Every Class IV pressure regulator casting stored in Silo 81 was used up decades ago. The ledger notes that spare assemblies were manufactured and warehoused at the surface city's municipal rail foundry."),
         dict(id="regional_map", u=16.5, v=-3.8, name="Valley transit & foundry blueprint",
@@ -1135,11 +1135,11 @@ def JT():
     P.append(dict(t="jt_tower_b", u=11.4, v=7.8, f="-v", name="East gate tower",
                   text="The gate watch keeps a rifle and a kettle up here."))
     # perimeter fence and vehicles pulled into the yard
-    P.append(dict(t="jt_fence", u=23.4, v=2.0, f="-u", name="Chain-link fence"))
-    P.append(dict(t="jt_van_blue", u=3.6, v=2.6, f="+u", name="Snow-covered van"))
-    P.append(dict(t="jt_van_rust", u=9.8, v=2.0, f="-u", name="Rusted van"))
-    P.append(dict(t="jt_car", u=7.6, v=-5.4, f="+v", name="Salvaged sedan"))
-    P.append(dict(t="jt_van_white", u=14.0, v=1.8, f="+v", name="Patched van"))
+    P.append(dict(t="jt_fence", u=22.0, v=-6.0, f="-u", name="Chain-link fence"))
+    P.append(dict(t="jt_van_blue", u=2.6, v=4.4, f="+v", name="Snow-covered van"))
+    P.append(dict(t="jt_van_rust", u=5.0, v=-6.2, f="-u", name="Rusted van"))
+    P.append(dict(t="jt_car", u=8.7, v=-6.4, f="+v", name="Salvaged sedan"))
+    P.append(dict(t="jt_van_white", u=20.6, v=3.8, f="+u", name="Patched van"))
     # shacks around the yard
     P.append(dict(t="junk_shack", u=16.0, v=4.6, f="-v", name="Mara's garage",
                   text="Half workshop, half home: a vice, a parts shelf and a stove."))
@@ -1993,10 +1993,10 @@ GLB_PROPS = {
     "jt_fence": dict(file="junk_town/jt_7dbe901d-65de-46da-b90e-f87f2bf23433.glb", rot=180, fit="box", L=4.0, D=0.18, H=2.2),
     "jt_tower_a": dict(file="junk_town/jt_8785b52a-41ee-4b35-9cf3-5692f915be52.glb", rot=180, fit="z", H=4.4, L=2.4, D=2.4),
     "jt_tower_b": dict(file="junk_town/jt_d84d152f-e826-4837-81d5-739b53a0c4b1.glb", rot=180, fit="z", H=4.6, L=3.0, D=3.0),
-    "jt_van_blue": dict(file="junk_town/jt_8b45d3f8-b39e-4568-bc4c-00b22b1cd533.glb", rot=180, fit="x", L=4.8, D=2.0),
-    "jt_van_rust": dict(file="junk_town/jt_9ab7da92-22c5-47f7-92d0-02f853ea0ee9.glb", rot=180, fit="x", L=4.8, D=2.0),
-    "jt_car": dict(file="junk_town/jt_b181aea4-5625-444d-af37-2005a11bd46b.glb", rot=180, fit="x", L=4.2, D=1.8),
-    "jt_van_white": dict(file="junk_town/jt_f57b9508-2629-4697-914a-afa8cfbee9ff.glb", rot=180, fit="x", L=4.8, D=2.0)}
+    "jt_van_blue": dict(file="junk_town/jt_8b45d3f8-b39e-4568-bc4c-00b22b1cd533.glb", rot=180, fit="z", H=2.2, L=3.6, D=1.6),
+    "jt_van_rust": dict(file="junk_town/jt_9ab7da92-22c5-47f7-92d0-02f853ea0ee9.glb", rot=180, fit="z", H=2.2, L=3.6, D=1.6),
+    "jt_car": dict(file="junk_town/jt_b181aea4-5625-444d-af37-2005a11bd46b.glb", rot=180, fit="z", H=1.5, L=3.2, D=1.5),
+    "jt_van_white": dict(file="junk_town/jt_f57b9508-2629-4697-914a-afa8cfbee9ff.glb", rot=180, fit="z", H=2.2, L=3.6, D=1.6)}
 
 
 def glb_box(key, L=None, D=None, H=None):
@@ -2163,8 +2163,8 @@ for i, p in enumerate(LV["props"]):
              "animal_pen": (4.2, 3.0), "goat": (0.95, 0.60),
              "junk_car_wall": (p.get("L", 6.0), 1.8), "junk_gate": (4.6, 0.4),
              "jt_carwall": (6.0, 1.8), "jt_fence": (4.0, 0.18), "jt_tower_a": (2.4, 2.4),
-             "jt_tower_b": (3.0, 3.0), "jt_van_blue": (4.8, 2.0), "jt_van_rust": (4.8, 2.0),
-             "jt_car": (4.2, 1.8), "jt_van_white": (4.8, 2.0)}[p["t"]]
+             "jt_tower_b": (3.0, 3.0), "jt_van_blue": (3.6, 1.6), "jt_van_rust": (3.6, 1.6),
+             "jt_car": (3.2, 1.5), "jt_van_white": (3.6, 1.6)}[p["t"]]
     fp = footprint(p["u"], p["v"], p["f"], L, Dp)
     cu, cv = (fp[0] + fp[1]) / 2, (fp[2] + fp[3]) / 2
     sx, sy = scr_uv(p["u"], p["v"])
@@ -2474,3 +2474,5 @@ for e in out["props"]:
 
 json.dump(out, open(os.path.join(DIR, "level.json"), "w"), indent=1)
 print("done", LEVEL, "sprites", len(cache))
+
+
