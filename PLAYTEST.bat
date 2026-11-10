@@ -32,17 +32,17 @@ echo   Q. Quit
 echo ============================================================
 set /p pick=Choose: 
 
-if /i "%pick%"=="1" ( start "" "%GODOT%" --path "%GAME%" & goto menu )
-if /i "%pick%"=="2" ( start "" "%GODOT%" --path "%GAME%" -- --start=L3,6.6,-0.2 & goto menu )
-if /i "%pick%"=="3" ( start "" "%GODOT%" --path "%GAME%" -- --start=L4W & goto menu )
-if /i "%pick%"=="4" ( start "" "%GODOT%" --path "%GAME%" -- --start=L4E & goto menu )
-if /i "%pick%"=="5" ( start "" "%GODOT%" --path "%GAME%" -- --start=L5 & goto menu )
-if /i "%pick%"=="6" ( start "" "%GODOT%" --path "%GAME%" -- --start=L1 & goto menu )
-if /i "%pick%"=="7" ( start "" "%GODOT%" --path "%GAME%" -- --start=JT,12,0 & goto menu )
-if /i "%pick%"=="8" ( start "" "%GODOT%" --path "%GAME%" -- --start=JT,19,-4 & goto menu )
-if /i "%pick%"=="9" ( start "" "%GODOT%" --path "%GAME%" -- --start=JT,12,0 --god & goto menu )
-if /i "%pick%"=="10" ( start "" "%GODOT%" --path "%GAME%" -- --start=L2W & goto menu )
-if /i "%pick%"=="11" ( start "" "%GODOT%" --path "%GAME%" -- --start=L4W,-27.8,7.2 & goto menu )
+if /i "%pick%"=="1" ( start "" "%GODOT%" --path "%GAME%" & exit /b 0 )
+if /i "%pick%"=="2" ( start "" "%GODOT%" --path "%GAME%" -- --start=L3,6.6,-0.2 & exit /b 0 )
+if /i "%pick%"=="3" ( start "" "%GODOT%" --path "%GAME%" -- --start=L4W & exit /b 0 )
+if /i "%pick%"=="4" ( start "" "%GODOT%" --path "%GAME%" -- --start=L4E & exit /b 0 )
+if /i "%pick%"=="5" ( start "" "%GODOT%" --path "%GAME%" -- --start=L5 & exit /b 0 )
+if /i "%pick%"=="6" ( start "" "%GODOT%" --path "%GAME%" -- --start=L1 & exit /b 0 )
+if /i "%pick%"=="7" ( start "" "%GODOT%" --path "%GAME%" -- --start=JT,12,0 & exit /b 0 )
+if /i "%pick%"=="8" ( start "" "%GODOT%" --path "%GAME%" -- --start=JT,19,-4 & exit /b 0 )
+if /i "%pick%"=="9" ( start "" "%GODOT%" --path "%GAME%" -- --start=JT,12,0 --god & exit /b 0 )
+if /i "%pick%"=="10" ( start "" "%GODOT%" --path "%GAME%" -- --start=L2W & exit /b 0 )
+if /i "%pick%"=="11" ( start "" "%GODOT%" --path "%GAME%" -- --start=L4W,-27.8,7.2 & exit /b 0 )
 if /i "%pick%"=="0" (
   "%GODOT%" --headless --fixed-fps 60 --path "%GAME%" -- --autotest
   echo.
@@ -51,4 +51,5 @@ if /i "%pick%"=="0" (
 )
 if /i "%pick%"=="q" exit /b 0
 goto menu
+
 
