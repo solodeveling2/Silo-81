@@ -79,9 +79,27 @@ func _ready() -> void:
 	add_child(mood)
 	load_level("L2", Vector2.INF)
 	hud.log_msg("Click to move. 1-5 or click the bar to pick an action, then click a target. Right-click cancels.", Hud.DIM)
+	# Playtest helpers: --start=LEVEL[,u,v] jumps straight in, --god keeps the player alive.
+	var start_spec := ""
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("--start="):
+			start_spec = a.substr(8)
+		elif a == "--god":
+			stats["hp_max"] = 999
+			stats["hp"] = 999
+	if start_spec != "":
+		var sp := start_spec.split(",")
+		var lvl: String = sp[0] if sp.size() > 0 else "L2"
+		var at := Vector2(float(sp[1]), float(sp[2])) if sp.size() >= 3 else Vector2.INF
+		flags["quest"] = "given"
+		if lvl == "JT":
+			flags["long_cold"] = "active"
+		load_level(lvl, at)
+		hud.log_msg("Playtest: jumped to %s." % lvl, Color(0.55, 0.85, 1.0))
 	var testing := false
 	for a in ["--autotest", "--test-commons", "--test-command", "--test-new-levels", "--view-pipe"]:
 		testing = testing or a in OS.get_cmdline_user_args()
+	testing = testing or start_spec != ""
 	for a in OS.get_cmdline_user_args():
 		testing = testing or a.begins_with("--shot=")
 	if testing:
