@@ -34,6 +34,7 @@ var pipe := {}
 var wall_parts: Array = []          # {sprite, mat, rect, y, sort, wall, room_id, fade, cut, alpha}
 var pipe_node: Sprite2D
 var water = null   # Array of the water particle emitters, made on first use
+var creatures: Array = []  # live 3D animals (Puppet3D), e.g. Junk Town goats: {p, facing, phase}
 var grazers: Array = []   # {s: Sprite2D, phase: float} — goat heads nodding while they eat
 
 
@@ -89,6 +90,19 @@ func build(dir: String, state: Dictionary) -> void:
 		var rect := Rect2(Vector2(p["x0"], p["y0"]), s.texture.get_size())
 		props.append({"data": p, "node": n, "sprite": s, "rect": rect})
 		blocked.append(_grow(p["footprint"], 0.08))
+
+	for c in data.get("creatures", []):           # live 3D animals (CLAUDE.md: anything that moves is 3D)
+		var coat := "piebald" if creatures.size() % 3 == 1 else "brown"
+		var base := "res://characters/%s_3d/%s_%s" % [c["kind"], c["kind"], coat]
+		if not FileAccess.file_exists(base + ".json"):
+			continue
+		var pup := Puppet3D.new()
+		pup.setup(base + ".glb", base + ".json")
+		var cn := Node2D.new()
+		cn.position = Hex.plan_to_screen(Vector2(c["u"], c["v"]))
+		cn.add_child(pup)
+		sorted.add_child(cn)
+		creatures.append({"p": pup, "facing": float(c.get("facing", 0.0)), "phase": float(c.get("phase", 0.0))})
 
 	for wp in data.get("wallparts", []):          # full-height walls, in strips that sort and fade
 		var n := Node2D.new()
@@ -902,6 +916,8 @@ func approach_hexes(target: Dictionary) -> Array:
 
 func _process(_dt: float) -> void:
 	var t := Time.get_ticks_msec() / 1000.0
+	for c in creatures:                           # 12 poses a second: the grazing loop at half its source rate
+		(c["p"] as Puppet3D).sync("idle", (t + c["phase"]) * 12.0, 12.0, c["facing"], NAN, _dt)
 	for g in grazers:
 		var ph: float = g["phase"]
 		g["s"].rotation = sin(t * 1.25 + ph) * 0.10 + sin(t * 2.9 + ph) * 0.035

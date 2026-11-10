@@ -1094,7 +1094,7 @@ def L1():
              text="Descend via the personnel lift to Level 4 Command (Valve Gallery)."),
         dict(id="to_l5_from_l1", u=0.0, v=1.3, to="L5", arrive=[20.8, 0.0], name="Freight Lift (Sub-Level 4)",
              text="Descend via the heavy freight lift to Sub-Level 4: Deep Storage & Geotherm Ring."),
-        dict(id="to_jt_from_l1", u=-2.6, v=-1.4, to="JT", arrive=[12.0, 0.0], name="Snow road to Junk Town",
+        dict(id="to_jt_from_l1", u=-2.6, v=-1.4, to="JT", arrive=[-3.0, 0.0], name="Snow road to Junk Town",
              text="The surface blast gate opens onto the snow road east, toward Junk Town."),
     ]
     D["spawns"] = {"player": [-2.6, 0.6, 0], "worms": []}
@@ -1109,58 +1109,116 @@ def L1():
 
 
 def JT():
-    """Junk Town blockout: the circular car-wall settlement outside Silo 81.
-    Zero combat hub: gate yard, market shacks, watchtowers, animal pen with grazing goats."""
-    D = {"name": "Junk Town - Scavenger Settlement", "rooms": [], "walls": [], "doors": [], "props": [],
-         "decor": [], "inspect": [], "stairs": [], "spawns": {}, "blocked": []}
-    snow = dict(rgb=(0.54, 0.57, 0.60), noise=0.22, noise_scale=4.0, tex="concrete_floor", ts=1.8)
-    slush = dict(rgb=(0.42, 0.40, 0.36), noise=0.26, noise_scale=6.0, tex="concrete_floor", ts=1.4)
-    dirt = dict(rgb=(0.36, 0.33, 0.28), noise=0.28, noise_scale=5.0, tex="concrete_floor", ts=1.2)
+    """Junk Town: a ring of wrecked cars nose-to-tail around a muddy yard (art/concepts/junk_town_ref.png).
+    Plan: town u 3..28, v -12..12; the road from Silo 81 comes in from the camera-left side (-u) to an open
+    gate in the west wall. Far walls (+v north, +u east) are tall: cars stacked, sheet behind, struts.
+    Camera-side walls (south, west) stay one car high (LEVEL_DESIGN: low camera-side walls) so the yard
+    reads. Corner watchtowers on the three corners that do not hide the yard. Zero-combat hub."""
+    D = {"name": "Junk Town", "rooms": [], "walls": [], "doors": [], "props": [], "decor": [],
+         "inspect": [], "stairs": [], "spawns": {}, "blocked": [], "holes": []}
+    snow = dict(rgb=(0.74, 0.77, 0.80), noise=0.16, noise_scale=1.6)          # snow, trodden grey near the yard
+    trod = dict(rgb=(0.60, 0.61, 0.62), noise=0.30, noise_scale=1.2)
+    mud = dict(rgb=(0.50, 0.48, 0.45), noise=0.42, noise_scale=0.9)
     D["rooms"] += [
-        dict(id="gate_yard", name="Gate yard", r=[0.0, 12.0, -8.0, 8.0], floor=snow),
-        dict(id="market", name="Market row", r=[12.0, 20.0, -8.0, 8.0], floor=slush),
-        dict(id="pen", name="Animal pen", r=[16.0, 24.0, -8.0, -2.0], floor=dirt),
+        dict(id="road", name="Snow road", r=[-7.0, 2.4, -2.2, 2.2], floor=trod),
+        dict(id="jt_yard", name="Junk Town yard", r=[8.0, 20.0, -5.0, 5.0], floor=snow),
+        dict(id="jt_north", name="Junk Town", r=[2.4, 28.5, 5.0, 12.5], floor=snow),
+        dict(id="jt_south", name="Junk Town", r=[2.4, 28.5, -12.5, -5.0], floor=snow),
+        dict(id="jt_west", name="Junk Town gate", r=[2.4, 8.0, -5.0, 5.0], floor=snow),
+        dict(id="jt_east", name="Junk Town", r=[20.0, 28.5, -5.0, 5.0], floor=snow),
     ]
-    D["holes"] = []
-    D["bounds"] = [0.0, 24.0, -8.0, 9.0]
+    D["bounds"] = [-7.0, 30.5, -14.5, 14.5]
     P = D["props"]
-    # north perimeter: car-body wall, gate in the middle
-    P.append(dict(t="junk_car_wall", u=2.4, v=8.8, f="-v", L=4.8, name="Car wall, west"))
-    P.append(dict(t="junk_gate", u=7.0, v=8.8, f="-v", name="Junk Town gate",
-                  text="Two truck-box leaves on a timber frame, scraped shut every night."))
-    P.append(dict(t="junk_car_wall", u=11.6, v=8.8, f="-v", L=4.8, name="Car wall, east"))
-    # gate towers
-    P.append(dict(t="junk_watchtower", u=1.8, v=7.8, f="-v", name="West gate tower",
+    # ---- the ring: far walls tall (sorted behind the yard), camera-side walls low (sorted in front)
+    for i, u in enumerate((6.0, 12.0, 18.0, 24.0)):
+        P.append(dict(t="junk_car_wall", u=u, v=14.3, f="-v", L=6.2, tall=True, seed=10 + i, sort_at="far", name="Car wall",
+                      text="Car bodies nose to tail, two high where they could lift them. Sheet and timber fill the gaps."))
+    for i, v in enumerate((-9.3, -3.1, 3.1, 9.3)):
+        P.append(dict(t="junk_car_wall", u=30.3, v=v, f="-u", L=6.2, tall=True, seed=20 + i, sort_at="far", name="Car wall"))
+    for i, u in enumerate((4.6, 9.0, 13.4, 17.8, 22.2, 26.6)):
+        P.append(dict(t="junk_car_wall", u=u, v=-14.3, f="+v", L=4.4, tall=False, seed=30 + i, sort_at="near", name="Car wall"))
+    for i, v in enumerate((-11.9, -7.6, 7.6, 11.9)):
+        P.append(dict(t="junk_car_wall", u=0.6, v=v, f="+u", L=4.3, tall=False, seed=40 + i, sort_at="near", name="Car wall"))
+    for v in (-4.0, 4.0):                                   # short sheet runs either side of the gate
+        P.append(dict(t="corrugated_fence", u=0.8, v=v, f="+u", L=1.8, sort_at="near"))
+    P.append(dict(t="junk_gate_open", u=0.7, v=0.0, f="+u", noblock=True, sort_at="near", name="Junk Town gate",
+                  text="Two truck-box leaves on a timber frame. Open by day, scraped shut every night.",
+                  posts=[[0.4, 1.0, -2.4, -1.9], [0.4, 1.0, 1.9, 2.4]]))
+    # ---- watchtowers: north-west and north-east corners, south-east corner, and one over the gate
+    P.append(dict(t="junk_watchtower", u=3.6, v=11.6, f="-v", name="Watchtower",
                   text="Scaffold, car seats and a corrugated roof. A bell hangs from the rail."))
-    P.append(dict(t="junk_watchtower", u=11.4, v=7.8, f="-v", name="East gate tower",
-                  text="The gate watch keeps a rifle and a kettle up here."))
-    # shacks around the yard
-    P.append(dict(t="junk_shack", u=16.0, v=4.6, f="-v", name="Mara's garage",
-                  text="Half workshop, half home: a vice, a parts shelf and a stove."))
-    P.append(dict(t="junk_shack", u=12.2, v=-4.2, f="+v", name="Market shack",
-                  text="Tarpaulin roof, salvaged counter, and a hand-painted sign."))
-    P.append(dict(t="junk_shack", u=4.2, v=-5.2, f="+v", name="Bunk shack",
+    P.append(dict(t="junk_watchtower", u=27.4, v=11.6, f="-v", name="Watchtower",
+                  text="The night watch keeps a rifle and a kettle up here."))
+    P.append(dict(t="junk_watchtower", u=27.4, v=-9.9, f="-u", name="Watchtower"))
+    # ---- shacks against the far walls, workshops facing the yard
+    P.append(dict(t="junk_shack", u=8.6, v=12.4, f="-v", seed=1, L=3.6, name="Bunk shack",
                   text="Bunks for travellers who reach the gate after dark."))
-    # animal pen and goats
-    P.append(dict(t="animal_pen", u=20.0, v=-5.0, f="+v", name="Goat pen",
+    P.append(dict(t="junk_shack", u=13.6, v=12.4, f="-v", seed=2, L=4.2, D=3.0, name="Mara's garage",
+                  text="Half workshop, half home: a vice, a parts shelf and a stove that never goes out."))
+    P.append(dict(t="junk_shack", u=18.6, v=12.4, f="-v", seed=3, name="Shack"))
+    P.append(dict(t="junk_shack", u=22.6, v=12.4, f="-v", seed=6, L=2.6, name="Shack"))
+    P.append(dict(t="junk_shack", u=28.4, v=5.4, f="-u", seed=4, L=3.6, name="Market shack",
+                  text="Tarpaulin roof, salvaged counter, and a hand-painted sign: BUY - SELL - SWAP."))
+    P.append(dict(t="junk_shack", u=28.4, v=0.6, f="-u", seed=5, name="Smokehouse",
+                  text="Goat, mostly. The smell carries to the gate."))
+    P.append(dict(t="junk_shack", u=8.4, v=-12.6, f="+v", seed=7, name="Shack"))
+    # ---- the market round the burn barrel, a car being stripped, firewood
+    P.append(dict(t="market_stall", u=11.4, v=3.6, f="-v", seed=0, name="Market stall",
+                  text="Jars of rendered fat, valve washers, a radio that works if you hit it."))
+    P.append(dict(t="market_stall", u=16.6, v=3.6, f="-v", seed=1, name="Market stall"))
+    P.append(dict(t="market_stall", u=17.4, v=-3.2, f="+v", seed=2, name="Market stall"))
+    P.append(dict(t="yard_wreck", u=21.0, v=-1.0, f="-u", seed=3, name="Stripped car",
+                  text="On blocks, bonnet up, half its parts already in the wall."))
+    P.append(dict(t="firewood", u=10.2, v=12.4, f="-v"))
+    P.append(dict(t="firewood", u=29.0, v=8.2, f="-u"))
+    P.append(dict(t="firewood", u=4.4, v=-12.6, f="+v"))
+    # ---- animal pen in the south-east, goats are live 3D creatures (spawned by level.gd)
+    P.append(dict(t="animal_pen", u=20.6, v=-12.2, f="+v", name="Goat pen",
                   text="Three goats, a trough and a hay pile. The settlement's only livestock."))
-    for i, (gu, gv, pose) in enumerate(((19.0, -4.2, 0), (20.8, -4.6, 1), (19.8, -5.8, 0))):
-        P.append(dict(t="goat", u=gu, v=gv, f="+v", pose=pose, name="Goat"))
-    # yard clutter
-    P.append(dict(t="crate", u=6.4, v=2.6, f="+u"))
-    P.append(dict(t="crate", u=7.1, v=2.1, f="+u"))
-    P.append(dict(t="bucket", u=8.0, v=0.2, f="+u"))
-    P.append(dict(t="crate", u=14.6, v=-1.2, f="-v"))
-    P.append(dict(t="sacks", u=9.2, v=-2.0, f="+u"))
-    D["light"] = dict(ambient=(0.84, 0.92, 1.06),
-                      lamps=[(6.0, 4.0, 3.6, 6.0, "amber"),
-                             (15.0, 2.0, 3.2, 5.0, "work"),
-                             (20.0, -5.0, 2.8, 4.0, "amber"),
-                             (2.0, -3.0, 2.6, 3.5, "cold")])
+    D["creatures"] = [dict(kind="goat", u=19.6, v=-10.9, facing=40.0, phase=0.0),
+                      dict(kind="goat", u=21.6, v=-11.4, facing=200.0, phase=2.1),
+                      dict(kind="goat", u=20.9, v=-9.9, facing=110.0, phase=4.3)]
+    # ---- yard life: burn barrel, drums, tyres, crates, scrap
+    P.append(dict(t="burn_barrel", u=13.8, v=0.6, f="+u", name="Burn barrel",
+                  text="Somebody always keeps it lit. People stand round it to trade news."))
+    for i, (u, v) in enumerate(((10.4, 9.6), (11.0, 9.9), (22.4, 7.8), (24.6, -2.6), (5.2, -9.4))):
+        P.append(dict(t="oil_drum", u=u, v=v, f="+u", k=i))
+    for (u, v, n) in ((23.6, 9.4, 3), (24.4, 9.0, 2), (6.0, 6.8, 4)):
+        P.append(dict(t="tyre_stack", u=u, v=v, f="+u", n=n))
+    for (u, v) in ((15.6, 8.6), (16.3, 8.2), (24.8, 3.4)):
+        P.append(dict(t="crate", u=u, v=v, f="+u"))
+    P.append(dict(t="sacks", u=25.2, v=-0.4, f="-u"))
+    P.append(dict(t="scrap_pile", u=6.2, v=9.4, f="-v", seed=1, name="Scrap pile",
+                  text="Door panels, a bonnet, a wheel: whatever the wall did not need yet."))
+    P.append(dict(t="scrap_pile", u=24.6, v=-6.8, f="-u", seed=2, name="Scrap pile"))
+    # ---- the way back to Silo 81
+    D["stairs"] = [dict(id="to_l1_from_jt", u=-6.2, v=0.0, to="L1", arrive=[-2.6, 0.6], name="Snow road to Silo 81",
+                        text="The road back west to the Silo 81 surface depot.")]
+    D["spawns"] = {"player": [-3.0, 0.0, 0], "worms": []}
+    D["light"] = dict(ambient=(0.86, 0.93, 1.06),
+                      lamps=[(13.8, 0.6, 1.2, 4.5, "amber"),          # burn barrel
+                             (13.2, 11.0, 2.2, 3.5, "amber"),         # Mara's garage
+                             (27.0, 3.0, 2.2, 3.5, "amber"),          # market
+                             (20.6, -10.7, 2.4, 3.0, "bulb"),         # pen lamp
+                             (-4.0, 0.0, 2.0, 5.0, "cold"),           # the road
+                             (3.0, -12.0, 2.0, 4.0, "cold")])
     return D
 
 
-LV = {"L2": L2, "L3": L3, "L2W": L2W, "L4W": L4W, "L4E": L4E, "L5": L5, "L1": L1, "JT": JT}[LEVEL]()
+def JTX():
+    """Test section for the Junk Town car wall: one tall far-side run, one low camera-side run, the gate."""
+    D = {"name": "JT wall test", "rooms": [], "walls": [], "doors": [], "props": [], "decor": [], "inspect": [],
+         "stairs": [], "spawns": {"player": [5.0, 3.0, 5]}, "blocked": [], "holes": [], "bounds": [0.0, 12.0, 0.0, 9.0]}
+    snow = dict(rgb=(0.54, 0.57, 0.60), noise=0.22, noise_scale=4.0, tex="concrete_floor", ts=1.8)
+    D["rooms"] += [dict(id="yard", name="Yard", r=[0.0, 12.0, 0.0, 9.0], floor=snow)]
+    P = D["props"]
+    P.append(dict(t="junk_car_wall", u=6.0, v=8.8, f="-v", L=11.0, tall=True, seed=1, name="Car wall"))
+    P.append(dict(t="junk_car_wall", u=0.0, v=4.5, f="+u", L=8.5, tall=False, seed=2, name="Car wall"))
+    D["light"] = dict(ambient=(0.84, 0.92, 1.06), lamps=[(6.0, 5.0, 3.6, 6.0, "amber")])
+    return D
+
+
+LV = {"L2": L2, "L3": L3, "L2W": L2W, "L4W": L4W, "L4E": L4E, "L5": L5, "L1": L1, "JT": JT, "JTX": JTX}[LEVEL]()
 
 # ---------- light (docs/VISUAL_DIRECTION.md): the level's base tone, its lamps and its cold pockets.
 # Desks with a lamp and standing lamps light themselves; "lamps" adds ceiling bulbs, work lamps and
@@ -1942,7 +2000,7 @@ def render(objs, path, rect=None):
 
 
 out = {"level": LEVEL, "name": LV["name"], "ppm": PPM, "elev_deg": CAMERA["elev_deg"], "rooms": [], "walls": [], "doors": [], "props": [],
-       "inspect": LV["inspect"], "stairs": LV["stairs"], "spawns": LV["spawns"], "blocked": LV["blocked"] + LV.get("holes", []),
+       "inspect": LV["inspect"], "stairs": LV["stairs"], "spawns": LV["spawns"], "creatures": LV.get("creatures", []), "blocked": LV["blocked"] + LV.get("holes", []),
        "bounds": LV["bounds"], "sprites": []}
 for r in LV["rooms"]:
     out["rooms"].append({k: r[k] for k in ("id", "r") if k in r} | ({"name": r["name"]} if "name" in r else {}) | ({"dark": True} if r.get("dark") else {}))
@@ -2083,11 +2141,19 @@ PROP_FN = {
     "monitors": lambda p: kit.monitors("Monitors"),
     "corrugated_fence": lambda p: kit.corrugated_fence("Fence", p.get("L", 2.6), p.get("H", 2.2)),
     "junk_watchtower": lambda p: kit.junk_watchtower("Watchtower"),
-    "junk_shack": lambda p: kit.junk_shack("Shack"),
+    "junk_shack": lambda p: kit.junk_shack("Shack", p.get("seed", 0), p.get("L", 3.0), p.get("D", 2.4)),
+    "market_stall": lambda p: kit.market_stall("Stall", p.get("seed", 0)),
+    "firewood": lambda p: kit.firewood("Firewood"),
+    "yard_wreck": lambda p: kit.yard_wreck("YardWreck", p.get("seed", 0)),
     "animal_pen": lambda p: kit.animal_pen("AnimalPen"),
     "goat": lambda p: kit.goat("Goat", p.get("pose", 0)),
-    "junk_car_wall": lambda p: kit.junk_car_wall("CarWall", p.get("L", 6.0)),
+    "junk_car_wall": lambda p: kit.junk_car_wall("CarWall", p.get("L", 6.0), p.get("tall", True), p.get("seed", 0)),
     "junk_gate": lambda p: kit.junk_gate("JunkGate"),
+    "junk_gate_open": lambda p: kit.junk_gate_open("JunkGateOpen"),
+    "oil_drum": lambda p: kit.oil_drum("OilDrum", p.get("k", 0)),
+    "burn_barrel": lambda p: kit.burn_barrel("BurnBarrel"),
+    "tyre_stack": lambda p: kit.tyre_stack("Tyres", p.get("n", 3)),
+    "scrap_pile": lambda p: kit.scrap_pile("ScrapPile", p.get("seed", 0)),
     "boiler_assembly": lambda p: kit.boiler_assembly("BoilerAssembly"),
     "control_panel": lambda p: kit.control_panel("ControlPanel"),
     "temp_monitor": lambda p: kit.temp_monitor("TempMonitor"),
@@ -2118,7 +2184,7 @@ for i, p in enumerate(LV["props"]):
         p["k"] = p["k"] % 4                            # two Tripo bunks, each plain or mirrored
     if p["t"] == "locker" and have_glb("locker") and p.get("w", 0.55) >= 0.9 and not p.get("open"):
         p["k"] = 0
-    keyargs = tuple(sorted((k, v) for k, v in p.items() if k not in ("u", "v", "name", "text", "id")))
+    keyargs = tuple(sorted((k, repr(v)) for k, v in p.items() if k not in ("u", "v", "name", "text", "id", "sort_at", "noblock", "posts")))
 
     def build(p=p):
         ob, size = PROP_FN[p["t"]](p)
@@ -2136,11 +2202,21 @@ for i, p in enumerate(LV["props"]):
              "schooldesk": (1.1, 0.85), "sacks": (1.1, 0.6), "files": (1.1, 0.42), "terminal": (1.4, 0.7), "radioset": (1.6, 0.6),
              "maptable": (1.8, 1.1), "floorlamp": (0.3, 0.3), "safe": (0.7, 0.6), "lathe": (1.8, 0.6),
              "monitors": (1.3, 0.65), "boiler_assembly": (3.4, 1.6), "control_panel": (1.8, 0.62), "temp_monitor": (1.5, 0.65),
-             "corrugated_fence": (p.get("L", 2.6), 0.14), "junk_watchtower": (2.4, 2.4), "junk_shack": (3.0, 2.4),
+             "corrugated_fence": (p.get("L", 2.6), 0.14), "junk_watchtower": (2.4, 2.4), "junk_shack": (p.get("L", 3.0), p.get("D", 2.4)), "market_stall": (2.6, 1.7), "firewood": (1.6, 0.7), "yard_wreck": (4.8, 1.9),
              "animal_pen": (4.2, 3.0), "goat": (0.95, 0.60),
-             "junk_car_wall": (p.get("L", 6.0), 1.8), "junk_gate": (4.6, 0.4)}[p["t"]]
+             "junk_car_wall": (p.get("L", 6.0), 1.8), "junk_gate": (4.6, 0.4), "junk_gate_open": (4.6, 0.4),
+             "oil_drum": (0.58, 0.58), "burn_barrel": (0.58, 0.58), "tyre_stack": (0.66, 0.66), "scrap_pile": (2.0, 1.6)}[p["t"]]
     fp = footprint(p["u"], p["v"], p["f"], L, Dp)
     cu, cv = (fp[0] + fp[1]) / 2, (fp[2] + fp[3]) / 2
+    # long outdoor walls sort by a corner, not their centre: "far" walls behind everything inside the
+    # ring (the corner nearest the far edge), "near" walls in front of it (the corner nearest the camera)
+    if p.get("sort_at") == "far":
+        cu, cv = fp[1], fp[3]
+    elif p.get("sort_at") == "near":
+        cu, cv = fp[0], fp[2]
+    if p.get("noblock"):                               # passable (an open gate): block only its posts
+        out["blocked"] += p.get("posts", [])
+        fp = [round(cu, 3), round(cu, 3), round(cv, 3), round(cv, 3)]
     sx, sy = scr_uv(p["u"], p["v"])
     srt = scr_uv(cu, cv)
     entry = {"type": p["t"], "footprint": fp, "sprite": f, "x0": round(sx + off[0], 1), "y0": round(sy + off[1], 1),

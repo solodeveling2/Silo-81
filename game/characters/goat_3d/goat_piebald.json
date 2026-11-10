@@ -1,0 +1,13 @@
+{
+ "fps_src": 24,
+ "clips": {
+  "idle": "graze"
+ },
+ "idle_loop_src": [
+  0,
+  96
+ ],
+ "height_m": 0.85,
+ "creature": "goat",
+ "coat": "piebald"
+}

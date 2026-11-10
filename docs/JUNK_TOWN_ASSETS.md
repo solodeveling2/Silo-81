@@ -1,90 +1,58 @@
-# Junk Town — asset status
+# Junk Town — assets and how the level is built
 
-**Status: 2 of 6 modules finished on Tripo; 4 blocked by credits. No GLBs downloaded yet.**
-Project: `https://studio.tripo3d.ai/canvas/projects/01a1c0ea-08ae-7d31-9692-620b352aaf60`
-Credits remaining: **10**.
+Reference: `art/concepts/junk_town_ref.png` (brief: `art/concepts/junk_town_brief.txt`).
+Level: `JT` in `tools/blender/build.py` → `game/levels/JT`. Built on a Blender-capable machine with
+`python3 -I tools/blender/build.py JT out` (about 4 minutes), then `bg.png`, `spr_*.png` and
+`level.json` copied to `game/levels/JT`. Spawns and stairs now live in the `JT()` plan itself, so the
+generated `level.json` is complete (nothing hand-edited to preserve).
 
-| Module | Tripo node | State |
-|---|---|---|
-| Car-wall section | #45 | Smart Mesh + UV done, saved to asset library |
-| Junk gate | #47 | Smart Mesh + UV done, saved to asset library |
-| Corrugated fence | #46 | stopped at Smart UV — no credits |
-| Watchtower | #48 | stopped at Smart UV — no credits |
-| Shack | #49 | stopped at Smart UV — no credits |
-| Animal pen | #50 | stopped at Smart UV — no credits |
+## Layout (plan metres)
 
-Tripo’s own message: *“6 of 6 didn't finish… You don't have enough credits for this step.”*
+- Town: u 2.4..28.5, v -12.5..12.5, one continuous snow floor. Road: u -7..2.4 along v = 0.
+- **Ring wall** of wrecked cars nose-to-tail (`kit.junk_car_wall`):
+  - far sides (north +v, east +u) are **tall**: some cars stacked two high, corrugated sheet and
+    timber posts behind, raking struts on the outside; sorted *behind* everything inside (`sort_at="far"`).
+  - camera-side walls (south -v, west -u) are **one car high**, sheet only in the gaps
+    (LEVEL_DESIGN: low camera-side walls), split into ~4.4 m runs sorted *in front* (`sort_at="near"`).
+- **Gate**: open, in the west wall at v = 0, facing the road (`junk_gate_open`, `noblock` with its
+  two posts in `blocked`), so it is passable.
+- **Watchtowers** on the NW, NE and SE corners (the SW corner would hide the yard).
+- **Shacks** along the far walls (Bunk shack, Mara's garage, two more; Market shack and Smokehouse
+  on the east wall, one on the south wall), each patched from mixed panels with a lit window.
+- **Yard**: burn barrel (amber light), three market stalls, a car on blocks being stripped,
+  drums, tyre stacks, crates, firewood, scrap piles.
+- **Goat pen** in the south-east with three **live 3D goats**.
+- Exit: `to_l1_from_jt` at (-6.2, 0) on the road; arriving from L1 puts the player at (-3, 0).
 
-## Exporting the two finished modules
+## Kit pieces (`tools/blender/kit.py`)
 
-They were saved with **right-click → Save to asset library** (toast confirmed). They are not yet
-visible in the Assets grid in this session, so wait for the library to sync, then:
+| piece | notes |
+|---|---|
+| `junk_car` | one wreck from a side profile: `volga`, `zhiguli`, `van` (UAZ-452), `pickup`; dark windows, pillars, wheel arches, half-buried wheels, rusted sills, missing doors, snow drifts |
+| `junk_car_wall(L, tall, seed)` | cars nose-to-tail with yaw jitter and overlap; `tall` stacks cars and adds the sheet course |
+| `junk_gate_open` | posts, top rail, sign board, leaves swung back |
+| `junk_watchtower` | scaffold legs, deck, railing, roof, ladder |
+| `junk_shack(seed, L, D)` | patched panel strips, single-pitch corrugated roof with drifts and tyre weights, stovepipe, warm window, door |
+| `market_stall`, `firewood`, `yard_wreck`, `oil_drum`, `burn_barrel`, `tyre_stack`, `scrap_pile`, `animal_pen`, `corrugated_fence` | yard life |
 
-1. Open `https://studio.tripo3d.ai/assets`, find **car-wall section** and **junk gate**.
-2. Open the model → **Export** → GLB (20k tri budget).
-3. Save to `source/props3d/junk_town/car_wall_section.glb` and `junk_gate.glb`.
+## Goats (live 3D)
 
-If they never appear, the fallback is to rebuild them in the Blender kit — the shapes are simple
-stacked car bodies, corrugated sheets and timber posts.
+`tools/blender/goat_live.py OUT brown|piebald` → `game/characters/goat_3d/goat_<coat>.glb/.json`.
+Low-poly rigged goat (bones body → neck → head), long body, short legs, visible neck, small head with
+a darker face, horns, beard, tail up. Clip `graze` (4 s): head down cropping, up chewing and looking
+round, back down. In the level they are `creatures` in `level.json`; `level.gd` spawns a `Puppet3D` for
+each and drives the loop at 12 poses per second with a per-goat phase. Check with
+`godot --path game --script tools/goat_test.gd` (4 facings × 5 moments → `/tmp/goat_test.png`).
+The old split-sprite goat (`goat`, `goat_head`) is no longer used.
 
-## Recommended fallback (no credits)
+## Tripo models (still to come)
 
-Do not wait on a top-up to keep building. The four missing modules are all kit-friendly:
+No Tripo GLBs are in the project yet (`source/props3d/junk_town/` does not exist). The kit versions
+are complete stand-ins. When the GLBs are exported (Tripo Studio → model card → Export → GLB), put
+them in `source/props3d/junk_town/` and swap them into `PROP_FN` the way the furniture GLBs are
+(`have_glb` / `glb`), keeping the same footprints, then rebuild `JT` and compare at the game camera.
 
-- **Corrugated fence:** sheet-metal panels on timber posts, leaning at slight angles.
-- **Watchtower:** scaffold poles, ladder, car-seat platform, corrugated roof.
-- **Shack:** timber frame, patched sheet walls, stovepipe, snow on roof.
-- **Animal pen:** pallet/plank fence, trough, hay, goat silhouettes.
+## History
 
-Build them as `kit.py` props, render them into the Junk Town level at 47°, and keep the two Tripo
-models as the hero pieces (gate and car-wall) once exported.
-
-## Reference
-
-`art/concepts/junk_town_ref.png` and `art/concepts/junk_town_brief.txt`.
-
-## Kit fallback — built (this pass)
-
-The four missing modules now exist procedurally in 	ools/blender/kit.py:
-
-- corrugated_fence(name, L, H) — leaning sheet panel on timber posts.
-- junk_watchtower(name, H) — scaffold legs, deck, railing, corrugated roof, ladder.
-- junk_shack(name) — timber frame, patched sheet walls, stovepipe, snow roof, door ajar.
-- nimal_pen(name) — rail pen, trough, hay, feed bin.
-- goat_body(name) + goat_head(name, pose) — the goat is split so the head can move while it eats.
-  pose 0 = head down, 1 = half up, 2 = up.
-
-Wired into uild.py as PROP_FN entries and a new **JT** plan (Junk Town blockout:
-gate yard, market row, pen, two towers, three shacks, fence wall). Built with:
-
-`
-blender -b -P tools/blender/build.py -- JT out/JT
-`
-
-Preview: docs/JUNK_TOWN_BLOCKOUT.png (4781×3166 render, scaled).
-
-### Grazing goats
-
-game/scripts/level.gd now collects goat_head props into grazers and nods each head around
-its neck (bottom-centre pivot) in _process:
-
-`
-rotation = sin(t * 1.25 + phase) * 0.10 + sin(t * 2.9 + phase) * 0.035
-`
-
-The body stays still; the head dips and lifts as if cropping grass. Not yet verified in the running
-game because JT has not been copied to game/levels/JT or wired into the L1 transition.
-
-## Integrated into the game
-
-- Copied out/JT/JT to game/levels/JT (background + 12 sprites).
-- level.json given spawns.player = [12, 0, 5], empty worms, and a 	o_l1_from_jt stair at (2, 8).
-- game.gd state now includes "JT": {}.
-- L1 has a 	o_jt_from_l1 stair at (-2.6, -1.4) (both uild.py source and the current L1 level.json).
-- In-game screenshots: docs/JUNK_TOWN_INGAME.png, docs/JUNK_TOWN_GOATS.png.
-
-**Known issue:** the split goat reads as a white cap on legs — the head is pitched too far down and the
-body/neck proportions are placeholder. The head nod works mechanically, but the model needs an art pass
-(smaller head, visible neck, longer body, shorter legs) before it looks like a goat.
-
-Full --autotest still passes; JT loads with 819 walkable hexes.
+The first blockout (DeepSeek pass) had one straight car wall of painted boxes, plain box shacks and a
+split-sprite goat that read as a white cap on legs; it was replaced by the above.

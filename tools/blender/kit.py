@@ -1635,6 +1635,7 @@ def glb_prop(name, file, L, D, rot=0.0, fit="x", H=None, outline=0.01, mirror=Fa
 def _junk_mats():
     return dict(
         rust=toon("JunkRust", (0.40, 0.23, 0.13), noise=0.22, noise_scale=9.0, metal=0.15),
+        rust_dark=toon("JunkRustDark", (0.27, 0.15, 0.09), noise=0.3, noise_scale=14.0, metal=0.1),
         sheet=toon("JunkSheet", (0.36, 0.36, 0.34), noise=0.16, noise_scale=7.0, metal=0.25),
         blue=toon("JunkCarBlue", (0.24, 0.31, 0.35), noise=0.18, noise_scale=8.0, metal=0.2),
         red=toon("JunkCarRed", (0.38, 0.18, 0.14), noise=0.2, noise_scale=8.0, metal=0.2),
@@ -1693,29 +1694,9 @@ def junk_watchtower(name, H=4.2):
     return b.finish(), (2.4, 2.4)
 
 
-def junk_shack(name):
-    """A patched sheet-metal shack: timber frame, stovepipe, snow on the roof, door ajar."""
-    b = Builder(name); m = _junk_mats()
-    L, D, H = 3.0, 2.4, 2.45
-    b.box(-L / 2, L / 2, 0, D, 0, 0.12, m["wood"])
-    b.box(-L / 2, L / 2, D - 0.08, D, 0.12, H, m["sheet"])                       # back
-    b.box(-L / 2, -L / 2 + 0.08, 0, D, 0.12, H, m["rust"])                       # left
-    b.box(L / 2 - 0.08, L / 2, 0, D, 0.12, H, m["sheet"])                        # right
-    b.box(-L / 2, -0.45, 0, 0.08, 0.12, H, m["rust"])                            # front left of door
-    b.box(0.45, L / 2, 0, 0.08, 0.12, H, m["sheet"])                             # front right
-    b.box(-0.45, 0.45, 0, 0.08, 1.95, H, m["sheet"])                             # lintel
-    # door ajar
-    Md = Matrix.Translation((-0.45, 0.05, 0)) @ Matrix.Rotation(math.radians(-24), 4, "Z")
-    b.box(0, 0.86, -0.02, 0.02, 0.12, 1.95, m["rust"], Md)
-    b.box(0.64, 0.72, 0.02, 0.06, 1.0, 1.04, m["dark"], Md)
-    # sloped roof
-    Mr = Matrix.Translation((0, D / 2, H)) @ Matrix.Rotation(math.radians(7), 4, "X") @ Matrix.Translation((0, -D / 2, -H))
-    b.box(-L / 2 - 0.15, L / 2 + 0.15, -0.1, D + 0.2, H, H + 0.12, m["sheet"], Mr)
-    b.box(-L / 2 - 0.1, L / 2 + 0.1, 0.0, D + 0.15, H + 0.12, H + 0.18, m["snow"], Mr)
-    b.cyl((0.85, D - 0.45, H), (0.85, D - 0.45, H + 1.1), 0.07, m["rust"], seg=7)  # stovepipe
-    b.box(-L / 2 + 0.25, -L / 2 + 0.95, 0.08, 0.1, 1.15, 1.55, m["glass"])       # window
-    b.box(-L / 2 + 0.2, -L / 2 + 1.0, 0.06, 0.1, 1.1, 1.17, m["wood"])
-    return b.finish(), (L, D)
+def junk_shack_old(name):
+    """Superseded by junk_shack (patched panels)."""
+    return None
 
 
 def animal_pen(name):
@@ -1775,37 +1756,171 @@ def goat_head(name, pose=0):
         b.box(x0, x1, 0.53, 0.57, 0.76, 0.80, dark, M=M)                          # ears
     return b.finish(), (0.42, 0.42)
 
-def junk_car_wall(name, L=6.0):
-    """Car bodies nose-to-tail, wheel-deep in snow, with a corrugated upper course and timber posts."""
-    b = Builder(name); m = _junk_mats()
-    paints = [m["blue"], m["red"]]
-    n = 2
+# ---------------------------------------------------------------- wrecked cars (Junk Town ring wall)
+# Soviet-era shapes so the wall reads as car bodies, not boxes: a long-bonnet saloon (Volga), a short
+# saloon (Zhiguli), a bread-loaf van (UAZ-452) and a cab pickup. Built from side profiles extruded across
+# the width (Builder.prism). Local frame: nose towards +x, centred on x=0 and y=0, wheels on z=0.
+
+CAR_PAINTS = [(0.24, 0.31, 0.35), (0.38, 0.18, 0.14), (0.46, 0.43, 0.34), (0.27, 0.33, 0.25),
+              (0.33, 0.30, 0.27), (0.40, 0.33, 0.18), (0.20, 0.24, 0.27), (0.42, 0.40, 0.37)]
+
+CAR_KINDS = {
+    #          length, width, body profile (x/L, z),                                      cabin (x/L at sill, x/L at roof, sill z, roof z)
+    "volga":  (4.7, 1.80, [(-0.5, 0.30), (0.5, 0.30), (0.5, 0.66), (0.47, 0.78), (-0.48, 0.80), (-0.5, 0.70)],
+               (-0.27, 0.17, -0.19, 0.06, 0.80, 1.44)),
+    "zhiguli": (4.05, 1.62, [(-0.5, 0.30), (0.5, 0.30), (0.5, 0.64), (0.47, 0.76), (-0.49, 0.78), (-0.5, 0.68)],
+                (-0.26, 0.19, -0.18, 0.08, 0.78, 1.40)),
+    "van":    (4.4, 1.94, [(-0.5, 0.32), (0.5, 0.32), (0.5, 1.05), (0.43, 1.95), (-0.49, 2.02), (-0.5, 1.9)],
+               None),
+    "pickup": (4.6, 1.80, [(-0.5, 0.32), (0.5, 0.32), (0.5, 0.74), (0.47, 0.86), (-0.5, 0.88)],
+               (-0.05, 0.27, -0.02, 0.18, 0.88, 1.62)),
+}
+
+
+def _prism(b, prof, y0, y1, mat, M):
+    """Extrude a convex side profile [(x, z), ...] (anticlockwise seen from -y) between y0 and y1."""
+    bm = b.bm
+    a = [bm.verts.new(M @ Vector((x, y0, z))) for x, z in prof]
+    c = [bm.verts.new(M @ Vector((x, y1, z))) for x, z in prof]
+    idx = b.mi(mat)
+    n = len(prof)
+    bm.faces.new(a[::-1]).material_index = idx
+    bm.faces.new(c).material_index = idx
     for i in range(n):
-        x = -L / 2 + (i + 0.5) * L / n
-        paint = paints[i % 2]
-        b.box(x - 1.02, x + 1.02, 0.12, 1.55, 0.30, 0.78, paint)                 # lower body
-        b.box(x - 0.72, x + 0.72, 0.26, 1.48, 0.78, 1.16, paint)                 # cabin
-        b.box(x - 0.58, x + 0.58, 1.49, 1.52, 0.84, 1.10, m["glass"])            # rear glass
-        b.box(x - 0.62, x + 0.62, 0.24, 0.27, 0.84, 1.10, m["glass"])            # front glass
-        b.box(x - 1.0, x + 1.0, 0.04, 0.12, 0.46, 0.70, m["rust"])               # bumper band
-        for sx in (-0.62, 0.62):
-            # wheels: axle along y so they read from the camera
-            b.cyl((x + sx, 0.02, 0.30), (x + sx, 0.34, 0.30), 0.30, m["dark"], seg=8)
-            b.cyl((x + sx, 0.04, 0.30), (x + sx, 0.36, 0.30), 0.13, m["sheet"], seg=8)
-        # snow drift packed against the tyres
-        b.box(x - 1.05, x + 1.05, 0.0, 0.22, 0.0, 0.22, m["snow"])
-    for i in range(n - 1):
-        x = -L / 2 + (i + 1) * L / n
-        b.box(x - 0.07, x + 0.07, 0.0, 0.16, 0.2, 2.2, m["wood"])
-    # corrugated upper course and lean-to sheets bridging the car roofs
-    for i in range(4):
-        x0 = -L / 2 + i * L / 4
-        b.box(x0, x0 + L / 4 - 0.02, 0.06, 0.11, 1.28, 2.25, m["sheet"] if i % 2 else m["rust"])
-    for x in (-L / 2 + 0.1, L / 2 - 0.1):
-        b.box(x - 0.10, x + 0.10, 0.0, 0.16, 0, 2.55, m["wood"])
-    b.box(-L / 2, L / 2, 0.02, 0.12, 2.30, 2.45, m["rust"])
-    b.box(-L / 2, L / 2, 0.01, 0.12, 2.45, 2.55, m["snow"])
-    return b.finish(), (L, 1.6)
+        j = (i + 1) % n
+        bm.faces.new([a[i], a[j], c[j], c[i]]).material_index = idx
+
+
+def junk_car(b, M, kind, paint, m, rng, snow=True, door_gone=False, wheels=True):
+    """One wrecked car into Builder b at transform M. rng: random.Random for rust and damage."""
+    L, W, prof, cab = CAR_KINDS[kind]
+    body = [(x * L, z) for x, z in prof]
+    _prism(b, body, -W / 2, W / 2, paint, M)
+    top = max(z for _, z in prof)
+    if cab:
+        xs0, xs1, xr0, xr1, zs, zr = cab
+        inset = 0.09
+        glass = [(xs0 * L, zs), (xs1 * L, zs), (xr1 * L, zr - 0.06), (xr0 * L, zr - 0.06)]
+        _prism(b, glass, -W / 2 + inset, W / 2 - inset, m["glass"], M)
+        roof = [(xr0 * L - 0.03, zr - 0.07), (xr1 * L + 0.03, zr - 0.07), (xr1 * L, zr), (xr0 * L, zr)]
+        _prism(b, roof, -W / 2 + inset - 0.01, W / 2 - inset + 0.01, paint, M)
+        # pillars: A at the windscreen, C at the back, B in the middle
+        for s0, s1 in ((xs1, xr1), (xs0, xr0), ((xs0 + xs1) / 2, (xr0 + xr1) / 2)):
+            pl = [(s0 * L - 0.05, zs), (s0 * L + 0.05, zs), (s1 * L + 0.05, zr - 0.06), (s1 * L - 0.05, zr - 0.06)]
+            _prism(b, pl, -W / 2 + inset - 0.012, W / 2 - inset + 0.012, paint, M)
+        top = zr
+        if kind == "pickup":                                        # load bed walls behind the cab
+            for y0, y1 in ((-W / 2, -W / 2 + 0.06), (W / 2 - 0.06, W / 2)):
+                b.box(-0.5 * L, xs0 * L, y0, y1, 0.88, 1.22, paint, M)
+            b.box(-0.5 * L, -0.5 * L + 0.06, -W / 2, W / 2, 0.88, 1.22, paint, M)
+            b.box(-0.5 * L + 0.06, xs0 * L, -W / 2 + 0.06, W / 2 - 0.06, 0.86, 0.9, m["rust"], M)
+    else:                                                            # van: window band and windscreen
+        for y in (-W / 2 - 0.005, W / 2 - 0.005):
+            b.box(-0.30 * L, 0.36 * L, y, y + 0.01, 1.28, 1.68, m["glass"], M)
+        ws = [(0.5 * L + 0.004, 1.12), (0.5 * L + 0.004, 1.12), (0.43 * L + 0.004, 1.86), (0.45 * L, 1.86)]
+        b.box(0.452 * L, 0.5 * L + 0.01, -W / 2 + 0.12, W / 2 - 0.12, 1.15, 1.75, m["glass"],
+              M @ Matrix.Translation((0.47 * L, 0, 1.45)) @ Matrix.Rotation(math.radians(-14), 4, "Y") @ Matrix.Translation((-0.47 * L, 0, -1.45)))
+    # bumpers, lights, wheel arches and wheels
+    for sx in (-1, 1):
+        b.box(sx * L / 2 - 0.05, sx * L / 2 + 0.05, -W / 2 + 0.04, W / 2 - 0.04, 0.34, 0.46, m["rust"] if rng.random() < 0.6 else m["sheet"], M)
+    for y in (-W / 2 + 0.28, W / 2 - 0.28):
+        b.cyl(M @ Vector((L / 2 + 0.005, y, 0.6)), M @ Vector((L / 2 + 0.03, y, 0.6)), 0.075,
+              m["dark"] if rng.random() < 0.5 else m["glass"], seg=8)
+    axle = (L / 2 - 0.85, -L / 2 + 0.95)
+    for ax_x in axle:
+        for y in (-W / 2, W / 2):
+            sgn = 1 if y > 0 else -1
+            b.box(ax_x - 0.42, ax_x + 0.42, y - sgn * 0.01, y + sgn * 0.004, 0.30, 0.58, m["dark"], M)   # arch shadow
+            if wheels and rng.random() < 0.85:
+                b.cyl(M @ Vector((ax_x, y - sgn * 0.20, 0.30)), M @ Vector((ax_x, y + sgn * 0.02, 0.30)), 0.31, m["dark"], seg=10)
+                b.cyl(M @ Vector((ax_x, y + sgn * 0.02, 0.30)), M @ Vector((ax_x, y + sgn * 0.03, 0.30)), 0.13, m["sheet"], seg=8)
+    # rust: along the sills, round the arches and a few blooms, flush with the panel
+    rr = m.get("rust_dark", m["rust"])
+    for y in (-W / 2, W / 2):
+        sgn = 1 if y > 0 else -1
+        x0 = -0.5 * L + rng.uniform(0.0, 0.3)
+        b.box(x0, x0 + rng.uniform(0.45, 0.95) * L, y - sgn * 0.002, y + sgn * 0.006, 0.31, 0.31 + rng.uniform(0.08, 0.16), rr, M)
+        for ax_x in axle:
+            if rng.random() < 0.6:
+                b.box(ax_x - 0.5, ax_x + 0.5, y - sgn * 0.002, y + sgn * 0.007, 0.56, 0.63, rr, M)
+        for _ in range(rng.randint(0, 2)):
+            xb = rng.uniform(-0.4, 0.35) * L
+            zb = rng.uniform(0.4, 0.62)
+            b.box(xb, xb + rng.uniform(0.15, 0.4), y - sgn * 0.002, y + sgn * 0.006, zb, zb + rng.uniform(0.06, 0.14), rr, M)
+        if door_gone and cab and y > 0:
+            dx0 = (cab[0] + cab[1]) / 2 * L
+            b.box(dx0, dx0 + 0.9, y - 0.004, y + 0.003, 0.36, min(0.95, top - 0.1), m["dark"], M)
+    if snow:                                                         # drifts of snow on the roof and bonnet
+        x_lo = (cab[2] * L + 0.12) if cab else -0.40 * L
+        x_hi = (cab[3] * L - 0.12) if cab else 0.36 * L
+        for _ in range(rng.randint(1, 2)):
+            a0 = rng.uniform(x_lo, (x_lo + x_hi) / 2)
+            a1 = min(x_hi, a0 + rng.uniform(0.35, 0.9))
+            w0 = rng.uniform(0.25, 0.45)
+            b.box(a0, a1, -W / 2 + w0, W / 2 - rng.uniform(0.25, 0.45), top, top + 0.035, m["snow"], M)
+        if cab and kind != "pickup" and rng.random() < 0.6:
+            a0 = rng.uniform(0.24, 0.32) * L
+            b.box(a0, a0 + rng.uniform(0.25, 0.5), -W / 2 + 0.35, W / 2 - 0.4, 0.78, 0.81, m["snow"], M)
+    return L, W, top
+
+
+def junk_car_wall(name, L=6.0, tall=True, seed=0, gap_fill=True):
+    """A run of wrecked cars nose-to-tail along x (back at y=0, front +y), slightly skewed and overlapping,
+    with corrugated sheet and timber posts filling the gaps. tall: stack some cars two high and add a sheet
+    course behind (far-side walls); tall=False keeps it to one car high so the camera can see over it."""
+    import random
+    rng = random.Random(seed * 7919 + int(L * 10))
+    b = Builder(name); m = _junk_mats()
+    paints = [toon(f"JunkCar{i}", c, noise=0.2, noise_scale=8.0, metal=0.2) for i, c in enumerate(CAR_PAINTS)]
+    kinds = ["volga", "zhiguli", "van", "pickup", "zhiguli", "volga"]
+    D = 1.8
+    x = -L / 2
+    k = rng.randrange(len(kinds))
+    placed = []
+    while x < L / 2 - 1.2:
+        kind = kinds[k % len(kinds)]; k += 1 + rng.randrange(2)
+        if not tall and kind == "van":
+            kind = "zhiguli"
+        Lc, Wc = CAR_KINDS[kind][0], CAR_KINDS[kind][1]
+        Lc_eff = min(Lc, L / 2 - x + 0.3)
+        cx = x + Lc / 2
+        yaw = math.radians(rng.uniform(-6, 6))
+        flip = rng.random() < 0.5
+        M = (Matrix.Translation((cx, D / 2 + rng.uniform(-0.08, 0.08), -0.08)) @ Matrix.Rotation(yaw, 4, "Z")
+             @ Matrix.Rotation(math.pi if flip else 0.0, 4, "Z") @ Matrix.Rotation(math.radians(rng.uniform(-2, 2)), 4, "X"))
+        _, _, top = junk_car(b, M, kind, paints[rng.randrange(len(paints))], m, rng, door_gone=rng.random() < 0.35)
+        placed.append((cx, Lc, top))
+        if tall and kind != "van" and rng.random() < 0.28:          # a second car on the roof
+            k2 = rng.choice(["zhiguli", "volga"])
+            M2 = (Matrix.Translation((cx + rng.uniform(-0.3, 0.3), D / 2, top - 0.30)) @ Matrix.Rotation(math.radians(rng.uniform(-9, 9)), 4, "Z")
+                  @ Matrix.Rotation(math.radians(rng.uniform(-4, 4)), 4, "Y"))
+            junk_car(b, M2, k2, paints[rng.randrange(len(paints))], m, rng, snow=True, wheels=rng.random() < 0.5)
+        x += Lc - rng.uniform(0.15, 0.4)
+    if gap_fill:
+        # timber posts between cars and corrugated sheet behind them (the outer face of the wall)
+        H = 2.5 if tall else 1.35
+        for cx, Lc, top in placed:
+            for px in (cx - Lc / 2 + 0.05,):
+                if -L / 2 - 0.1 < px < L / 2 + 0.1:
+                    b.box(px - 0.07, px + 0.07, 0.05, 0.19, 0, H + rng.uniform(0.1, 0.4), m["wood"])
+        if tall:
+            n = int(L / 0.95) + 1
+            for i in range(n):
+                x0 = -L / 2 + i * L / n
+                h = H - rng.uniform(0.0, 0.35)
+                Ms = Matrix.Translation((x0, 0.04, 0)) @ Matrix.Rotation(math.radians(rng.uniform(-4, 4)), 4, "Y")
+                b.box(0, L / n + 0.08, 0.0, 0.035, 0.0, h, m["sheet"] if rng.random() < 0.55 else m["rust"], Ms)
+                b.box(0.02, L / n + 0.06, 0.035, 0.05, h - 0.06, h, m["snow"], Ms)
+        else:                                                         # low wall: sheet only in the gaps
+            for i in range(len(placed) - 1):
+                gx = (placed[i][0] + placed[i][1] / 2 + placed[i + 1][0] - placed[i + 1][1] / 2) / 2
+                b.box(gx - 0.35, gx + 0.35, D / 2 - 0.03, D / 2 + 0.03, 0.0, 1.25, m["sheet"] if i % 2 else m["rust"],
+                      Matrix.Rotation(math.radians(rng.uniform(-8, 8)), 4, "Z"))
+        if tall:                                                      # a raking strut every few metres
+            for i in range(int(L / 2.4)):
+                px = -L / 2 + 1.2 + i * 2.4
+                b.cyl((px, -0.9, 0), (px, 0.02, H - 0.2), 0.05, m["wood"], seg=6)
+    return b.finish(), (L, D)
 
 
 def junk_gate(name, W=4.2, H=3.0):
@@ -1855,3 +1970,182 @@ def goat(name, pose=0):
         x0, x1 = sorted((sx * 0.075, sx * 0.18))
         b.box(x0, x1, 0.53, 0.57, 0.76, 0.80, dark, M=M)
     return b.finish(), (0.95, 0.60)
+
+
+# ---------------------------------------------------------------- Junk Town yard clutter
+def oil_drum(name, k=0):
+    """A 200-litre drum, painted then rusted; k picks the paint."""
+    b = Builder(name); m = _junk_mats()
+    paint = toon(f"Drum{k % 3}", [(0.24, 0.31, 0.35), (0.40, 0.33, 0.18), (0.27, 0.33, 0.25)][k % 3], noise=0.25, noise_scale=10.0, metal=0.2)
+    b.cyl((0, 0.29, 0), (0, 0.29, 0.88), 0.29, paint, seg=14)
+    for z in (0.29, 0.59):
+        b.cyl((0, 0.29, z - 0.02), (0, 0.29, z + 0.02), 0.296, m["rust_dark"], seg=14)
+    b.cyl((0, 0.29, 0.88), (0, 0.29, 0.9), 0.27, m["snow"], seg=12)
+    return b.finish(), (0.58, 0.58)
+
+
+def burn_barrel(name):
+    """A drum with holes punched round it and a fire inside: where people stand and talk."""
+    b = Builder(name); m = _junk_mats()
+    fire = flat("BarrelFire", (1.0, 0.62, 0.22))
+    b.cyl((0, 0.29, 0), (0, 0.29, 0.86), 0.29, m["rust"], seg=14)
+    for k in range(6):
+        a = 2 * math.pi * k / 6
+        x, y = 0.292 * math.cos(a), 0.29 + 0.292 * math.sin(a)
+        b.box(x - 0.04, x + 0.04, y - 0.04, y + 0.04, 0.22, 0.32, fire)
+    b.cyl((0, 0.29, 0.8), (0, 0.29, 0.98), 0.21, fire, seg=10, r1=0.04)
+    return b.finish(), (0.58, 0.58)
+
+
+def tyre_stack(name, n=3):
+    b = Builder(name); m = _junk_mats()
+    for i in range(n):
+        dx = 0.04 * ((i * 37) % 5 - 2)
+        b.cyl((0.33 + dx, 0.33, i * 0.2), (0.33 + dx, 0.33, i * 0.2 + 0.19), 0.32, m["dark"], seg=14)
+        b.cyl((0.33 + dx, 0.33, i * 0.2 + 0.19), (0.33 + dx, 0.33, i * 0.2 + 0.192), 0.16, m["glass"], seg=10)
+    b.cyl((0.33, 0.33, n * 0.2), (0.33, 0.33, n * 0.2 + 0.02), 0.28, m["snow"], seg=10)
+    return b.finish(), (0.66, 0.66)
+
+
+def scrap_pile(name, seed=0):
+    """A heap of panels, a door, pipe, a wheel and a car bonnet, half under snow."""
+    import random
+    rng = random.Random(seed)
+    b = Builder(name); m = _junk_mats()
+    mats = [m["sheet"], m["rust"], m["rust_dark"], m["dark"]]
+    for i in range(9):
+        cx, cy = rng.uniform(-0.8, 0.8), rng.uniform(0.3, 1.3)
+        w, d = rng.uniform(0.4, 1.0), rng.uniform(0.3, 0.8)
+        M = (Matrix.Translation((cx, cy, rng.uniform(0.0, 0.35))) @ Matrix.Rotation(rng.uniform(-0.6, 0.6), 4, "Z")
+             @ Matrix.Rotation(rng.uniform(-0.5, 0.5), 4, "X"))
+        b.box(-w / 2, w / 2, -d / 2, d / 2, 0, 0.04, rng.choice(mats), M)
+    b.cyl((-0.9, 0.5, 0.15), (0.7, 1.2, 0.35), 0.06, m["rust"], seg=8)
+    b.cyl((0.6, 0.6, 0.3), (0.6, 0.8, 0.3), 0.3, m["dark"], seg=10)
+    ellipsoid(b, (0.0, 0.8, 0.0), (1.0, 0.65, 0.22), m["snow"], seg=10)
+    return b.finish(), (2.0, 1.6)
+
+
+def junk_gate_open(name, W=4.2, H=3.0):
+    """The gate by day: two corrugated leaves swung back against the outside of the wall."""
+    b = Builder(name); m = _junk_mats()
+    for x in (-W / 2, W / 2):
+        b.box(x - 0.14, x + 0.14, 0.0, 0.28, 0, H + 0.55, m["wood"])
+        b.box(x - 0.2, x + 0.2, -0.02, 0.3, H + 0.55, H + 0.68, m["dark"])
+    b.box(-W / 2, W / 2, 0.0, 0.14, H + 0.38, H + 0.52, m["rust"])              # top rail
+    b.box(-W / 2 + 0.1, W / 2 - 0.1, 0.0, 0.14, H + 0.52, H + 0.58, m["snow"])
+    for side in (-1, 1):
+        hinge = Vector((side * (W / 2 - 0.16), 0.0, 0.0))
+        M = Matrix.Translation(hinge) @ Matrix.Rotation(math.radians(-side * 100), 4, "Z")
+        xa, xb = sorted((0.0, -side * (W / 2 - 0.22)))
+        b.box(xa, xb, -0.04, 0.04, 0.12, H, m["sheet"] if side < 0 else m["rust"], M)
+        b.cyl(M @ Vector((xa + 0.12, 0.05, 0.3)), M @ Vector((xb - 0.12, 0.05, H - 0.3)), 0.035, m["rust_dark"], seg=5)
+    # a sign over the gate
+    b.box(-1.0, 1.0, 0.14, 0.2, H + 0.62, H + 1.02, m["wood"])
+    return b.finish(), (W + 0.4, 0.4)
+
+
+def junk_shack(name, seed=0, L=3.0, D=2.4):
+    """A shack patched from whatever the wall did not need: wall strips of sheet, rust, planks and car
+    panels; a single-pitch corrugated roof with snow only in drifts; stovepipe; a warm window; a door."""
+    import random
+    rng = random.Random(seed * 131 + 7)
+    b = Builder(name); m = _junk_mats()
+    panels = [m["sheet"], m["rust"], m["wood"], m["rust_dark"],
+              toon(f"ShackPaint{seed % 4}", CAR_PAINTS[(seed * 3) % len(CAR_PAINTS)], noise=0.22, noise_scale=8.0, metal=0.15)]
+    glow = flat("ShackWindow", (0.95, 0.66, 0.30))
+    H0, H1 = 2.15, 2.65                                     # front (+y) is low, back high: the roof sheds to the yard
+    b.box(-L / 2, L / 2, 0, D, 0, 0.1, m["wood"])           # sill
+    def strips(x0, x1, y0, y1, h0, h1, along_x=True):
+        n = max(2, int((x1 - x0 if along_x else y1 - y0) / 0.55))
+        for i in range(n):
+            t0, t1 = i / n, (i + 1) / n
+            h = h0 + (h1 - h0) * (t0 + t1) / 2
+            mat = rng.choice(panels)
+            if along_x:
+                b.box(x0 + (x1 - x0) * t0, x0 + (x1 - x0) * t1 + 0.02, y0, y1, 0.1, h - rng.uniform(0, 0.12), mat)
+            else:
+                b.box(x0, x1, y0 + (y1 - y0) * t0, y0 + (y1 - y0) * t1 + 0.02, 0.1, h0 + (h1 - h0) * (1 - (t0 + t1) / 2) - rng.uniform(0, 0.1), mat)
+    strips(-L / 2, L / 2, 0.0, 0.06, H1, H1)                # back wall (against the car wall)
+    strips(-L / 2, -L / 2 + 0.06, 0.0, D, H0, H1, along_x=False)
+    strips(L / 2 - 0.06, L / 2, 0.0, D, H0, H1, along_x=False)
+    # front: door, window, the rest in strips
+    dx = rng.uniform(-0.5, 0.3)
+    strips(-L / 2, dx - 0.45, D - 0.06, D, H0, H0)
+    strips(dx + 0.45, L / 2, D - 0.06, D, H0, H0)
+    b.box(dx - 0.45, dx + 0.45, D - 0.06, D, 1.95, H0, m["sheet"])
+    b.box(dx - 0.42, dx + 0.42, D - 0.03, D + 0.01, 0.1, 1.95, rng.choice([m["wood"], m["rust"]]))   # door
+    b.box(dx + 0.24, dx + 0.32, D + 0.01, D + 0.04, 0.95, 1.02, m["dark"])
+    wx = (dx + 0.45 + L / 2) / 2 if dx < 0 else (dx - 0.45 - L / 2) / 2
+    b.box(wx - 0.3, wx + 0.3, D + 0.001, D + 0.012, 1.1, 1.5, glow)
+    b.box(wx - 0.36, wx + 0.36, D + 0.01, D + 0.03, 1.04, 1.1, m["wood"])
+    b.box(wx - 0.015, wx + 0.015, D + 0.01, D + 0.02, 1.1, 1.5, m["wood"])
+    # roof: corrugated sheets, sloping to the front, overhanging; snow in a couple of drifts
+    ang = math.atan2(H1 - H0, D)
+    Mr = Matrix.Translation((0, 0, H1)) @ Matrix.Rotation(-ang, 4, "X")
+    run = math.hypot(D, H1 - H0) + 0.35
+    n = int((L + 0.4) / 0.6) + 1
+    for i in range(n):
+        x0 = -L / 2 - 0.2 + i * (L + 0.4) / n
+        b.box(x0, x0 + (L + 0.4) / n + 0.03, -0.12, run, 0.0, 0.05, rng.choice([m["sheet"], m["rust"], m["rust"]]),
+              Mr @ Matrix.Rotation(math.radians(rng.uniform(-1.5, 1.5)), 4, "Y"))
+    for _ in range(2):
+        s0 = rng.uniform(-L / 2, 0.2)
+        b.box(s0, s0 + rng.uniform(0.7, 1.4), 0.0, rng.uniform(0.9, run - 0.3), 0.05, 0.1, m["snow"], Mr)
+    for _ in range(rng.randint(2, 4)):                       # weights on the roof: tyres and stones
+        tx, ty = rng.uniform(-L / 2 + 0.3, L / 2 - 0.3), rng.uniform(0.2, run - 0.4)
+        p = Mr @ Vector((tx, ty, 0.05))
+        b.cyl(p, p + Vector((0, 0, 0.12)), 0.18, m["dark"], seg=10)
+    px = L / 2 - 0.5 if seed % 2 else -L / 2 + 0.5
+    b.cyl((px, 0.5, 0.5), (px, 0.5, H1 + 0.9), 0.07, m["rust_dark"], seg=8)        # stovepipe
+    b.cyl((px, 0.5, H1 + 0.9), (px, 0.5, H1 + 1.0), 0.11, m["dark"], seg=8)
+    return b.finish(), (L, D)
+
+
+def market_stall(name, seed=0):
+    """Timber frame, a tarpaulin and a counter of planks on drums: the trading spot by the burn barrel."""
+    import random
+    rng = random.Random(seed)
+    b = Builder(name); m = _junk_mats()
+    tarp = toon(f"Tarp{seed % 3}", [(0.27, 0.33, 0.25), (0.24, 0.31, 0.35), (0.40, 0.33, 0.18)][seed % 3], noise=0.2, noise_scale=6.0)
+    L, D, H = 2.6, 1.4, 2.2
+    for x in (-L / 2, L / 2):
+        for y in (0.0, D):
+            b.box(x - 0.05, x + 0.05, y - 0.05, y + 0.05, 0, H + (0.25 if y == 0 else 0), m["wood"])
+    Mt = Matrix.Translation((0, 0, H + 0.25)) @ Matrix.Rotation(-math.atan2(0.25, D), 4, "X")
+    b.box(-L / 2 - 0.15, L / 2 + 0.15, -0.1, D + 0.25, 0, 0.03, tarp, Mt)
+    b.box(-L / 2 + 0.2, L / 2 - 0.2, D - 0.1, D + 0.25, 0.85, 0.92, m["wood"])        # counter plank
+    for x in (-L / 2 + 0.4, L / 2 - 0.4):
+        b.cyl((x, D + 0.07, 0), (x, D + 0.07, 0.85), 0.2, m["rust"], seg=10)
+    for i in range(rng.randint(3, 5)):                      # wares: jars, a radio, parts
+        x = rng.uniform(-L / 2 + 0.35, L / 2 - 0.35)
+        b.box(x - 0.08, x + 0.08, D - 0.02, D + 0.12, 0.92, 0.92 + rng.uniform(0.08, 0.2), rng.choice([m["glass"], m["sheet"], m["rust"], tarp]))
+    for i in range(2):
+        b.box(-L / 2 + 0.1 + i * 0.7, -L / 2 + 0.7 + i * 0.7, 0.1, 0.7, 0, 0.5, m["wood"])  # crates at the back
+    return b.finish(), (L, D + 0.3)
+
+
+def firewood(name):
+    b = Builder(name); m = _junk_mats()
+    for row in range(4):
+        for i in range(6 - row):
+            x = -0.75 + 0.13 * row + i * 0.26
+            b.cyl((x, 0.0, 0.11 + row * 0.2), (x, 0.7, 0.11 + row * 0.2), 0.1, m["wood"], seg=7)
+    b.box(-0.8, 0.8, 0.0, 0.7, 0.9, 0.95, m["sheet"])
+    b.box(-0.7, 0.7, 0.05, 0.65, 0.95, 0.99, m["snow"])
+    return b.finish(), (1.6, 0.7)
+
+
+def yard_wreck(name, seed=0):
+    """A car in the yard being stripped for the wall: on blocks, bonnet up, one door gone."""
+    import random
+    rng = random.Random(seed)
+    b = Builder(name); m = _junk_mats()
+    paint = toon(f"WreckPaint{seed % 4}", CAR_PAINTS[(seed * 5 + 1) % len(CAR_PAINTS)], noise=0.2, noise_scale=8.0, metal=0.2)
+    M = Matrix.Translation((0, 0.95, 0.12))
+    junk_car(b, M, "volga", paint, m, rng, door_gone=True, wheels=False)
+    for x in (-1.4, 1.4):
+        b.box(x - 0.25, x + 0.25, 0.4, 1.5, 0, 0.16, m["wood"])                   # blocks
+    Mh = Matrix.Translation((2.05, 0.95, 0.92)) @ Matrix.Rotation(math.radians(-62), 4, "Y")
+    b.box(-0.9, 0.0, -0.8, 0.8, 0.0, 0.04, paint, Mh)                              # bonnet up
+    b.cyl((2.6, 2.1, 0.0), (2.6, 2.1, 0.22), 0.31, m["dark"], seg=10)              # a wheel lying by it
+    return b.finish(), (4.8, 1.9)
