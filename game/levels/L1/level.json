@@ -1,0 +1,3010 @@
+{
+ "level": "L1",
+ "name": "Level 1 - Surface Transit Depot",
+ "ppm": 165.0,
+ "elev_deg": 47.0,
+ "rooms": [
+  {
+   "id": "airlock",
+   "r": [
+    -4.2,
+    1.5,
+    -2.2,
+    2.2
+   ],
+   "name": "Surface lift airlock"
+  },
+  {
+   "id": "depot_spine",
+   "r": [
+    1.5,
+    20.0,
+    -1.8,
+    1.8
+   ],
+   "name": "Covered loading platform"
+  },
+  {
+   "id": "guardhouse",
+   "r": [
+    1.5,
+    10.0,
+    1.8,
+    7.8
+   ],
+   "name": "Surface watchpost & dispatch"
+  },
+  {
+   "id": "switchyard",
+   "r": [
+    10.0,
+    20.0,
+    1.8,
+    8.6
+   ],
+   "name": "Frozen rail switchyard bay"
+  },
+  {
+   "id": "ration_store",
+   "r": [
+    1.5,
+    10.5,
+    -7.2,
+    -1.8
+   ],
+   "name": "Expedition gear & ration store"
+  },
+  {
+   "id": "triage_bay",
+   "r": [
+    10.5,
+    20.0,
+    -7.2,
+    -1.8
+   ],
+   "name": "Field decontamination & triage"
+  }
+ ],
+ "walls": [
+  {
+   "a": [
+    -4.2,
+    2.2
+   ],
+   "b": [
+    1.5,
+    2.2
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    1.5,
+    2.2
+   ],
+   "b": [
+    1.5,
+    7.8
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    1.5,
+    7.8
+   ],
+   "b": [
+    10.0,
+    7.8
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    10.0,
+    7.8
+   ],
+   "b": [
+    10.0,
+    8.6
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    10.0,
+    8.6
+   ],
+   "b": [
+    20.0,
+    8.6
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    20.0,
+    1.8
+   ],
+   "b": [
+    20.0,
+    8.6
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    20.0,
+    -1.8
+   ],
+   "b": [
+    20.0,
+    1.8
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    20.0,
+    -7.2
+   ],
+   "b": [
+    20.0,
+    -1.8
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    -4.2,
+    -2.2
+   ],
+   "b": [
+    -4.2,
+    2.2
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -4.2,
+    -2.2
+   ],
+   "b": [
+    1.5,
+    -2.2
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    1.5,
+    -2.2
+   ],
+   "b": [
+    1.5,
+    2.2
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     -0.9,
+     0.9,
+     null
+    ]
+   ]
+  },
+  {
+   "a": [
+    1.5,
+    1.8
+   ],
+   "b": [
+    20.0,
+    1.8
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     4.85,
+     6.15,
+     "door_guard"
+    ],
+    [
+     13.8,
+     16.2,
+     null
+    ]
+   ]
+  },
+  {
+   "a": [
+    10.0,
+    1.8
+   ],
+   "b": [
+    10.0,
+    7.8
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    1.5,
+    -1.8
+   ],
+   "b": [
+    20.0,
+    -1.8
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     5.35,
+     6.65,
+     "door_expedition"
+    ],
+    [
+     14.35,
+     15.65,
+     "door_triage"
+    ]
+   ]
+  },
+  {
+   "a": [
+    1.5,
+    -7.2
+   ],
+   "b": [
+    1.5,
+    -1.8
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    1.5,
+    -7.2
+   ],
+   "b": [
+    10.5,
+    -7.2
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    10.5,
+    -7.2
+   ],
+   "b": [
+    10.5,
+    -1.8
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    10.5,
+    -7.2
+   ],
+   "b": [
+    20.0,
+    -7.2
+   ],
+   "h": 0.4,
+   "openings": []
+  }
+ ],
+ "doors": [
+  {
+   "id": "door_guard",
+   "kind": "steel",
+   "label": "DISPATCH",
+   "u": 5.5,
+   "v": 1.8,
+   "open": true,
+   "locked": false,
+   "name": "Surface dispatch door",
+   "text": "Insulated steel door to the Surface Watchpost and Dispatch Office.",
+   "spr_closed": {
+    "sprite": "spr_023.png",
+    "x0": 343.7,
+    "y0": -928.9
+   },
+   "spr_open": {
+    "sprite": "spr_024.png",
+    "x0": 242.7,
+    "y0": -1007.9
+   },
+   "sort": [
+    431.7,
+    -622.9
+   ]
+  },
+  {
+   "id": "door_expedition",
+   "kind": "steel",
+   "label": "GEAR",
+   "u": 6.0,
+   "v": -1.8,
+   "open": false,
+   "locked": false,
+   "name": "Expedition gear store",
+   "text": "Quartermaster's heavy door stencilled: SURFACE EXPEDITION GEAR & RATIONS.",
+   "spr_closed": {
+    "sprite": "spr_025.png",
+    "x0": 822.0,
+    "y0": -664.4
+   },
+   "spr_open": {
+    "sprite": "spr_026.png",
+    "x0": 721.0,
+    "y0": -743.4
+   },
+   "sort": [
+    910.0,
+    -358.4
+   ]
+  },
+  {
+   "id": "door_triage",
+   "kind": "plywood",
+   "u": 15.0,
+   "v": -1.8,
+   "open": false,
+   "locked": false,
+   "name": "Field triage ward",
+   "text": "Decontamination and cold-exposure triage room.",
+   "spr_closed": {
+    "sprite": "spr_027.png",
+    "x0": 1872.1,
+    "y0": -1432.3
+   },
+   "spr_open": {
+    "sprite": "spr_028.png",
+    "x0": 1771.1,
+    "y0": -1511.3
+   },
+   "sort": [
+    1960.1,
+    -1126.3
+   ]
+  }
+ ],
+ "props": [
+  {
+   "type": "sinks",
+   "footprint": [
+    -4.075,
+    -3.625,
+    -1.3,
+    0.1
+   ],
+   "sprite": "spr_000.png",
+   "x0": -478.4,
+   "y0": 208.9,
+   "sort": [
+    -379.2,
+    379.7
+   ],
+   "name": "Decontamination washbasins",
+   "text": "Dry. The drain traps are packed with rock salt to stop them freezing solid."
+  },
+  {
+   "type": "locker",
+   "footprint": [
+    -2.0,
+    -1.0,
+    -2.075,
+    -1.575
+   ],
+   "sprite": "spr_001.png",
+   "x0": -73.9,
+   "y0": 34.1,
+   "sort": [
+    37.9,
+    283.7
+   ],
+   "name": "Airlock suit lockers",
+   "text": "Heavy canvas greatcoats, frost goggles, and spare respirator canisters."
+  },
+  {
+   "type": "desk",
+   "footprint": [
+    3.6,
+    4.8,
+    4.8,
+    5.4
+   ],
+   "sprite": "spr_002.png",
+   "x0": -219.0,
+   "y0": -986.2,
+   "sort": [
+    -105.0,
+    -793.6
+   ],
+   "name": "Dispatch officer's desk",
+   "text": "Surface weather logs and rail switchyard manifests. A brass barometer sits beside a mug of cold chicory."
+  },
+  {
+   "type": "chair",
+   "footprint": [
+    3.95,
+    4.45,
+    5.7,
+    6.2
+   ],
+   "sprite": "spr_003.png",
+   "x0": -268.3,
+   "y0": -1016.4,
+   "sort": [
+    -204.2,
+    -866.1
+   ]
+  },
+  {
+   "type": "radioset",
+   "footprint": [
+    2.0,
+    3.6,
+    7.075,
+    7.675
+   ],
+   "sprite": "spr_004.png",
+   "x0": -669.8,
+   "y0": -1167.8,
+   "sort": [
+    -533.8,
+    -868.2
+   ],
+   "name": "Surface beacon transceiver",
+   "text": "Shortwave line-of-sight transceiver aimed down the valley toward the city rail terminus."
+  },
+  {
+   "type": "terminal",
+   "footprint": [
+    5.5,
+    6.9,
+    6.975,
+    7.675
+   ],
+   "sprite": "spr_005.png",
+   "x0": -262.1,
+   "y0": -1382.9,
+   "sort": [
+    -131.3,
+    -1154.1
+   ],
+   "name": "Switchyard control terminal",
+   "text": "Displays the track diagram for the covered rail spur between Silo 81 and the municipal industrial foundry."
+  },
+  {
+   "type": "monitors",
+   "footprint": [
+    7.75,
+    9.05,
+    7.025,
+    7.675
+   ],
+   "sprite": "spr_006.png",
+   "x0": -4.4,
+   "y0": -1587.7,
+   "sort": [
+    122.5,
+    -1343.9
+   ],
+   "name": "Exterior camera monitors",
+   "text": "Grainy black-and-white feeds of the snow-buried blast gates and the frozen rail cutting outside."
+  },
+  {
+   "type": "stove",
+   "footprint": [
+    9.075,
+    9.875,
+    3.4,
+    5.0
+   ],
+   "sprite": "spr_007.png",
+   "x0": 466.1,
+   "y0": -1385.0,
+   "sort": [
+    615.4,
+    -1128.9
+   ],
+   "name": "Watchpost stove",
+   "text": "A small cast-iron stove keeping the dispatch office livable against the sub-zero draft from the switchyard."
+  },
+  {
+   "type": "safe",
+   "footprint": [
+    1.625,
+    2.225,
+    5.85,
+    6.55
+   ],
+   "sprite": "spr_008.png",
+   "x0": -582.8,
+   "y0": -863.7,
+   "sort": [
+    -498.8,
+    -693.3
+   ],
+   "name": "Dispatch safe",
+   "text": "Contains surface gate logs and emergency flare cartridges."
+  },
+  {
+   "type": "boiler_assembly",
+   "footprint": [
+    13.3,
+    16.7,
+    4.4,
+    6.0
+   ],
+   "sprite": "spr_009.png",
+   "x0": 849.1,
+   "y0": -2222.9,
+   "sort": [
+    1143.4,
+    -1723.6
+   ],
+   "name": "Armoured thermal freight car",
+   "text": "A heavy narrow-gauge rail tender coupled to the depot buffer stop, built to haul heavy foundry castings through the valley snow."
+  },
+  {
+   "type": "control_panel",
+   "footprint": [
+    10.7,
+    12.5,
+    7.855,
+    8.475
+   ],
+   "sprite": "spr_010.png",
+   "x0": 251.6,
+   "y0": -1992.0,
+   "sort": [
+    400.8,
+    -1686.5
+   ],
+   "name": "Blast-gate winch console",
+   "text": "Hydraulic winch controls for the outer snow-shed doors leading toward the city rail line."
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    19.255,
+    19.875,
+    6.49,
+    7.11
+   ],
+   "sprite": "spr_011.png",
+   "x0": 1430.5,
+   "y0": -2352.1,
+   "sort": [
+    1489.3,
+    -2249.7
+   ],
+   "name": "Cargo crate",
+   "text": "Stencilled: SILO 81 SURFACE DEPOT - OUTBOUND SALVAGE."
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    19.255,
+    19.875,
+    5.49,
+    6.11
+   ],
+   "sprite": "spr_011.png",
+   "x0": 1547.2,
+   "y0": -2266.8,
+   "sort": [
+    1606.0,
+    -2164.4
+   ]
+  },
+  {
+   "type": "sacks",
+   "footprint": [
+    11.2,
+    11.8,
+    2.45,
+    3.55
+   ],
+   "sprite": "spr_012.png",
+   "x0": 888.7,
+   "y0": -1388.7,
+   "sort": [
+    991.7,
+    -1237.3
+   ],
+   "name": "Road-salt sacks",
+   "text": "Coarse rock salt for clearing ice from the switchyard points."
+  },
+  {
+   "type": "shelf",
+   "footprint": [
+    2.65,
+    3.75,
+    -7.075,
+    -6.625
+   ],
+   "sprite": "spr_013.png",
+   "x0": 1053.8,
+   "y0": 18.6,
+   "sort": [
+    1172.6,
+    311.5
+   ],
+   "name": "Cold-weather gear rack",
+   "text": "Fleece-lined parkas, snowshoes, ice axes, andinsulated battery packs."
+  },
+  {
+   "type": "workbench",
+   "footprint": [
+    5.1,
+    6.9,
+    -7.075,
+    -6.375
+   ],
+   "sprite": "spr_014.png",
+   "x0": 1330.5,
+   "y0": -161.3,
+   "sort": [
+    1484.7,
+    41.1
+   ],
+   "name": "Equipment maintenance bench",
+   "text": "Ski bindings, lantern mantles, and a map of the surface highway with shelter huts marked in red pencil."
+  },
+  {
+   "type": "shelf",
+   "footprint": [
+    8.25,
+    9.35,
+    -7.075,
+    -6.625
+   ],
+   "sprite": "spr_013.png",
+   "x0": 1707.2,
+   "y0": -459.2,
+   "sort": [
+    1825.9,
+    -191.5
+   ],
+   "name": "Field ration shelf",
+   "text": "Tins of Pemmican, compressed biscuit, and solid fuel tablets for surface work parties."
+  },
+  {
+   "type": "toolbox",
+   "footprint": [
+    1.625,
+    1.925,
+    -5.0,
+    -4.0
+   ],
+   "sprite": "spr_015.png",
+   "x0": 647.6,
+   "y0": 74.3,
+   "sort": [
+    732.1,
+    232.5
+   ],
+   "name": "Field repair kit",
+   "text": "Portable rivet gun, wire cutters, and flare pistol."
+  },
+  {
+   "type": "locker",
+   "footprint": [
+    9.875,
+    10.375,
+    -4.7,
+    -3.7
+   ],
+   "sprite": "spr_016.png",
+   "x0": 1559.5,
+   "y0": -743.9,
+   "sort": [
+    1671.3,
+    -505.6
+   ],
+   "name": "Expedition lockers",
+   "text": "Numbered kit lockers for the surface maintenance crew."
+  },
+  {
+   "type": "bed",
+   "footprint": [
+    11.6,
+    13.6,
+    -7.075,
+    -6.175
+   ],
+   "sprite": "spr_017.png",
+   "x0": 2068.5,
+   "y0": -724.4,
+   "sort": [
+    2243.0,
+    -533.0
+   ],
+   "name": "Warming cot",
+   "text": "Rigged with heated blankets for surface lookouts returning with frostbite."
+  },
+  {
+   "type": "bed",
+   "footprint": [
+    15.8,
+    17.8,
+    -7.075,
+    -6.175
+   ],
+   "sprite": "spr_018.png",
+   "x0": 2558.6,
+   "y0": -1082.8,
+   "sort": [
+    2733.1,
+    -881.9
+   ],
+   "name": "Triage cot",
+   "text": "Wool blankets folded neatly at the foot."
+  },
+  {
+   "type": "medscreen",
+   "footprint": [
+    13.8,
+    15.6,
+    -5.6,
+    -5.4
+   ],
+   "sprite": "spr_019.png",
+   "x0": 2235.5,
+   "y0": -1072.5,
+   "sort": [
+    2356.8,
+    -785.0
+   ],
+   "name": "Privacy screen",
+   "text": "Canvas medical screen."
+  },
+  {
+   "type": "medcab",
+   "footprint": [
+    10.625,
+    11.045,
+    -3.85,
+    -2.95
+   ],
+   "sprite": "spr_020.png",
+   "x0": 1567.3,
+   "y0": -917.5,
+   "sort": [
+    1660.8,
+    -664.1
+   ],
+   "name": "First-aid cabinet",
+   "text": " Frostbite salve, camphor spirits, and splints."
+  },
+  {
+   "type": "desk",
+   "footprint": [
+    19.275,
+    19.875,
+    -4.2,
+    -3.0
+   ],
+   "sprite": "spr_021.png",
+   "x0": 2589.9,
+   "y0": -1555.7,
+   "sort": [
+    2703.9,
+    -1363.1
+   ],
+   "name": "Medical log desk",
+   "text": "Logbook recording surface exposure times and wind-chill readings."
+  },
+  {
+   "type": "chair",
+   "footprint": [
+    18.4,
+    18.9,
+    -3.85,
+    -3.35
+   ],
+   "sprite": "spr_022.png",
+   "x0": 2531.8,
+   "y0": -1435.9,
+   "sort": [
+    2596.0,
+    -1284.2
+   ]
+  }
+ ],
+ "inspect": [
+  {
+   "id": "surface_monitors",
+   "u": 8.4,
+   "v": 6.8,
+   "name": "Exterior snow-shed cameras",
+   "text": "The cameras show the armoured rail cutting leading out of the mountain toward the distant city. Heavy snow blankets the tracks, but the tunnel structure is intact."
+  },
+  {
+   "id": "freight_car_inspect",
+   "u": 15.0,
+   "v": 4.6,
+   "name": "Armoured rail tender",
+   "text": "Built to transport multi-ton foundry castings between the city works and Silo 81. Its coupling latches are greased and ready under a rime of frost."
+  },
+  {
+   "id": "city_spur_gate",
+   "u": 19.2,
+   "v": 4.4,
+   "name": "Outer rail bulkhead",
+   "text": "Sealed against the blizzard outside. Stencilled above the wheel: MUNICIPAL INDUSTRIAL SECTOR - 12 KM."
+  }
+ ],
+ "stairs": [
+  {
+   "id": "to_l4w_from_l1",
+   "u": -2.6,
+   "v": 1.3,
+   "to": "L4W",
+   "arrive": [
+    -4.9,
+    3.2
+   ],
+   "name": "Command Lift (L4)",
+   "text": "Descend via the personnel lift to Level 4 Command (Valve Gallery)."
+  },
+  {
+   "id": "to_l5_from_l1",
+   "u": 0.0,
+   "v": 1.3,
+   "to": "L5",
+   "arrive": [
+    20.8,
+    0.0
+   ],
+   "name": "Freight Lift (Sub-Level 4)",
+   "text": "Descend via the heavy freight lift to Sub-Level 4: Deep Storage & Geotherm Ring."
+  },
+  {
+   "id": "to_jt_from_l1",
+   "u": -2.6,
+   "v": -1.4,
+   "to": "JT",
+   "arrive": [
+    12.0,
+    0.0
+   ],
+   "name": "Snow road to Junk Town",
+   "text": "The surface blast gate opens onto the snow road east, toward Junk Town."
+  }
+ ],
+ "spawns": {
+  "player": [
+   -2.6,
+   0.6,
+   0
+  ],
+  "worms": []
+ },
+ "blocked": [],
+ "bounds": [
+  -4.2,
+  20.0,
+  -7.2,
+  8.6
+ ],
+ "sprites": [],
+ "bg": {
+  "file": "bg.png",
+  "x0": -801,
+  "y0": -2790
+ },
+ "wallparts": [
+  {
+   "sprite": "wall_00_00.png",
+   "x0": -801,
+   "y0": -172,
+   "sort": [
+    -746.7,
+    170.7
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_01.png",
+   "x0": -748,
+   "y0": -173,
+   "sort": [
+    -721.5,
+    189.1
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_02.png",
+   "x0": -695,
+   "y0": -124,
+   "sort": [
+    -668.5,
+    227.9
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_03.png",
+   "x0": -642,
+   "y0": -85,
+   "sort": [
+    -615.5,
+    266.6
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_04.png",
+   "x0": -589,
+   "y0": -46,
+   "sort": [
+    -562.5,
+    305.4
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_05.png",
+   "x0": -536,
+   "y0": -7,
+   "sort": [
+    -509.5,
+    344.1
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_06.png",
+   "x0": -483,
+   "y0": 31,
+   "sort": [
+    -456.5,
+    382.9
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_07.png",
+   "x0": -430,
+   "y0": 70,
+   "sort": [
+    -403.5,
+    421.7
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_08.png",
+   "x0": -377,
+   "y0": 109,
+   "sort": [
+    -350.5,
+    460.4
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_09.png",
+   "x0": -324,
+   "y0": 148,
+   "sort": [
+    -297.5,
+    499.2
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_10.png",
+   "x0": -271,
+   "y0": 187,
+   "sort": [
+    -244.5,
+    537.9
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_11.png",
+   "x0": -218,
+   "y0": 214,
+   "sort": [
+    -233.3,
+    546.1
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_01_00.png",
+   "x0": -288,
+   "y0": 203,
+   "sort": [
+    -233.3,
+    546.1
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_01.png",
+   "x0": -235,
+   "y0": 177,
+   "sort": [
+    -208.5,
+    527.9
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_02.png",
+   "x0": -182,
+   "y0": 137,
+   "sort": [
+    -155.5,
+    489.2
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_03.png",
+   "x0": -129,
+   "y0": 99,
+   "sort": [
+    -102.5,
+    450.4
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_04.png",
+   "x0": -76,
+   "y0": 61,
+   "sort": [
+    -49.5,
+    411.6
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_05.png",
+   "x0": -23,
+   "y0": 22,
+   "sort": [
+    3.5,
+    372.9
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_06.png",
+   "x0": 30,
+   "y0": -17,
+   "sort": [
+    56.5,
+    334.1
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_07.png",
+   "x0": 83,
+   "y0": -56,
+   "sort": [
+    109.5,
+    295.4
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_08.png",
+   "x0": 136,
+   "y0": -95,
+   "sort": [
+    162.5,
+    256.6
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_09.png",
+   "x0": 189,
+   "y0": -133,
+   "sort": [
+    215.5,
+    217.8
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_10.png",
+   "x0": 242,
+   "y0": -172,
+   "sort": [
+    268.5,
+    179.1
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_11.png",
+   "x0": 295,
+   "y0": -211,
+   "sort": [
+    321.5,
+    140.3
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_12.png",
+   "x0": 348,
+   "y0": -262,
+   "sort": [
+    374.5,
+    101.6
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_13.png",
+   "x0": 401,
+   "y0": -284,
+   "sort": [
+    427.5,
+    62.8
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_14.png",
+   "x0": 454,
+   "y0": -268,
+   "sort": [
+    431.7,
+    59.7
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_02_00.png",
+   "x0": -107,
+   "y0": -593,
+   "sort": [
+    -80.5,
+    -314.9
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_01.png",
+   "x0": -54,
+   "y0": -573,
+   "sort": [
+    -27.5,
+    -276.1
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_02.png",
+   "x0": -1,
+   "y0": -534,
+   "sort": [
+    25.5,
+    -237.3
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_03.png",
+   "x0": 52,
+   "y0": -495,
+   "sort": [
+    78.5,
+    -198.6
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_04.png",
+   "x0": 105,
+   "y0": -456,
+   "sort": [
+    131.5,
+    -159.8
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_05.png",
+   "x0": 158,
+   "y0": -418,
+   "sort": [
+    184.5,
+    -121.1
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_06.png",
+   "x0": 211,
+   "y0": -379,
+   "sort": [
+    237.5,
+    -82.3
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_07.png",
+   "x0": 264,
+   "y0": -340,
+   "sort": [
+    290.5,
+    -43.5
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_08.png",
+   "x0": 317,
+   "y0": -302,
+   "sort": [
+    343.5,
+    -4.8
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_09.png",
+   "x0": 370,
+   "y0": -262,
+   "sort": [
+    396.5,
+    34.0
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_10.png",
+   "x0": 423,
+   "y0": -224,
+   "sort": [
+    431.7,
+    59.7
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_03_00.png",
+   "x0": -60,
+   "y0": -579,
+   "sort": [
+    -33.5,
+    -282.7
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_01.png",
+   "x0": -7,
+   "y0": -618,
+   "sort": [
+    19.5,
+    -321.4
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_02.png",
+   "x0": 46,
+   "y0": -657,
+   "sort": [
+    72.5,
+    -360.2
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_03.png",
+   "x0": 99,
+   "y0": -695,
+   "sort": [
+    125.5,
+    -399.0
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_04.png",
+   "x0": 152,
+   "y0": -734,
+   "sort": [
+    178.5,
+    -437.7
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_05.png",
+   "x0": 205,
+   "y0": -773,
+   "sort": [
+    231.5,
+    -476.5
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_06.png",
+   "x0": 258,
+   "y0": -812,
+   "sort": [
+    284.5,
+    -515.3
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_07.png",
+   "x0": 311,
+   "y0": -850,
+   "sort": [
+    337.5,
+    -554.0
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_08.png",
+   "x0": 364,
+   "y0": -889,
+   "sort": [
+    390.5,
+    -592.8
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_09.png",
+   "x0": 417,
+   "y0": -928,
+   "sort": [
+    443.5,
+    -631.5
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_10.png",
+   "x0": 470,
+   "y0": -967,
+   "sort": [
+    496.5,
+    -670.3
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_11.png",
+   "x0": 523,
+   "y0": -1005,
+   "sort": [
+    549.5,
+    -709.1
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_12.png",
+   "x0": 576,
+   "y0": -1044,
+   "sort": [
+    602.5,
+    -747.8
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_13.png",
+   "x0": 629,
+   "y0": -1083,
+   "sort": [
+    655.5,
+    -786.6
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_14.png",
+   "x0": 682,
+   "y0": -1122,
+   "sort": [
+    708.5,
+    -825.3
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_15.png",
+   "x0": 735,
+   "y0": -1161,
+   "sort": [
+    761.5,
+    -864.1
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_16.png",
+   "x0": 788,
+   "y0": -1199,
+   "sort": [
+    814.5,
+    -902.9
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_17.png",
+   "x0": 841,
+   "y0": -1238,
+   "sort": [
+    867.5,
+    -941.6
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_18.png",
+   "x0": 894,
+   "y0": -1277,
+   "sort": [
+    920.5,
+    -980.4
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_19.png",
+   "x0": 947,
+   "y0": -1316,
+   "sort": [
+    973.5,
+    -1019.2
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_20.png",
+   "x0": 1000,
+   "y0": -1354,
+   "sort": [
+    1026.5,
+    -1057.9
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_21.png",
+   "x0": 1053,
+   "y0": -1393,
+   "sort": [
+    1079.5,
+    -1096.7
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_22.png",
+   "x0": 1106,
+   "y0": -1432,
+   "sort": [
+    1132.5,
+    -1135.4
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_23.png",
+   "x0": 1159,
+   "y0": -1470,
+   "sort": [
+    1185.5,
+    -1174.2
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_24.png",
+   "x0": 1212,
+   "y0": -1509,
+   "sort": [
+    1238.5,
+    -1213.0
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_25.png",
+   "x0": 1265,
+   "y0": -1548,
+   "sort": [
+    1291.5,
+    -1251.7
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_26.png",
+   "x0": 1318,
+   "y0": -1587,
+   "sort": [
+    1344.5,
+    -1290.5
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_27.png",
+   "x0": 1371,
+   "y0": -1626,
+   "sort": [
+    1397.5,
+    -1329.3
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_28.png",
+   "x0": 1424,
+   "y0": -1665,
+   "sort": [
+    1450.5,
+    -1368.0
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_29.png",
+   "x0": 1477,
+   "y0": -1703,
+   "sort": [
+    1503.5,
+    -1406.8
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_30.png",
+   "x0": 1530,
+   "y0": -1742,
+   "sort": [
+    1556.5,
+    -1445.5
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_31.png",
+   "x0": 1583,
+   "y0": -1781,
+   "sort": [
+    1609.5,
+    -1484.3
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_32.png",
+   "x0": 1636,
+   "y0": -1819,
+   "sort": [
+    1662.5,
+    -1523.1
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_33.png",
+   "x0": 1689,
+   "y0": -1858,
+   "sort": [
+    1715.5,
+    -1561.8
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_34.png",
+   "x0": 1742,
+   "y0": -1897,
+   "sort": [
+    1768.5,
+    -1600.6
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_35.png",
+   "x0": 1795,
+   "y0": -1936,
+   "sort": [
+    1821.5,
+    -1639.3
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_36.png",
+   "x0": 1848,
+   "y0": -1975,
+   "sort": [
+    1874.5,
+    -1678.1
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_37.png",
+   "x0": 1901,
+   "y0": -2013,
+   "sort": [
+    1927.5,
+    -1716.9
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_38.png",
+   "x0": 1954,
+   "y0": -2052,
+   "sort": [
+    1980.5,
+    -1755.6
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_39.png",
+   "x0": 2007,
+   "y0": -2091,
+   "sort": [
+    2033.5,
+    -1794.4
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_40.png",
+   "x0": 2060,
+   "y0": -2130,
+   "sort": [
+    2086.5,
+    -1833.2
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_41.png",
+   "x0": 2113,
+   "y0": -2137,
+   "sort": [
+    2123.4,
+    -1860.2
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_04_00.png",
+   "x0": 232,
+   "y0": -1796,
+   "sort": [
+    258.5,
+    -1517.5
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_01.png",
+   "x0": 285,
+   "y0": -1775,
+   "sort": [
+    311.5,
+    -1478.8
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_02.png",
+   "x0": 338,
+   "y0": -1736,
+   "sort": [
+    364.5,
+    -1440.0
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_03.png",
+   "x0": 391,
+   "y0": -1698,
+   "sort": [
+    417.5,
+    -1401.2
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_04.png",
+   "x0": 444,
+   "y0": -1659,
+   "sort": [
+    470.5,
+    -1362.5
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_05.png",
+   "x0": 497,
+   "y0": -1621,
+   "sort": [
+    523.5,
+    -1323.7
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_06.png",
+   "x0": 550,
+   "y0": -1581,
+   "sort": [
+    576.5,
+    -1285.0
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_07.png",
+   "x0": 603,
+   "y0": -1542,
+   "sort": [
+    629.5,
+    -1246.2
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_08.png",
+   "x0": 656,
+   "y0": -1504,
+   "sort": [
+    682.5,
+    -1207.4
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_09.png",
+   "x0": 709,
+   "y0": -1465,
+   "sort": [
+    735.5,
+    -1168.7
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_10.png",
+   "x0": 762,
+   "y0": -1426,
+   "sort": [
+    788.5,
+    -1129.9
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_11.png",
+   "x0": 815,
+   "y0": -1388,
+   "sort": [
+    841.5,
+    -1091.1
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_12.png",
+   "x0": 868,
+   "y0": -1349,
+   "sort": [
+    894.5,
+    -1052.4
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_13.png",
+   "x0": 921,
+   "y0": -1310,
+   "sort": [
+    947.5,
+    -1013.6
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_14.png",
+   "x0": 974,
+   "y0": -1024,
+   "sort": [
+    956.7,
+    -1006.9
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_05_00.png",
+   "x0": 360,
+   "y0": -272,
+   "sort": [
+    386.5,
+    24.5
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_01.png",
+   "x0": 413,
+   "y0": -311,
+   "sort": [
+    439.5,
+    -14.2
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_02.png",
+   "x0": 466,
+   "y0": -350,
+   "sort": [
+    492.5,
+    -53.0
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_03.png",
+   "x0": 519,
+   "y0": -388,
+   "sort": [
+    545.5,
+    -91.8
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_04.png",
+   "x0": 572,
+   "y0": -427,
+   "sort": [
+    598.5,
+    -130.5
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_05.png",
+   "x0": 625,
+   "y0": -466,
+   "sort": [
+    651.5,
+    -169.3
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_06.png",
+   "x0": 678,
+   "y0": -505,
+   "sort": [
+    704.5,
+    -208.1
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_07.png",
+   "x0": 731,
+   "y0": -543,
+   "sort": [
+    757.5,
+    -246.8
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_08.png",
+   "x0": 784,
+   "y0": -582,
+   "sort": [
+    810.5,
+    -285.6
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_09.png",
+   "x0": 837,
+   "y0": -621,
+   "sort": [
+    863.5,
+    -324.3
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_10.png",
+   "x0": 890,
+   "y0": -660,
+   "sort": [
+    916.5,
+    -363.1
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_11.png",
+   "x0": 943,
+   "y0": -698,
+   "sort": [
+    969.5,
+    -401.9
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_12.png",
+   "x0": 996,
+   "y0": -737,
+   "sort": [
+    1022.5,
+    -440.6
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_13.png",
+   "x0": 1049,
+   "y0": -776,
+   "sort": [
+    1075.5,
+    -479.4
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_14.png",
+   "x0": 1102,
+   "y0": -815,
+   "sort": [
+    1128.5,
+    -518.1
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_15.png",
+   "x0": 1155,
+   "y0": -853,
+   "sort": [
+    1181.5,
+    -556.9
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_16.png",
+   "x0": 1208,
+   "y0": -892,
+   "sort": [
+    1234.5,
+    -595.7
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_17.png",
+   "x0": 1261,
+   "y0": -931,
+   "sort": [
+    1287.5,
+    -634.4
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_18.png",
+   "x0": 1314,
+   "y0": -970,
+   "sort": [
+    1340.5,
+    -673.2
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_19.png",
+   "x0": 1367,
+   "y0": -1009,
+   "sort": [
+    1393.5,
+    -712.0
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_20.png",
+   "x0": 1420,
+   "y0": -1047,
+   "sort": [
+    1446.5,
+    -750.7
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_21.png",
+   "x0": 1473,
+   "y0": -1086,
+   "sort": [
+    1499.5,
+    -789.5
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_22.png",
+   "x0": 1526,
+   "y0": -1125,
+   "sort": [
+    1552.5,
+    -828.2
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_23.png",
+   "x0": 1579,
+   "y0": -1163,
+   "sort": [
+    1605.5,
+    -867.0
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_24.png",
+   "x0": 1632,
+   "y0": -1202,
+   "sort": [
+    1658.5,
+    -905.8
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_25.png",
+   "x0": 1685,
+   "y0": -1241,
+   "sort": [
+    1711.5,
+    -944.5
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_26.png",
+   "x0": 1738,
+   "y0": -1280,
+   "sort": [
+    1764.5,
+    -983.3
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_27.png",
+   "x0": 1791,
+   "y0": -1319,
+   "sort": [
+    1817.5,
+    -1022.1
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_28.png",
+   "x0": 1844,
+   "y0": -1357,
+   "sort": [
+    1870.5,
+    -1060.8
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_29.png",
+   "x0": 1897,
+   "y0": -1396,
+   "sort": [
+    1923.5,
+    -1099.6
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_30.png",
+   "x0": 1950,
+   "y0": -1435,
+   "sort": [
+    1976.5,
+    -1138.3
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_31.png",
+   "x0": 2003,
+   "y0": -1474,
+   "sort": [
+    2029.5,
+    -1177.1
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_32.png",
+   "x0": 2056,
+   "y0": -1512,
+   "sort": [
+    2082.5,
+    -1215.9
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_33.png",
+   "x0": 2109,
+   "y0": -1551,
+   "sort": [
+    2135.5,
+    -1254.6
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_34.png",
+   "x0": 2162,
+   "y0": -1590,
+   "sort": [
+    2188.5,
+    -1293.4
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_35.png",
+   "x0": 2215,
+   "y0": -1629,
+   "sort": [
+    2241.5,
+    -1332.1
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_36.png",
+   "x0": 2268,
+   "y0": -1667,
+   "sort": [
+    2294.5,
+    -1370.9
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_37.png",
+   "x0": 2321,
+   "y0": -1706,
+   "sort": [
+    2347.5,
+    -1409.7
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_38.png",
+   "x0": 2374,
+   "y0": -1745,
+   "sort": [
+    2400.5,
+    -1448.4
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_39.png",
+   "x0": 2427,
+   "y0": -1784,
+   "sort": [
+    2453.5,
+    -1487.2
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_40.png",
+   "x0": 2480,
+   "y0": -1823,
+   "sort": [
+    2506.5,
+    -1526.0
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_41.png",
+   "x0": 2533,
+   "y0": -1830,
+   "sort": [
+    2543.5,
+    -1553.0
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_06_00.png",
+   "x0": 330,
+   "y0": -316,
+   "sort": [
+    385.0,
+    25.6
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_01.png",
+   "x0": 383,
+   "y0": -318,
+   "sort": [
+    409.5,
+    43.5
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_02.png",
+   "x0": 436,
+   "y0": -269,
+   "sort": [
+    462.5,
+    82.3
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_03.png",
+   "x0": 489,
+   "y0": -230,
+   "sort": [
+    515.5,
+    121.0
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_04.png",
+   "x0": 542,
+   "y0": -191,
+   "sort": [
+    568.5,
+    159.8
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_05.png",
+   "x0": 595,
+   "y0": -153,
+   "sort": [
+    621.5,
+    198.5
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_06.png",
+   "x0": 648,
+   "y0": -114,
+   "sort": [
+    674.5,
+    237.3
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_07.png",
+   "x0": 701,
+   "y0": -75,
+   "sort": [
+    727.5,
+    276.1
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_08.png",
+   "x0": 754,
+   "y0": -36,
+   "sort": [
+    780.5,
+    314.8
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_09.png",
+   "x0": 807,
+   "y0": 3,
+   "sort": [
+    833.5,
+    353.6
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_10.png",
+   "x0": 860,
+   "y0": 41,
+   "sort": [
+    886.5,
+    392.4
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_11.png",
+   "x0": 913,
+   "y0": 80,
+   "sort": [
+    939.5,
+    431.1
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_12.png",
+   "x0": 966,
+   "y0": 118,
+   "sort": [
+    992.5,
+    469.9
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_13.png",
+   "x0": 1019,
+   "y0": 146,
+   "sort": [
+    1015.1,
+    486.4
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_07_00.png",
+   "x0": 960,
+   "y0": 144,
+   "sort": [
+    1015.1,
+    486.4
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_01.png",
+   "x0": 1013,
+   "y0": 117,
+   "sort": [
+    1039.5,
+    468.5
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_02.png",
+   "x0": 1066,
+   "y0": 79,
+   "sort": [
+    1092.5,
+    429.7
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_03.png",
+   "x0": 1119,
+   "y0": 40,
+   "sort": [
+    1145.5,
+    391.0
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_04.png",
+   "x0": 1172,
+   "y0": 1,
+   "sort": [
+    1198.5,
+    352.2
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_05.png",
+   "x0": 1225,
+   "y0": -38,
+   "sort": [
+    1251.5,
+    313.4
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_06.png",
+   "x0": 1278,
+   "y0": -76,
+   "sort": [
+    1304.5,
+    274.7
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_07.png",
+   "x0": 1331,
+   "y0": -115,
+   "sort": [
+    1357.5,
+    235.9
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_08.png",
+   "x0": 1384,
+   "y0": -154,
+   "sort": [
+    1410.5,
+    197.2
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_09.png",
+   "x0": 1437,
+   "y0": -193,
+   "sort": [
+    1463.5,
+    158.4
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_10.png",
+   "x0": 1490,
+   "y0": -231,
+   "sort": [
+    1516.5,
+    119.6
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_11.png",
+   "x0": 1543,
+   "y0": -271,
+   "sort": [
+    1569.5,
+    80.9
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_12.png",
+   "x0": 1596,
+   "y0": -309,
+   "sort": [
+    1622.5,
+    42.1
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_13.png",
+   "x0": 1649,
+   "y0": -348,
+   "sort": [
+    1675.5,
+    3.4
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_14.png",
+   "x0": 1702,
+   "y0": -387,
+   "sort": [
+    1728.5,
+    -35.4
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_15.png",
+   "x0": 1755,
+   "y0": -426,
+   "sort": [
+    1781.5,
+    -74.2
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_16.png",
+   "x0": 1808,
+   "y0": -464,
+   "sort": [
+    1834.5,
+    -112.9
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_17.png",
+   "x0": 1861,
+   "y0": -503,
+   "sort": [
+    1887.5,
+    -151.7
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_18.png",
+   "x0": 1914,
+   "y0": -542,
+   "sort": [
+    1940.5,
+    -190.5
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_19.png",
+   "x0": 1967,
+   "y0": -592,
+   "sort": [
+    1993.5,
+    -229.2
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_20.png",
+   "x0": 2020,
+   "y0": -625,
+   "sort": [
+    2046.5,
+    -268.0
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_21.png",
+   "x0": 2073,
+   "y0": -619,
+   "sort": [
+    2065.1,
+    -281.6
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_08_00.png",
+   "x0": 1411,
+   "y0": -1020,
+   "sort": [
+    1437.5,
+    -740.6
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_01.png",
+   "x0": 1464,
+   "y0": -999,
+   "sort": [
+    1490.5,
+    -701.8
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_02.png",
+   "x0": 1517,
+   "y0": -960,
+   "sort": [
+    1543.5,
+    -663.1
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_03.png",
+   "x0": 1570,
+   "y0": -921,
+   "sort": [
+    1596.5,
+    -624.3
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_04.png",
+   "x0": 1623,
+   "y0": -882,
+   "sort": [
+    1649.5,
+    -585.5
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_05.png",
+   "x0": 1676,
+   "y0": -843,
+   "sort": [
+    1702.5,
+    -546.8
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_06.png",
+   "x0": 1729,
+   "y0": -804,
+   "sort": [
+    1755.5,
+    -508.0
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_07.png",
+   "x0": 1782,
+   "y0": -766,
+   "sort": [
+    1808.5,
+    -469.3
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_08.png",
+   "x0": 1835,
+   "y0": -727,
+   "sort": [
+    1861.5,
+    -430.5
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_09.png",
+   "x0": 1888,
+   "y0": -688,
+   "sort": [
+    1914.5,
+    -391.7
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_10.png",
+   "x0": 1941,
+   "y0": -649,
+   "sort": [
+    1967.5,
+    -353.0
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_11.png",
+   "x0": 1994,
+   "y0": -611,
+   "sort": [
+    2020.5,
+    -314.2
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_12.png",
+   "x0": 2047,
+   "y0": -572,
+   "sort": [
+    2065.1,
+    -281.6
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_09_00.png",
+   "x0": 2010,
+   "y0": -623,
+   "sort": [
+    2065.1,
+    -281.6
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_01.png",
+   "x0": 2063,
+   "y0": -651,
+   "sort": [
+    2089.5,
+    -299.4
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_02.png",
+   "x0": 2116,
+   "y0": -689,
+   "sort": [
+    2142.5,
+    -338.2
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_03.png",
+   "x0": 2169,
+   "y0": -728,
+   "sort": [
+    2195.5,
+    -377.0
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_04.png",
+   "x0": 2222,
+   "y0": -767,
+   "sort": [
+    2248.5,
+    -415.7
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_05.png",
+   "x0": 2275,
+   "y0": -806,
+   "sort": [
+    2301.5,
+    -454.5
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_06.png",
+   "x0": 2328,
+   "y0": -844,
+   "sort": [
+    2354.5,
+    -493.2
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_07.png",
+   "x0": 2381,
+   "y0": -883,
+   "sort": [
+    2407.5,
+    -532.0
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_08.png",
+   "x0": 2434,
+   "y0": -922,
+   "sort": [
+    2460.5,
+    -570.8
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_09.png",
+   "x0": 2487,
+   "y0": -961,
+   "sort": [
+    2513.5,
+    -609.5
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_10.png",
+   "x0": 2540,
+   "y0": -999,
+   "sort": [
+    2566.5,
+    -648.3
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_11.png",
+   "x0": 2593,
+   "y0": -1039,
+   "sort": [
+    2619.5,
+    -687.0
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_12.png",
+   "x0": 2646,
+   "y0": -1077,
+   "sort": [
+    2672.5,
+    -725.8
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_13.png",
+   "x0": 2699,
+   "y0": -1116,
+   "sort": [
+    2725.5,
+    -764.6
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_14.png",
+   "x0": 2752,
+   "y0": -1155,
+   "sort": [
+    2778.5,
+    -803.3
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_15.png",
+   "x0": 2805,
+   "y0": -1194,
+   "sort": [
+    2831.5,
+    -842.1
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_16.png",
+   "x0": 2858,
+   "y0": -1232,
+   "sort": [
+    2884.5,
+    -880.9
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_17.png",
+   "x0": 2911,
+   "y0": -1271,
+   "sort": [
+    2937.5,
+    -919.6
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_18.png",
+   "x0": 2964,
+   "y0": -1309,
+   "sort": [
+    2990.5,
+    -958.4
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_19.png",
+   "x0": 3017,
+   "y0": -1348,
+   "sort": [
+    3043.5,
+    -997.1
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_20.png",
+   "x0": 3070,
+   "y0": -1387,
+   "sort": [
+    3096.5,
+    -1035.9
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_21.png",
+   "x0": 3123,
+   "y0": -1436,
+   "sort": [
+    3149.5,
+    -1074.7
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_22.png",
+   "x0": 3176,
+   "y0": -1434,
+   "sort": [
+    3173.5,
+    -1092.2
+   ],
+   "wall": 9
+  }
+ ]
+}

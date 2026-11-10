@@ -1,0 +1,3983 @@
+{
+ "level": "L2",
+ "name": "Level 2 - Dormitories",
+ "ppm": 165.0,
+ "elev_deg": 47.0,
+ "rooms": [
+  {
+   "id": "landing",
+   "r": [
+    -4.2,
+    0.0,
+    -2.0999999999999996,
+    1.4
+   ]
+  },
+  {
+   "id": "corridor",
+   "r": [
+    0.0,
+    22.6,
+    -2.0999999999999996,
+    1.4
+   ]
+  },
+  {
+   "id": "room_2_1",
+   "r": [
+    0.6,
+    4.6,
+    1.4,
+    5.6
+   ],
+   "name": "Your room"
+  },
+  {
+   "id": "dorm_2a",
+   "r": [
+    4.6,
+    11.6,
+    1.4,
+    5.6
+   ],
+   "name": "Dormitory 2-A"
+  },
+  {
+   "id": "dorm_2b",
+   "r": [
+    11.6,
+    18.6,
+    1.4,
+    5.6
+   ],
+   "name": "Dormitory 2-B"
+  },
+  {
+   "id": "room_2_d",
+   "r": [
+    18.6,
+    22.6,
+    1.4,
+    5.6
+   ],
+   "name": "Room 2-D",
+   "dark": true
+  },
+  {
+   "id": "washroom",
+   "r": [
+    1.0,
+    7.0,
+    -5.7,
+    -2.0999999999999996
+   ],
+   "name": "Washroom"
+  },
+  {
+   "id": "dorm_2c",
+   "r": [
+    7.0,
+    14.0,
+    -5.7,
+    -2.0999999999999996
+   ],
+   "name": "Dormitory 2-C"
+  },
+  {
+   "id": "linen",
+   "r": [
+    14.0,
+    18.6,
+    -5.7,
+    -2.0999999999999996
+   ],
+   "name": "Linen store"
+  }
+ ],
+ "walls": [
+  {
+   "a": [
+    -4.2,
+    1.4
+   ],
+   "b": [
+    0.6,
+    1.4
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    0.6,
+    5.6
+   ],
+   "b": [
+    22.6,
+    5.6
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    22.6,
+    1.4
+   ],
+   "b": [
+    22.6,
+    5.6
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    22.6,
+    -2.0999999999999996
+   ],
+   "b": [
+    22.6,
+    1.4
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    18.6,
+    -5.7
+   ],
+   "b": [
+    18.6,
+    -2.0999999999999996
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -4.2,
+    -2.0999999999999996
+   ],
+   "b": [
+    -4.2,
+    1.4
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     -1.3,
+     -0.1,
+     null
+    ]
+   ]
+  },
+  {
+   "a": [
+    -4.2,
+    -2.0999999999999996
+   ],
+   "b": [
+    1.0,
+    -2.0999999999999996
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    0.6,
+    1.4
+   ],
+   "b": [
+    22.6,
+    1.4
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     2.1,
+     3.1,
+     "door_2_1"
+    ],
+    [
+     7.4,
+     8.8,
+     null
+    ],
+    [
+     14.4,
+     15.8,
+     null
+    ],
+    [
+     20.1,
+     21.1,
+     "door_2_d"
+    ]
+   ]
+  },
+  {
+   "a": [
+    0.6,
+    1.4
+   ],
+   "b": [
+    0.6,
+    5.6
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    4.6,
+    1.4
+   ],
+   "b": [
+    4.6,
+    5.6
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    11.6,
+    1.4
+   ],
+   "b": [
+    11.6,
+    5.6
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    18.6,
+    1.4
+   ],
+   "b": [
+    18.6,
+    5.6
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    1.0,
+    -2.0999999999999996
+   ],
+   "b": [
+    22.6,
+    -2.0999999999999996
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     3.4,
+     4.8,
+     null
+    ],
+    [
+     9.8,
+     11.2,
+     null
+    ],
+    [
+     15.6,
+     17.0,
+     null
+    ]
+   ]
+  },
+  {
+   "a": [
+    1.0,
+    -5.7
+   ],
+   "b": [
+    1.0,
+    -2.0999999999999996
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    7.0,
+    -5.7
+   ],
+   "b": [
+    7.0,
+    -2.0999999999999996
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    14.0,
+    -5.7
+   ],
+   "b": [
+    14.0,
+    -2.0999999999999996
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    1.0,
+    -5.7
+   ],
+   "b": [
+    18.6,
+    -5.7
+   ],
+   "h": 0.4,
+   "openings": []
+  }
+ ],
+ "doors": [
+  {
+   "id": "door_2_1",
+   "kind": "plywood",
+   "u": 2.6,
+   "v": 1.4,
+   "open": true,
+   "locked": false,
+   "name": "Door to your room",
+   "text": "Plywood on a steel frame. Your door; it has not locked properly in years.",
+   "spr_closed": {
+    "sprite": "spr_039.png",
+    "x0": 52.0,
+    "y0": -647.3
+   },
+   "spr_open": {
+    "sprite": "spr_040.png",
+    "x0": -49.0,
+    "y0": -726.3
+   },
+   "sort": [
+    140.0,
+    -341.3
+   ]
+  },
+  {
+   "id": "door_2_d",
+   "kind": "steel",
+   "u": 20.6,
+   "v": 1.4,
+   "open": false,
+   "locked": true,
+   "lock": 45,
+   "strength": 6,
+   "name": "Room 2-D",
+   "text": "A steel door at the cold end of the corridor. Security's padlock is through the hasp. Nobody has lived here for years.",
+   "spr_closed": {
+    "sprite": "spr_041.png",
+    "x0": 2152.1,
+    "y0": -2183.2
+   },
+   "spr_open": {
+    "sprite": "spr_042.png",
+    "x0": 2051.1,
+    "y0": -2262.2
+   },
+   "sort": [
+    2240.1,
+    -1877.2
+   ]
+  }
+ ],
+ "props": [
+  {
+   "type": "bed",
+   "footprint": [
+    0.9,
+    2.9,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_000.png",
+   "x0": -543.1,
+   "y0": -841.3,
+   "sort": [
+    -364.6,
+    -590.9
+   ],
+   "id": "bed_player",
+   "name": "Your bunk",
+   "text": "Your bed. The blanket is your mother's, older than you."
+  },
+  {
+   "type": "locker",
+   "footprint": [
+    3.5,
+    4.5,
+    4.975,
+    5.475
+   ],
+   "sprite": "spr_001.png",
+   "x0": -239.1,
+   "y0": -1025.5,
+   "sort": [
+    -142.9,
+    -787.2
+   ],
+   "name": "Your locker",
+   "text": "Spare overalls, a dead torch, a photo of Mira's graduation from apprentice."
+  },
+  {
+   "type": "desk",
+   "footprint": [
+    3.875,
+    4.475,
+    2.8,
+    4.0
+   ],
+   "sprite": "spr_002.png",
+   "x0": -23.6,
+   "y0": -839.0,
+   "sort": [
+    90.4,
+    -635.2
+   ],
+   "name": "Your desk",
+   "text": "Work orders. Most are about the general circuit, and most are marked DEFERRED by the Council."
+  },
+  {
+   "type": "chair",
+   "footprint": [
+    3.75,
+    4.25,
+    3.15,
+    3.65
+   ],
+   "sprite": "spr_003.png",
+   "x0": 5.8,
+   "y0": -783.1,
+   "sort": [
+    70.0,
+    -631.4
+   ]
+  },
+  {
+   "type": "toolbox",
+   "footprint": [
+    0.725,
+    1.025,
+    2.3,
+    3.3
+   ],
+   "sprite": "spr_004.png",
+   "x0": -309.1,
+   "y0": -471.8,
+   "sort": [
+    -224.6,
+    -318.0
+   ],
+   "id": "toolbox",
+   "name": "Your toolbox",
+   "text": "Your toolbox. The welding kit is inside: torch, two small bottles, a handful of rods."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    4.75,
+    6.75,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_005.png",
+   "x0": -92.9,
+   "y0": -1217.8,
+   "sort": [
+    84.6,
+    -919.4
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts. Names are painted on the frame; two have been crossed out."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    7.1,
+    9.1,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_006.png",
+   "x0": 181.3,
+   "y0": -1411.3,
+   "sort": [
+    358.8,
+    -1119.9
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts. Names are painted on the frame; two have been crossed out."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    9.45,
+    11.45,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_007.png",
+   "x0": 455.4,
+   "y0": -1611.9,
+   "sort": [
+    632.9,
+    -1320.5
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts. Names are painted on the frame; two have been crossed out."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    6.82,
+    6.92,
+    4.775,
+    5.425
+   ],
+   "sprite": "spr_008.png",
+   "x0": 159.3,
+   "y0": -1294.7,
+   "sort": [
+    206.5,
+    -1021.4
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire: the only walls a family gets in here."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    6.82,
+    6.92,
+    4.125,
+    4.775
+   ],
+   "sprite": "spr_009.png",
+   "x0": 234.2,
+   "y0": -1238.2,
+   "sort": [
+    282.3,
+    -965.9
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire: the only walls a family gets in here."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    6.82,
+    6.92,
+    3.475,
+    4.125
+   ],
+   "sprite": "spr_010.png",
+   "x0": 310.0,
+   "y0": -1182.7,
+   "sort": [
+    358.2,
+    -910.5
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire: the only walls a family gets in here."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    9.17,
+    9.27,
+    4.775,
+    5.425
+   ],
+   "sprite": "spr_011.png",
+   "x0": 432.5,
+   "y0": -1494.2,
+   "sort": [
+    480.7,
+    -1221.9
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire: the only walls a family gets in here."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    9.17,
+    9.27,
+    4.125,
+    4.775
+   ],
+   "sprite": "spr_012.png",
+   "x0": 509.4,
+   "y0": -1439.7,
+   "sort": [
+    556.5,
+    -1166.4
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire: the only walls a family gets in here."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    9.17,
+    9.27,
+    3.475,
+    4.125
+   ],
+   "sprite": "spr_013.png",
+   "x0": 584.2,
+   "y0": -1383.2,
+   "sort": [
+    632.4,
+    -1111.0
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire: the only walls a family gets in here."
+  },
+  {
+   "type": "table",
+   "footprint": [
+    7.5,
+    8.7,
+    2.0,
+    2.7
+   ],
+   "sprite": "spr_014.png",
+   "x0": 551.7,
+   "y0": -1067.8,
+   "sort": [
+    670.9,
+    -891.7
+   ]
+  },
+  {
+   "type": "stool",
+   "footprint": [
+    7.42,
+    7.78,
+    2.69,
+    3.05
+   ],
+   "sprite": "spr_015.png",
+   "x0": 496.9,
+   "y0": -1006.8,
+   "sort": [
+    551.9,
+    -893.4
+   ]
+  },
+  {
+   "type": "stool",
+   "footprint": [
+    8.42,
+    8.78,
+    2.69,
+    3.05
+   ],
+   "sprite": "spr_015.png",
+   "x0": 613.5,
+   "y0": -1092.1,
+   "sort": [
+    668.5,
+    -978.7
+   ]
+  },
+  {
+   "type": "locker",
+   "footprint": [
+    4.725,
+    5.225,
+    2.1,
+    3.1
+   ],
+   "sprite": "spr_016.png",
+   "x0": 180.9,
+   "y0": -896.0,
+   "sort": [
+    277.1,
+    -646.4
+   ],
+   "name": "Lockers",
+   "text": "Two doors, two names on tape, one padlock between them."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    11.75,
+    13.75,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_007.png",
+   "x0": 723.8,
+   "y0": -1808.1,
+   "sort": [
+    901.3,
+    -1516.7
+   ],
+   "name": "Bunk",
+   "text": "The mattress is damp. Frost has got as far as the wall behind it."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    14.1,
+    16.1,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_005.png",
+   "x0": 998.0,
+   "y0": -2015.6,
+   "sort": [
+    1175.5,
+    -1717.2
+   ],
+   "name": "Bunk",
+   "text": "The mattress is damp. Frost has got as far as the wall behind it."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    16.45,
+    18.45,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_017.png",
+   "x0": 1272.2,
+   "y0": -2216.2,
+   "sort": [
+    1449.7,
+    -1917.8
+   ],
+   "name": "Bunk",
+   "text": "The mattress is damp. Frost has got as far as the wall behind it."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    13.82,
+    13.92,
+    4.775,
+    5.425
+   ],
+   "sprite": "spr_018.png",
+   "x0": 975.1,
+   "y0": -1891.0,
+   "sort": [
+    1023.2,
+    -1618.7
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    13.82,
+    13.92,
+    4.125,
+    4.775
+   ],
+   "sprite": "spr_019.png",
+   "x0": 1050.9,
+   "y0": -1835.5,
+   "sort": [
+    1099.1,
+    -1563.2
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    13.82,
+    13.92,
+    3.475,
+    4.125
+   ],
+   "sprite": "spr_020.png",
+   "x0": 1127.7,
+   "y0": -1781.0,
+   "sort": [
+    1174.9,
+    -1507.8
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    16.17,
+    16.27,
+    4.775,
+    5.425
+   ],
+   "sprite": "spr_021.png",
+   "x0": 1250.2,
+   "y0": -2092.5,
+   "sort": [
+    1297.4,
+    -1819.2
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    16.17,
+    16.27,
+    4.125,
+    4.775
+   ],
+   "sprite": "spr_022.png",
+   "x0": 1326.1,
+   "y0": -2037.0,
+   "sort": [
+    1373.2,
+    -1763.7
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire."
+  },
+  {
+   "type": "curtain",
+   "footprint": [
+    16.17,
+    16.27,
+    3.475,
+    4.125
+   ],
+   "sprite": "spr_023.png",
+   "x0": 1400.9,
+   "y0": -1980.6,
+   "sort": [
+    1449.1,
+    -1708.3
+   ],
+   "name": "Blanket partition",
+   "text": "Blankets pinned to a wire."
+  },
+  {
+   "type": "bucket",
+   "footprint": [
+    14.93,
+    15.27,
+    2.66,
+    3.0
+   ],
+   "sprite": "spr_024.png",
+   "x0": 1386.7,
+   "y0": -1599.5,
+   "sort": [
+    1431.6,
+    -1529.9
+   ],
+   "name": "Bucket",
+   "text": "Catching a drip from the ceiling. The water has a skin of ice."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    19.0,
+    21.0,
+    4.575,
+    5.475
+   ],
+   "sprite": "spr_025.png",
+   "x0": 1572.7,
+   "y0": -2454.8,
+   "sort": [
+    1747.2,
+    -2135.4
+   ],
+   "name": "Bare bunk",
+   "text": "Stripped to the springs. Someone took the mattress, and they took it a long time ago."
+  },
+  {
+   "type": "chair",
+   "footprint": [
+    20.85,
+    21.35,
+    2.7,
+    3.2
+   ],
+   "sprite": "spr_026.png",
+   "x0": 2004.4,
+   "y0": -2190.5,
+   "sort": [
+    2117.6,
+    -2052.2
+   ]
+  },
+  {
+   "type": "locker",
+   "footprint": [
+    21.975,
+    22.475,
+    4.475,
+    5.025
+   ],
+   "sprite": "spr_027.png",
+   "x0": 1903.0,
+   "y0": -2565.1,
+   "sort": [
+    2038.9,
+    -2301.7
+   ],
+   "name": "Open locker",
+   "text": "Empty. The door hangs open."
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    19.09,
+    19.71,
+    2.2,
+    2.82
+   ],
+   "sprite": "spr_028.png",
+   "x0": 1911.8,
+   "y0": -1955.1,
+   "sort": [
+    1970.6,
+    -1869.6
+   ],
+   "name": "Crate",
+   "text": "Nailed shut."
+  },
+  {
+   "type": "sinks",
+   "footprint": [
+    1.25,
+    3.35,
+    -2.675,
+    -2.225
+   ],
+   "sprite": "spr_029.png",
+   "x0": 414.9,
+   "y0": -191.4,
+   "sort": [
+    554.2,
+    59.9
+   ],
+   "name": "Washbasins",
+   "text": "Cold water only, except on bath day."
+  },
+  {
+   "type": "bucket",
+   "footprint": [
+    1.33,
+    1.67,
+    -5.1,
+    -4.76
+   ],
+   "sprite": "spr_030.png",
+   "x0": 703.0,
+   "y0": 222.2,
+   "sort": [
+    750.2,
+    292.7
+   ]
+  },
+  {
+   "type": "stall",
+   "footprint": [
+    5.675,
+    6.875,
+    -3.35,
+    -2.45
+   ],
+   "sprite": "spr_031.png",
+   "x0": 872.5,
+   "y0": -639.2,
+   "sort": [
+    1070.5,
+    -288.0
+   ],
+   "name": "Toilet stall",
+   "text": "Fixtures from the closed washrooms on Level 1, refitted here."
+  },
+  {
+   "type": "stall",
+   "footprint": [
+    5.675,
+    6.875,
+    -4.25,
+    -3.35
+   ],
+   "sprite": "spr_031.png",
+   "x0": 977.5,
+   "y0": -562.4,
+   "sort": [
+    1175.5,
+    -211.2
+   ],
+   "name": "Toilet stall",
+   "text": "Fixtures from the closed washrooms on Level 1, refitted here."
+  },
+  {
+   "type": "stall",
+   "footprint": [
+    5.675,
+    6.875,
+    -5.15,
+    -4.25
+   ],
+   "sprite": "spr_031.png",
+   "x0": 1082.5,
+   "y0": -485.6,
+   "sort": [
+    1280.5,
+    -134.4
+   ],
+   "name": "Toilet stall",
+   "text": "Fixtures from the closed washrooms on Level 1, refitted here."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    7.4,
+    9.4,
+    -3.125,
+    -2.225
+   ],
+   "sprite": "spr_006.png",
+   "x0": 1114.6,
+   "y0": -779.9,
+   "sort": [
+    1292.1,
+    -444.0
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    11.6,
+    13.6,
+    -3.125,
+    -2.225
+   ],
+   "sprite": "spr_005.png",
+   "x0": 1604.7,
+   "y0": -1145.3,
+   "sort": [
+    1782.2,
+    -831.6
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    7.4,
+    9.4,
+    -5.575,
+    -4.675
+   ],
+   "sprite": "spr_032.png",
+   "x0": 1368.5,
+   "y0": -601.1,
+   "sort": [
+    1578.0,
+    -315.8
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts."
+  },
+  {
+   "type": "bunk",
+   "footprint": [
+    10.0,
+    12.0,
+    -5.575,
+    -4.675
+   ],
+   "sprite": "spr_033.png",
+   "x0": 1670.8,
+   "y0": -815.9,
+   "sort": [
+    1881.3,
+    -548.4
+   ],
+   "name": "Bunk",
+   "text": "Shared in shifts."
+  },
+  {
+   "type": "table",
+   "footprint": [
+    11.7,
+    12.7,
+    -5.0,
+    -4.3
+   ],
+   "sprite": "spr_034.png",
+   "x0": 1858.1,
+   "y0": -811.1,
+   "sort": [
+    1965.9,
+    -644.2
+   ]
+  },
+  {
+   "type": "stool",
+   "footprint": [
+    11.52,
+    11.88,
+    -3.6,
+    -3.24
+   ],
+   "sprite": "spr_035.png",
+   "x0": 1700.1,
+   "y0": -826.2,
+   "sort": [
+    1764.1,
+    -706.5
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    14.19,
+    14.81,
+    -5.3,
+    -4.68
+   ],
+   "sprite": "spr_028.png",
+   "x0": 2215.1,
+   "y0": -897.0,
+   "sort": [
+    2273.9,
+    -811.5
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    14.89,
+    15.51,
+    -5.3,
+    -4.68
+   ],
+   "sprite": "spr_028.png",
+   "x0": 2296.8,
+   "y0": -956.8,
+   "sort": [
+    2355.6,
+    -871.2
+   ]
+  },
+  {
+   "type": "laundry",
+   "footprint": [
+    14.9,
+    16.7,
+    -3.55,
+    -3.3
+   ],
+   "sprite": "spr_036.png",
+   "x0": 2119.4,
+   "y0": -1351.6,
+   "sort": [
+    2243.0,
+    -1055.9
+   ],
+   "name": "Washing line",
+   "text": "Blankets drying. They will not dry down here."
+  },
+  {
+   "type": "laundry",
+   "footprint": [
+    15.1,
+    16.9,
+    -4.75,
+    -4.5
+   ],
+   "sprite": "spr_037.png",
+   "x0": 2282.8,
+   "y0": -1266.3,
+   "sort": [
+    2406.4,
+    -970.6
+   ],
+   "name": "Washing line",
+   "text": "Blankets drying."
+  },
+  {
+   "type": "shelf",
+   "footprint": [
+    18.025,
+    18.475,
+    -3.45,
+    -2.35
+   ],
+   "sprite": "spr_038.png",
+   "x0": 2323.9,
+   "y0": -1610.0,
+   "sort": [
+    2467.6,
+    -1272.8
+   ],
+   "name": "Linen shelves",
+   "text": "Folded blankets, counted and signed for."
+  },
+  {
+   "type": "shelf",
+   "footprint": [
+    18.025,
+    18.475,
+    -4.6,
+    -3.5
+   ],
+   "sprite": "spr_038.png",
+   "x0": 2458.1,
+   "y0": -1511.9,
+   "sort": [
+    2601.8,
+    -1195.3
+   ],
+   "name": "Linen shelves",
+   "text": "Folded blankets, counted and signed for."
+  },
+  {
+   "type": "shelf",
+   "footprint": [
+    18.025,
+    18.475,
+    -5.55,
+    -4.45
+   ],
+   "sprite": "spr_038.png",
+   "x0": 2568.9,
+   "y0": -1430.8,
+   "sort": [
+    2712.6,
+    -1117.8
+   ],
+   "name": "Linen shelves",
+   "text": "Folded blankets, counted and signed for."
+  }
+ ],
+ "inspect": [
+  {
+   "id": "graffiti",
+   "u": 22.2,
+   "v": 0.3,
+   "name": "Graffiti",
+   "text": "HEAT IS RANK, sprayed over the old WARMTH FOR ALL poster, with an arrow pointing down towards the warm levels. A child's handwriting, or someone who wanted it to look like one."
+  },
+  {
+   "id": "radiator_end",
+   "u": 22.1,
+   "v": -0.75,
+   "name": "Radiator",
+   "text": "Dead. Frost in the fins. The far end of the branch never gets enough flow, so the water barely moves out here."
+  },
+  {
+   "id": "radiator_own",
+   "u": 3.2,
+   "v": 5.1,
+   "name": "Radiator",
+   "text": "Your radiator. Warm, mostly: your room is near the start of the branch."
+  },
+  {
+   "id": "cd_sign",
+   "u": 22.2,
+   "v": -1.0,
+   "name": "Civil defence sign",
+   "text": "Blue triangle on orange: civil defence. Painted when the silo was new."
+  },
+  {
+   "id": "intercom",
+   "u": 1.0,
+   "v": 5.2,
+   "name": "Intercom",
+   "text": "The line to Engineering. It still smells of Mira's solder."
+  },
+  {
+   "id": "drawing",
+   "u": 21.75,
+   "v": 5.2,
+   "name": "Drawing",
+   "text": "A child's drawing of a sky: blue, with a yellow sun. Nobody in Silo 81 has seen one.",
+   "room": "room_2_d"
+  }
+ ],
+ "stairs": [
+  {
+   "id": "stairs_down",
+   "u": -0.45,
+   "v": 0.7,
+   "to": "L3",
+   "arrive": [
+    -0.3,
+    -0.2
+   ],
+   "name": "Stairs down",
+   "text": "The stairwell down to Level 3, life support."
+  },
+  {
+   "id": "to_commons",
+   "u": -4.0,
+   "v": -0.7,
+   "to": "L2W",
+   "arrive": [
+    -5.0,
+    0.0
+   ],
+   "name": "Commons wing",
+   "text": "West, past the dead lift, to the commons, the clinic and the school."
+  }
+ ],
+ "spawns": {
+  "player": [
+   2.3,
+   3.5,
+   5
+  ],
+  "worms": []
+ },
+ "blocked": [
+  [
+   -4.0,
+   -0.8,
+   0.0,
+   1.4
+  ]
+ ],
+ "bounds": [
+  -4.2,
+  22.6,
+  -5.7,
+  5.6
+ ],
+ "sprites": [],
+ "bg": {
+  "file": "bg.png",
+  "x0": -660,
+  "y0": -2756
+ },
+ "wallparts": [
+  {
+   "sprite": "wall_00_00.png",
+   "x0": -708,
+   "y0": -104,
+   "sort": [
+    -653.4,
+    238.9
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_01.png",
+   "x0": -655,
+   "y0": -130,
+   "sort": [
+    -628.5,
+    220.7
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_02.png",
+   "x0": -602,
+   "y0": -169,
+   "sort": [
+    -575.5,
+    182.0
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_03.png",
+   "x0": -549,
+   "y0": -208,
+   "sort": [
+    -522.5,
+    143.2
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_04.png",
+   "x0": -496,
+   "y0": -247,
+   "sort": [
+    -469.5,
+    104.4
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_05.png",
+   "x0": -443,
+   "y0": -285,
+   "sort": [
+    -416.5,
+    65.7
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_06.png",
+   "x0": -390,
+   "y0": -324,
+   "sort": [
+    -363.5,
+    26.9
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_07.png",
+   "x0": -337,
+   "y0": -363,
+   "sort": [
+    -310.5,
+    -11.8
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_08.png",
+   "x0": -284,
+   "y0": -402,
+   "sort": [
+    -257.5,
+    -50.6
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_09.png",
+   "x0": -231,
+   "y0": -440,
+   "sort": [
+    -204.5,
+    -89.4
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_10.png",
+   "x0": -178,
+   "y0": -491,
+   "sort": [
+    -151.5,
+    -128.1
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_11.png",
+   "x0": -125,
+   "y0": -514,
+   "sort": [
+    -98.5,
+    -166.9
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_12.png",
+   "x0": -72,
+   "y0": -499,
+   "sort": [
+    -93.3,
+    -170.7
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_01_00.png",
+   "x0": 2360,
+   "y0": -1751,
+   "sort": [
+    2415.1,
+    -1407.9
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_01.png",
+   "x0": 2413,
+   "y0": -1752,
+   "sort": [
+    2439.5,
+    -1390.1
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_02.png",
+   "x0": 2466,
+   "y0": -1703,
+   "sort": [
+    2492.5,
+    -1351.3
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_03.png",
+   "x0": 2519,
+   "y0": -1664,
+   "sort": [
+    2545.5,
+    -1312.6
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_04.png",
+   "x0": 2572,
+   "y0": -1625,
+   "sort": [
+    2598.5,
+    -1273.8
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_05.png",
+   "x0": 2625,
+   "y0": -1587,
+   "sort": [
+    2651.5,
+    -1235.1
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_06.png",
+   "x0": 2678,
+   "y0": -1548,
+   "sort": [
+    2704.5,
+    -1196.3
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_07.png",
+   "x0": 2731,
+   "y0": -1509,
+   "sort": [
+    2757.5,
+    -1157.5
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_08.png",
+   "x0": 2784,
+   "y0": -1470,
+   "sort": [
+    2810.5,
+    -1118.8
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_09.png",
+   "x0": 2837,
+   "y0": -1443,
+   "sort": [
+    2835.1,
+    -1100.7
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_02_00.png",
+   "x0": -708,
+   "y0": -104,
+   "sort": [
+    -653.4,
+    238.9
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_01.png",
+   "x0": -655,
+   "y0": -105,
+   "sort": [
+    -628.5,
+    257.1
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_02.png",
+   "x0": -602,
+   "y0": -55,
+   "sort": [
+    -575.5,
+    295.9
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_03.png",
+   "x0": -549,
+   "y0": -16,
+   "sort": [
+    -522.5,
+    334.6
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_04.png",
+   "x0": -496,
+   "y0": 22,
+   "sort": [
+    -469.5,
+    373.4
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_05.png",
+   "x0": -443,
+   "y0": 61,
+   "sort": [
+    -416.5,
+    412.2
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_06.png",
+   "x0": -390,
+   "y0": 100,
+   "sort": [
+    -363.5,
+    450.9
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_07.png",
+   "x0": -337,
+   "y0": 138,
+   "sort": [
+    -310.5,
+    489.7
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_08.png",
+   "x0": -284,
+   "y0": 177,
+   "sort": [
+    -257.5,
+    528.4
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_09.png",
+   "x0": -231,
+   "y0": 204,
+   "sort": [
+    -245.0,
+    537.6
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_03_00.png",
+   "x0": -300,
+   "y0": 195,
+   "sort": [
+    -245.0,
+    537.6
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_01.png",
+   "x0": -247,
+   "y0": 169,
+   "sort": [
+    -220.5,
+    519.6
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_02.png",
+   "x0": -194,
+   "y0": 130,
+   "sort": [
+    -167.5,
+    480.9
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_03.png",
+   "x0": -141,
+   "y0": 91,
+   "sort": [
+    -114.5,
+    442.1
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_04.png",
+   "x0": -88,
+   "y0": 52,
+   "sort": [
+    -61.5,
+    403.4
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_05.png",
+   "x0": -35,
+   "y0": 13,
+   "sort": [
+    -8.5,
+    364.6
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_06.png",
+   "x0": 18,
+   "y0": -25,
+   "sort": [
+    44.5,
+    325.8
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_07.png",
+   "x0": 71,
+   "y0": -65,
+   "sort": [
+    97.5,
+    287.1
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_08.png",
+   "x0": 124,
+   "y0": -103,
+   "sort": [
+    150.5,
+    248.3
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_09.png",
+   "x0": 177,
+   "y0": -142,
+   "sort": [
+    203.5,
+    209.6
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_10.png",
+   "x0": 230,
+   "y0": -180,
+   "sort": [
+    256.5,
+    170.8
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_11.png",
+   "x0": 283,
+   "y0": -231,
+   "sort": [
+    309.5,
+    132.0
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_12.png",
+   "x0": 336,
+   "y0": -250,
+   "sort": [
+    361.7,
+    93.9
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_13.png",
+   "x0": 389,
+   "y0": -230,
+   "sort": [
+    361.7,
+    93.9
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_04_00.png",
+   "x0": -125,
+   "y0": -508,
+   "sort": [
+    -93.3,
+    -170.7
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_01.png",
+   "x0": -72,
+   "y0": -547,
+   "sort": [
+    -45.5,
+    -205.6
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_02.png",
+   "x0": -19,
+   "y0": -586,
+   "sort": [
+    7.5,
+    -244.4
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_03.png",
+   "x0": 34,
+   "y0": -625,
+   "sort": [
+    60.5,
+    -283.2
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_04.png",
+   "x0": 87,
+   "y0": -663,
+   "sort": [
+    113.5,
+    -321.9
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_05.png",
+   "x0": 140,
+   "y0": -701,
+   "sort": [
+    166.5,
+    -360.7
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_06.png",
+   "x0": 193,
+   "y0": -741,
+   "sort": [
+    219.5,
+    -399.5
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_07.png",
+   "x0": 246,
+   "y0": -779,
+   "sort": [
+    272.5,
+    -438.2
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_08.png",
+   "x0": 299,
+   "y0": -818,
+   "sort": [
+    325.5,
+    -477.0
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_09.png",
+   "x0": 352,
+   "y0": -857,
+   "sort": [
+    378.5,
+    -515.7
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_10.png",
+   "x0": 405,
+   "y0": -895,
+   "sort": [
+    431.5,
+    -554.5
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_11.png",
+   "x0": 458,
+   "y0": -934,
+   "sort": [
+    484.5,
+    -593.3
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_12.png",
+   "x0": 511,
+   "y0": -973,
+   "sort": [
+    537.5,
+    -632.0
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_13.png",
+   "x0": 564,
+   "y0": -1012,
+   "sort": [
+    590.5,
+    -670.8
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_14.png",
+   "x0": 617,
+   "y0": -1050,
+   "sort": [
+    643.5,
+    -709.5
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_15.png",
+   "x0": 670,
+   "y0": -1089,
+   "sort": [
+    696.5,
+    -748.3
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_16.png",
+   "x0": 723,
+   "y0": -1128,
+   "sort": [
+    749.5,
+    -787.1
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_17.png",
+   "x0": 776,
+   "y0": -1167,
+   "sort": [
+    802.5,
+    -825.8
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_18.png",
+   "x0": 829,
+   "y0": -1206,
+   "sort": [
+    855.5,
+    -864.6
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_19.png",
+   "x0": 882,
+   "y0": -1244,
+   "sort": [
+    908.5,
+    -903.4
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_20.png",
+   "x0": 935,
+   "y0": -1283,
+   "sort": [
+    961.5,
+    -942.1
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_21.png",
+   "x0": 988,
+   "y0": -1322,
+   "sort": [
+    1014.5,
+    -980.9
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_22.png",
+   "x0": 1041,
+   "y0": -1361,
+   "sort": [
+    1067.5,
+    -1019.6
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_23.png",
+   "x0": 1094,
+   "y0": -1399,
+   "sort": [
+    1120.5,
+    -1058.4
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_24.png",
+   "x0": 1147,
+   "y0": -1438,
+   "sort": [
+    1173.5,
+    -1097.2
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_25.png",
+   "x0": 1200,
+   "y0": -1477,
+   "sort": [
+    1226.5,
+    -1135.9
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_26.png",
+   "x0": 1253,
+   "y0": -1515,
+   "sort": [
+    1279.5,
+    -1174.7
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_27.png",
+   "x0": 1306,
+   "y0": -1554,
+   "sort": [
+    1332.5,
+    -1213.4
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_28.png",
+   "x0": 1359,
+   "y0": -1593,
+   "sort": [
+    1385.5,
+    -1252.2
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_29.png",
+   "x0": 1412,
+   "y0": -1632,
+   "sort": [
+    1438.5,
+    -1291.0
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_30.png",
+   "x0": 1465,
+   "y0": -1671,
+   "sort": [
+    1491.5,
+    -1329.7
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_31.png",
+   "x0": 1518,
+   "y0": -1709,
+   "sort": [
+    1544.5,
+    -1368.5
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_32.png",
+   "x0": 1571,
+   "y0": -1748,
+   "sort": [
+    1597.5,
+    -1407.3
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_33.png",
+   "x0": 1624,
+   "y0": -1787,
+   "sort": [
+    1650.5,
+    -1446.0
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_34.png",
+   "x0": 1677,
+   "y0": -1826,
+   "sort": [
+    1703.5,
+    -1484.8
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_35.png",
+   "x0": 1730,
+   "y0": -1865,
+   "sort": [
+    1756.5,
+    -1523.5
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_36.png",
+   "x0": 1783,
+   "y0": -1903,
+   "sort": [
+    1809.5,
+    -1562.3
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_37.png",
+   "x0": 1836,
+   "y0": -1943,
+   "sort": [
+    1862.5,
+    -1601.1
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_38.png",
+   "x0": 1889,
+   "y0": -1981,
+   "sort": [
+    1915.5,
+    -1639.8
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_39.png",
+   "x0": 1942,
+   "y0": -2020,
+   "sort": [
+    1968.5,
+    -1678.6
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_40.png",
+   "x0": 1995,
+   "y0": -2059,
+   "sort": [
+    2021.5,
+    -1717.4
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_41.png",
+   "x0": 2048,
+   "y0": -2097,
+   "sort": [
+    2074.5,
+    -1756.1
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_42.png",
+   "x0": 2101,
+   "y0": -2136,
+   "sort": [
+    2127.5,
+    -1794.9
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_43.png",
+   "x0": 2154,
+   "y0": -2175,
+   "sort": [
+    2180.5,
+    -1833.6
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_44.png",
+   "x0": 2207,
+   "y0": -2213,
+   "sort": [
+    2233.5,
+    -1872.4
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_45.png",
+   "x0": 2260,
+   "y0": -2252,
+   "sort": [
+    2286.5,
+    -1911.2
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_46.png",
+   "x0": 2313,
+   "y0": -2291,
+   "sort": [
+    2339.5,
+    -1949.9
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_47.png",
+   "x0": 2366,
+   "y0": -2329,
+   "sort": [
+    2392.5,
+    -1988.7
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_48.png",
+   "x0": 2419,
+   "y0": -2369,
+   "sort": [
+    2445.5,
+    -2027.4
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_04_49.png",
+   "x0": 2472,
+   "y0": -2370,
+   "sort": [
+    2473.5,
+    -2047.9
+   ],
+   "wall": 4
+  },
+  {
+   "sprite": "wall_05_00.png",
+   "x0": -638,
+   "y0": -872,
+   "sort": [
+    -583.4,
+    -529.0
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_01.png",
+   "x0": -585,
+   "y0": -872,
+   "sort": [
+    -558.5,
+    -510.9
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_02.png",
+   "x0": -532,
+   "y0": -823,
+   "sort": [
+    -505.5,
+    -472.1
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_03.png",
+   "x0": -479,
+   "y0": -786,
+   "sort": [
+    -452.5,
+    -433.3
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_04.png",
+   "x0": -426,
+   "y0": -746,
+   "sort": [
+    -399.5,
+    -394.6
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_05.png",
+   "x0": -373,
+   "y0": -707,
+   "sort": [
+    -346.5,
+    -355.8
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_06.png",
+   "x0": -320,
+   "y0": -669,
+   "sort": [
+    -293.5,
+    -317.0
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_07.png",
+   "x0": -267,
+   "y0": -630,
+   "sort": [
+    -240.5,
+    -278.3
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_08.png",
+   "x0": -214,
+   "y0": -591,
+   "sort": [
+    -187.5,
+    -239.5
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_09.png",
+   "x0": -161,
+   "y0": -552,
+   "sort": [
+    -134.5,
+    -200.8
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_10.png",
+   "x0": -108,
+   "y0": -514,
+   "sort": [
+    -93.3,
+    -170.7
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_05_11.png",
+   "x0": -55,
+   "y0": -486,
+   "sort": [
+    -93.3,
+    -170.7
+   ],
+   "wall": 5
+  },
+  {
+   "sprite": "wall_06_00.png",
+   "x0": -141,
+   "y0": -1148,
+   "sort": [
+    -114.5,
+    -868.8
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_01.png",
+   "x0": -88,
+   "y0": -1126,
+   "sort": [
+    -61.5,
+    -830.0
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_02.png",
+   "x0": -35,
+   "y0": -1088,
+   "sort": [
+    -8.5,
+    -791.2
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_03.png",
+   "x0": 18,
+   "y0": -1049,
+   "sort": [
+    44.5,
+    -752.5
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_04.png",
+   "x0": 71,
+   "y0": -1010,
+   "sort": [
+    97.5,
+    -713.7
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_05.png",
+   "x0": 124,
+   "y0": -972,
+   "sort": [
+    150.5,
+    -675.0
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_06.png",
+   "x0": 177,
+   "y0": -933,
+   "sort": [
+    203.5,
+    -636.2
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_07.png",
+   "x0": 230,
+   "y0": -894,
+   "sort": [
+    256.5,
+    -597.4
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_08.png",
+   "x0": 283,
+   "y0": -856,
+   "sort": [
+    309.5,
+    -558.7
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_09.png",
+   "x0": 336,
+   "y0": -816,
+   "sort": [
+    362.5,
+    -519.9
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_06_10.png",
+   "x0": 389,
+   "y0": -778,
+   "sort": [
+    373.4,
+    -512.0
+   ],
+   "wall": 6
+  },
+  {
+   "sprite": "wall_07_00.png",
+   "x0": 676,
+   "y0": -1745,
+   "sort": [
+    702.5,
+    -1465.9
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_01.png",
+   "x0": 729,
+   "y0": -1723,
+   "sort": [
+    755.5,
+    -1427.1
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_02.png",
+   "x0": 782,
+   "y0": -1685,
+   "sort": [
+    808.5,
+    -1388.3
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_03.png",
+   "x0": 835,
+   "y0": -1646,
+   "sort": [
+    861.5,
+    -1349.6
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_04.png",
+   "x0": 888,
+   "y0": -1607,
+   "sort": [
+    914.5,
+    -1310.8
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_05.png",
+   "x0": 941,
+   "y0": -1569,
+   "sort": [
+    967.5,
+    -1272.0
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_06.png",
+   "x0": 994,
+   "y0": -1530,
+   "sort": [
+    1020.5,
+    -1233.3
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_07.png",
+   "x0": 1047,
+   "y0": -1491,
+   "sort": [
+    1073.5,
+    -1194.5
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_08.png",
+   "x0": 1100,
+   "y0": -1453,
+   "sort": [
+    1126.5,
+    -1155.8
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_09.png",
+   "x0": 1153,
+   "y0": -1413,
+   "sort": [
+    1179.5,
+    -1117.0
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_07_10.png",
+   "x0": 1206,
+   "y0": -1375,
+   "sort": [
+    1190.1,
+    -1109.3
+   ],
+   "wall": 7
+  },
+  {
+   "sprite": "wall_08_00.png",
+   "x0": 1492,
+   "y0": -2343,
+   "sort": [
+    1518.5,
+    -2063.7
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_01.png",
+   "x0": 1545,
+   "y0": -2321,
+   "sort": [
+    1571.5,
+    -2024.9
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_02.png",
+   "x0": 1598,
+   "y0": -2282,
+   "sort": [
+    1624.5,
+    -1986.2
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_03.png",
+   "x0": 1651,
+   "y0": -2244,
+   "sort": [
+    1677.5,
+    -1947.4
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_04.png",
+   "x0": 1704,
+   "y0": -2205,
+   "sort": [
+    1730.5,
+    -1908.6
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_05.png",
+   "x0": 1757,
+   "y0": -2166,
+   "sort": [
+    1783.5,
+    -1869.9
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_06.png",
+   "x0": 1810,
+   "y0": -2127,
+   "sort": [
+    1836.5,
+    -1831.1
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_07.png",
+   "x0": 1863,
+   "y0": -2088,
+   "sort": [
+    1889.5,
+    -1792.3
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_08.png",
+   "x0": 1916,
+   "y0": -2050,
+   "sort": [
+    1942.5,
+    -1753.6
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_09.png",
+   "x0": 1969,
+   "y0": -2011,
+   "sort": [
+    1995.5,
+    -1714.8
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_08_10.png",
+   "x0": 2022,
+   "y0": -1972,
+   "sort": [
+    2006.8,
+    -1706.6
+   ],
+   "wall": 8
+  },
+  {
+   "sprite": "wall_09_00.png",
+   "x0": 330,
+   "y0": -243,
+   "sort": [
+    361.7,
+    93.9
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_01.png",
+   "x0": 383,
+   "y0": -282,
+   "sort": [
+    409.5,
+    58.9
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_02.png",
+   "x0": 436,
+   "y0": -321,
+   "sort": [
+    462.5,
+    20.1
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_03.png",
+   "x0": 489,
+   "y0": -360,
+   "sort": [
+    515.5,
+    -18.6
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_04.png",
+   "x0": 542,
+   "y0": -399,
+   "sort": [
+    568.5,
+    -57.4
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_05.png",
+   "x0": 595,
+   "y0": -437,
+   "sort": [
+    621.5,
+    -96.2
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_06.png",
+   "x0": 648,
+   "y0": -476,
+   "sort": [
+    674.5,
+    -134.9
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_07.png",
+   "x0": 701,
+   "y0": -515,
+   "sort": [
+    727.5,
+    -173.7
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_08.png",
+   "x0": 754,
+   "y0": -553,
+   "sort": [
+    780.5,
+    -212.4
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_09.png",
+   "x0": 807,
+   "y0": -592,
+   "sort": [
+    833.5,
+    -251.2
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_10.png",
+   "x0": 860,
+   "y0": -631,
+   "sort": [
+    886.5,
+    -290.0
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_11.png",
+   "x0": 913,
+   "y0": -670,
+   "sort": [
+    939.5,
+    -328.7
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_12.png",
+   "x0": 966,
+   "y0": -709,
+   "sort": [
+    992.5,
+    -367.5
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_13.png",
+   "x0": 1019,
+   "y0": -747,
+   "sort": [
+    1045.5,
+    -406.2
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_14.png",
+   "x0": 1072,
+   "y0": -786,
+   "sort": [
+    1098.5,
+    -445.0
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_15.png",
+   "x0": 1125,
+   "y0": -825,
+   "sort": [
+    1151.5,
+    -483.8
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_16.png",
+   "x0": 1178,
+   "y0": -864,
+   "sort": [
+    1204.5,
+    -522.5
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_17.png",
+   "x0": 1231,
+   "y0": -902,
+   "sort": [
+    1257.5,
+    -561.3
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_18.png",
+   "x0": 1284,
+   "y0": -941,
+   "sort": [
+    1310.5,
+    -600.1
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_19.png",
+   "x0": 1337,
+   "y0": -980,
+   "sort": [
+    1363.5,
+    -638.8
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_20.png",
+   "x0": 1390,
+   "y0": -1019,
+   "sort": [
+    1416.5,
+    -677.6
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_21.png",
+   "x0": 1443,
+   "y0": -1057,
+   "sort": [
+    1469.5,
+    -716.3
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_22.png",
+   "x0": 1496,
+   "y0": -1096,
+   "sort": [
+    1522.5,
+    -755.1
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_23.png",
+   "x0": 1549,
+   "y0": -1135,
+   "sort": [
+    1575.5,
+    -793.9
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_24.png",
+   "x0": 1602,
+   "y0": -1174,
+   "sort": [
+    1628.5,
+    -832.6
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_25.png",
+   "x0": 1655,
+   "y0": -1212,
+   "sort": [
+    1681.5,
+    -871.4
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_26.png",
+   "x0": 1708,
+   "y0": -1251,
+   "sort": [
+    1734.5,
+    -910.2
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_27.png",
+   "x0": 1761,
+   "y0": -1290,
+   "sort": [
+    1787.5,
+    -948.9
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_28.png",
+   "x0": 1814,
+   "y0": -1329,
+   "sort": [
+    1840.5,
+    -987.7
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_29.png",
+   "x0": 1867,
+   "y0": -1368,
+   "sort": [
+    1893.5,
+    -1026.4
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_30.png",
+   "x0": 1920,
+   "y0": -1406,
+   "sort": [
+    1946.5,
+    -1065.2
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_31.png",
+   "x0": 1973,
+   "y0": -1445,
+   "sort": [
+    1999.5,
+    -1104.0
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_32.png",
+   "x0": 2026,
+   "y0": -1483,
+   "sort": [
+    2052.5,
+    -1142.7
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_33.png",
+   "x0": 2079,
+   "y0": -1522,
+   "sort": [
+    2105.5,
+    -1181.5
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_34.png",
+   "x0": 2132,
+   "y0": -1561,
+   "sort": [
+    2158.5,
+    -1220.2
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_35.png",
+   "x0": 2185,
+   "y0": -1600,
+   "sort": [
+    2211.5,
+    -1259.0
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_36.png",
+   "x0": 2238,
+   "y0": -1639,
+   "sort": [
+    2264.5,
+    -1297.8
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_37.png",
+   "x0": 2291,
+   "y0": -1678,
+   "sort": [
+    2317.5,
+    -1336.5
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_38.png",
+   "x0": 2344,
+   "y0": -1716,
+   "sort": [
+    2370.5,
+    -1375.3
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_39.png",
+   "x0": 2397,
+   "y0": -1755,
+   "sort": [
+    2423.5,
+    -1414.1
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_40.png",
+   "x0": 2450,
+   "y0": -1794,
+   "sort": [
+    2476.5,
+    -1452.8
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_41.png",
+   "x0": 2503,
+   "y0": -1833,
+   "sort": [
+    2529.5,
+    -1491.6
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_42.png",
+   "x0": 2556,
+   "y0": -1871,
+   "sort": [
+    2582.5,
+    -1530.3
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_43.png",
+   "x0": 2609,
+   "y0": -1910,
+   "sort": [
+    2635.5,
+    -1569.1
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_44.png",
+   "x0": 2662,
+   "y0": -1949,
+   "sort": [
+    2688.5,
+    -1607.9
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_45.png",
+   "x0": 2715,
+   "y0": -1987,
+   "sort": [
+    2741.5,
+    -1646.6
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_46.png",
+   "x0": 2768,
+   "y0": -2026,
+   "sort": [
+    2794.5,
+    -1685.4
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_47.png",
+   "x0": 2821,
+   "y0": -2065,
+   "sort": [
+    2847.5,
+    -1724.1
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_09_48.png",
+   "x0": 2874,
+   "y0": -2071,
+   "sort": [
+    2881.8,
+    -1749.2
+   ],
+   "wall": 9
+  },
+  {
+   "sprite": "wall_10_00.png",
+   "x0": 307,
+   "y0": -249,
+   "sort": [
+    361.7,
+    93.9
+   ],
+   "wall": 10
+  },
+  {
+   "sprite": "wall_10_01.png",
+   "x0": 360,
+   "y0": -250,
+   "sort": [
+    386.5,
+    112.0
+   ],
+   "wall": 10
+  },
+  {
+   "sprite": "wall_10_02.png",
+   "x0": 413,
+   "y0": -201,
+   "sort": [
+    439.5,
+    150.8
+   ],
+   "wall": 10
+  },
+  {
+   "sprite": "wall_10_03.png",
+   "x0": 466,
+   "y0": -161,
+   "sort": [
+    492.5,
+    189.5
+   ],
+   "wall": 10
+  },
+  {
+   "sprite": "wall_10_04.png",
+   "x0": 519,
+   "y0": -123,
+   "sort": [
+    545.5,
+    228.3
+   ],
+   "wall": 10
+  },
+  {
+   "sprite": "wall_10_05.png",
+   "x0": 572,
+   "y0": -85,
+   "sort": [
+    598.5,
+    267.1
+   ],
+   "wall": 10
+  },
+  {
+   "sprite": "wall_10_06.png",
+   "x0": 625,
+   "y0": -46,
+   "sort": [
+    651.5,
+    305.8
+   ],
+   "wall": 10
+  },
+  {
+   "sprite": "wall_10_07.png",
+   "x0": 678,
+   "y0": -7,
+   "sort": [
+    704.5,
+    344.6
+   ],
+   "wall": 10
+  },
+  {
+   "sprite": "wall_10_08.png",
+   "x0": 731,
+   "y0": 32,
+   "sort": [
+    757.5,
+    383.3
+   ],
+   "wall": 10
+  },
+  {
+   "sprite": "wall_10_09.png",
+   "x0": 784,
+   "y0": 59,
+   "sort": [
+    781.7,
+    401.0
+   ],
+   "wall": 10
+  },
+  {
+   "sprite": "wall_11_00.png",
+   "x0": 1037,
+   "y0": -696,
+   "sort": [
+    1063.5,
+    -416.8
+   ],
+   "wall": 11
+  },
+  {
+   "sprite": "wall_11_01.png",
+   "x0": 1090,
+   "y0": -674,
+   "sort": [
+    1116.5,
+    -378.0
+   ],
+   "wall": 11
+  },
+  {
+   "sprite": "wall_11_02.png",
+   "x0": 1143,
+   "y0": -636,
+   "sort": [
+    1169.5,
+    -339.3
+   ],
+   "wall": 11
+  },
+  {
+   "sprite": "wall_11_03.png",
+   "x0": 1196,
+   "y0": -597,
+   "sort": [
+    1222.5,
+    -300.5
+   ],
+   "wall": 11
+  },
+  {
+   "sprite": "wall_11_04.png",
+   "x0": 1249,
+   "y0": -558,
+   "sort": [
+    1275.5,
+    -261.8
+   ],
+   "wall": 11
+  },
+  {
+   "sprite": "wall_11_05.png",
+   "x0": 1302,
+   "y0": -519,
+   "sort": [
+    1328.5,
+    -223.0
+   ],
+   "wall": 11
+  },
+  {
+   "sprite": "wall_11_06.png",
+   "x0": 1355,
+   "y0": -481,
+   "sort": [
+    1381.5,
+    -184.2
+   ],
+   "wall": 11
+  },
+  {
+   "sprite": "wall_11_07.png",
+   "x0": 1408,
+   "y0": -442,
+   "sort": [
+    1434.5,
+    -145.5
+   ],
+   "wall": 11
+  },
+  {
+   "sprite": "wall_11_08.png",
+   "x0": 1461,
+   "y0": -403,
+   "sort": [
+    1481.7,
+    -110.9
+   ],
+   "wall": 11
+  },
+  {
+   "sprite": "wall_12_00.png",
+   "x0": 1854,
+   "y0": -1293,
+   "sort": [
+    1880.5,
+    -1013.9
+   ],
+   "wall": 12
+  },
+  {
+   "sprite": "wall_12_01.png",
+   "x0": 1907,
+   "y0": -1271,
+   "sort": [
+    1933.5,
+    -975.1
+   ],
+   "wall": 12
+  },
+  {
+   "sprite": "wall_12_02.png",
+   "x0": 1960,
+   "y0": -1233,
+   "sort": [
+    1986.5,
+    -936.4
+   ],
+   "wall": 12
+  },
+  {
+   "sprite": "wall_12_03.png",
+   "x0": 2013,
+   "y0": -1194,
+   "sort": [
+    2039.5,
+    -897.6
+   ],
+   "wall": 12
+  },
+  {
+   "sprite": "wall_12_04.png",
+   "x0": 2066,
+   "y0": -1155,
+   "sort": [
+    2092.5,
+    -858.9
+   ],
+   "wall": 12
+  },
+  {
+   "sprite": "wall_12_05.png",
+   "x0": 2119,
+   "y0": -1117,
+   "sort": [
+    2145.5,
+    -820.1
+   ],
+   "wall": 12
+  },
+  {
+   "sprite": "wall_12_06.png",
+   "x0": 2172,
+   "y0": -1078,
+   "sort": [
+    2198.5,
+    -781.3
+   ],
+   "wall": 12
+  },
+  {
+   "sprite": "wall_12_07.png",
+   "x0": 2225,
+   "y0": -1039,
+   "sort": [
+    2251.5,
+    -742.6
+   ],
+   "wall": 12
+  },
+  {
+   "sprite": "wall_12_08.png",
+   "x0": 2278,
+   "y0": -1000,
+   "sort": [
+    2298.5,
+    -708.2
+   ],
+   "wall": 12
+  },
+  {
+   "sprite": "wall_13_00.png",
+   "x0": 727,
+   "y0": 59,
+   "sort": [
+    781.7,
+    401.0
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_01.png",
+   "x0": 780,
+   "y0": 32,
+   "sort": [
+    806.5,
+    382.9
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_02.png",
+   "x0": 833,
+   "y0": -7,
+   "sort": [
+    859.5,
+    344.2
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_03.png",
+   "x0": 886,
+   "y0": -45,
+   "sort": [
+    912.5,
+    305.4
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_04.png",
+   "x0": 939,
+   "y0": -85,
+   "sort": [
+    965.5,
+    266.6
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_05.png",
+   "x0": 992,
+   "y0": -123,
+   "sort": [
+    1018.5,
+    227.9
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_06.png",
+   "x0": 1045,
+   "y0": -162,
+   "sort": [
+    1071.5,
+    189.1
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_07.png",
+   "x0": 1098,
+   "y0": -201,
+   "sort": [
+    1124.5,
+    150.3
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_08.png",
+   "x0": 1151,
+   "y0": -239,
+   "sort": [
+    1177.5,
+    111.6
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_09.png",
+   "x0": 1204,
+   "y0": -278,
+   "sort": [
+    1230.5,
+    72.8
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_10.png",
+   "x0": 1257,
+   "y0": -317,
+   "sort": [
+    1283.5,
+    34.1
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_11.png",
+   "x0": 1310,
+   "y0": -356,
+   "sort": [
+    1336.5,
+    -4.7
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_12.png",
+   "x0": 1363,
+   "y0": -395,
+   "sort": [
+    1389.5,
+    -43.5
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_13.png",
+   "x0": 1416,
+   "y0": -433,
+   "sort": [
+    1442.5,
+    -82.2
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_14.png",
+   "x0": 1469,
+   "y0": -472,
+   "sort": [
+    1495.5,
+    -121.0
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_15.png",
+   "x0": 1522,
+   "y0": -511,
+   "sort": [
+    1548.5,
+    -159.8
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_16.png",
+   "x0": 1575,
+   "y0": -550,
+   "sort": [
+    1601.5,
+    -198.5
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_17.png",
+   "x0": 1628,
+   "y0": -588,
+   "sort": [
+    1654.5,
+    -237.3
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_18.png",
+   "x0": 1681,
+   "y0": -627,
+   "sort": [
+    1707.5,
+    -276.0
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_19.png",
+   "x0": 1734,
+   "y0": -667,
+   "sort": [
+    1760.5,
+    -314.8
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_20.png",
+   "x0": 1787,
+   "y0": -705,
+   "sort": [
+    1813.5,
+    -353.6
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_21.png",
+   "x0": 1840,
+   "y0": -744,
+   "sort": [
+    1866.5,
+    -392.3
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_22.png",
+   "x0": 1893,
+   "y0": -782,
+   "sort": [
+    1919.5,
+    -431.1
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_23.png",
+   "x0": 1946,
+   "y0": -821,
+   "sort": [
+    1972.5,
+    -469.8
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_24.png",
+   "x0": 1999,
+   "y0": -860,
+   "sort": [
+    2025.5,
+    -508.6
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_25.png",
+   "x0": 2052,
+   "y0": -898,
+   "sort": [
+    2078.5,
+    -547.4
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_26.png",
+   "x0": 2105,
+   "y0": -937,
+   "sort": [
+    2131.5,
+    -586.1
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_27.png",
+   "x0": 2158,
+   "y0": -976,
+   "sort": [
+    2184.5,
+    -624.9
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_28.png",
+   "x0": 2211,
+   "y0": -1015,
+   "sort": [
+    2237.5,
+    -663.7
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_29.png",
+   "x0": 2264,
+   "y0": -1054,
+   "sort": [
+    2290.5,
+    -702.4
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_30.png",
+   "x0": 2317,
+   "y0": -1092,
+   "sort": [
+    2343.5,
+    -741.2
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_31.png",
+   "x0": 2370,
+   "y0": -1131,
+   "sort": [
+    2396.5,
+    -779.9
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_32.png",
+   "x0": 2423,
+   "y0": -1170,
+   "sort": [
+    2449.5,
+    -818.7
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_33.png",
+   "x0": 2476,
+   "y0": -1209,
+   "sort": [
+    2502.5,
+    -857.5
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_34.png",
+   "x0": 2529,
+   "y0": -1247,
+   "sort": [
+    2555.5,
+    -896.2
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_35.png",
+   "x0": 2582,
+   "y0": -1287,
+   "sort": [
+    2608.5,
+    -935.0
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_36.png",
+   "x0": 2635,
+   "y0": -1325,
+   "sort": [
+    2661.5,
+    -973.7
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_37.png",
+   "x0": 2688,
+   "y0": -1363,
+   "sort": [
+    2714.5,
+    -1012.5
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_38.png",
+   "x0": 2741,
+   "y0": -1415,
+   "sort": [
+    2767.5,
+    -1051.3
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_39.png",
+   "x0": 2794,
+   "y0": -1445,
+   "sort": [
+    2820.5,
+    -1090.0
+   ],
+   "wall": 13
+  },
+  {
+   "sprite": "wall_13_40.png",
+   "x0": 2847,
+   "y0": -1436,
+   "sort": [
+    2835.1,
+    -1100.7
+   ],
+   "wall": 13
+  }
+ ]
+}

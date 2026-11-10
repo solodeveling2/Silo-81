@@ -1,0 +1,1287 @@
+{
+ "level": "L3",
+ "name": "Level 3 - Pipe gallery",
+ "ppm": 165.0,
+ "elev_deg": 47.0,
+ "rooms": [
+  {
+   "id": "landing",
+   "r": [
+    -4.2,
+    0.0,
+    -1.6,
+    1.8
+   ]
+  },
+  {
+   "id": "gallery",
+   "r": [
+    0.0,
+    18.0,
+    -1.6,
+    1.8
+   ],
+   "name": "Pipe gallery"
+  },
+  {
+   "id": "pumps",
+   "r": [
+    9.0,
+    18.0,
+    -6.0,
+    -1.6
+   ],
+   "name": "Pump room 3-P"
+  }
+ ],
+ "walls": [
+  {
+   "a": [
+    -4.2,
+    1.8
+   ],
+   "b": [
+    18.0,
+    1.8
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    18.0,
+    -6.0
+   ],
+   "b": [
+    18.0,
+    1.8
+   ],
+   "h": 2.7,
+   "openings": []
+  },
+  {
+   "a": [
+    -4.2,
+    -1.6
+   ],
+   "b": [
+    -4.2,
+    1.8
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    -4.2,
+    -1.6
+   ],
+   "b": [
+    18.0,
+    -1.6
+   ],
+   "h": 0.4,
+   "openings": [
+    [
+     12.4,
+     13.8,
+     null
+    ]
+   ]
+  },
+  {
+   "a": [
+    9.0,
+    -6.0
+   ],
+   "b": [
+    9.0,
+    -1.6
+   ],
+   "h": 0.4,
+   "openings": []
+  },
+  {
+   "a": [
+    9.0,
+    -6.0
+   ],
+   "b": [
+    18.0,
+    -6.0
+   ],
+   "h": 0.4,
+   "openings": []
+  }
+ ],
+ "doors": [],
+ "props": [
+  {
+   "type": "pump",
+   "footprint": [
+    11.3,
+    12.0,
+    -5.2,
+    -4.0
+   ],
+   "sprite": "spr_000.png",
+   "x0": 1614.8,
+   "y0": -881.4,
+   "sort": [
+    1895.9,
+    -601.6
+   ],
+   "name": "Circulation pump",
+   "text": "Circulation pump for the general circuit, running hard against the leak."
+  },
+  {
+   "type": "pump",
+   "footprint": [
+    14.9,
+    15.6,
+    -5.2,
+    -4.0
+   ],
+   "sprite": "spr_000.png",
+   "x0": 2034.8,
+   "y0": -1188.6,
+   "sort": [
+    2316.0,
+    -908.8
+   ],
+   "name": "Circulation pump",
+   "text": "The standby pump. Its bearings were replaced with parts from Level 1."
+  },
+  {
+   "type": "workbench",
+   "footprint": [
+    17.175,
+    17.875,
+    -5.8,
+    -4.0
+   ],
+   "sprite": "spr_001.png",
+   "x0": 2462.2,
+   "y0": -1300.1,
+   "sort": [
+    2616.4,
+    -1077.3
+   ],
+   "name": "Workbench",
+   "text": "Somebody's half-finished repair: a flange, filed by hand."
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    9.29,
+    9.91,
+    -5.5,
+    -4.88
+   ],
+   "sprite": "spr_002.png",
+   "x0": 1666.8,
+   "y0": -461.8,
+   "sort": [
+    1725.6,
+    -376.3
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    9.99,
+    10.61,
+    -5.5,
+    -4.88
+   ],
+   "sprite": "spr_002.png",
+   "x0": 1748.4,
+   "y0": -521.6,
+   "sort": [
+    1807.3,
+    -436.0
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    16.28,
+    16.9,
+    -2.51,
+    -1.89
+   ],
+   "sprite": "spr_003.png",
+   "x0": 2133.4,
+   "y0": -1330.3,
+   "sort": [
+    2192.3,
+    -1227.9
+   ]
+  }
+ ],
+ "inspect": [
+  {
+   "id": "pipes_label",
+   "u": 4.5,
+   "v": 1.2,
+   "name": "Pipes",
+   "text": "Top to bottom: bore water; heating return; heating flow for the general circuit, up to Level 2. The flow runs lowest, where the worms can reach it."
+  },
+  {
+   "id": "gauge",
+   "u": 14.0,
+   "v": 1.2,
+   "name": "Gauge",
+   "text": "Pressure on the general circuit, falling."
+  },
+  {
+   "id": "manifold",
+   "u": 17.6,
+   "v": -2.6,
+   "name": "Valve manifold",
+   "text": "Valve wheels tagged in three different handwritings. The newest tag says COUNCIL ORDER: DO NOT OPEN."
+  }
+ ],
+ "stairs": [
+  {
+   "id": "stairs_up",
+   "u": -0.45,
+   "v": 1.0,
+   "to": "L2",
+   "arrive": [
+    -0.3,
+    0.0
+   ],
+   "name": "Stairs up",
+   "text": "Back up to Level 2."
+  },
+  {
+   "id": "stairs_down",
+   "u": -0.45,
+   "v": -0.9,
+   "to": "L4W",
+   "arrive": [
+    -0.3,
+    -0.6
+   ],
+   "name": "Stairs down",
+   "text": "Down to Level 4: engineering and command. The air gets warmer on every step."
+  }
+ ],
+ "spawns": {
+  "player": [
+   -0.3,
+   0.0,
+   0
+  ],
+  "worms": [
+   [
+    8.32,
+    1.08,
+    1,
+    "chew"
+   ],
+   [
+    5.4,
+    0.85,
+    2
+   ],
+   [
+    13.1,
+    -3.0,
+    1
+   ]
+  ]
+ },
+ "blocked": [
+  [
+   -4.2,
+   -0.75,
+   0.35,
+   1.8
+  ],
+  [
+   -0.6,
+   18.0,
+   1.25,
+   1.8
+  ],
+  [
+   -4.0,
+   -0.8,
+   -1.5,
+   0.15
+  ]
+ ],
+ "bounds": [
+  -4.2,
+  18.0,
+  -6.0,
+  1.8
+ ],
+ "sprites": [],
+ "bg": {
+  "file": "bg.png",
+  "x0": -755,
+  "y0": -2039
+ },
+ "pipe": {
+  "id": "pipe_break",
+  "u": 8.85,
+  "v": 1.675,
+  "z": 0.45,
+  "gap": [
+   8.25,
+   9.45
+  ],
+  "name": "Burst pipe",
+  "text": "The heating flow for the general circuit, chewed through. Hot water sprays from the hole and the pressure is falling. It needs welding.",
+  "fixed_text": "Welded. The bead is ugly but it holds, and the gauge needle is climbing back.",
+  "broken": {
+   "sprite": "spr_004.png",
+   "x0": 776,
+   "y0": -1007
+  },
+  "fixed": {
+   "sprite": "spr_005.png",
+   "x0": 773,
+   "y0": -1011
+  },
+  "sort": [
+   837.1,
+   -898.1
+  ]
+ },
+ "wallparts": [
+  {
+   "sprite": "wall_00_00.png",
+   "x0": -745,
+   "y0": 53,
+   "sort": [
+    -700.0,
+    204.8
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_01.png",
+   "x0": -692,
+   "y0": 58,
+   "sort": [
+    -665.5,
+    230.0
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_02.png",
+   "x0": -639,
+   "y0": 98,
+   "sort": [
+    -612.5,
+    268.8
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_03.png",
+   "x0": -586,
+   "y0": 136,
+   "sort": [
+    -559.5,
+    307.6
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_04.png",
+   "x0": -533,
+   "y0": 176,
+   "sort": [
+    -506.5,
+    346.3
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_05.png",
+   "x0": -480,
+   "y0": 214,
+   "sort": [
+    -453.5,
+    385.1
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_06.png",
+   "x0": -427,
+   "y0": 252,
+   "sort": [
+    -400.5,
+    423.9
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_07.png",
+   "x0": -374,
+   "y0": 291,
+   "sort": [
+    -347.5,
+    462.6
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_08.png",
+   "x0": -321,
+   "y0": 330,
+   "sort": [
+    -303.3,
+    494.9
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_00_09.png",
+   "x0": -268,
+   "y0": 369,
+   "sort": [
+    -303.3,
+    494.9
+   ],
+   "wall": 0
+  },
+  {
+   "sprite": "wall_01_00.png",
+   "x0": -349,
+   "y0": 338,
+   "sort": [
+    -303.3,
+    494.9
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_01.png",
+   "x0": -296,
+   "y0": 299,
+   "sort": [
+    -269.5,
+    470.2
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_02.png",
+   "x0": -243,
+   "y0": 260,
+   "sort": [
+    -216.5,
+    431.4
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_03.png",
+   "x0": -190,
+   "y0": 221,
+   "sort": [
+    -163.5,
+    392.6
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_04.png",
+   "x0": -137,
+   "y0": 183,
+   "sort": [
+    -110.5,
+    353.9
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_05.png",
+   "x0": -84,
+   "y0": 144,
+   "sort": [
+    -57.5,
+    315.1
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_06.png",
+   "x0": -31,
+   "y0": 105,
+   "sort": [
+    -4.5,
+    276.3
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_07.png",
+   "x0": 22,
+   "y0": 66,
+   "sort": [
+    48.5,
+    237.6
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_08.png",
+   "x0": 75,
+   "y0": 27,
+   "sort": [
+    101.5,
+    198.8
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_09.png",
+   "x0": 128,
+   "y0": -11,
+   "sort": [
+    154.5,
+    160.1
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_10.png",
+   "x0": 181,
+   "y0": -50,
+   "sort": [
+    207.5,
+    121.3
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_11.png",
+   "x0": 234,
+   "y0": -89,
+   "sort": [
+    260.5,
+    82.5
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_12.png",
+   "x0": 287,
+   "y0": -127,
+   "sort": [
+    313.5,
+    43.8
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_13.png",
+   "x0": 340,
+   "y0": -166,
+   "sort": [
+    366.5,
+    5.0
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_14.png",
+   "x0": 393,
+   "y0": -205,
+   "sort": [
+    419.5,
+    -33.8
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_15.png",
+   "x0": 446,
+   "y0": -244,
+   "sort": [
+    472.5,
+    -72.5
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_16.png",
+   "x0": 499,
+   "y0": -282,
+   "sort": [
+    525.5,
+    -111.3
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_17.png",
+   "x0": 552,
+   "y0": -321,
+   "sort": [
+    578.5,
+    -150.0
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_18.png",
+   "x0": 605,
+   "y0": -360,
+   "sort": [
+    631.5,
+    -188.8
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_19.png",
+   "x0": 658,
+   "y0": -399,
+   "sort": [
+    684.5,
+    -227.6
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_20.png",
+   "x0": 711,
+   "y0": -437,
+   "sort": [
+    737.5,
+    -266.3
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_21.png",
+   "x0": 764,
+   "y0": -476,
+   "sort": [
+    790.5,
+    -305.1
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_22.png",
+   "x0": 817,
+   "y0": -515,
+   "sort": [
+    843.5,
+    -343.8
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_23.png",
+   "x0": 870,
+   "y0": -554,
+   "sort": [
+    896.5,
+    -382.6
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_24.png",
+   "x0": 923,
+   "y0": -593,
+   "sort": [
+    949.5,
+    -421.4
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_25.png",
+   "x0": 976,
+   "y0": -631,
+   "sort": [
+    1002.5,
+    -460.1
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_26.png",
+   "x0": 1029,
+   "y0": -670,
+   "sort": [
+    1055.5,
+    -498.9
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_27.png",
+   "x0": 1082,
+   "y0": -709,
+   "sort": [
+    1108.5,
+    -537.7
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_28.png",
+   "x0": 1135,
+   "y0": -747,
+   "sort": [
+    1161.5,
+    -576.4
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_29.png",
+   "x0": 1188,
+   "y0": -787,
+   "sort": [
+    1214.5,
+    -615.2
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_30.png",
+   "x0": 1241,
+   "y0": -825,
+   "sort": [
+    1267.5,
+    -653.9
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_31.png",
+   "x0": 1294,
+   "y0": -864,
+   "sort": [
+    1320.5,
+    -692.7
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_32.png",
+   "x0": 1347,
+   "y0": -903,
+   "sort": [
+    1373.5,
+    -731.5
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_33.png",
+   "x0": 1400,
+   "y0": -941,
+   "sort": [
+    1426.5,
+    -770.2
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_34.png",
+   "x0": 1453,
+   "y0": -980,
+   "sort": [
+    1479.5,
+    -809.0
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_35.png",
+   "x0": 1506,
+   "y0": -1019,
+   "sort": [
+    1532.5,
+    -847.7
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_36.png",
+   "x0": 1559,
+   "y0": -1058,
+   "sort": [
+    1585.5,
+    -886.5
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_37.png",
+   "x0": 1612,
+   "y0": -1060,
+   "sort": [
+    1638.5,
+    -925.3
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_38.png",
+   "x0": 1771,
+   "y0": -1213,
+   "sort": [
+    1797.5,
+    -1041.6
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_39.png",
+   "x0": 1824,
+   "y0": -1251,
+   "sort": [
+    1850.5,
+    -1080.3
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_40.png",
+   "x0": 1877,
+   "y0": -1290,
+   "sort": [
+    1903.5,
+    -1119.1
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_41.png",
+   "x0": 1930,
+   "y0": -1329,
+   "sort": [
+    1956.5,
+    -1157.8
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_42.png",
+   "x0": 1983,
+   "y0": -1368,
+   "sort": [
+    2009.5,
+    -1196.6
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_43.png",
+   "x0": 2036,
+   "y0": -1406,
+   "sort": [
+    2062.5,
+    -1235.4
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_44.png",
+   "x0": 2089,
+   "y0": -1445,
+   "sort": [
+    2115.5,
+    -1274.1
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_45.png",
+   "x0": 2142,
+   "y0": -1484,
+   "sort": [
+    2168.5,
+    -1312.9
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_46.png",
+   "x0": 2195,
+   "y0": -1523,
+   "sort": [
+    2221.5,
+    -1351.6
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_47.png",
+   "x0": 2248,
+   "y0": -1551,
+   "sort": [
+    2274.5,
+    -1390.4
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_01_48.png",
+   "x0": 2301,
+   "y0": -1541,
+   "sort": [
+    2286.8,
+    -1399.4
+   ],
+   "wall": 1
+  },
+  {
+   "sprite": "wall_02_00.png",
+   "x0": 1191,
+   "y0": -784,
+   "sort": [
+    1236.7,
+    -631.4
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_01.png",
+   "x0": 1244,
+   "y0": -778,
+   "sort": [
+    1270.5,
+    -606.7
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_02.png",
+   "x0": 1297,
+   "y0": -739,
+   "sort": [
+    1323.5,
+    -568.0
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_03.png",
+   "x0": 1350,
+   "y0": -700,
+   "sort": [
+    1376.5,
+    -529.2
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_04.png",
+   "x0": 1403,
+   "y0": -662,
+   "sort": [
+    1429.5,
+    -490.5
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_05.png",
+   "x0": 1456,
+   "y0": -623,
+   "sort": [
+    1482.5,
+    -451.7
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_06.png",
+   "x0": 1509,
+   "y0": -584,
+   "sort": [
+    1535.5,
+    -412.9
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_07.png",
+   "x0": 1562,
+   "y0": -545,
+   "sort": [
+    1588.5,
+    -374.2
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_08.png",
+   "x0": 1615,
+   "y0": -507,
+   "sort": [
+    1641.5,
+    -335.4
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_09.png",
+   "x0": 1668,
+   "y0": -468,
+   "sort": [
+    1694.5,
+    -296.6
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_10.png",
+   "x0": 1721,
+   "y0": -429,
+   "sort": [
+    1747.5,
+    -257.9
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_02_11.png",
+   "x0": 1774,
+   "y0": -390,
+   "sort": [
+    1750.1,
+    -256.0
+   ],
+   "wall": 2
+  },
+  {
+   "sprite": "wall_03_00.png",
+   "x0": 1705,
+   "y0": -413,
+   "sort": [
+    1750.1,
+    -256.0
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_01.png",
+   "x0": 1758,
+   "y0": -452,
+   "sort": [
+    1784.5,
+    -281.2
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_02.png",
+   "x0": 1811,
+   "y0": -491,
+   "sort": [
+    1837.5,
+    -319.9
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_03.png",
+   "x0": 1864,
+   "y0": -530,
+   "sort": [
+    1890.5,
+    -358.7
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_04.png",
+   "x0": 1917,
+   "y0": -568,
+   "sort": [
+    1943.5,
+    -397.4
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_05.png",
+   "x0": 1970,
+   "y0": -607,
+   "sort": [
+    1996.5,
+    -436.2
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_06.png",
+   "x0": 2023,
+   "y0": -647,
+   "sort": [
+    2049.5,
+    -475.0
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_07.png",
+   "x0": 2076,
+   "y0": -685,
+   "sort": [
+    2102.5,
+    -513.7
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_08.png",
+   "x0": 2129,
+   "y0": -724,
+   "sort": [
+    2155.5,
+    -552.5
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_09.png",
+   "x0": 2182,
+   "y0": -762,
+   "sort": [
+    2208.5,
+    -591.2
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_10.png",
+   "x0": 2235,
+   "y0": -801,
+   "sort": [
+    2261.5,
+    -630.0
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_11.png",
+   "x0": 2288,
+   "y0": -840,
+   "sort": [
+    2314.5,
+    -668.8
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_12.png",
+   "x0": 2341,
+   "y0": -878,
+   "sort": [
+    2367.5,
+    -707.5
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_13.png",
+   "x0": 2394,
+   "y0": -918,
+   "sort": [
+    2420.5,
+    -746.3
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_14.png",
+   "x0": 2447,
+   "y0": -957,
+   "sort": [
+    2473.5,
+    -785.1
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_15.png",
+   "x0": 2500,
+   "y0": -995,
+   "sort": [
+    2526.5,
+    -823.8
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_16.png",
+   "x0": 2553,
+   "y0": -1034,
+   "sort": [
+    2579.5,
+    -862.6
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_17.png",
+   "x0": 2606,
+   "y0": -1072,
+   "sort": [
+    2632.5,
+    -901.3
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_18.png",
+   "x0": 2659,
+   "y0": -1111,
+   "sort": [
+    2685.5,
+    -940.1
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_19.png",
+   "x0": 2712,
+   "y0": -1150,
+   "sort": [
+    2738.5,
+    -978.9
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_20.png",
+   "x0": 2765,
+   "y0": -1176,
+   "sort": [
+    2791.5,
+    -1017.6
+   ],
+   "wall": 3
+  },
+  {
+   "sprite": "wall_03_21.png",
+   "x0": 2818,
+   "y0": -1162,
+   "sort": [
+    2800.1,
+    -1023.9
+   ],
+   "wall": 3
+  }
+ ]
+}

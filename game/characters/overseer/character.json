@@ -1,0 +1,317 @@
+{
+  "name": "overseer",
+  "direction_order": "0=right, then counter-clockwise: 1=up-right, 2=up-left, 3=left, 4=down-left, 5=down-right",
+  "animations": {
+    "walk": {
+      "fps": 24,
+      "loop": true,
+      "frames": 56,
+      "directions": {
+        "0": {
+          "sheet": "walk_dir0.png",
+          "frame_size": [
+            175,
+            236
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            76.0,
+            205.7
+          ],
+          "step_px": [
+            7.303,
+            -0.0
+          ]
+        },
+        "1": {
+          "sheet": "walk_dir1.png",
+          "frame_size": [
+            157,
+            262
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            60.0,
+            219.7
+          ],
+          "step_px": [
+            3.652,
+            -4.626
+          ]
+        },
+        "2": {
+          "sheet": "walk_dir2.png",
+          "frame_size": [
+            150,
+            269
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            81.0,
+            225.7
+          ],
+          "step_px": [
+            -3.652,
+            -4.626
+          ]
+        },
+        "3": {
+          "sheet": "walk_dir3.png",
+          "frame_size": [
+            176,
+            237
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            99.0,
+            211.7
+          ],
+          "step_px": [
+            -7.303,
+            -0.0
+          ]
+        },
+        "4": {
+          "sheet": "walk_dir4.png",
+          "frame_size": [
+            155,
+            258
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            96.0,
+            199.7
+          ],
+          "step_px": [
+            -3.652,
+            4.626
+          ]
+        },
+        "5": {
+          "sheet": "walk_dir5.png",
+          "frame_size": [
+            150,
+            261
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            69.0,
+            197.7
+          ],
+          "step_px": [
+            3.652,
+            4.626
+          ]
+        }
+      }
+    },
+    "run": {
+      "fps": 24,
+      "loop": true,
+      "frames": 30,
+      "directions": {
+        "0": {
+          "sheet": "run_dir0.png",
+          "frame_size": [
+            254,
+            222
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            128.0,
+            194.7
+          ],
+          "step_px": [
+            26.616,
+            -0.0
+          ]
+        },
+        "1": {
+          "sheet": "run_dir1.png",
+          "frame_size": [
+            217,
+            302
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            114.0,
+            224.7
+          ],
+          "step_px": [
+            13.308,
+            -16.858
+          ]
+        },
+        "2": {
+          "sheet": "run_dir2.png",
+          "frame_size": [
+            204,
+            298
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            90.0,
+            226.7
+          ],
+          "step_px": [
+            -13.308,
+            -16.858
+          ]
+        },
+        "3": {
+          "sheet": "run_dir3.png",
+          "frame_size": [
+            253,
+            215
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            125.0,
+            193.7
+          ],
+          "step_px": [
+            -26.616,
+            -0.0
+          ]
+        },
+        "4": {
+          "sheet": "run_dir4.png",
+          "frame_size": [
+            215,
+            219
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            103.0,
+            179.7
+          ],
+          "step_px": [
+            -13.308,
+            16.858
+          ]
+        },
+        "5": {
+          "sheet": "run_dir5.png",
+          "frame_size": [
+            203,
+            223
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            114.0,
+            182.7
+          ],
+          "step_px": [
+            13.308,
+            16.858
+          ]
+        }
+      }
+    },
+    "idle": {
+      "fps": 12,
+      "loop": true,
+      "frames": 48,
+      "directions": {
+        "0": {
+          "sheet": "idle_dir0.png",
+          "frame_size": [
+            94,
+            240
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            42.0,
+            212.7
+          ],
+          "step_px": [
+            0.0,
+            -0.0
+          ]
+        },
+        "1": {
+          "sheet": "idle_dir1.png",
+          "frame_size": [
+            123,
+            234
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            57.0,
+            217.7
+          ],
+          "step_px": [
+            0.0,
+            -0.0
+          ]
+        },
+        "2": {
+          "sheet": "idle_dir2.png",
+          "frame_size": [
+            115,
+            233
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            62.0,
+            216.7
+          ],
+          "step_px": [
+            -0.0,
+            -0.0
+          ]
+        },
+        "3": {
+          "sheet": "idle_dir3.png",
+          "frame_size": [
+            95,
+            228
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            53.0,
+            204.7
+          ],
+          "step_px": [
+            -0.0,
+            -0.0
+          ]
+        },
+        "4": {
+          "sheet": "idle_dir4.png",
+          "frame_size": [
+            123,
+            233
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            66.0,
+            200.7
+          ],
+          "step_px": [
+            -0.0,
+            0.0
+          ]
+        },
+        "5": {
+          "sheet": "idle_dir5.png",
+          "frame_size": [
+            115,
+            235
+          ],
+          "columns": 8,
+          "feet_anchor": [
+            53.0,
+            204.7
+          ],
+          "step_px": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  },
+  "pixels_per_metre": 165.0,
+  "height_m": 1.75
+}

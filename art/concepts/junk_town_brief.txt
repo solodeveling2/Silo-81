@@ -1,0 +1,21 @@
+﻿JUNK TOWN — Tripo Agentic Canvas brief
+Reference: art/concepts/junk_town_ref.png
+
+Design Junk Town, a circular fortified scavenger settlement in a frozen wasteland,
+for a Fallout-style isometric RPG.
+
+The perimeter is the signature: a ring wall built from rusted abandoned car bodies
+placed nose-to-tail, combined with corrugated metal sheets, timber posts, scrap
+plating and chain-link fence filling the gaps. Corner watchtowers made of
+scaffolding and car parts.
+
+Inside: patched shacks, workshops, a central muddy yard, animal pens with goats,
+scrap piles, barrels, smoke from stovepipes, improvised power lines, snow on roofs
+and car hoods.
+
+Make it believable and improvised, built by survivors from junk - not a military
+fortress. Realistic 3D game asset style, low-poly friendly, muted industrial palette
+with rust and faded paint.
+
+Deliver modular assets: car-wall section, corrugated fence section, junk gate,
+watchtower, shack, animal pen.

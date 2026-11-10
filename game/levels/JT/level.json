@@ -1,0 +1,370 @@
+{
+ "level": "JT",
+ "name": "Junk Town - Scavenger Settlement",
+ "ppm": 165.0,
+ "elev_deg": 47.0,
+ "rooms": [
+  {
+   "id": "gate_yard",
+   "r": [
+    0.0,
+    12.0,
+    -8.0,
+    8.0
+   ],
+   "name": "Gate yard"
+  },
+  {
+   "id": "market",
+   "r": [
+    12.0,
+    20.0,
+    -8.0,
+    8.0
+   ],
+   "name": "Market row"
+  },
+  {
+   "id": "pen",
+   "r": [
+    16.0,
+    24.0,
+    -8.0,
+    -2.0
+   ],
+   "name": "Animal pen"
+  }
+ ],
+ "walls": [],
+ "doors": [],
+ "props": [
+  {
+   "type": "junk_car_wall",
+   "footprint": [
+    0.0,
+    4.8,
+    7.0,
+    8.8
+   ],
+   "sprite": "spr_000.png",
+   "x0": -1034.7,
+   "y0": -1455.7,
+   "sort": [
+    -641.7,
+    -878.9
+   ],
+   "name": "Car wall, west"
+  },
+  {
+   "type": "junk_gate",
+   "footprint": [
+    4.7,
+    9.3,
+    8.4,
+    8.8
+   ],
+   "sprite": "spr_001.png",
+   "x0": -486.0,
+   "y0": -1967.2,
+   "sort": [
+    -186.7,
+    -1331.1
+   ],
+   "name": "Junk Town gate",
+   "text": "Two truck-box leaves on a timber frame, scraped shut every night."
+  },
+  {
+   "type": "junk_car_wall",
+   "footprint": [
+    9.2,
+    14.0,
+    7.0,
+    8.8
+   ],
+   "sprite": "spr_000.png",
+   "x0": 38.7,
+   "y0": -2240.7,
+   "sort": [
+    431.7,
+    -1663.9
+   ],
+   "name": "Car wall, east"
+  },
+  {
+   "type": "junk_watchtower",
+   "footprint": [
+    0.6,
+    3.0,
+    5.4,
+    7.8
+   ],
+   "sprite": "spr_002.png",
+   "x0": -988.0,
+   "y0": -1649.2,
+   "sort": [
+    -560.0,
+    -716.8
+   ],
+   "name": "West gate tower",
+   "text": "Scaffold, car seats and a corrugated roof. A bell hangs from the rail."
+  },
+  {
+   "type": "junk_watchtower",
+   "footprint": [
+    10.2,
+    12.6,
+    5.4,
+    7.8
+   ],
+   "sprite": "spr_002.png",
+   "x0": 132.0,
+   "y0": -2468.3,
+   "sort": [
+    560.0,
+    -1535.9
+   ],
+   "name": "East gate tower",
+   "text": "The gate watch keeps a rifle and a kettle up here."
+  },
+  {
+   "type": "junk_shack",
+   "footprint": [
+    14.5,
+    17.5,
+    2.2,
+    4.6
+   ],
+   "sprite": "spr_003.png",
+   "x0": 1092.1,
+   "y0": -2333.8,
+   "sort": [
+    1470.1,
+    -1655.4
+   ],
+   "name": "Mara's garage",
+   "text": "Half workshop, half home: a vice, a parts shelf and a stove."
+  },
+  {
+   "type": "junk_shack",
+   "footprint": [
+    10.7,
+    13.7,
+    -4.2,
+    -1.8
+   ],
+   "sprite": "spr_004.png",
+   "x0": 1410.4,
+   "y0": -1452.6,
+   "sort": [
+    1773.4,
+    -785.0
+   ],
+   "name": "Market shack",
+   "text": "Tarpaulin roof, salvaged counter, and a hand-painted sign."
+  },
+  {
+   "type": "junk_shack",
+   "footprint": [
+    2.7,
+    5.7,
+    -5.2,
+    -2.8
+   ],
+   "sprite": "spr_004.png",
+   "x0": 593.7,
+   "y0": -684.7,
+   "sort": [
+    956.7,
+    -17.1
+   ],
+   "name": "Bunk shack",
+   "text": "Bunks for travellers who reach the gate after dark."
+  },
+  {
+   "type": "animal_pen",
+   "footprint": [
+    17.9,
+    22.1,
+    -5.0,
+    -2.0
+   ],
+   "sprite": "spr_005.png",
+   "x0": 2299.8,
+   "y0": -1857.9,
+   "sort": [
+    2741.8,
+    -1407.9
+   ],
+   "name": "Goat pen",
+   "text": "Three goats, a trough and a hay pile. The settlement's only livestock."
+  },
+  {
+   "type": "goat",
+   "footprint": [
+    18.525,
+    19.475,
+    -4.2,
+    -3.6
+   ],
+   "sprite": "spr_006.png",
+   "x0": 2563.8,
+   "y0": -1473.9,
+   "sort": [
+    2671.8,
+    -1288.5
+   ],
+   "name": "Goat"
+  },
+  {
+   "type": "goat",
+   "footprint": [
+    20.325,
+    21.275,
+    -4.6,
+    -4.0
+   ],
+   "sprite": "spr_007.png",
+   "x0": 2816.5,
+   "y0": -1599.3,
+   "sort": [
+    2928.5,
+    -1407.9
+   ],
+   "name": "Goat"
+  },
+  {
+   "type": "goat",
+   "footprint": [
+    19.325,
+    20.275,
+    -5.8,
+    -5.2
+   ],
+   "sprite": "spr_006.png",
+   "x0": 2843.8,
+   "y0": -1405.6,
+   "sort": [
+    2951.8,
+    -1220.2
+   ],
+   "name": "Goat"
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    6.4,
+    7.02,
+    2.29,
+    2.91
+   ],
+   "sprite": "spr_008.png",
+   "x0": 398.4,
+   "y0": -880.0,
+   "sort": [
+    479.5,
+    -794.4
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    7.1,
+    7.72,
+    1.79,
+    2.41
+   ],
+   "sprite": "spr_008.png",
+   "x0": 538.4,
+   "y0": -897.0,
+   "sort": [
+    619.5,
+    -811.5
+   ]
+  },
+  {
+   "type": "bucket",
+   "footprint": [
+    8.0,
+    8.34,
+    0.03,
+    0.37
+   ],
+   "sprite": "spr_009.png",
+   "x0": 885.0,
+   "y0": -784.7,
+   "sort": [
+    929.9,
+    -714.2
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    14.29,
+    14.91,
+    -1.82,
+    -1.2
+   ],
+   "sprite": "spr_010.png",
+   "x0": 1798.4,
+   "y0": -1219.4,
+   "sort": [
+    1879.6,
+    -1117.0
+   ]
+  },
+  {
+   "type": "sacks",
+   "footprint": [
+    9.2,
+    9.8,
+    -2.55,
+    -1.45
+   ],
+   "sprite": "spr_011.png",
+   "x0": 1238.7,
+   "y0": -791.4,
+   "sort": [
+    1341.7,
+    -640.0
+   ]
+  }
+ ],
+ "inspect": [],
+ "stairs": [
+  {
+   "id": "to_l1_from_jt",
+   "u": 2.0,
+   "v": 8.0,
+   "to": "L1",
+   "arrive": [
+    -2.6,
+    0.6
+   ],
+   "name": "Silo 81 gate",
+   "text": "The blast gate back down to the Silo 81 surface depot."
+  }
+ ],
+ "spawns": {
+  "player": [
+   12.0,
+   0.0,
+   5
+  ],
+  "worms": []
+ },
+ "blocked": [],
+ "bounds": [
+  0.0,
+  24.0,
+  -8.0,
+  9.0
+ ],
+ "sprites": [],
+ "bg": {
+  "file": "bg.png",
+  "x0": -940,
+  "y0": -2396
+ },
+ "wallparts": []
+}

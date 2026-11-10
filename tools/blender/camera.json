@@ -1,0 +1,1 @@
+{"elev_deg": 47.0, "ppm": 165.0, "note": "Single source for the view. build.py, kit.py, render_character.py and glb_preview.py read this; the game's hex.gd mirrors it (Hex.ELEV_DEG) and level.gd warns if a level was built at another angle."}

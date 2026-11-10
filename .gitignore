@@ -1,0 +1,17 @@
+# Godot import cache and generated builds
+game/.godot/
+build/
+site/
+out/
+
+# Exported binaries (too large for GitHub, rebuild locally)
+game/*.exe
+game/*.pck
+game/*.zip
+
+# Archives and temporary files
+*.zip
+*.7z
+*.rar
+*.tmp
+*.blend1

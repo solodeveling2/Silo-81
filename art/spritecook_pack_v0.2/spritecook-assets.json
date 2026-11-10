@@ -1,0 +1,64 @@
+{
+  "model": "gemini-nano-banana-2.1",
+  "project": "Frostfall - Silo 81",
+  "assets": [
+    {
+      "asset_id": "cfcc0bab-c035-4d06-a1b1-d2552efb4a1c",
+      "sha12": "5ce37881714d",
+      "label": "Silo 81 floors and walls sheet",
+      "file": "sheets/01_floors_walls.png"
+    },
+    {
+      "asset_id": "5e5660ae-18bb-4afc-951d-3034e0f0cbbe",
+      "sha12": "bd48b8e4d9dc",
+      "label": "Silo 81 machinery sheet",
+      "file": "sheets/02_machinery.png"
+    },
+    {
+      "asset_id": "d0cfdf89-02be-4ba1-a1d1-b1d2a624f116",
+      "sha12": "77b63a3ab333",
+      "label": "Silo 81 living props sheet",
+      "file": "sheets/03_living_props.png"
+    },
+    {
+      "asset_id": "660c4c3d-dfa0-4d98-9dac-74e6e8dc7453",
+      "sha12": "69f27c9267cc",
+      "label": "Silo 81 blast door",
+      "file": "sheets/04_blast_door.png"
+    },
+    {
+      "asset_id": "9eaf8908-d4b1-4e90-9484-236222275492",
+      "sha12": "7cbb81cf7e4b",
+      "label": "Character: player_male",
+      "file": "sprites/characters/player_male.png"
+    },
+    {
+      "asset_id": "518f60dd-94ed-46e4-8610-305e86effa17",
+      "sha12": "2141765c1680",
+      "label": "Character: player_female",
+      "file": "sprites/characters/player_female.png"
+    },
+    {
+      "asset_id": "c987fc88-6f18-4cb4-b892-bf398a7061f4",
+      "sha12": "1b6c5ef7097b",
+      "label": "Character: mira_lenz",
+      "file": "sprites/characters/mira_lenz.png"
+    },
+    {
+      "asset_id": "736c52eb-5ad6-4261-85d1-ccb2d85a2234",
+      "sha12": "348d6ff82cfa",
+      "label": "Character: sanda_rusu",
+      "file": "sprites/characters/sanda_rusu.png"
+    },
+    {
+      "asset_id": "20dea4ba-f2f2-43fb-a383-a0bb9c0d4fec",
+      "sha12": "629200fec8cc",
+      "label": "Character: ilona_varga",
+      "file": "sprites/characters/ilona_varga.png"
+    },
+    {
+      "asset_id": "546a2b9c-296d-4bb5-a8a7-e35dd6f21612",
+      "label": "Style reference: Post-Apocalyptic Wasteland Tileset (not included)"
+    }
+  ]
+}

@@ -1,0 +1,275 @@
+[gd_scene load_steps=46 format=3]
+
+[ext_resource type="TileSet" path="res://Silo81_Assets/tilesets/silo81_floors.tres" id="0_tiles"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/characters/ilona_varga.png" id="1_ilona_varga"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/characters/mira_lenz.png" id="2_mira_lenz"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/characters/player_female.png" id="3_player_female"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/characters/player_male.png" id="4_player_male"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/characters/sanda_rusu.png" id="5_sanda_rusu"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/doors/blast_door_81.png" id="6_blast_door_81"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/machinery/air_filtration_unit.png" id="7_air_filtration_unit"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/machinery/boiler_horizontal.png" id="8_boiler_horizontal"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/machinery/fuse_cabinet.png" id="9_fuse_cabinet"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/machinery/geothermal_core.png" id="10_geothermal_core"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/machinery/heat_exchanger.png" id="11_heat_exchanger"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/machinery/maintenance_terminal.png" id="12_maintenance_terminal"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/machinery/pipe_elbow.png" id="13_pipe_elbow"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/machinery/pipe_straight_insulated.png" id="14_pipe_straight_insulated"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/machinery/pipe_valve_junction.png" id="15_pipe_valve_junction"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/machinery/water_tank.png" id="16_water_tank"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/props/archive_shelf.png" id="17_archive_shelf"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/props/bunk_bed.png" id="18_bunk_bed"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/props/desk_chair_lamp.png" id="19_desk_chair_lamp"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/props/hospital_cot.png" id="20_hospital_cot"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/props/hydroponic_rack.png" id="21_hydroponic_rack"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/props/lockers.png" id="22_lockers"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/props/medical_cabinet.png" id="23_medical_cabinet"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/props/mess_table_benches.png" id="24_mess_table_benches"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/props/space_heater.png" id="25_space_heater"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/props/supply_crates.png" id="26_supply_crates"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/props/water_canister.png" id="27_water_canister"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/barricade_wooden.png" id="28_barricade_wooden"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/ruin_foundation_slab.png" id="29_ruin_foundation_slab"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_breach_hole.png" id="30_wall_breach_hole"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_concrete_corner.png" id="31_wall_concrete_corner"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_concrete_doorway.png" id="32_wall_concrete_doorway"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_concrete_pipes.png" id="33_wall_concrete_pipes"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_concrete_straight.png" id="34_wall_concrete_straight"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_corner_pipes_large.png" id="35_wall_corner_pipes_large"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_door_narrow.png" id="36_wall_door_narrow"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_doorframe_narrow.png" id="37_wall_doorframe_narrow"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_low_corner_ruined.png" id="38_wall_low_corner_ruined"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_sign_plate.png" id="39_wall_sign_plate"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_steel_bulkhead_corner.png" id="40_wall_steel_bulkhead_corner"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_steel_corner_small.png" id="41_wall_steel_corner_small"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_steel_pressure_door.png" id="42_wall_steel_pressure_door"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_window.png" id="43_wall_window"]
+[ext_resource type="Texture2D" path="res://Silo81_Assets/sprites/walls/wall_window_broken.png" id="44_wall_window_broken"]
+
+[node name="Silo81Preview" type="Node2D"]
+
+[node name="Floor" type="TileMapLayer" parent="."]
+tile_set = ExtResource("0_tiles")
+
+[node name="Props" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="ilona_varga" type="Sprite2D" parent="Props"]
+position = Vector2(117, 233)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_ilona_varga")
+
+[node name="mira_lenz" type="Sprite2D" parent="Props"]
+position = Vector2(248, 238)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_mira_lenz")
+
+[node name="player_female" type="Sprite2D" parent="Props"]
+position = Vector2(389, 248)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_player_female")
+
+[node name="player_male" type="Sprite2D" parent="Props"]
+position = Vector2(525, 245)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_player_male")
+
+[node name="sanda_rusu" type="Sprite2D" parent="Props"]
+position = Vector2(664, 243)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("5_sanda_rusu")
+
+[node name="blast_door_81" type="Sprite2D" parent="Props"]
+position = Vector2(317, 770)
+scale = Vector2(0.55, 0.55)
+texture = ExtResource("6_blast_door_81")
+
+[node name="air_filtration_unit" type="Sprite2D" parent="Props"]
+position = Vector2(199, 1282)
+scale = Vector2(0.65, 0.65)
+texture = ExtResource("7_air_filtration_unit")
+
+[node name="boiler_horizontal" type="Sprite2D" parent="Props"]
+position = Vector2(475, 1274)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_boiler_horizontal")
+
+[node name="fuse_cabinet" type="Sprite2D" parent="Props"]
+position = Vector2(693, 1271)
+scale = Vector2(0.55, 0.55)
+texture = ExtResource("9_fuse_cabinet")
+
+[node name="geothermal_core" type="Sprite2D" parent="Props"]
+position = Vector2(917, 1375)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("10_geothermal_core")
+
+[node name="heat_exchanger" type="Sprite2D" parent="Props"]
+position = Vector2(1184, 1282)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("11_heat_exchanger")
+
+[node name="maintenance_terminal" type="Sprite2D" parent="Props"]
+position = Vector2(1392, 1259)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("12_maintenance_terminal")
+
+[node name="pipe_elbow" type="Sprite2D" parent="Props"]
+position = Vector2(1544, 1204)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("13_pipe_elbow")
+
+[node name="pipe_straight_insulated" type="Sprite2D" parent="Props"]
+position = Vector2(1698, 1208)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("14_pipe_straight_insulated")
+
+[node name="pipe_valve_junction" type="Sprite2D" parent="Props"]
+position = Vector2(1871, 1220)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("15_pipe_valve_junction")
+
+[node name="water_tank" type="Sprite2D" parent="Props"]
+position = Vector2(2079, 1311)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("16_water_tank")
+
+[node name="archive_shelf" type="Sprite2D" parent="Props"]
+position = Vector2(166, 1865)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("17_archive_shelf")
+
+[node name="bunk_bed" type="Sprite2D" parent="Props"]
+position = Vector2(398, 1835)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("18_bunk_bed")
+
+[node name="desk_chair_lamp" type="Sprite2D" parent="Props"]
+position = Vector2(650, 1807)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("19_desk_chair_lamp")
+
+[node name="hospital_cot" type="Sprite2D" parent="Props"]
+position = Vector2(902, 1801)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("20_hospital_cot")
+
+[node name="hydroponic_rack" type="Sprite2D" parent="Props"]
+position = Vector2(1130, 1839)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("21_hydroponic_rack")
+
+[node name="lockers" type="Sprite2D" parent="Props"]
+position = Vector2(1368, 1844)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("22_lockers")
+
+[node name="medical_cabinet" type="Sprite2D" parent="Props"]
+position = Vector2(1583, 1808)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("23_medical_cabinet")
+
+[node name="mess_table_benches" type="Sprite2D" parent="Props"]
+position = Vector2(1834, 1805)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("24_mess_table_benches")
+
+[node name="space_heater" type="Sprite2D" parent="Props"]
+position = Vector2(2061, 1753)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("25_space_heater")
+
+[node name="supply_crates" type="Sprite2D" parent="Props"]
+position = Vector2(2235, 1794)
+scale = Vector2(0.65, 0.65)
+texture = ExtResource("26_supply_crates")
+
+[node name="water_canister" type="Sprite2D" parent="Props"]
+position = Vector2(2401, 1745)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("27_water_canister")
+
+[node name="barricade_wooden" type="Sprite2D" parent="Props"]
+position = Vector2(144, 2203)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("28_barricade_wooden")
+
+[node name="ruin_foundation_slab" type="Sprite2D" parent="Props"]
+position = Vector2(330, 2213)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("29_ruin_foundation_slab")
+
+[node name="wall_breach_hole" type="Sprite2D" parent="Props"]
+position = Vector2(488, 2208)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("30_wall_breach_hole")
+
+[node name="wall_concrete_corner" type="Sprite2D" parent="Props"]
+position = Vector2(641, 2222)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("31_wall_concrete_corner")
+
+[node name="wall_concrete_doorway" type="Sprite2D" parent="Props"]
+position = Vector2(826, 2230)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("32_wall_concrete_doorway")
+
+[node name="wall_concrete_pipes" type="Sprite2D" parent="Props"]
+position = Vector2(1008, 2230)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("33_wall_concrete_pipes")
+
+[node name="wall_concrete_straight" type="Sprite2D" parent="Props"]
+position = Vector2(1188, 2227)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("34_wall_concrete_straight")
+
+[node name="wall_corner_pipes_large" type="Sprite2D" parent="Props"]
+position = Vector2(1412, 2266)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("35_wall_corner_pipes_large")
+
+[node name="wall_door_narrow" type="Sprite2D" parent="Props"]
+position = Vector2(1609, 2209)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("36_wall_door_narrow")
+
+[node name="wall_doorframe_narrow" type="Sprite2D" parent="Props"]
+position = Vector2(1732, 2209)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("37_wall_doorframe_narrow")
+
+[node name="wall_low_corner_ruined" type="Sprite2D" parent="Props"]
+position = Vector2(1882, 2206)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("38_wall_low_corner_ruined")
+
+[node name="wall_sign_plate" type="Sprite2D" parent="Props"]
+position = Vector2(2066, 2238)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("39_wall_sign_plate")
+
+[node name="wall_steel_bulkhead_corner" type="Sprite2D" parent="Props"]
+position = Vector2(2288, 2225)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("40_wall_steel_bulkhead_corner")
+
+[node name="wall_steel_corner_small" type="Sprite2D" parent="Props"]
+position = Vector2(2492, 2208)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("41_wall_steel_corner_small")
+
+[node name="wall_steel_pressure_door" type="Sprite2D" parent="Props"]
+position = Vector2(150, 2532)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("42_wall_steel_pressure_door")
+
+[node name="wall_window" type="Sprite2D" parent="Props"]
+position = Vector2(301, 2512)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("43_wall_window")
+
+[node name="wall_window_broken" type="Sprite2D" parent="Props"]
+position = Vector2(421, 2510)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("44_wall_window_broken")

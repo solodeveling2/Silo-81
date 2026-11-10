@@ -1,0 +1,3095 @@
+{
+ "name": "player_male",
+ "pixels_per_metre": 165.0,
+ "direction_order": "0=right, then counter-clockwise: 1=up-right, 2=up-left, 3=left, 4=down-left, 5=down-right",
+ "animations": {
+  "walk": {
+   "fps": 24,
+   "loop": true,
+   "frames": 56,
+   "directions": {
+    "0": {
+     "sheet": "walk_dir0.png",
+     "frame_size": [
+      181,
+      234
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      203.7
+     ],
+     "step_px": [
+      7.538,
+      -0.0
+     ],
+     "slide_check_px_per_frame": 0.375
+    },
+    "1": {
+     "sheet": "walk_dir1.png",
+     "frame_size": [
+      145,
+      267
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      58.0,
+      216.7
+     ],
+     "step_px": [
+      3.769,
+      -4.774
+     ],
+     "slide_check_px_per_frame": 0.327
+    },
+    "2": {
+     "sheet": "walk_dir2.png",
+     "frame_size": [
+      141,
+      269
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      75.0,
+      220.7
+     ],
+     "step_px": [
+      -3.769,
+      -4.774
+     ],
+     "slide_check_px_per_frame": 0.31
+    },
+    "3": {
+     "sheet": "walk_dir3.png",
+     "frame_size": [
+      181,
+      236
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      97.0,
+      210.7
+     ],
+     "step_px": [
+      -7.538,
+      -0.0
+     ],
+     "slide_check_px_per_frame": 0.349
+    },
+    "4": {
+     "sheet": "walk_dir4.png",
+     "frame_size": [
+      145,
+      257
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      87.0,
+      199.7
+     ],
+     "step_px": [
+      -3.769,
+      4.774
+     ],
+     "slide_check_px_per_frame": 0.335
+    },
+    "5": {
+     "sheet": "walk_dir5.png",
+     "frame_size": [
+      140,
+      260
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      66.0,
+      196.7
+     ],
+     "step_px": [
+      3.769,
+      4.774
+     ],
+     "slide_check_px_per_frame": 0.345
+    }
+   }
+  },
+  "run": {
+   "fps": 24,
+   "loop": true,
+   "frames": 30,
+   "directions": {
+    "0": {
+     "sheet": "run_dir0.png",
+     "frame_size": [
+      256,
+      220
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      136.0,
+      195.7
+     ],
+     "step_px": [
+      27.471,
+      -0.0
+     ],
+     "slide_check_px_per_frame": 1.282
+    },
+    "1": {
+     "sheet": "run_dir1.png",
+     "frame_size": [
+      202,
+      303
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      106.0,
+      222.7
+     ],
+     "step_px": [
+      13.735,
+      -17.399
+     ],
+     "slide_check_px_per_frame": 1.256
+    },
+    "2": {
+     "sheet": "run_dir2.png",
+     "frame_size": [
+      195,
+      299
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      224.7
+     ],
+     "step_px": [
+      -13.735,
+      -17.399
+     ],
+     "slide_check_px_per_frame": 0.94
+    },
+    "3": {
+     "sheet": "run_dir3.png",
+     "frame_size": [
+      255,
+      216
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      119.0,
+      198.7
+     ],
+     "step_px": [
+      -27.471,
+      -0.0
+     ],
+     "slide_check_px_per_frame": 1.229
+    },
+    "4": {
+     "sheet": "run_dir4.png",
+     "frame_size": [
+      202,
+      222
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      96.0,
+      185.7
+     ],
+     "step_px": [
+      -13.735,
+      17.399
+     ],
+     "slide_check_px_per_frame": 1.436
+    },
+    "5": {
+     "sheet": "run_dir5.png",
+     "frame_size": [
+      195,
+      226
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      111.0,
+      188.7
+     ],
+     "step_px": [
+      13.735,
+      17.399
+     ],
+     "slide_check_px_per_frame": 1.255
+    }
+   }
+  },
+  "idle": {
+   "fps": 12,
+   "loop": true,
+   "frames": 48,
+   "directions": {
+    "0": {
+     "sheet": "idle_dir0.png",
+     "frame_size": [
+      75,
+      237
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      39.0,
+      209.7
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "sheet": "idle_dir1.png",
+     "frame_size": [
+      114,
+      237
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      59.0,
+      214.7
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "sheet": "idle_dir2.png",
+     "frame_size": [
+      107,
+      234
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      53.0,
+      212.7
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "sheet": "idle_dir3.png",
+     "frame_size": [
+      75,
+      226
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      36.0,
+      203.7
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "sheet": "idle_dir4.png",
+     "frame_size": [
+      114,
+      229
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      55.0,
+      200.7
+     ],
+     "step_px": [
+      -0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "idle_dir5.png",
+     "frame_size": [
+      107,
+      231
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      54.0,
+      204.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "hit": {
+   "fps": 24,
+   "loop": false,
+   "frames": 9,
+   "directions": {
+    "0": {
+     "sheet": "hit_dir0.png",
+     "frame_size": [
+      130,
+      250
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      64.0,
+      195.7
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "sheet": "hit_dir1.png",
+     "frame_size": [
+      123,
+      262
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      61.0,
+      207.7
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "sheet": "hit_dir2.png",
+     "frame_size": [
+      168,
+      238
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      85.0,
+      210.7
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "sheet": "hit_dir3.png",
+     "frame_size": [
+      130,
+      250
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      66.0,
+      203.7
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "sheet": "hit_dir4.png",
+     "frame_size": [
+      123,
+      278
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      62.0,
+      218.7
+     ],
+     "step_px": [
+      -0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "hit_dir5.png",
+     "frame_size": [
+      169,
+      238
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      215.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "action_frame": 0
+  },
+  "pistol_idle": {
+   "fps": 24,
+   "loop": true,
+   "frames": 40,
+   "directions": {
+    "0": {
+     "sheet": "pistol_idle_dir0.png",
+     "frame_size": [
+      162,
+      245
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      64.0,
+      190.7
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_idle_dir1.png",
+     "frame_size": [
+      121,
+      271
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      47.0,
+      216.7
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_idle_dir2.png",
+     "frame_size": [
+      167,
+      262
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      234.7
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_idle_dir3.png",
+     "frame_size": [
+      162,
+      252
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      98.0,
+      205.7
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_idle_dir4.png",
+     "frame_size": [
+      121,
+      252
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      74.0,
+      193.7
+     ],
+     "step_px": [
+      -0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_idle_dir5.png",
+     "frame_size": [
+      168,
+      206
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      185.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "death": {
+   "fps": 24,
+   "loop": false,
+   "frames": 59,
+   "directions": {
+    "0": {
+     "sheet": "death_dir0.png",
+     "frame_size": [
+      351,
+      272
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      273.0,
+      196.7
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "sheet": "death_dir1.png",
+     "frame_size": [
+      299,
+      403
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      184.0,
+      205.7
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "sheet": "death_dir2.png",
+     "frame_size": [
+      327,
+      378
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      103.0,
+      209.7
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "sheet": "death_dir3.png",
+     "frame_size": [
+      351,
+      265
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      79.0,
+      202.7
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "sheet": "death_dir4.png",
+     "frame_size": [
+      300,
+      305
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      115.0,
+      238.7
+     ],
+     "step_px": [
+      -0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "death_dir5.png",
+     "frame_size": [
+      327,
+      278
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      225.0,
+      208.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "action_frame": 0
+  },
+  "pistol_raise_m60": {
+   "fps": 24,
+   "loop": false,
+   "frames": 4,
+   "pitch_deg": -60,
+   "directions": {
+    "0": {
+     "sheet": "pistol_raise_m60_dir0.png",
+     "frame_size": [
+      166,
+      243
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      64.0,
+      188.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_raise_m60_dir1.png",
+     "frame_size": [
+      122,
+      263
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      47.0,
+      208.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_raise_m60_dir2.png",
+     "frame_size": [
+      167,
+      251
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      84.0,
+      223.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_raise_m60_dir3.png",
+     "frame_size": [
+      165,
+      249
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      101.0,
+      202.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_raise_m60_dir4.png",
+     "frame_size": [
+      122,
+      250
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      75.0,
+      191.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_raise_m60_dir5.png",
+     "frame_size": [
+      168,
+      203
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      84.0,
+      182.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "pistol_shot_m60": {
+   "fps": 24,
+   "loop": false,
+   "frames": 18,
+   "pitch_deg": -60,
+   "directions": {
+    "0": {
+     "sheet": "pistol_shot_m60_dir0.png",
+     "frame_size": [
+      136,
+      237
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      64.0,
+      182.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      60.9,
+      -66.8
+     ],
+     "muzzle_m": [
+      0.369,
+      0.749
+     ],
+     "barrel_pitch_deg": -59.8
+    },
+    "1": {
+     "sheet": "pistol_shot_m60_dir1.png",
+     "frame_size": [
+      107,
+      263
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      47.0,
+      208.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      51.1,
+      -114.1
+     ],
+     "muzzle_m": [
+      0.369,
+      0.749
+     ],
+     "barrel_pitch_deg": -59.8
+    },
+    "2": {
+     "sheet": "pistol_shot_m60_dir2.png",
+     "frame_size": [
+      167,
+      243
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      215.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -9.8,
+      -131.6
+     ],
+     "muzzle_m": [
+      0.369,
+      0.749
+     ],
+     "barrel_pitch_deg": -59.8
+    },
+    "3": {
+     "sheet": "pistol_shot_m60_dir3.png",
+     "frame_size": [
+      136,
+      236
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      72.0,
+      189.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -60.9,
+      -101.8
+     ],
+     "muzzle_m": [
+      0.369,
+      0.749
+     ],
+     "barrel_pitch_deg": -59.8
+    },
+    "4": {
+     "sheet": "pistol_shot_m60_dir4.png",
+     "frame_size": [
+      108,
+      241
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      61.0,
+      182.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -51.1,
+      -54.5
+     ],
+     "muzzle_m": [
+      0.369,
+      0.749
+     ],
+     "barrel_pitch_deg": -59.8
+    },
+    "5": {
+     "sheet": "pistol_shot_m60_dir5.png",
+     "frame_size": [
+      168,
+      190
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      169.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      9.8,
+      -37.1
+     ],
+     "muzzle_m": [
+      0.369,
+      0.749
+     ],
+     "barrel_pitch_deg": -59.8
+    }
+   },
+   "action_frame": 0
+  },
+  "pistol_lower_m60": {
+   "fps": 24,
+   "loop": false,
+   "frames": 7,
+   "pitch_deg": -60,
+   "directions": {
+    "0": {
+     "sheet": "pistol_lower_m60_dir0.png",
+     "frame_size": [
+      166,
+      245
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      64.0,
+      190.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_lower_m60_dir1.png",
+     "frame_size": [
+      123,
+      271
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      47.0,
+      216.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_lower_m60_dir2.png",
+     "frame_size": [
+      167,
+      262
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      84.0,
+      234.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_lower_m60_dir3.png",
+     "frame_size": [
+      167,
+      251
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      103.0,
+      204.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_lower_m60_dir4.png",
+     "frame_size": [
+      122,
+      252
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      75.0,
+      193.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_lower_m60_dir5.png",
+     "frame_size": [
+      168,
+      206
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      84.0,
+      185.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "pistol_raise_m40": {
+   "fps": 24,
+   "loop": false,
+   "frames": 4,
+   "pitch_deg": -40,
+   "directions": {
+    "0": {
+     "sheet": "pistol_raise_m40_dir0.png",
+     "frame_size": [
+      166,
+      243
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      64.0,
+      188.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_raise_m40_dir1.png",
+     "frame_size": [
+      123,
+      264
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      47.0,
+      209.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_raise_m40_dir2.png",
+     "frame_size": [
+      167,
+      255
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      84.0,
+      227.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_raise_m40_dir3.png",
+     "frame_size": [
+      166,
+      250
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      102.0,
+      203.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_raise_m40_dir4.png",
+     "frame_size": [
+      122,
+      251
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      75.0,
+      192.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_raise_m40_dir5.png",
+     "frame_size": [
+      168,
+      204
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      84.0,
+      183.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "pistol_shot_m40": {
+   "fps": 24,
+   "loop": false,
+   "frames": 18,
+   "pitch_deg": -40,
+   "directions": {
+    "0": {
+     "sheet": "pistol_shot_m40_dir0.png",
+     "frame_size": [
+      154,
+      239
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      64.0,
+      184.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      84.2,
+      -85.7
+     ],
+     "muzzle_m": [
+      0.51,
+      0.916
+     ],
+     "barrel_pitch_deg": -39.8
+    },
+    "1": {
+     "sheet": "pistol_shot_m40_dir1.png",
+     "frame_size": [
+      117,
+      264
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      47.0,
+      209.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      62.8,
+      -147.8
+     ],
+     "muzzle_m": [
+      0.51,
+      0.917
+     ],
+     "barrel_pitch_deg": -39.8
+    },
+    "2": {
+     "sheet": "pistol_shot_m40_dir2.png",
+     "frame_size": [
+      167,
+      244
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      216.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -21.4,
+      -165.3
+     ],
+     "muzzle_m": [
+      0.51,
+      0.917
+     ],
+     "barrel_pitch_deg": -39.8
+    },
+    "3": {
+     "sheet": "pistol_shot_m40_dir3.png",
+     "frame_size": [
+      154,
+      241
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      90.0,
+      194.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -84.1,
+      -120.8
+     ],
+     "muzzle_m": [
+      0.51,
+      0.918
+     ],
+     "barrel_pitch_deg": -39.8
+    },
+    "4": {
+     "sheet": "pistol_shot_m40_dir4.png",
+     "frame_size": [
+      117,
+      244
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      70.0,
+      185.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -62.7,
+      -58.9
+     ],
+     "muzzle_m": [
+      0.51,
+      0.919
+     ],
+     "barrel_pitch_deg": -39.7
+    },
+    "5": {
+     "sheet": "pistol_shot_m40_dir5.png",
+     "frame_size": [
+      168,
+      194
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      173.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      21.4,
+      -41.6
+     ],
+     "muzzle_m": [
+      0.51,
+      0.92
+     ],
+     "barrel_pitch_deg": -39.7
+    }
+   },
+   "action_frame": 0
+  },
+  "pistol_lower_m40": {
+   "fps": 24,
+   "loop": false,
+   "frames": 7,
+   "pitch_deg": -40,
+   "directions": {
+    "0": {
+     "sheet": "pistol_lower_m40_dir0.png",
+     "frame_size": [
+      166,
+      245
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      64.0,
+      190.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_lower_m40_dir1.png",
+     "frame_size": [
+      123,
+      271
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      47.0,
+      216.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_lower_m40_dir2.png",
+     "frame_size": [
+      167,
+      262
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      84.0,
+      234.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_lower_m40_dir3.png",
+     "frame_size": [
+      166,
+      252
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      102.0,
+      205.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_lower_m40_dir4.png",
+     "frame_size": [
+      122,
+      252
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      75.0,
+      193.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_lower_m40_dir5.png",
+     "frame_size": [
+      168,
+      206
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      84.0,
+      185.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "pistol_raise_m20": {
+   "fps": 24,
+   "loop": false,
+   "frames": 4,
+   "pitch_deg": -20,
+   "directions": {
+    "0": {
+     "sheet": "pistol_raise_m20_dir0.png",
+     "frame_size": [
+      166,
+      244
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      64.0,
+      189.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_raise_m20_dir1.png",
+     "frame_size": [
+      122,
+      267
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      47.0,
+      212.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_raise_m20_dir2.png",
+     "frame_size": [
+      167,
+      258
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      84.0,
+      230.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_raise_m20_dir3.png",
+     "frame_size": [
+      165,
+      251
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      101.0,
+      204.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_raise_m20_dir4.png",
+     "frame_size": [
+      122,
+      251
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      75.0,
+      192.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_raise_m20_dir5.png",
+     "frame_size": [
+      168,
+      205
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      84.0,
+      184.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "pistol_shot_m20": {
+   "fps": 24,
+   "loop": false,
+   "frames": 18,
+   "pitch_deg": -20,
+   "directions": {
+    "0": {
+     "sheet": "pistol_shot_m20_dir0.png",
+     "frame_size": [
+      165,
+      241
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      64.0,
+      186.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      96.2,
+      -110.2
+     ],
+     "muzzle_m": [
+      0.583,
+      1.134
+     ],
+     "barrel_pitch_deg": -19.6
+    },
+    "1": {
+     "sheet": "pistol_shot_m20_dir1.png",
+     "frame_size": [
+      122,
+      263
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      47.0,
+      208.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      68.8,
+      -179.9
+     ],
+     "muzzle_m": [
+      0.583,
+      1.134
+     ],
+     "barrel_pitch_deg": -19.6
+    },
+    "2": {
+     "sheet": "pistol_shot_m20_dir2.png",
+     "frame_size": [
+      167,
+      243
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      215.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -27.5,
+      -197.4
+     ],
+     "muzzle_m": [
+      0.583,
+      1.134
+     ],
+     "barrel_pitch_deg": -19.6
+    },
+    "3": {
+     "sheet": "pistol_shot_m20_dir3.png",
+     "frame_size": [
+      165,
+      247
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      101.0,
+      200.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -96.2,
+      -145.2
+     ],
+     "muzzle_m": [
+      0.583,
+      1.135
+     ],
+     "barrel_pitch_deg": -19.6
+    },
+    "4": {
+     "sheet": "pistol_shot_m20_dir4.png",
+     "frame_size": [
+      123,
+      248
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      76.0,
+      189.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -68.7,
+      -75.6
+     ],
+     "muzzle_m": [
+      0.583,
+      1.135
+     ],
+     "barrel_pitch_deg": -19.6
+    },
+    "5": {
+     "sheet": "pistol_shot_m20_dir5.png",
+     "frame_size": [
+      168,
+      199
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      178.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      27.4,
+      -58.1
+     ],
+     "muzzle_m": [
+      0.583,
+      1.135
+     ],
+     "barrel_pitch_deg": -19.6
+    }
+   },
+   "action_frame": 0
+  },
+  "pistol_lower_m20": {
+   "fps": 24,
+   "loop": false,
+   "frames": 7,
+   "pitch_deg": -20,
+   "directions": {
+    "0": {
+     "sheet": "pistol_lower_m20_dir0.png",
+     "frame_size": [
+      166,
+      245
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      64.0,
+      190.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_lower_m20_dir1.png",
+     "frame_size": [
+      122,
+      271
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      47.0,
+      216.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_lower_m20_dir2.png",
+     "frame_size": [
+      167,
+      262
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      84.0,
+      234.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_lower_m20_dir3.png",
+     "frame_size": [
+      166,
+      252
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      102.0,
+      205.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_lower_m20_dir4.png",
+     "frame_size": [
+      122,
+      252
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      75.0,
+      193.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_lower_m20_dir5.png",
+     "frame_size": [
+      168,
+      206
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      84.0,
+      185.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "pistol_raise_0": {
+   "fps": 24,
+   "loop": false,
+   "frames": 4,
+   "pitch_deg": 0,
+   "directions": {
+    "0": {
+     "sheet": "pistol_raise_0_dir0.png",
+     "frame_size": [
+      163,
+      245
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      64.0,
+      190.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_raise_0_dir1.png",
+     "frame_size": [
+      121,
+      270
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      47.0,
+      215.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_raise_0_dir2.png",
+     "frame_size": [
+      167,
+      261
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      84.0,
+      233.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_raise_0_dir3.png",
+     "frame_size": [
+      163,
+      252
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      99.0,
+      205.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_raise_0_dir4.png",
+     "frame_size": [
+      121,
+      252
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      74.0,
+      193.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_raise_0_dir5.png",
+     "frame_size": [
+      168,
+      206
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      84.0,
+      185.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "pistol_shot_0": {
+   "fps": 24,
+   "loop": false,
+   "frames": 18,
+   "pitch_deg": 0,
+   "directions": {
+    "0": {
+     "sheet": "pistol_shot_0_dir0.png",
+     "frame_size": [
+      163,
+      245
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      64.0,
+      190.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      95.3,
+      -136.7
+     ],
+     "muzzle_m": [
+      0.578,
+      1.369
+     ],
+     "barrel_pitch_deg": 0.4
+    },
+    "1": {
+     "sheet": "pistol_shot_0_dir1.png",
+     "frame_size": [
+      122,
+      266
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      47.0,
+      211.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      68.3,
+      -205.8
+     ],
+     "muzzle_m": [
+      0.578,
+      1.369
+     ],
+     "barrel_pitch_deg": 0.4
+    },
+    "2": {
+     "sheet": "pistol_shot_0_dir2.png",
+     "frame_size": [
+      167,
+      258
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      230.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -27.0,
+      -223.2
+     ],
+     "muzzle_m": [
+      0.578,
+      1.369
+     ],
+     "barrel_pitch_deg": 0.4
+    },
+    "3": {
+     "sheet": "pistol_shot_0_dir3.png",
+     "frame_size": [
+      163,
+      252
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      99.0,
+      205.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -95.4,
+      -171.5
+     ],
+     "muzzle_m": [
+      0.578,
+      1.369
+     ],
+     "barrel_pitch_deg": 0.4
+    },
+    "4": {
+     "sheet": "pistol_shot_0_dir4.png",
+     "frame_size": [
+      122,
+      252
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      75.0,
+      193.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -68.4,
+      -102.4
+     ],
+     "muzzle_m": [
+      0.578,
+      1.369
+     ],
+     "barrel_pitch_deg": 0.4
+    },
+    "5": {
+     "sheet": "pistol_shot_0_dir5.png",
+     "frame_size": [
+      168,
+      205
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      184.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      27.1,
+      -84.9
+     ],
+     "muzzle_m": [
+      0.578,
+      1.369
+     ],
+     "barrel_pitch_deg": 0.4
+    }
+   },
+   "action_frame": 0
+  },
+  "pistol_lower_0": {
+   "fps": 24,
+   "loop": false,
+   "frames": 7,
+   "pitch_deg": 0,
+   "directions": {
+    "0": {
+     "sheet": "pistol_lower_0_dir0.png",
+     "frame_size": [
+      163,
+      245
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      64.0,
+      190.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_lower_0_dir1.png",
+     "frame_size": [
+      121,
+      271
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      47.0,
+      216.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_lower_0_dir2.png",
+     "frame_size": [
+      167,
+      262
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      84.0,
+      234.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_lower_0_dir3.png",
+     "frame_size": [
+      163,
+      252
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      99.0,
+      205.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_lower_0_dir4.png",
+     "frame_size": [
+      121,
+      252
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      74.0,
+      193.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_lower_0_dir5.png",
+     "frame_size": [
+      168,
+      206
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      84.0,
+      185.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "pistol_raise_p20": {
+   "fps": 24,
+   "loop": false,
+   "frames": 4,
+   "pitch_deg": 20,
+   "directions": {
+    "0": {
+     "sheet": "pistol_raise_p20_dir0.png",
+     "frame_size": [
+      160,
+      247
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      64.0,
+      192.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_raise_p20_dir1.png",
+     "frame_size": [
+      119,
+      282
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      47.0,
+      227.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_raise_p20_dir2.png",
+     "frame_size": [
+      167,
+      272
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      84.0,
+      244.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_raise_p20_dir3.png",
+     "frame_size": [
+      159,
+      254
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      95.0,
+      207.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_raise_p20_dir4.png",
+     "frame_size": [
+      119,
+      260
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      72.0,
+      201.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_raise_p20_dir5.png",
+     "frame_size": [
+      168,
+      215
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      84.0,
+      194.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "pistol_shot_p20": {
+   "fps": 24,
+   "loop": false,
+   "frames": 18,
+   "pitch_deg": 20,
+   "directions": {
+    "0": {
+     "sheet": "pistol_shot_p20_dir0.png",
+     "frame_size": [
+      150,
+      248
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      64.0,
+      193.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      81.2,
+      -162.1
+     ],
+     "muzzle_m": [
+      0.492,
+      1.595
+     ],
+     "barrel_pitch_deg": 20.3
+    },
+    "1": {
+     "sheet": "pistol_shot_p20_dir1.png",
+     "frame_size": [
+      115,
+      282
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      47.0,
+      227.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      61.2,
+      -222.2
+     ],
+     "muzzle_m": [
+      0.491,
+      1.595
+     ],
+     "barrel_pitch_deg": 20.4
+    },
+    "2": {
+     "sheet": "pistol_shot_p20_dir2.png",
+     "frame_size": [
+      167,
+      273
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      245.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -19.8,
+      -239.5
+     ],
+     "muzzle_m": [
+      0.49,
+      1.596
+     ],
+     "barrel_pitch_deg": 20.4
+    },
+    "3": {
+     "sheet": "pistol_shot_p20_dir3.png",
+     "frame_size": [
+      150,
+      256
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      86.0,
+      209.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -80.7,
+      -197.1
+     ],
+     "muzzle_m": [
+      0.489,
+      1.596
+     ],
+     "barrel_pitch_deg": 20.5
+    },
+    "4": {
+     "sheet": "pistol_shot_p20_dir4.png",
+     "frame_size": [
+      115,
+      260
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      68.0,
+      201.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -60.9,
+      -137.4
+     ],
+     "muzzle_m": [
+      0.488,
+      1.596
+     ],
+     "barrel_pitch_deg": 20.5
+    },
+    "5": {
+     "sheet": "pistol_shot_p20_dir5.png",
+     "frame_size": [
+      168,
+      215
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      194.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      19.6,
+      -120.1
+     ],
+     "muzzle_m": [
+      0.487,
+      1.597
+     ],
+     "barrel_pitch_deg": 20.6
+    }
+   },
+   "action_frame": 0
+  },
+  "pistol_lower_p20": {
+   "fps": 24,
+   "loop": false,
+   "frames": 7,
+   "pitch_deg": 20,
+   "directions": {
+    "0": {
+     "sheet": "pistol_lower_p20_dir0.png",
+     "frame_size": [
+      161,
+      247
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      64.0,
+      192.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_lower_p20_dir1.png",
+     "frame_size": [
+      120,
+      282
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      47.0,
+      227.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_lower_p20_dir2.png",
+     "frame_size": [
+      167,
+      272
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      84.0,
+      244.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_lower_p20_dir3.png",
+     "frame_size": [
+      161,
+      254
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      97.0,
+      207.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_lower_p20_dir4.png",
+     "frame_size": [
+      120,
+      260
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      73.0,
+      201.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_lower_p20_dir5.png",
+     "frame_size": [
+      168,
+      215
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      84.0,
+      194.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "pistol_raise_p40": {
+   "fps": 24,
+   "loop": false,
+   "frames": 4,
+   "pitch_deg": 40,
+   "directions": {
+    "0": {
+     "sheet": "pistol_raise_p40_dir0.png",
+     "frame_size": [
+      158,
+      248
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      64.0,
+      193.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_raise_p40_dir1.png",
+     "frame_size": [
+      119,
+      285
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      48.0,
+      230.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_raise_p40_dir2.png",
+     "frame_size": [
+      167,
+      275
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      84.0,
+      247.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_raise_p40_dir3.png",
+     "frame_size": [
+      156,
+      271
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      92.0,
+      224.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_raise_p40_dir4.png",
+     "frame_size": [
+      118,
+      270
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      70.0,
+      211.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_raise_p40_dir5.png",
+     "frame_size": [
+      168,
+      224
+     ],
+     "columns": 4,
+     "feet_anchor": [
+      84.0,
+      203.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "pistol_shot_p40": {
+   "fps": 24,
+   "loop": false,
+   "frames": 18,
+   "pitch_deg": 40,
+   "directions": {
+    "0": {
+     "sheet": "pistol_shot_p40_dir0.png",
+     "frame_size": [
+      127,
+      249
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      64.0,
+      194.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      53.5,
+      -183.7
+     ],
+     "muzzle_m": [
+      0.325,
+      1.786
+     ],
+     "barrel_pitch_deg": 40.6
+    },
+    "1": {
+     "sheet": "pistol_shot_p40_dir1.png",
+     "frame_size": [
+      103,
+      285
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      48.0,
+      230.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      47.1,
+      -226.0
+     ],
+     "muzzle_m": [
+      0.322,
+      1.786
+     ],
+     "barrel_pitch_deg": 40.7
+    },
+    "2": {
+     "sheet": "pistol_shot_p40_dir2.png",
+     "frame_size": [
+      167,
+      275
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      247.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -5.8,
+      -243.1
+     ],
+     "muzzle_m": [
+      0.319,
+      1.786
+     ],
+     "barrel_pitch_deg": 40.8
+    },
+    "3": {
+     "sheet": "pistol_shot_p40_dir3.png",
+     "frame_size": [
+      128,
+      275
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      64.0,
+      228.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -52.3,
+      -218.3
+     ],
+     "muzzle_m": [
+      0.317,
+      1.786
+     ],
+     "barrel_pitch_deg": 40.9
+    },
+    "4": {
+     "sheet": "pistol_shot_p40_dir4.png",
+     "frame_size": [
+      103,
+      271
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      55.0,
+      212.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      -46.5,
+      -176.7
+     ],
+     "muzzle_m": [
+      0.315,
+      1.786
+     ],
+     "barrel_pitch_deg": 41.0
+    },
+    "5": {
+     "sheet": "pistol_shot_p40_dir5.png",
+     "frame_size": [
+      168,
+      225
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      204.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ],
+     "muzzle_offset_px": [
+      5.4,
+      -159.6
+     ],
+     "muzzle_m": [
+      0.313,
+      1.786
+     ],
+     "barrel_pitch_deg": 41.1
+    }
+   },
+   "action_frame": 0
+  },
+  "pistol_lower_p40": {
+   "fps": 24,
+   "loop": false,
+   "frames": 7,
+   "pitch_deg": 40,
+   "directions": {
+    "0": {
+     "sheet": "pistol_lower_p40_dir0.png",
+     "frame_size": [
+      160,
+      248
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      64.0,
+      193.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_lower_p40_dir1.png",
+     "frame_size": [
+      120,
+      285
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      48.0,
+      230.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_lower_p40_dir2.png",
+     "frame_size": [
+      167,
+      275
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      84.0,
+      247.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_lower_p40_dir3.png",
+     "frame_size": [
+      159,
+      271
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      95.0,
+      224.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_lower_p40_dir4.png",
+     "frame_size": [
+      120,
+      270
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      72.0,
+      211.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_lower_p40_dir5.png",
+     "frame_size": [
+      168,
+      224
+     ],
+     "columns": 7,
+     "feet_anchor": [
+      84.0,
+      203.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "pistol_hold": {
+   "fps": 24,
+   "loop": false,
+   "frames": 21,
+   "directions": {
+    "0": {
+     "sheet": "pistol_hold_dir0.png",
+     "frame_size": [
+      166,
+      248
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      64.0,
+      193.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "1": {
+     "sheet": "pistol_hold_dir1.png",
+     "frame_size": [
+      124,
+      286
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      48.0,
+      231.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "2": {
+     "sheet": "pistol_hold_dir2.png",
+     "frame_size": [
+      167,
+      277
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      249.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "3": {
+     "sheet": "pistol_hold_dir3.png",
+     "frame_size": [
+      166,
+      272
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      102.0,
+      225.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "4": {
+     "sheet": "pistol_hold_dir4.png",
+     "frame_size": [
+      124,
+      270
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      76.0,
+      211.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "pistol_hold_dir5.png",
+     "frame_size": [
+      168,
+      224
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      84.0,
+      203.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "fall": {
+   "fps": 24,
+   "loop": false,
+   "frames": 73,
+   "directions": {
+    "0": {
+     "sheet": "fall_dir0.png",
+     "frame_size": [
+      174,
+      354
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      82.0,
+      305.7
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "sheet": "fall_dir1.png",
+     "frame_size": [
+      408,
+      300
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      305.0,
+      250.7
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "sheet": "fall_dir2.png",
+     "frame_size": [
+      448,
+      353
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      348.0,
+      216.7
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "sheet": "fall_dir3.png",
+     "frame_size": [
+      174,
+      481
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      92.0,
+      221.7
+     ],
+     "step_px": [
+      -0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "sheet": "fall_dir4.png",
+     "frame_size": [
+      408,
+      369
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      103.0,
+      203.7
+     ],
+     "step_px": [
+      -0.0,
+      0.0
+     ]
+    },
+    "5": {
+     "sheet": "fall_dir5.png",
+     "frame_size": [
+      448,
+      238
+     ],
+     "columns": 8,
+     "feet_anchor": [
+      100.0,
+      199.7
+     ],
+     "step_px": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  }
+ },
+ "height_m": 1.75,
+ "aim_points": {
+  "body": [
+   0.0,
+   1.27
+  ],
+  "head": [
+   0.05,
+   1.59
+  ]
+ },
+ "aim": {
+  "shot": "pistol_shot",
+  "raise": "pistol_raise",
+  "lower": "pistol_lower",
+  "hold": "pistol_hold",
+  "pitches": [
+   -60,
+   -40,
+   -20,
+   0,
+   20,
+   40
+  ],
+  "hold_pitches": [
+   -60,
+   -55,
+   -50,
+   -45,
+   -40,
+   -35,
+   -30,
+   -25,
+   -20,
+   -15,
+   -10,
+   -5,
+   0,
+   5,
+   10,
+   15,
+   20,
+   25,
+   30,
+   35,
+   40
+  ]
+ }
+}
