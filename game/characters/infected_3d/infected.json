@@ -3,6 +3,7 @@
  "clips": {
   "idle": "idle",
   "walk": "walk",
+  "run": "run",
   "bite": "bite",
   "hit": "hit",
   "death": "death"
@@ -12,23 +13,23 @@
   96
  ],
  "height_m": 1.75,
- "exposure": 1.0,
+ "exposure": 1.2,
  "creature": "infected",
  "lengths": {
-  "idle": 96,
-  "walk": 40,
   "bite": 24,
-  "hit": 14,
-  "death": 40
+  "death": 58,
+  "hit": 31,
+  "idle": 96,
+  "run": 15,
+  "walk": 25
  },
- "walk_v": 0.025,
- "bite_hit": 13,
+ "bite_hit": 7,
  "view": {
-  "w": 420,
-  "h": 460,
-  "foot_y": 380,
-  "big_w": 760,
-  "big_h": 620,
-  "big_foot_y": 330
+  "w": 270,
+  "h": 406,
+  "foot_y": 305,
+  "big_w": 464,
+  "big_h": 549,
+  "big_foot_y": 376
  }
 }

@@ -23,13 +23,16 @@ const ENEMY := {
 				"last": "The road goes quiet. Only the wind now.", "fatal": "Cold hands close around your throat.",
 				"look": "It was a person once. The coat still is. The skin under it is the colour of old candle wax.",
 				"wake": "It straightens up. The head tips over, too far, and it starts towards you."},
-	## Tier 1 of the Firn Strata (built in Blender: tools/blender/feral.py, infected.py). Brain-dead, drawn to warmth and noise.
+	## Tier 1 of the Firn Strata (Meshy models, animated in Blender: tools/blender/meshy_hunger.py, meshy_stalker.py).
+	## Brain-dead, drawn to warmth and noise.
 	"feral": {"json": FERAL_JSON, "name": "Feral", "hp": 14, "ap": 8, "atk_ap": 3, "dmg": [3, 6], "hit": 70, "speed": 1.0,
 			  "attack": "It snaps its jaws shut on you for %d.", "kill": "It thrashes in the snow, the ice on its back cracking, and goes still.",
 			  "last": "The road goes quiet. Only the wind now.", "fatal": "The jaws find your throat.",
 			  "look": "Feral: something that went on all fours a long time ago. Ice has grown out of its spine like a crest of glass.",
 			  "wake": "A crest of ice lifts out of the snow. It turns its head towards your warmth."},
+	## The Infected (Meshy model "The Tattered Hunger"): paces a short beat out of combat, runs in combat.
 	"infected": {"json": INFECTED_JSON, "name": "Infected", "hp": 20, "ap": 6, "atk_ap": 3, "dmg": [3, 5], "hit": 65, "speed": 1.0,
+				 "move": "run", "patrol": 2.5,
 				 "attack": "It rakes you with its nails for %d.", "kill": "It folds into the snow and does not get up.",
 				 "last": "The road goes quiet. Only the wind now.", "fatal": "Cold, bloody hands close around your throat.",
 				 "look": "Infected: it was a person once. The hood is still up. The mouth will not close.",
@@ -1010,6 +1013,10 @@ func _spawn_enemy(e: Dictionary, k: int) -> void:
 	if e.get("state", "idle") == "hidden":            # under the snow until the fight brings it up
 		a.set_meta("hidden", true)
 		a.visible = false
+	elif e.get("state", "idle") == "idle" and float(spec.get("patrol", 0.0)) > 0.0:
+		a.set_meta("patrol_home", a.ground)              # paces left and right of here until a fight starts
+		a.set_meta("patrol_side", 1.0 if k % 2 == 0 else -1.0)
+		a.set_meta("patrol_wait", rng.randf_range(0.5, 3.0))
 	a.stepped.connect(_on_worm_step.bind(a))
 	worms.append(a)
 
@@ -1084,6 +1091,9 @@ func start_combat(msg: String, group := "") -> void:
 		flags["seen_worms"] = true
 	player.set_meta("combat", true)
 	player.play("pistol_idle", player.dir)
+	for w in live_worms():
+		if w.has_meta("patrol_home") and w.is_moving():
+			w.stop_now()
 	for w in engaged:
 		if w.get_meta("hidden", false):
 			continue
@@ -1365,7 +1375,7 @@ func worm_turn(w: Actor) -> void:
 		if path.is_empty():
 			break
 		path = path.slice(0, w.ap)
-		w.follow(path)
+		w.follow(path, str(_kind(w).get("move", "")) if w.has_clip(str(_kind(w).get("move", ""))) else "")
 		await w.arrived
 		if pending_overwatch == w:
 			pending_overwatch = null
@@ -1698,6 +1708,8 @@ class Beacon extends Node2D:
 
 
 func _process(delta: float) -> void:
+	if mode == "explore" and level and not busy:
+		_patrol(delta)
 	if focus and is_instance_valid(focus):
 		cam.position = focus.position + Vector2(0, Hex.VSCALE * -80)
 	if level and is_instance_valid(level) and player and is_instance_valid(player):
@@ -1705,6 +1717,29 @@ func _process(delta: float) -> void:
 		var p_plan := Hex.ground_to_plan(Hex.screen_to_ground(feet))
 		var active_room := level.update_player_room(p_plan, player.hex)
 		level.fade_walls([], delta, active_room)
+
+
+## Out of combat, enemies with a "patrol" distance walk a short beat left and right of where they
+## spawned (along the road), pausing at each end. A fight stops them (start_combat).
+func _patrol(delta: float) -> void:
+	for w in worms:
+		if not w.alive or not w.has_meta("patrol_home") or w.team != "hostile" or w.is_moving() or w.get_meta("hidden", false):
+			continue
+		var wait := float(w.get_meta("patrol_wait", 0.0)) - delta
+		w.set_meta("patrol_wait", wait)
+		if wait > 0.0:
+			continue
+		var side := float(w.get_meta("patrol_side", 1.0))
+		var reach := float(_kind(w).get("patrol", 2.5)) * rng.randf_range(0.6, 1.0)
+		var home: Vector2 = w.get_meta("patrol_home")
+		var goal := Hex.ground_to_hex(home + Vector2(side * reach, rng.randf_range(-0.6, 0.6)))
+		w.set_meta("patrol_side", -side)
+		w.set_meta("patrol_wait", rng.randf_range(2.0, 4.5))
+		if not level.walkable.has(goal) or goal == w.hex or (player and goal == player.hex):
+			continue
+		var p := level.find_path(w.hex, goal, occupied(w))
+		if not p.is_empty() and p.size() <= 6:
+			w.follow(p, "walk")
 
 
 # ================================================================== hex highlights

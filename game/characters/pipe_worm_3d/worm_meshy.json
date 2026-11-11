@@ -1,0 +1,35 @@
+{
+ "fps_src": 24,
+ "clips": {
+  "idle": "idle",
+  "crawl": "crawl",
+  "bite": "bite",
+  "hit": "hit",
+  "death": "death",
+  "chew": "chew",
+  "release": "release"
+ },
+ "idle_loop_src": [
+  0,
+  32
+ ],
+ "height_m": 0.5,
+ "exposure": 1.1,
+ "lengths": {
+  "idle": 32,
+  "crawl": 24,
+  "bite": 20,
+  "hit": 12,
+  "death": 32,
+  "chew": 36,
+  "release": 14
+ },
+ "view": {
+  "w": 383,
+  "h": 348,
+  "foot_y": 205,
+  "big_w": 383,
+  "big_h": 348,
+  "big_foot_y": 205
+ }
+}

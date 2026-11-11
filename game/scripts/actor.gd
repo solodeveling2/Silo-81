@@ -26,7 +26,7 @@ const LIVE_3D := {
 	"res://characters/player_male/character.json": ["res://characters/player_3d/player.glb", "res://characters/player_3d/player.json"],
 	"res://characters/tibor/character.json": ["res://characters/tibor_3d/tibor.glb", "res://characters/tibor_3d/tibor.json"],
 	"res://characters/overseer/character.json": ["res://characters/overseer_3d/overseer.glb", "res://characters/overseer_3d/overseer.json"],
-	"res://characters/pipe_worm/character.json": ["res://characters/pipe_worm_3d/worm.bin", "res://characters/pipe_worm_3d/worm.json"],
+	"res://characters/pipe_worm/character.json": ["res://characters/pipe_worm_3d/worm_meshy.glb", "res://characters/pipe_worm_3d/worm_meshy.json"],
 	"res://characters/changed/character.json": ["res://characters/changed_3d/changed.glb", "res://characters/changed_3d/changed.json"],
 	"res://characters/feral/character.json": ["res://characters/feral_3d/feral.glb", "res://characters/feral_3d/feral.json"],
 	"res://characters/infected/character.json": ["res://characters/infected_3d/infected.glb", "res://characters/infected_3d/infected.json"],

@@ -2,33 +2,33 @@
  "fps_src": 24,
  "clips": {
   "idle": "idle",
-  "walk": "walk",
   "bite": "bite",
   "hit": "hit",
-  "death": "death"
+  "death": "death",
+  "walk": "walk"
  },
  "idle_loop_src": [
   0,
   48
  ],
- "height_m": 1.0,
- "exposure": 1.0,
+ "height_m": 1.2,
+ "exposure": 1.1,
  "creature": "feral",
  "lengths": {
   "idle": 48,
-  "walk": 20,
   "bite": 22,
   "hit": 14,
-  "death": 36
+  "death": 36,
+  "walk": 24
  },
  "view": {
-  "w": 316,
-  "h": 414,
-  "foot_y": 296,
-  "big_w": 334,
-  "big_h": 427,
-  "big_foot_y": 302
+  "w": 308,
+  "h": 374,
+  "foot_y": 258,
+  "big_w": 308,
+  "big_h": 374,
+  "big_foot_y": 258
  },
- "walk_v": 0.04,
+ "walk_v": 0.0487,
  "bite_hit": 11
 }
