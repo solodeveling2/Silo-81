@@ -21,6 +21,10 @@ func _init() -> void:
 		for fr in cs[1].split(","):
 			cols.append([cs[0], float(fr), 24.0])
 		rows = [[ROWS[0][0], ROWS[0][1], cols], [ROWS[1][0], ROWS[1][1], cols]]
+	if OS.has_environment("ONLY"):                      # e.g. ONLY=0 (feral) or ONLY=1 (infected)
+		rows = [rows[int(OS.get_environment("ONLY"))]]
+	var sc := float(OS.get_environment("SCALE")) if OS.has_environment("SCALE") else 0.62
+	var step := 250.0 * sc / 0.62
 	var pups := []
 	for r in rows.size():
 		for fi in 2:
@@ -28,8 +32,8 @@ func _init() -> void:
 			for c in cols.size():
 				var p := Puppet3D.new()
 				p.setup(rows[r][0], rows[r][1])
-				p.position = Vector2(150 + c * 250, 250 + (r * 2 + fi) * 250)
-				p.scale = Vector2(0.62, 0.62)
+				p.position = Vector2(step * 0.6 + c * step, step + (r * 2 + fi) * step)
+				p.scale = Vector2(sc, sc)
 				root.add_child(p)
 				pups.append([p, cols[c], facings[fi]])
 	for i in 30:

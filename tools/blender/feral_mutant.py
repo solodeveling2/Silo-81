@@ -30,18 +30,18 @@ def V(*a):
 
 
 # ------------------------------------------------------------------ landmarks (joint centres)
-SH = {s: V(x * 0.150, -0.10, 0.70) for s, x in SIDES}        # shoulder
-EL = {s: V(x * 0.170, -0.03, 0.42) for s, x in SIDES}        # elbow (points back, like a human arm)
-WR = {s: V(x * 0.165, -0.15, 0.10) for s, x in SIDES}        # wrist
-KNU = {s: V(x * 0.165, -0.25, 0.030) for s, x in SIDES}      # knuckles (the hand stands on its fingers)
-HIP = {s: V(x * 0.100, 0.56, 0.66) for s, x in SIDES}
-KN = {s: V(x * 0.135, 0.36, 0.40) for s, x in SIDES}        # knee (forward)
-HK = {s: V(x * 0.125, 0.62, 0.20) for s, x in SIDES}        # hock (high, back)
-BALL = {s: V(x * 0.125, 0.53, 0.036) for s, x in SIDES}     # ball of the hind foot
-TOE = {s: V(x * 0.125, 0.45, 0.014) for s, x in SIDES}
+SH = {s: V(x * 0.175, -0.10, 0.70) for s, x in SIDES}        # shoulder
+EL = {s: V(x * 0.195, -0.03, 0.42) for s, x in SIDES}        # elbow (points back, like a human arm)
+WR = {s: V(x * 0.185, -0.15, 0.10) for s, x in SIDES}        # wrist
+KNU = {s: V(x * 0.185, -0.25, 0.032) for s, x in SIDES}      # knuckles (the hand stands on its fingers)
+HIP = {s: V(x * 0.115, 0.56, 0.66) for s, x in SIDES}
+KN = {s: V(x * 0.150, 0.36, 0.40) for s, x in SIDES}        # knee (forward)
+HK = {s: V(x * 0.140, 0.62, 0.20) for s, x in SIDES}        # hock (high, back)
+BALL = {s: V(x * 0.140, 0.53, 0.038) for s, x in SIDES}     # ball of the hind foot
+TOE = {s: V(x * 0.140, 0.45, 0.015) for s, x in SIDES}
 HC = V(0, -0.42, 0.87)                                      # cranium centre
-HINGE = HC + V(0, 0.0, -0.065)                              # jaw hinge (on the midline)
-JAW_OPEN = 26.0                                             # the jaw is sculpted hanging open this far
+HINGE = HC + V(0, 0.03, -0.08)                              # jaw hinge (on the midline)
+JAW_OPEN = 22.0                                             # the jaw is sculpted hanging open this far
 
 
 def along(a, b):
@@ -56,8 +56,8 @@ def jaw_open(p, deg=JAW_OPEN):
 
 def topline(y):
     """Approximate height of the back's skin (for laying out the crystals before the mesh exists)."""
-    pts = [(-0.50, 0.93), (-0.42, 0.945), (-0.30, 0.93), (-0.14, 0.945), (-0.04, 0.965), (0.14, 0.975),
-           (0.36, 0.90), (0.56, 0.855), (0.70, 0.80)]
+    pts = [(-0.50, 0.94), (-0.42, 0.95), (-0.30, 0.955), (-0.14, 0.965), (-0.04, 0.985), (0.14, 0.99),
+           (0.36, 0.915), (0.56, 0.87), (0.70, 0.81)]
     for (y0, z0), (y1, z1) in zip(pts, pts[1:]):
         if y0 <= y <= y1:
             return z0 + (z1 - z0) * (y - y0) / (y1 - y0)
@@ -107,29 +107,31 @@ CRYSTALS = crystal_layout()
 
 # ------------------------------------------------------------------ forms (shared by the sculpts and the weight proxy)
 def body_forms(s, coarse=False):
-    s.ellipsoid(V(0, 0.02, 0.715), (0.12, 0.21, 0.21))                         # ribcage, deep and narrow
-    s.ellipsoid(V(0, -0.09, 0.63), (0.09, 0.11, 0.12))                          # brisket
+    """Gaunt but powerful: deep chest, heavy shoulders and neck, roped limbs."""
+    s.ellipsoid(V(0, 0.02, 0.71), (0.15, 0.22, 0.22))                          # ribcage, deep
+    s.ellipsoid(V(0, -0.09, 0.62), (0.11, 0.12, 0.13))                          # brisket
     for _, x in SIDES:
-        s.ellipsoid(V(x * 0.072, -0.04, 0.86), (0.055, 0.12, 0.085), rot=Quaternion((0, 1, 0), x * 0.35))   # shoulder blades
-    s.chain([V(0, -0.07, 0.875), V(0, 0.14, 0.895), V(0, 0.36, 0.83), V(0, 0.56, 0.775)], [0.085, 0.08, 0.07, 0.08])  # arched back
-    s.ellipsoid(V(0, 0.33, 0.73), (0.078, 0.13, 0.08))                           # tucked waist
-    s.ellipsoid(V(0, 0.56, 0.715), (0.10, 0.11, 0.095))                          # pelvis
-    s.ball(V(0, 0.65, 0.74), 0.064)                                              # rump
-    s.chain([V(0, -0.10, 0.80), V(0, -0.24, 0.84), V(0, -0.34, 0.86)], [0.11, 0.085, 0.068])   # neck
-    s.ellipsoid(V(0, -0.19, 0.77), (0.065, 0.09, 0.055))                         # throat
+        s.ellipsoid(V(x * 0.085, -0.05, 0.86), (0.07, 0.13, 0.09), rot=Quaternion((0, 1, 0), x * 0.35))   # shoulder blades
+        s.ellipsoid(V(x * 0.12, -0.12, 0.74), (0.06, 0.08, 0.1))                # chest muscle into the arm
+    s.chain([V(0, -0.07, 0.875), V(0, 0.14, 0.895), V(0, 0.36, 0.83), V(0, 0.56, 0.775)], [0.10, 0.095, 0.085, 0.09])  # arched back
+    s.ellipsoid(V(0, 0.33, 0.72), (0.10, 0.13, 0.095))                           # tucked waist
+    s.ellipsoid(V(0, 0.56, 0.71), (0.12, 0.12, 0.105))                           # pelvis
+    s.ball(V(0, 0.65, 0.74), 0.076)                                              # rump
+    s.chain([V(0, -0.10, 0.80), V(0, -0.24, 0.835), V(0, -0.34, 0.85)], [0.13, 0.11, 0.09])   # thick neck
+    s.ellipsoid(V(0, -0.20, 0.76), (0.08, 0.10, 0.07))                           # throat
     for side, x in SIDES:
         sh, el, wr = SH[side], EL[side], WR[side]
-        s.ball(sh, 0.064)                                                        # deltoid
-        s.ellipsoid(sh.lerp(el, 0.38) + V(0, 0.012, 0), (0.04, 0.042, 0.095), rot=along(sh, el))
-        s.chain([sh, el], [0.046, 0.032])
-        s.chain([el, wr], [0.032, 0.02])
-        s.ellipsoid(el.lerp(wr, 0.26) + V(0, -0.006, 0), (0.032, 0.03, 0.08), rot=along(el, wr))   # forearm flexors
+        s.ball(sh, 0.078)                                                        # deltoid
+        s.ellipsoid(sh.lerp(el, 0.38) + V(0, 0.014, 0), (0.055, 0.055, 0.11), rot=along(sh, el))
+        s.chain([sh, el], [0.058, 0.04])
+        s.chain([el, wr], [0.04, 0.026])
+        s.ellipsoid(el.lerp(wr, 0.26) + V(0, -0.008, 0), (0.042, 0.04, 0.09), rot=along(el, wr))   # forearm flexors
         hp, kn, hk, ba = HIP[side], KN[side], HK[side], BALL[side]
-        s.ellipsoid(hp.lerp(kn, 0.42) + V(x * 0.01, 0.0, 0.02), (0.06, 0.08, 0.15), rot=along(hp, kn))  # thigh
-        s.chain([hp, kn], [0.062, 0.034])
-        s.chain([kn, hk], [0.032, 0.019])
-        s.ellipsoid(kn.lerp(hk, 0.3) + V(0, 0.024, 0.012), (0.03, 0.036, 0.07), rot=along(kn, hk))   # calf
-        s.chain([hk, ba], [0.019, 0.017])
+        s.ellipsoid(hp.lerp(kn, 0.42) + V(x * 0.012, 0.0, 0.02), (0.075, 0.095, 0.16), rot=along(hp, kn))  # thigh
+        s.chain([hp, kn], [0.072, 0.042])
+        s.chain([kn, hk], [0.038, 0.024])
+        s.ellipsoid(kn.lerp(hk, 0.3) + V(0, 0.028, 0.012), (0.04, 0.045, 0.08), rot=along(kn, hk))   # calf
+        s.chain([hk, ba], [0.024, 0.021])
     if not coarse:
         for p, d, L, rb in CRYSTALS:                                            # raw swellings round the crystals
             if p.z > 0.8 and p.y > -0.33:
@@ -137,30 +139,32 @@ def body_forms(s, coarse=False):
 
 
 def head_forms(s, coarse=False):
+    """A hyena's skull on a man's flesh: broad cranium and cheekbones, an angry brow over small deep
+    eyes, a short deep muzzle with a broad flat nose, a heavy jaw hanging open."""
     C = HC
-    s.ellipsoid(C + V(0, 0.02, 0.0), (0.06, 0.09, 0.064))                      # cranium
-    s.capsule(C + V(0, 0.07, 0.056), C + V(0, -0.05, 0.062), 0.013)           # sagittal crest
-    s.ellipsoid(C + V(0, -0.072, 0.033), (0.056, 0.022, 0.019))                 # heavy brow ridge
+    s.ellipsoid(C + V(0, 0.03, 0.0), (0.075, 0.09, 0.07))                      # broad cranium
+    s.capsule(C + V(0, 0.09, 0.05), C + V(0, -0.04, 0.068), 0.014)            # sagittal crest
     for x in (-1, 1):
-        s.ellipsoid(C + V(x * 0.056, -0.02, -0.04), (0.03, 0.06, 0.045))        # masseters (bone-crushing jaws)
-        s.ellipsoid(C + V(x * 0.05, -0.055, -0.006), (0.013, 0.05, 0.012))       # cheekbone arch
+        s.ellipsoid(C + V(x * 0.029, -0.072, 0.033), (0.03, 0.022, 0.015), rot=Quaternion((0, 1, 0), -x * 0.3))  # brows, an angry V
+        s.ellipsoid(C + V(x * 0.068, -0.035, -0.025), (0.034, 0.055, 0.04))     # wide cheekbones
+        s.ellipsoid(C + V(x * 0.062, 0.01, -0.062), (0.032, 0.05, 0.045))       # masseters
         if not coarse:
-            s.ball(C + V(x * 0.045, -0.085, 0.018), 0.0135, neg=True)          # deep eye sockets
-    s.ellipsoid(C + V(0, -0.15, -0.022), (0.04, 0.11, 0.05))                   # long, deep muzzle
-    s.ellipsoid(C + V(0, -0.14, 0.014), (0.033, 0.085, 0.022))                 # nasal bridge
-    s.ellipsoid(C + V(0, -0.252, -0.032), (0.027, 0.032, 0.03))                # end of the muzzle
-    s.ball(C + V(0, -0.276, -0.026), 0.018)                                    # nose pad
+            s.ball(C + V(x * 0.042, -0.096, 0.012), 0.017, neg=True)          # deep eye sockets
+    s.ellipsoid(C + V(0, -0.135, -0.03), (0.048, 0.10, 0.058))                # short, deep muzzle
+    s.ellipsoid(C + V(0, -0.125, 0.018), (0.032, 0.085, 0.024))               # nasal ridge
+    s.ellipsoid(C + V(0, -0.212, -0.026), (0.032, 0.045, 0.04))               # muzzle tapering to the nose
+    s.ellipsoid(C + V(0, -0.252, -0.012), (0.025, 0.022, 0.02))               # dog's nose pad
     if not coarse:
         for x in (-1, 1):
-            s.ball(C + V(x * 0.01, -0.294, -0.026), 0.0065, neg=True)          # nostrils
-    # lower jaw: a deep, heavy mandible hanging open
+            s.ball(C + V(x * 0.011, -0.272, -0.012), 0.0062, neg=True)        # nostrils
+    # heavy lower jaw, hanging open
     for x in (-1, 1):
-        s.capsule(jaw_open(C + V(x * 0.05, 0.0, -0.07)), jaw_open(C + V(x * 0.026, -0.22, -0.088)), 0.016)
-        s.ellipsoid(jaw_open(C + V(x * 0.038, -0.10, -0.097)), (0.014, 0.085, 0.022))
-        s.ellipsoid(C + V(x * 0.048, -0.045, -0.078), (0.019, 0.045, 0.026))    # lip web at the corner of the mouth
-    s.ball(jaw_open(C + V(0, -0.238, -0.09)), 0.017)                            # chin
-    s.capsule(jaw_open(C + V(-0.026, -0.22, -0.09)), jaw_open(C + V(0.026, -0.22, -0.09)), 0.015)
-    s.chain([C + V(0, 0.06, -0.02), C + V(0, 0.12, -0.03)], [0.058, 0.064])     # into the neck
+        s.capsule(jaw_open(C + V(x * 0.058, 0.02, -0.085)), jaw_open(C + V(x * 0.036, -0.19, -0.105)), 0.021)
+        s.ellipsoid(jaw_open(C + V(x * 0.045, -0.08, -0.112)), (0.018, 0.09, 0.024))
+        s.ellipsoid(C + V(x * 0.056, -0.02, -0.088), (0.02, 0.05, 0.03))       # lip web at the corner of the mouth
+    s.ball(jaw_open(C + V(0, -0.205, -0.11)), 0.022)                           # chin
+    s.capsule(jaw_open(C + V(-0.034, -0.195, -0.11)), jaw_open(C + V(0.034, -0.195, -0.11)), 0.02)
+    s.chain([C + V(0, 0.07, -0.03), C + V(0, 0.13, -0.04)], [0.075, 0.085])    # into the thick neck
 
 
 def hand_frame(side, x):
@@ -175,8 +179,8 @@ FINGER_TIPS = {}
 def hand_forms(s, side, x, coarse=False):
     u, lat, up = hand_frame(side, x)
     W, Kn = WR[side], KNU[side]
-    s.capsule(W + (W - Kn).normalized() * 0.05, W, 0.027)                       # wrist into the forearm
-    s.ellipsoid(W.lerp(Kn, 0.5), (0.036, 0.016, 0.066), rot=Matrix((V(1, 0, 0), up, u)).transposed().to_quaternion())
+    s.capsule(W + (W - Kn).normalized() * 0.05, W, 0.032)                       # wrist into the forearm
+    s.ellipsoid(W.lerp(Kn, 0.5), (0.043, 0.02, 0.07), rot=Matrix((V(1, 0, 0), up, u)).transposed().to_quaternion())
     tips = []
     spread = (-0.032, -0.011, 0.011, 0.031)
     for j, off in enumerate(spread):
@@ -191,7 +195,7 @@ def hand_forms(s, side, x, coarse=False):
         if p.z < 0.008:                                                         # finger pads rest on the ground
             dz = 0.008 - p.z
             pts = [q + V(0, 0, dz * k / 3) for k, q in enumerate(pts)]
-        s.chain(pts, [0.012, 0.0105, 0.0092, 0.0078], stiff=2.5)
+        s.chain(pts, [0.0145, 0.0128, 0.011, 0.0092], stiff=2.5)
         tips.append((pts[-1], (pts[-1] - pts[-2]).normalized()))
     # thumb: inner side, shorter, pointing in and forward
     t0 = W.lerp(Kn, 0.55) - lat * 0.03 * 1.0
@@ -210,8 +214,8 @@ TOE_TIPS = {}
 
 def paw_forms(s, side, x, coarse=False):
     hk, ba = HK[side], BALL[side]
-    s.chain([hk.lerp(ba, 0.4), ba], [0.022, 0.024])
-    s.ellipsoid(ba + V(0, -0.012, -0.006), (0.034, 0.03, 0.02))                 # pad
+    s.chain([hk.lerp(ba, 0.4), ba], [0.026, 0.028])
+    s.ellipsoid(ba + V(0, -0.012, -0.006), (0.04, 0.034, 0.022))                # pad
     tips = []
     for j, off in enumerate((-0.026, -0.009, 0.009, 0.025)):
         L = (0.8, 1.0, 1.0, 0.85)[j]
@@ -222,7 +226,7 @@ def paw_forms(s, side, x, coarse=False):
             pts.append(p)
         if p.z < 0.009:
             pts[-1].z = 0.009
-        s.chain(pts, [0.012, 0.0105, 0.009], stiff=2.5)
+        s.chain(pts, [0.014, 0.012, 0.0104], stiff=2.5)
         tips.append((pts[-1], (pts[-1] - pts[-2]).normalized()))
     TOE_TIPS[side] = tips
 
@@ -254,9 +258,9 @@ def gaunt(v, n):
 def snarl(v, n):
     rel = v - HC
     d = n * (noise.noise(v * 30.0) * 0.0018 + noise.noise(v * 70.0) * 0.0008)
-    if -0.24 < rel.y < -0.12 and rel.z > 0.0:                                   # snarl folds over the muzzle
-        w = rel.y * 260 + noise.noise(v * 25) * 2.5
-        d += n * 0.003 * max(0.0, math.sin(w)) ** 3 * min(1.0, rel.z / 0.015)
+    if -0.23 < rel.y < -0.08 and rel.z > -0.06 and abs(rel.x) > 0.012:        # snarl folds: from the nose up to the eyes
+        w = (rel.y * 0.8 - rel.z * 0.6) * 2 * math.pi / 0.02 + noise.noise(v * 25) * 1.5
+        d += n * 0.0028 * max(0.0, math.sin(w)) ** 2 * min(1.0, (rel.z + 0.06) / 0.02)
     if -0.09 < rel.y < -0.04 and rel.z > 0.03:                                  # furrowed brow
         d += n * 0.002 * math.sin(rel.x * 300)
     return d
@@ -354,35 +358,34 @@ def build_teeth():
     r = random.Random(11)
     C = HC
     for x in (-1, 1):
-        for k in range(8):
-            t = k / 7
-            y = -0.075 - 0.185 * t
-            half = 0.042 - 0.026 * t
+        for k in range(7):                                                       # upper: gum line of the muzzle
+            t = k / 6
+            y = -0.045 - 0.19 * t
             canine = k == 6
-            L = 0.044 if canine else r.uniform(0.016, 0.034) * (1.25 if k in (3, 4) else 1.0)
-            base = C + V(x * half, y, -0.056 - 0.006 * t)
-            tip = base + V(x * r.uniform(-0.004, 0.004), r.uniform(0.0, 0.008), -L)
-            cone_bm(bm_up, base, tip, 0.0085 if canine else 0.0065, bend=V(0, 0.006, 0), sides=5)
-            if k < 7:                                                            # along the top of the mandible
-                tl = k / 6
-                L2 = r.uniform(0.016, 0.03) * (1.35 if k == 5 else 1.0)
-                b2 = C + V(x * (0.046 - 0.022 * tl), -0.04 - 0.17 * tl, -0.06 - 0.016 * tl)
-                t2 = b2 + V(x * r.uniform(-0.004, 0.004), r.uniform(-0.006, 0.0), L2)
-                cone_bm(bm_lo, jaw_open(b2), jaw_open(t2), 0.0075 if k == 5 else 0.006, sides=5)
-    for x in (-0.012, 0.0, 0.012):                                               # incisors
-        b = C + V(x, -0.27, -0.056)
-        cone_bm(bm_up, b, b + V(0, -0.002, -0.016), 0.0045, sides=5)
+            L = 0.05 if canine else r.uniform(0.018, 0.036) * (1.25 if k in (3, 4) else 1.0)
+            base = C + V(x * (0.05 - 0.022 * t), y, -0.078 + 0.008 * t)
+            tip = base + V(x * r.uniform(-0.004, 0.004), r.uniform(0.0, 0.01), -L)
+            cone_bm(bm_up, base, tip, 0.01 if canine else 0.0075, bend=V(0, 0.008, 0), sides=5)
+        for k in range(6):                                                       # lower: along the top of the mandible
+            tl = k / 5
+            L2 = r.uniform(0.018, 0.032) * (1.45 if k == 5 else 1.0)
+            b2 = C + V(x * (0.052 - 0.02 * tl), -0.01 - 0.18 * tl, -0.072 - 0.02 * tl)
+            t2 = b2 + V(x * r.uniform(-0.004, 0.004), r.uniform(-0.008, 0.0), L2)
+            cone_bm(bm_lo, jaw_open(b2), jaw_open(t2), 0.009 if k == 5 else 0.007, sides=5)
+    for x in (-0.011, 0.011):                                                    # incisors
+        b = C + V(x, -0.248, -0.07)
+        cone_bm(bm_up, b, b + V(0, -0.003, -0.02), 0.005, sides=5)
     ob = H.obj_from_bm(bm_up, "TeethUpper"); add("TeethUpper", ob, "teeth")
     ob = H.obj_from_bm(bm_lo, "TeethLower"); add("TeethLower", ob, "teeth")
     # the inside of the mouth: dark wet flesh filling the gape
     s = H.Sculpt("Mouth", res=0.003)
-    s.ellipsoid(C + V(0, -0.14, -0.066), (0.03, 0.12, 0.016))                  # palate
-    s.ellipsoid(jaw_open(C + V(0, -0.12, -0.084)), (0.026, 0.1, 0.012))        # tongue on the floor of the mouth
-    s.ellipsoid(C + V(0, -0.05, -0.095), (0.036, 0.06, 0.04))                   # throat: no daylight through the gape
+    s.ellipsoid(C + V(0, -0.13, -0.082), (0.04, 0.11, 0.016))                  # palate
+    s.ellipsoid(jaw_open(C + V(0, -0.11, -0.098)), (0.032, 0.09, 0.014))        # tongue on the floor of the mouth
+    s.ellipsoid(C + V(0, -0.03, -0.1), (0.042, 0.06, 0.042))                    # throat: no daylight through the gape
     add("Mouth", s.mesh("Mouth"), "mouth")
     for x in (-1, 1):
         e = H.Sculpt("Eye_" + ("L" if x > 0 else "R"), res=0.002)
-        e.ball(C + V(x * 0.039, -0.088, 0.015), 0.0078)
+        e.ball(C + V(x * 0.037, -0.095, 0.011), 0.0075)
         add("Eye_" + ("L" if x > 0 else "R"), e.mesh(), "eye")
 
 
@@ -451,7 +454,7 @@ def build_rags():
         n = 4 if side == "L" else 3
         for k in range(n):
             t = 0.42 + k * 0.13 + r.uniform(-0.03, 0.03)
-            band(bm, EL[side], WR[side], t, 0.04, 0.03, tilt=r.uniform(0.25, 0.5) * (1 if k % 2 else -1), phase=r.uniform(0, 6))
+            band(bm, EL[side], WR[side], t, 0.05, 0.03, tilt=r.uniform(0.25, 0.5) * (1 if k % 2 else -1), phase=r.uniform(0, 6))
         ob = H.obj_from_bm(bm, "Wrap_" + side)
         shrink_to(ob, body, 0.004)
         H.solidify(ob, 0.004, 1.0, min_faces=0)
@@ -459,16 +462,16 @@ def build_rags():
         add("Wrap_" + side, ob, "cloth")
     # torn cloth hanging off the left forearm, and a rag round the right thigh with a tatter
     bm = bmesh.new()
-    flap(bm, EL["L"].lerp(WR["L"], 0.45) + V(0.03, 0.035, 0.0), V(0.3, 1, 0), 0.06, 0.13, r)
+    flap(bm, EL["L"].lerp(WR["L"], 0.45) + V(0.04, 0.04, 0.0), V(0.3, 1, 0), 0.06, 0.13, r)
     ob = H.obj_from_bm(bm, "Flap"); H.solidify(ob, 0.003, 0.0, min_faces=0); add("Flap", ob, "cloth")
     bm = bmesh.new()
     for k, t in enumerate((0.38, 0.55)):
-        band(bm, HIP["R"], KN["R"], t, 0.08, 0.045, tilt=0.35 * (1 if k else -1), phase=1.3 + k)
+        band(bm, HIP["R"], KN["R"], t, 0.1, 0.045, tilt=0.35 * (1 if k else -1), phase=1.3 + k)
     ob = H.obj_from_bm(bm, "ThighRag"); shrink_to(ob, body, 0.005); H.solidify(ob, 0.004, 1.0, min_faces=0)
     m = ob.modifiers.new("Sub", "SUBSURF"); m.levels = 1; H.apply_mods(ob)
     add("ThighRag", ob, "cloth")
     bm = bmesh.new()
-    flap(bm, HIP["R"].lerp(KN["R"], 0.6) + V(-0.07, 0.0, 0.0), V(0.2, 1, 0), 0.07, 0.11, r)
+    flap(bm, HIP["R"].lerp(KN["R"], 0.6) + V(-0.085, 0.0, 0.0), V(0.2, 1, 0), 0.07, 0.11, r)
     ob = H.obj_from_bm(bm, "ThighFlap"); H.solidify(ob, 0.003, 0.0, min_faces=0); add("ThighFlap", ob, "cloth")
 
 
@@ -500,33 +503,47 @@ def build_body():
 # ------------------------------------------------------------------ paint
 def paints():
     P = {}
-    p = H.Paint("skin").base((0.62, 0.43, 0.37), (0.80, 0.62, 0.53), scale=4.5, contrast=0.6, fine=0.2)
-    p.layer(p.mask_noise(1.5, 0.35), (0.56, 0.38, 0.35), 0.5)                      # blotchy, feverish flesh
-    p.layer(p.mask_noise(3.0, 0.26), (0.36, 0.24, 0.28), 0.75)                     # bruising
-    p.layer(p.mask_noise(8.0, 0.14), (0.24, 0.15, 0.16), 0.7)                      # dark necrotic spots
-    p.layer(p.mask_below(0.0, 0.22, 0.06), (0.36, 0.26, 0.22), 0.75)               # filthy hands and feet
+    # Painted for the game camera first (a metre is ~100 px, the texture is shown heavily shrunk): big folds,
+    # crease lines several cm wide, painted ribs and sinew shadows, big bruises; fine skin detail on top.
+    p = H.Paint("skin").base((0.50, 0.31, 0.26), (0.70, 0.48, 0.40), scale=4.0, contrast=0.6, fine=0.15)
+    p.layer(p.mask_noise(1.4, 0.38), (0.60, 0.30, 0.25), 0.55)                    # redder, feverish areas
+    folds = p.voronoi(11.0, coord=p.warped(2.0, 0.08))                             # ~9 cm skin folds
+    p.layer(p.rng(folds, 0.0, 0.06, 1.0, 0.0), (0.22, 0.11, 0.09), 0.7)          # dark crease lines
+    p.layer(p.rng(folds, 0.12, 0.35, 0.0, 1.0), (0.78, 0.58, 0.48), 0.25)        # paler fold tops
+    sep = p.node("ShaderNodeSeparateXYZ"); p.link(p.tc.outputs["Object"], sep.inputs[0])
+    ph = p.math("ADD", sep.outputs["Y"], p.math("MULTIPLY", p.math("SUBTRACT", 0.83, sep.outputs["Z"]), 0.35))
+    rib = p.math("SINE", p.math("MULTIPLY", p.math("ADD", ph, 0.15), 2 * math.pi / 0.05))
+    ribs = p.math("MULTIPLY", p.rng(rib, -1.0, -0.2, 1.0, 0.0), p.mask_box((0, 0.025, 0.695), (0, 0.175, 0.135), 0.1))
+    p.layer(ribs, (0.26, 0.13, 0.10), 0.7)                                         # the grooves between the ribs
+    p.layer(p.mask_noise(2.0, 0.3), (0.30, 0.17, 0.22), 0.85)                      # big bruises
+    p.layer(p.mask_noise(3.5, 0.18), (0.24, 0.12, 0.18), 0.7)                      # darker purple cores
+    p.layer(p.mask_noise(5.0, 0.16), (0.22, 0.12, 0.12), 0.7)                      # dark necrotic spots
+    p.layer(p.math("MULTIPLY", p.ridges(4.5, 0.03), p.mask_noise(1.8, 0.5)), (0.30, 0.18, 0.30), 0.6)   # thick veins
+    p.layer(p.mask_below(0.0, 0.32, 0.08), (0.30, 0.18, 0.14), 0.8)               # filthy, darker lower limbs
     ridge = [V(0, y, topline(y) - 0.01) for y in np.arange(-0.30, 0.64, 0.03)]
-    p.layer(p.mask_near(ridge, 0.09, 0.85, 0.6, 7.0), (0.62, 0.27, 0.25), 0.75)   # inflamed skin along the ice ridge
-    p.layer(p.mask_near(ridge, 0.04, 0.7, 0.6, 12.0), (0.48, 0.10, 0.09), 0.9)    # raw, split flesh at the roots
+    p.layer(p.mask_near(ridge, 0.11, 0.85, 0.6, 6.0), (0.62, 0.22, 0.20), 0.75)   # inflamed skin along the ice ridge
+    p.layer(p.mask_near(ridge, 0.05, 0.7, 0.6, 10.0), (0.45, 0.08, 0.07), 0.9)    # raw, split flesh at the roots
     bases = [b for b, d, L, rb in SPIKES]
-    p.layer(p.mask_near(bases, 0.026, 0.6, 0.5, 20.0), (0.40, 0.07, 0.06), 0.9)
+    p.layer(p.mask_near(bases, 0.03, 0.6, 0.5, 18.0), (0.36, 0.06, 0.05), 0.9)
     r = random.Random(17)
     gashes = []
     for w in WOUNDS:                                                                # torn gashes, not round spots
         d = V(r.uniform(-0.3, 0.3), r.uniform(-1, 1), r.uniform(-0.6, 0.6)).normalized()
-        gashes += [w + d * (k - 1.5) * 0.016 for k in range(4)]
-    p.layer(p.mask_near(gashes, 0.03, 0.85, 0.6, 15.0), (0.60, 0.28, 0.25), 0.5)
-    p.layer(p.mask_near(gashes, 0.013, 0.5, 0.5, 30.0), (0.38, 0.05, 0.05), 0.95)
-    mouth = [HC + V(0, -0.22, -0.07), jaw_open(HC + V(0, -0.22, -0.09)), HC + V(0.04, -0.1, -0.07), HC + V(-0.04, -0.1, -0.07)]
-    p.layer(p.mask_near(mouth, 0.06, 0.6, 0.45, 12.0), (0.40, 0.06, 0.05), 0.85)  # blood round the jaws
-    p.layer(p.mask_near([jaw_open(HC + V(0.01, -0.22, -0.11)), V(0, -0.30, 0.62), V(0.02, -0.25, 0.55)], 0.05, 0.7, 0.5, 18.0),
-            (0.38, 0.05, 0.05), 0.8)                                               # drool down the throat
+        gashes += [w + d * (k - 1.5) * 0.02 for k in range(4)]
+    p.layer(p.mask_near(gashes, 0.05, 0.85, 0.6, 12.0), (0.58, 0.20, 0.18), 0.7)
+    p.layer(p.mask_near(gashes, 0.025, 0.5, 0.5, 25.0), (0.32, 0.04, 0.04), 0.95)
+    mouth = [HC + V(0, -0.2, -0.08), jaw_open(HC + V(0, -0.2, -0.1)), HC + V(0.05, -0.08, -0.08), HC + V(-0.05, -0.08, -0.08)]
+    p.layer(p.mask_near(mouth, 0.07, 0.6, 0.45, 12.0), (0.38, 0.05, 0.05), 0.85)  # blood round the jaws
+    p.layer(p.mask_near([jaw_open(HC + V(0.01, -0.2, -0.13)), V(0, -0.30, 0.62), V(0.02, -0.25, 0.55)], 0.06, 0.7, 0.5, 14.0),
+            (0.36, 0.05, 0.05), 0.85)                                              # drool down the throat
     tips = [t for side, _ in SIDES for t, _ in FINGER_TIPS[side]]
-    p.layer(p.mask_near(tips, 0.035, 0.6, 0.4), (0.35, 0.07, 0.06), 0.85)         # bloody fingers
-    p.layer(p.mask_near([HC + V(x * 0.045, -0.088, 0.018) for x in (-1, 1)], 0.02, 0.6, 0.2), (0.30, 0.10, 0.10), 0.8)   # raw sockets
-    p.skin_texture(1.0, crease=(0.30, 0.17, 0.16), vein=(0.38, 0.26, 0.40), amount=0.7, veins=0.55)
-    p.crust(p.mask_near(ridge + gashes, 0.045, 0.7, 0.6, 10.0), 60.0, (0.26, 0.07, 0.05), 0.8)   # scabs round the roots and tears
-    P["skin"] = p.cavity(0.65, 0.3).done()
+    p.layer(p.mask_near(tips, 0.04, 0.6, 0.4), (0.32, 0.06, 0.05), 0.85)          # bloody fingers
+    p.layer(p.mask_near([HC + V(0, -0.258, -0.012)], 0.03, 0.5, 0.2), (0.14, 0.08, 0.08), 0.9)   # dark nose
+    eyes = [HC + V(x * 0.042, -0.096, 0.012) for x in (-1, 1)]
+    p.layer(p.mask_near(eyes, 0.03, 0.7, 0.3), (0.20, 0.08, 0.07), 0.85)         # dark, sunken sockets
+    p.skin_texture(1.0, crease=(0.30, 0.16, 0.14), vein=(0.36, 0.24, 0.38), amount=0.6, veins=0.4)   # fine detail up close
+    p.crust(p.mask_near(ridge + gashes, 0.05, 0.7, 0.6, 9.0), 45.0, (0.24, 0.06, 0.04), 0.8)   # scabs round the roots and tears
+    P["skin"] = p.cavity(0.85, 0.3).done()
     p = H.Paint("ice").base((0.22, 0.34, 0.46), (0.50, 0.63, 0.73), scale=14, contrast=0.7, fine=0.25)
     p.layer(p.mask_noise(5.0, 0.25), (0.24, 0.36, 0.48), 0.6)                      # deep blue inside
     p.layer(p.mask_near([b for b, d, L, rb in SPIKES], 0.03, 0.5, 0.3), (0.42, 0.18, 0.18), 0.6)   # blood drawn up the base
@@ -630,7 +647,8 @@ def stage_low():
         p.use_smooth = True
     tris = sum(len(p.vertices) - 2 for p in game.data.polygons)
     print("game mesh", len(game.data.vertices), "verts", tris, "tris")
-    H.bake_to_low(highs, game, size=2048, cage=0.02, ao=0.55, path=OUT + "_paint_2k.png")
+    size = int(sys.argv[sys.argv.index("--bake") + 1]) if "--bake" in sys.argv else 2048
+    H.bake_to_low(highs, game, size=size, cage=0.02, ao=0.75, path=OUT + "_paint_2k.png")
     # crystals keep their facets
     rig_attr = game.data.attributes["rigid"]
     rig_v = np.zeros(len(game.data.vertices), np.int32); rig_attr.data.foreach_get("value", rig_v)
@@ -655,7 +673,7 @@ elif STAGE == "low":
 
 # ------------------------------------------------------------------ stage: rig, weights, clips, export
 UP, FWD, BACK = (0, 0, 1), (0, -1, 0), (0, 1, 0)
-JAW_TIP = jaw_open(HC + V(0, -0.238, -0.09))
+JAW_TIP = jaw_open(HC + V(0, -0.205, -0.11))
 
 
 def bones_spec():

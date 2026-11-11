@@ -22,12 +22,12 @@
   "death": 36
  },
  "view": {
-  "w": 321,
-  "h": 416,
+  "w": 316,
+  "h": 414,
   "foot_y": 296,
-  "big_w": 332,
-  "big_h": 424,
-  "big_foot_y": 300
+  "big_w": 334,
+  "big_h": 427,
+  "big_foot_y": 302
  },
  "walk_v": 0.04,
  "bite_hit": 11

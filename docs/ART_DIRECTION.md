@@ -129,6 +129,12 @@ The Tier 1 Firn Strata pair are built entirely in Blender by script, following t
 - Each runs in three stages: `--stage high` (sculpt + paint), `--stage low` (game mesh + 2k bake),
   `--stage rig` (skeleton, weights, clips idle/walk/bite/hit/death, GLB + json, packed .blend), each with
   `--qc` for renders. Long runs go through `tools/sv/sv.py`.
+- Paint for the game camera first: at default zoom a metre is ~100 px and the texture is shown heavily
+  shrunk (mipmapped), so anything finer than ~2 cm averages away. Carry the read with big patterns
+  (skin folds ~9 cm, crease lines several cm wide, painted rib and sinew shadows, large bruises, darker
+  dirty limbs, strong AO), then add fine procedural detail (pores, small wrinkles, weave) for close views.
+  Check skin in the real toon shader (`ONLY=0 SCALE=1.0 godot --path game -s tools/creature_test.gd`),
+  not only in Blender close-ups.
 - Detail is baked into the painted colour; the game keeps its toon_v2 + ink outline look. Grey is kept
   out of the palette's lead (warm reds, ochres, browns, pale flesh; ice blue-grey only on the crystals).
 - Deliverables: `source/blend/infected_human.blend`, `source/models/infected_human.glb`,
