@@ -111,6 +111,31 @@ rule above is being deliberately changed.
    at the game camera's zoom on a Silo 81 floor. A new character is done only when it passes the
    final quality test in that line-up and in the game itself.
 
+## Enemies and creatures modelled in Blender (from code)
+
+The Tier 1 Firn Strata pair are built entirely in Blender by script, following the creature workflow
+(blockout -> final shape -> retopology -> baked detail -> painted texture):
+
+- `tools/blender/human_kit.py` - the kit: metaball sculpting with true radii (`Sculpt`), surface
+  displacement, cloth shells (solidify, hems, wrapped bands), QuadriFlow retopology with a decimate
+  fallback, painted emission materials (`Paint`: noise, masks near points, sewn patches, stitches,
+  cavity), a selected-to-active bake of paint x AO onto the game mesh, bone-heat weights through a
+  closed proxy body and weight transfer, and Cycles QC sheets (front/side/back/3-4 + game camera, close-ups).
+- `tools/blender/infected_human.py` - the Infected (hooded red parka, scarf, patched trousers, wrapped
+  boots, clawed hands, gaunt open-mouthed face). About 24k triangles, humanoid skeleton (25 bones).
+- `tools/blender/feral_mutant.py` - the Feral Mutant (quadruped, human hands it walks on, jumping hind
+  legs, hyena jaw, ice crystals from raw bases along the spine, rags on the limbs). Dedicated quadruped
+  skeleton; crystals, teeth, claws and eyes are rigid islands.
+- Each runs in three stages: `--stage high` (sculpt + paint), `--stage low` (game mesh + 2k bake),
+  `--stage rig` (skeleton, weights, clips idle/walk/bite/hit/death, GLB + json, packed .blend), each with
+  `--qc` for renders. Long runs go through `tools/sv/sv.py`.
+- Detail is baked into the painted colour; the game keeps its toon_v2 + ink outline look. Grey is kept
+  out of the palette's lead (warm reds, ochres, browns, pale flesh; ice blue-grey only on the crystals).
+- Deliverables: `source/blend/infected_human.blend`, `source/models/infected_human.glb`,
+  `source/blend/feral_mutant.blend`, `source/models/feral_mutant.glb`; the game copies live in
+  `game/characters/infected_3d` and `feral_3d`. Check with `godot --path game -s tools/creature_test.gd`.
+- The rig stage prints a ground report (lowest point per clip) and sizes the puppet view from every frame.
+
 ## Detail budget at game resolution
 
 At the default camera zoom (0.62) a metre is about 100 screen pixels, so a 1.75 m person is about

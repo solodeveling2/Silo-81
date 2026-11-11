@@ -2,7 +2,7 @@
  "name": "infected",
  "live_only": true,
  "pixels_per_metre": 165.0,
- "height_m": 1.72,
+ "height_m": 1.75,
  "direction_order": "0=right, then counter-clockwise: 1=up-right, 2=up-left, 3=left, 4=down-left, 5=down-right",
  "aim_points": {
   "body": [

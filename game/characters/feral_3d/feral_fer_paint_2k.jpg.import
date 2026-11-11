@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtg6xmv3win3w"
-path="res://.godot/imported/feral_feral_paint.jpg-f48e47afe2218b9902e90ee2d1eeb726.ctex"
+uid="uid://df203u1736w81"
+path="res://.godot/imported/feral_fer_paint_2k.jpg-aaeb4e63c095893e9e1aae604159988b.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "38ddadf69d6d076a566755adbb48ef4e"
+"md5": "79a83957cf5209a3ce08da801ce49d5e"
 }
 
 [deps]
 
-source_file="res://characters/feral_3d/feral_feral_paint.jpg"
-dest_files=["res://.godot/imported/feral_feral_paint.jpg-f48e47afe2218b9902e90ee2d1eeb726.ctex"]
+source_file="res://characters/feral_3d/feral_fer_paint_2k.jpg"
+dest_files=["res://.godot/imported/feral_fer_paint_2k.jpg-aaeb4e63c095893e9e1aae604159988b.ctex"]
 
 [params]
 

@@ -11,8 +11,8 @@
   0,
   48
  ],
- "height_m": 0.75,
- "exposure": 1.05,
+ "height_m": 1.0,
+ "exposure": 1.0,
  "creature": "feral",
  "lengths": {
   "idle": 48,
@@ -22,11 +22,11 @@
   "death": 36
  },
  "view": {
-  "w": 460,
-  "h": 440,
-  "foot_y": 290,
-  "big_w": 640,
-  "big_h": 520,
+  "w": 321,
+  "h": 416,
+  "foot_y": 296,
+  "big_w": 332,
+  "big_h": 424,
   "big_foot_y": 300
  },
  "walk_v": 0.04,

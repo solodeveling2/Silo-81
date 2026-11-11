@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ddbcsdbkwwo56"
-path="res://.godot/imported/infected_infected_paint.jpg-6e0a1cc42758df301f41817c7bf314ea.ctex"
+uid="uid://d2j405meq5v6t"
+path="res://.godot/imported/infected_inf_paint_2k.jpg-bd198248568c06b021bf22467658cadb.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "c9cbf0ba80af7db984d328f1af513d03"
+"md5": "a905f3e90c0dbfd205d84663da46f5b8"
 }
 
 [deps]
 
-source_file="res://characters/infected_3d/infected_infected_paint.jpg"
-dest_files=["res://.godot/imported/infected_infected_paint.jpg-6e0a1cc42758df301f41817c7bf314ea.ctex"]
+source_file="res://characters/infected_3d/infected_inf_paint_2k.jpg"
+dest_files=["res://.godot/imported/infected_inf_paint_2k.jpg-bd198248568c06b021bf22467658cadb.ctex"]
 
 [params]
 

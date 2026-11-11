@@ -2,16 +2,16 @@
  "name": "feral",
  "live_only": true,
  "pixels_per_metre": 165.0,
- "height_m": 0.75,
+ "height_m": 1.0,
  "direction_order": "0=right, then counter-clockwise: 1=up-right, 2=up-left, 3=left, 4=down-left, 5=down-right",
  "aim_points": {
   "body": [
    0.0,
-   0.5
+   0.72
   ],
   "head": [
-   0.55,
-   0.6
+   0.48,
+   0.82
   ]
  },
  "animations": {
