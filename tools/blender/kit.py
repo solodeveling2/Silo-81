@@ -2033,12 +2033,9 @@ def junk_gate_open(name, W=4.2, H=3.0):
         b.box(x - 0.2, x + 0.2, -0.02, 0.3, H + 0.55, H + 0.68, m["dark"])
     b.box(-W / 2, W / 2, 0.0, 0.14, H + 0.38, H + 0.52, m["rust"])              # top rail
     b.box(-W / 2 + 0.1, W / 2 - 0.1, 0.0, 0.14, H + 0.52, H + 0.58, m["snow"])
-    for side in (-1, 1):
-        hinge = Vector((side * (W / 2 - 0.16), 0.0, 0.0))
-        M = Matrix.Translation(hinge) @ Matrix.Rotation(math.radians(-side * 100), 4, "Z")
-        xa, xb = sorted((0.0, -side * (W / 2 - 0.22)))
-        b.box(xa, xb, -0.04, 0.04, 0.12, H, m["sheet"] if side < 0 else m["rust"], M)
-        b.cyl(M @ Vector((xa + 0.12, 0.05, 0.3)), M @ Vector((xb - 0.12, 0.05, H - 0.3)), 0.035, m["rust_dark"], seg=5)
+    for side in (-1, 1):                                                      # rails the leaves slide on, chains
+        b.box(side * W / 2 - 0.1, side * W / 2 + 0.1, 0.05, 0.25, 0.0, 0.12, m["dark"])
+        b.cyl((side * (W / 2 - 0.1), 0.3, H - 0.2), (side * (W / 2 - 0.1), 0.3, 1.0), 0.02, m["rust_dark"], seg=4)
     # a sign over the gate
     b.box(-1.0, 1.0, 0.14, 0.2, H + 0.62, H + 1.02, m["wood"])
     return b.finish(), (W + 0.4, 0.4)
@@ -2101,27 +2098,293 @@ def junk_shack(name, seed=0, L=3.0, D=2.4):
     return b.finish(), (L, D)
 
 
+def _scrap_mats():
+    T = lambda n, t, sc=2.0, metal=0.2: toon(n, (1.0, 1.0, 1.0), tex=t, tex_scale=sc, metal=metal)
+    return dict(
+        galv=T("ScrapGalv", "corr_galv"), rust=T("ScrapRust", "corr_rust"), teal=T("ScrapTeal", "corr_teal"),
+        blue=T("ScrapBlue", "corr_blue"), olive=T("ScrapOlive", "corr_olive"), red=T("ScrapRed", "corr_red"),
+        cream=T("ScrapCream", "corr_cream"), yellow=T("ScrapYellow", "corr_yellow"),
+        planks=T("ScrapPlanks", "planks_grey", 2.2, 0.0),
+        roof=T("ScrapRoof", "corr_rust", 2.4), roof_g=T("ScrapRoofGalv", "corr_galv", 2.4, 0.3),
+        frame=toon("ScrapFrame", (0.24, 0.16, 0.11), noise=0.3, noise_scale=12.0, metal=0.2),
+        post=toon("ScrapPost", (0.27, 0.20, 0.14), noise=0.25, noise_scale=10.0),
+        block=toon("ScrapBlock", (0.42, 0.41, 0.39), tex="concrete_wall", tex_scale=1.2),
+        dark=toon("ScrapDark", (0.07, 0.07, 0.08), noise=0.05),
+        tyre=toon("ScrapTyre", (0.09, 0.09, 0.10), noise=0.15, noise_scale=10.0),
+        glow=flat("ScrapGlow", (0.98, 0.70, 0.34)), bulb=flat("ScrapBulb", (1.0, 0.86, 0.55)),
+        snow=toon("ScrapSnow", (0.80, 0.83, 0.87), noise=0.08, noise_scale=4.0),
+        canvas=toon("ScrapCanvas", (0.40, 0.37, 0.28), noise=0.22, noise_scale=8.0),
+        green=toon("ScrapGreen", (0.20, 0.36, 0.24), noise=0.1),
+        white=toon("ScrapWhite", (0.72, 0.71, 0.66), noise=0.12, noise_scale=8.0),
+        car=toon("ScrapCarDoor", (0.24, 0.31, 0.35), noise=0.2, noise_scale=8.0, metal=0.3),
+        glass=toon("ScrapGlass", (0.12, 0.15, 0.17), noise=0.05, metal=0.3),
+        steel=toon("ScrapSteel", (0.36, 0.38, 0.37), noise=0.15, noise_scale=7.0, metal=0.4),
+    )
+
+
+SCRAP_PALETTES = {
+    "mixed": ["galv", "rust", "teal", "blue", "olive", "red", "planks", "rust", "galv"],
+    "cool": ["galv", "teal", "blue", "rust", "galv", "planks"],
+    "warm": ["rust", "red", "olive", "planks", "galv", "rust"],
+    "clinic": ["cream", "cream", "galv", "cream", "planks"],
+    "bare": ["galv", "rust", "galv", "rust", "planks"],
+}
+
+
+def scrap_house(name, seed=0, L=4.4, D=4.0, H=2.7, pal="mixed", door=0.0, windows=(-1,), awning=0.0, tank=False,
+                garage=False, cross=False, chimney=True, lean=False, porch=False, sign_board=None):
+    """A Junk Town building patched together from corrugated sheet, car doors, planks and road signs: a
+    timber/steel frame on a course of salvaged blocks, mismatched painted panels (two sheets high, lapped,
+    some skewed), a single-pitch rusted roof weighed down with tyres, a stovepipe. Front is +y.
+    door: x of the door (None = no door). windows: x positions on the front. awning: depth of a front
+    lean-to (market counter, tea house). tank: a water cistern on a stand at the side. garage: a wide
+    roll door instead of the door. cross: a painted cross plate (clinic). lean: a side lean-to with
+    firewood. porch: duckboards and a step at the door. sign_board: (x, z, w, h) a blank board for lettering."""
+    import random
+    rng = random.Random(seed * 977 + 13)
+    b = Builder(name); m = _scrap_mats()
+    pals = [m[k] for k in SCRAP_PALETTES[pal]]
+    Hb = H + 0.55                                            # back is higher: the roof sheds to the front
+    t = 0.05
+    # ---- footing: salvaged blocks and a sill
+    for side in ((-L / 2, L / 2, -0.02, 0.22), (-L / 2, L / 2, D - 0.22, D + 0.02), (-L / 2, -L / 2 + 0.24, 0, D), (L / 2 - 0.24, L / 2, 0, D)):
+        b.box(*side, 0.0, 0.26, m["block"])
+    b.box(-L / 2 - 0.02, L / 2 + 0.02, -0.04, D + 0.04, 0.26, 0.32, m["frame"])
+    def hz(y):                                               # wall top height at depth y (pitched roof line)
+        return Hb + (H - Hb) * (y / D)
+    # ---- panels: two courses, lapped, mismatched; each wall is a run of sheets
+    def wall(axis, c, a0, a1, outward, skip=()):
+        """axis 'x': wall along x at y=c; axis 'y': wall along y at x=c. outward: +1/-1 normal sign."""
+        a = a0
+        while a < a1 - 0.05:
+            w = min(rng.uniform(0.75, 1.25), a1 - a)
+            mid = a + w / 2
+            if any(s0 < mid < s1 for s0, s1 in skip):
+                a += w; continue
+            top = hz(c if axis == "x" else mid) if axis == "x" else hz(mid)
+            split = rng.uniform(1.15, 1.6)
+            off = outward * rng.uniform(0.0, 0.035)
+            for (z0, z1) in ((0.3, split + 0.08), (split, top + rng.uniform(-0.05, 0.02))):
+                mat = rng.choice(pals)
+                if axis == "x":
+                    b.box(a - 0.03, a + w + 0.03, c + off - t / 2 + (0.012 if z0 > 0.5 else 0) * outward,
+                          c + off + t / 2 + (0.012 if z0 > 0.5 else 0) * outward, z0, z1, mat)
+                else:
+                    b.box(c + off - t / 2, c + off + t / 2, a - 0.03, a + w + 0.03, z0, min(z1, hz(a + w) if z1 > split else z1), mat)
+            if rng.random() < 0.35:                         # a skewed patch over the seam
+                pw = rng.uniform(0.4, 0.8); pz = split + rng.uniform(-0.3, 0.2)
+                Mt = Matrix.Rotation(math.radians(rng.uniform(-9, 9)), 4, "Y" if axis == "x" else "X")
+                pm = rng.choice(pals)
+                if axis == "x":
+                    cc = Vector((mid, c + outward * 0.05, pz))
+                    b.box(-pw / 2, pw / 2, -0.015, 0.015, -0.3, 0.3, pm, Matrix.Translation(cc) @ Mt)
+                else:
+                    cc = Vector((c + outward * 0.05, mid, pz))
+                    b.box(-0.015, 0.015, -pw / 2, pw / 2, -0.3, 0.3, pm, Matrix.Translation(cc) @ Mt)
+            a += w
+    dx = door if door is not None else 99
+    dw = 1.0 if not garage else 2.6
+    win = [(x - 0.42, x + 0.42) for x in windows if x is not None]
+    wall("x", 0.0, -L / 2, L / 2, -1)
+    wall("y", -L / 2, 0.0, D, -1)
+    wall("y", L / 2, 0.0, D, +1)
+    front_skip = [(dx - dw / 2, dx + dw / 2)]
+    wall("x", D, -L / 2, L / 2, +1, skip=front_skip)
+    # ---- frame: corner posts, a top plate, lintel
+    for (x, y) in ((-L / 2, 0), (L / 2, 0), (-L / 2, D), (L / 2, D)):
+        b.box(x - 0.08, x + 0.08, y - 0.08, y + 0.08, 0.26, hz(y) + 0.04, m["post"])
+    b.box(-L / 2 - 0.08, L / 2 + 0.08, D - 0.06, D + 0.1, H - 0.1, H + 0.02, m["post"])
+    # ---- door
+    if door is not None:
+        if garage:
+            b.box(dx - dw / 2, dx + dw / 2, D - 0.02, D + 0.02, 0.3, 2.45, m["dark"])
+            for k in range(14):                              # roll-door slats
+                z = 0.32 + k * 0.152
+                b.box(dx - dw / 2 + 0.04, dx + dw / 2 - 0.04, D + 0.02, D + 0.05, z, z + 0.13, m["galv"] if k % 5 else m["rust"])
+            b.box(dx - dw / 2 - 0.1, dx + dw / 2 + 0.1, D, D + 0.14, 2.45, 2.7, m["steel"])
+            b.box(dx - dw / 2 - 0.12, dx - dw / 2, D, D + 0.12, 0.26, 2.7, m["steel"])
+            b.box(dx + dw / 2, dx + dw / 2 + 0.12, D, D + 0.12, 0.26, 2.7, m["steel"])
+        else:
+            b.box(dx - 0.5, dx + 0.5, D - 0.03, D + 0.0, 0.3, 2.1, m["dark"])
+            dm = rng.choice([m["planks"], m["planks"], m["red"], m["teal"]])
+            b.box(dx - 0.46, dx + 0.46, D + 0.0, D + 0.05, 0.32, 2.06, dm)
+            for z in (0.6, 1.75):                            # strap hinges / battens
+                b.box(dx - 0.46, dx + 0.46, D + 0.05, D + 0.07, z, z + 0.08, m["frame"])
+            b.box(dx + 0.3, dx + 0.38, D + 0.05, D + 0.1, 1.05, 1.15, m["steel"])
+            b.box(dx - 0.56, dx + 0.56, D, D + 0.1, 2.1, 2.22, m["post"])
+            b.box(dx - 0.56, dx - 0.46, D, D + 0.1, 0.3, 2.1, m["post"])
+            b.box(dx + 0.46, dx + 0.56, D, D + 0.1, 0.3, 2.1, m["post"])
+            b.cyl((dx, D + 0.05, 2.36), (dx, D + 0.3, 2.36), 0.025, m["steel"], seg=6)       # a bulb on a bracket
+            ellipsoid(b, (dx, D + 0.32, 2.3), (0.07, 0.07, 0.09), m["bulb"], seg=8)
+        if porch:
+            for k in range(5):
+                b.box(dx - 0.9, dx + 0.9, D + 0.1 + k * 0.17, D + 0.24 + k * 0.17, 0.0, 0.08, m["planks"])
+            b.box(dx - 0.7, dx + 0.7, D + 0.02, D + 0.42, 0.08, 0.2, m["block"])
+    # ---- windows: a warm pane behind rebar, a sill, maybe a shutter
+    for (w0, w1) in win:
+        z0, z1 = 1.05, 1.62
+        b.box(w0, w1, D + 0.03, D + 0.035, z0, z1, m["glow"])
+        b.box(w0 - 0.07, w1 + 0.07, D + 0.03, D + 0.08, z0 - 0.07, z0, m["post"])
+        b.box(w0 - 0.07, w1 + 0.07, D + 0.03, D + 0.08, z1, z1 + 0.07, m["post"])
+        for k in range(4):
+            x = w0 + (w1 - w0) * (k + 0.5) / 4
+            b.box(x - 0.012, x + 0.012, D + 0.05, D + 0.07, z0, z1, m["dark"])
+        if rng.random() < 0.5:                               # a shutter made of a road sign, swung open
+            b.box(w1 + 0.08, w1 + 0.5, D + 0.05, D + 0.09, z0 - 0.02, z1 + 0.02, rng.choice([m["yellow"], m["red"], m["planks"]]))
+    # ---- a car door bolted into one side wall, window and all
+    sx = L / 2 + 0.06 if seed % 2 else -L / 2 - 0.06
+    cy = rng.uniform(0.9, D - 1.6)
+    b.box(sx - 0.03, sx + 0.03, cy, cy + 1.05, 0.55, 1.45, m["car"])
+    b.box(sx - 0.035, sx + 0.035, cy + 0.12, cy + 0.85, 1.05, 1.4, m["glass"])
+    b.box(sx - 0.04, sx + 0.04, cy + 0.75, cy + 0.9, 0.95, 1.0, m["steel"])
+    # ---- roof: rusted corrugated sheets laid down the slope, overhanging, with tyres to hold them
+    ang = math.atan2(Hb - H, D)
+    Mr = Matrix.Translation((0, -0.25, Hb + 0.05 + 0.25 * math.tan(ang))) @ Matrix.Rotation(-ang, 4, "X")
+    run = math.hypot(D, Hb - H) + 0.25 + 0.45
+    n = max(3, int((L + 0.6) / 0.9))
+    for i in range(n):
+        x0 = -L / 2 - 0.3 + i * (L + 0.6) / n
+        tilt = Matrix.Rotation(math.radians(rng.uniform(-1.2, 1.2)), 4, "Y")
+        b.box(x0 - 0.04, x0 + (L + 0.6) / n + 0.04, 0.0, run + rng.uniform(-0.1, 0.1), 0.0, 0.04,
+              rng.choice([m["roof_g"], m["roof_g"], m["roof"], m["roof_g"], rng.choice(pals)]), Mr @ Matrix.Translation((0, 0, 0.012 * (i % 2))) @ tilt)
+    b.box(-L / 2 - 0.3, L / 2 + 0.3, run - 0.06, run, -0.12, 0.02, m["frame"], Mr)          # fascia
+    for _ in range(rng.randint(1, 3)):                       # a couple of tyres and a timber to hold the sheets down
+        tx, ty = rng.uniform(-L / 2 + 0.4, L / 2 - 0.4), rng.uniform(0.5, run - 0.7)
+        p = Mr @ Vector((tx, ty, 0.04))
+        b.cyl(p, p + Vector((0, 0, 0.13)), 0.22, m["tyre"], seg=12)
+        b.cyl(p + Vector((0, 0, 0.13)), p + Vector((0, 0, 0.135)), 0.11, m["dark"], seg=10)
+    yb = rng.uniform(0.4, run - 0.5)
+    b.box(-L / 2 - 0.1, L / 2 + 0.1, yb, yb + 0.1, 0.04, 0.12, m["post"], Mr)
+    # ---- stovepipe
+    if chimney:
+        px = (L / 2 - 0.6) if seed % 3 else (-L / 2 + 0.6)
+        b.cyl((px, 0.45, 0.3), (px, 0.45, Hb + 1.1), 0.09, m["frame"], seg=10)
+        b.cyl((px, 0.45, Hb + 1.1), (px, 0.45, Hb + 1.16), 0.2, m["dark"], seg=10, r1=0.05)
+        b.cyl((px, 0.45, Hb + 0.4), (px, -0.05, Hb + 0.2), 0.012, m["steel"], seg=4)
+    # ---- extras
+    if awning:
+        ang2 = math.radians(14)
+        Ma = Matrix.Translation((0, D, H - 0.05)) @ Matrix.Rotation(-ang2, 4, "X")
+        for x in (-L / 2 + 0.2, L / 2 - 0.2):
+            b.box(x - 0.06, x + 0.06, D + awning - 0.08, D + awning + 0.04, 0.0, H - 0.05 - awning * math.tan(ang2), m["post"])
+        b.box(-L / 2 + 0.1, L / 2 - 0.1, D + awning - 0.1, D + awning, H - 0.25 - awning * math.tan(ang2), H - 0.15 - awning * math.tan(ang2), m["post"])
+        k = max(2, int(L / 1.1))
+        for i in range(k):
+            x0 = -L / 2 + i * L / k
+            b.box(x0, x0 + L / k + 0.04, 0.0, awning / math.cos(ang2) + 0.15, 0.0, 0.035,
+                  rng.choice([m["canvas"], m["roof_g"], m["canvas"]]), Ma @ Matrix.Translation((0, 0, 0.01 * (i % 2))))
+        cx0 = -L / 2 + 0.4 if door is None or dx > 0 else 0.2
+        cx1 = cx0 + min(2.2, L - 1.6)
+        b.box(cx0, cx1, D + awning - 0.75, D + awning - 0.3, 0.0, 0.95, m["planks"])          # counter
+        b.box(cx0 - 0.05, cx1 + 0.05, D + awning - 0.8, D + awning - 0.25, 0.95, 1.0, m["steel"])
+        for i in range(rng.randint(3, 6)):                   # goods on the counter
+            gx = rng.uniform(cx0 + 0.1, cx1 - 0.2)
+            b.box(gx, gx + rng.uniform(0.12, 0.3), D + awning - 0.7, D + awning - 0.45, 1.0, 1.0 + rng.uniform(0.08, 0.3),
+                  rng.choice([m["olive"], m["red"], m["galv"], m["canvas"], m["teal"]]))
+    if tank:
+        tx = L / 2 + 0.95 if seed % 2 == 0 else -L / 2 - 0.95
+        for (x, y) in ((tx - 0.6, 0.5), (tx + 0.6, 0.5), (tx - 0.6, 1.7), (tx + 0.6, 1.7)):
+            b.box(x - 0.06, x + 0.06, y - 0.06, y + 0.06, 0.0, 1.5, m["frame"])
+        b.box(tx - 0.75, tx + 0.75, 0.3, 1.9, 1.45, 1.55, m["planks"])
+        b.cyl((tx, 1.1, 1.55), (tx, 1.1, 3.0), 0.72, m["galv"], seg=16)
+        b.cyl((tx, 1.1, 3.0), (tx, 1.1, 3.05), 0.74, m["rust"], seg=16)
+        b.cyl((tx + 0.5, 1.1 + 0.5, 1.7), (tx + 0.5, 1.1 + 0.5, 0.25), 0.03, m["steel"], seg=6)
+        b.cyl((tx + 0.5, 1.6, 0.25), (tx + 0.5, 1.9, 0.25), 0.03, m["steel"], seg=6)
+        b.cyl((tx + 0.5, 1.95, 0.0), (tx + 0.5, 1.95, 0.4), 0.2, m["steel"], seg=12)        # a bucket under the tap
+    if cross:
+        b.box(-0.5, 0.5, D + 0.06, D + 0.09, H - 1.0, H - 0.08, m["white"])
+        b.box(-0.09, 0.09, D + 0.09, D + 0.1, H - 0.86, H - 0.22, m["green"])
+        b.box(-0.32, 0.32, D + 0.09, D + 0.1, H - 0.63, H - 0.45, m["green"])
+    if lean:
+        lx = -L / 2 if seed % 2 else L / 2
+        sg = -1 if seed % 2 else 1
+        for y in (0.3, D - 0.3):
+            b.box(lx + sg * 1.2 - 0.05, lx + sg * 1.2 + 0.05, y - 0.05, y + 0.05, 0.0, 1.55, m["post"])
+        Ml = Matrix.Translation((lx, 0.0, 2.05)) @ Matrix.Rotation(sg * math.radians(-22), 4, "Y")
+        b.box(min(0, sg * 1.5), max(0, sg * 1.5), 0.0, D, 0.0, 0.035, m["roof"], Ml)
+        for k in range(6):                                   # split logs, stacked
+            for j in range(3):
+                y = 0.3 + j * (D - 0.6) / 3
+                b.cyl((lx + sg * (0.15 + (k % 3) * 0.3), y, 0.12 + (k // 3) * 0.22),
+                      (lx + sg * (0.15 + (k % 3) * 0.3), y + (D - 0.6) / 3 - 0.05, 0.12 + (k // 3) * 0.22), 0.11, m["post"], seg=7)
+    if sign_board:
+        x, z, w, h = sign_board
+        b.box(x - w / 2, x + w / 2, D + 0.06, D + 0.1, z - h / 2, z + h / 2, m["planks"])
+        b.box(x - w / 2 - 0.05, x + w / 2 + 0.05, D + 0.05, D + 0.07, z - h / 2 - 0.05, z + h / 2 + 0.05, m["frame"])
+    ext = 0.0
+    if tank: ext = 1.7
+    if lean: ext = max(ext, 1.6)
+    return b.finish(), (L, D)
+
+
 def market_stall(name, seed=0):
-    """Timber frame, a tarpaulin and a counter of planks on drums: the trading spot by the burn barrel."""
+    """A trading stall: four leaning poles, a ridged tarp sagging between them, a plank counter on two drums,
+    goods laid out (jars, tins, a radio, boots), a coat hung on a nail, a lantern, and a chalked price board."""
     import random
     rng = random.Random(seed)
     b = Builder(name); m = _junk_mats()
-    tarp = toon(f"Tarp{seed % 3}", [(0.27, 0.33, 0.25), (0.24, 0.31, 0.35), (0.40, 0.33, 0.18)][seed % 3], noise=0.2, noise_scale=6.0)
-    L, D, H = 2.6, 1.4, 2.2
+    sm = _scrap_mats()                                          # tin sheets and one painted panel, like the houses
+    tarp = sm["roof_g"]
+    tarp2 = sm[["teal", "olive", "red", "blue"][seed % 4]]
+    glow = flat("StallLantern", (1.0, 0.72, 0.36))
+    L, D, H = 2.8, 1.6, 2.25
     for x in (-L / 2, L / 2):
         for y in (0.0, D):
-            b.box(x - 0.05, x + 0.05, y - 0.05, y + 0.05, 0, H + (0.25 if y == 0 else 0), m["wood"])
-    Mt = Matrix.Translation((0, 0, H + 0.25)) @ Matrix.Rotation(-math.atan2(0.25, D), 4, "X")
-    b.box(-L / 2 - 0.15, L / 2 + 0.15, -0.1, D + 0.25, 0, 0.03, tarp, Mt)
-    b.box(-L / 2 + 0.2, L / 2 - 0.2, D - 0.1, D + 0.25, 0.85, 0.92, m["wood"])        # counter plank
-    for x in (-L / 2 + 0.4, L / 2 - 0.4):
-        b.cyl((x, D + 0.07, 0), (x, D + 0.07, 0.85), 0.2, m["rust"], seg=10)
-    for i in range(rng.randint(3, 5)):                      # wares: jars, a radio, parts
-        x = rng.uniform(-L / 2 + 0.35, L / 2 - 0.35)
-        b.box(x - 0.08, x + 0.08, D - 0.02, D + 0.12, 0.92, 0.92 + rng.uniform(0.08, 0.2), rng.choice([m["glass"], m["sheet"], m["rust"], tarp]))
-    for i in range(2):
-        b.box(-L / 2 + 0.1 + i * 0.7, -L / 2 + 0.7 + i * 0.7, 0.1, 0.7, 0, 0.5, m["wood"])  # crates at the back
+            lean = rng.uniform(-0.06, 0.06)
+            b.cyl((x, y, 0), (x + lean, y, H + (0.3 if y == 0 else 0.0)), 0.05, m["wood"], seg=6)
+    # tarp: two sagging slopes from a ridge along x
+    n = 6
+    for i in range(n):
+        x0, x1 = -L / 2 - 0.15 + i * (L + 0.3) / n, -L / 2 - 0.15 + (i + 1) * (L + 0.3) / n
+        sag = 0.12 * math.sin(math.pi * (i + 0.5) / n)
+        mat = tarp2 if (seed + i) % 4 == 1 else tarp
+        b.quad([(x0, -0.15, H + 0.18 - sag), (x1, -0.15, H + 0.18 - sag), (x1, D * 0.45, H + 0.55 - sag), (x0, D * 0.45, H + 0.55 - sag)], mat)
+        b.quad([(x0, D * 0.45, H + 0.55 - sag), (x1, D * 0.45, H + 0.55 - sag), (x1, D + 0.3, H - 0.05 - sag), (x0, D + 0.3, H - 0.05 - sag)], mat)
+    b.box(-L / 2 - 0.1, L / 2 + 0.1, D + 0.24, D + 0.3, H - 0.32, H - 0.02, tarp)                  # front flap
+    # counter of planks on two drums
+    for x in (-L / 2 + 0.45, L / 2 - 0.45):
+        b.cyl((x, D + 0.05, 0), (x, D + 0.05, 0.82), 0.22, m["rust"], seg=12)
+    for k in range(3):
+        b.box(-L / 2 + 0.15, L / 2 - 0.15, D - 0.25 + k * 0.17, D - 0.1 + k * 0.17, 0.82, 0.88, sm["planks"])
+    # goods
+    for i in range(rng.randint(6, 9)):
+        x = rng.uniform(-L / 2 + 0.3, L / 2 - 0.3); y = rng.uniform(D - 0.2, D + 0.2)
+        kind = rng.random()
+        if kind < 0.4:
+            b.cyl((x, y, 0.88), (x, y, 0.88 + rng.uniform(0.12, 0.2)), 0.05, m["glass"], seg=8)
+        elif kind < 0.7:
+            b.cyl((x, y, 0.88), (x, y, 0.98), 0.05, m["sheet"], seg=8)
+        else:
+            b.box(x - 0.12, x + 0.12, y - 0.08, y + 0.08, 0.88, 1.0, rng.choice([m["dark"], m["rust"], tarp]))
+    # a coat hung on a nail, a lantern, a price board
+    b.box(-L / 2 + 0.05, -L / 2 + 0.5, 0.05, 0.12, 1.0, 1.85, rng.choice([m["blue"], m["red"], m["cream"]]))
+    b.cyl((0.3, D * 0.5, H + 0.4), (0.3, D * 0.5, H - 0.15), 0.008, m["dark"], seg=4)
+    b.cyl((0.3, D * 0.5, H - 0.15), (0.3, D * 0.5, H - 0.38), 0.07, glow, seg=8)
+    b.box(L / 2 - 0.7, L / 2 - 0.1, D + 0.3, D + 0.33, 1.05, 1.5, m["dark"])
+    for k in range(3):
+        b.box(L / 2 - 0.62, L / 2 - 0.25 - 0.08 * k, D + 0.33, D + 0.335, 1.38 - 0.11 * k, 1.41 - 0.11 * k, m["snow"])
+    for x in (-L / 2 + 0.3, L / 2 - 0.9):                                                     # crates behind
+        b.box(x, x + 0.6, 0.1, 0.65, 0, 0.5, m["wood"])
     return b.finish(), (L, D + 0.3)
+
+
+def laundry_line(name, L=4.0, seed=0):
+    """Two poles and a line of washing: shirts, a blanket, socks. Somebody here still does laundry."""
+    import random
+    rng = random.Random(seed)
+    b = Builder(name); m = _junk_mats()
+    cloth = [toon("Wash%d" % i, c, noise=0.15, noise_scale=8.0) for i, c in
+             enumerate([(0.62, 0.60, 0.54), (0.30, 0.36, 0.44), (0.52, 0.24, 0.20), (0.40, 0.42, 0.30), (0.70, 0.68, 0.62)])]
+    for x in (-L / 2, L / 2):
+        b.cyl((x, 0.1, 0), (x, 0.1, 2.1), 0.04, m["wood"], seg=6)
+    b.cyl((-L / 2, 0.1, 2.0), (L / 2, 0.1, 2.0), 0.008, m["dark"], seg=4)
+    x = -L / 2 + 0.3
+    while x < L / 2 - 0.4:
+        w = rng.uniform(0.25, 0.7)
+        sag = 0.12 * math.sin(math.pi * (x + L / 2) / L)
+        b.box(x, x + w, 0.08, 0.12, 2.0 - sag - rng.uniform(0.35, 0.8), 2.0 - sag, rng.choice(cloth))
+        x += w + rng.uniform(0.08, 0.25)
+    return b.finish(), (L, 0.3)
 
 
 def firewood(name):
@@ -2130,8 +2393,7 @@ def firewood(name):
         for i in range(6 - row):
             x = -0.75 + 0.13 * row + i * 0.26
             b.cyl((x, 0.0, 0.11 + row * 0.2), (x, 0.7, 0.11 + row * 0.2), 0.1, m["wood"], seg=7)
-    b.box(-0.8, 0.8, 0.0, 0.7, 0.9, 0.95, m["sheet"])
-    b.box(-0.7, 0.7, 0.05, 0.65, 0.95, 0.99, m["snow"])
+    b.box(-0.8, 0.8, -0.05, 0.75, 0.9, 0.93, _scrap_mats()["roof_g"])     # a sheet of tin keeps the snow off
     return b.finish(), (1.6, 0.7)
 
 
@@ -2149,3 +2411,417 @@ def yard_wreck(name, seed=0):
     b.box(-0.9, 0.0, -0.8, 0.8, 0.0, 0.04, paint, Mh)                              # bonnet up
     b.cyl((2.6, 2.1, 0.0), (2.6, 2.1, 0.22), 0.31, m["dark"], seg=10)              # a wheel lying by it
     return b.finish(), (4.8, 1.9)
+
+
+# ---------------------------------------------------------------- the road to Junk Town (docs/LEVEL_ROAD_TO_JUNK_TOWN.md)
+# Local frames as everywhere: back at y=0, front +y, standing on z=0, length along x (centred).
+
+def _road_mats():
+    return dict(
+        concrete=toon("RdConcrete", (0.52, 0.52, 0.50), noise=0.22, noise_scale=5.0),
+        concrete_d=toon("RdConcreteDark", (0.36, 0.36, 0.35), noise=0.2, noise_scale=6.0),
+        steel=toon("RdSteel", (0.30, 0.33, 0.31), noise=0.16, noise_scale=7.0, metal=0.4),
+        steel_l=toon("RdSteelLight", (0.48, 0.50, 0.49), noise=0.12, noise_scale=7.0, metal=0.4),
+        rust=toon("RdRust", (0.40, 0.23, 0.13), noise=0.25, noise_scale=9.0, metal=0.15),
+        rust_d=toon("RdRustDark", (0.25, 0.14, 0.09), noise=0.3, noise_scale=12.0),
+        red=toon("RdRed", (0.48, 0.15, 0.11), noise=0.22, noise_scale=7.0, metal=0.2),
+        olive=toon("RdOlive", (0.27, 0.29, 0.19), noise=0.18, noise_scale=7.0, metal=0.15),
+        canvas=toon("RdCanvas", (0.36, 0.35, 0.26), noise=0.2, noise_scale=8.0),
+        teal=toon("RdTeal", (0.18, 0.32, 0.33), noise=0.2, noise_scale=7.0, metal=0.2),
+        wood=toon("RdWood", (0.30, 0.21, 0.13), noise=0.2, noise_scale=10.0),
+        bark=toon("RdBark", (0.17, 0.14, 0.12), noise=0.25, noise_scale=14.0),
+        dark=toon("RdDark", (0.08, 0.08, 0.09), noise=0.05),
+        black=toon("RdBurnt", (0.10, 0.09, 0.08), noise=0.25, noise_scale=6.0),
+        glass=toon("RdGlass", (0.12, 0.15, 0.17), noise=0.05, metal=0.3),
+        snow=toon("RdSnow", (0.80, 0.83, 0.86), noise=0.08, noise_scale=4.0),
+        sand=toon("RdSandbag", (0.42, 0.38, 0.27), noise=0.22, noise_scale=12.0),
+        white=toon("RdWhite", (0.70, 0.69, 0.64), noise=0.15, noise_scale=8.0),
+        yellow=toon("RdHazard", (0.62, 0.50, 0.16), noise=0.18, noise_scale=8.0),
+        lamp=flat("RdDeadLamp", (0.20, 0.22, 0.20)),
+    )
+
+
+def silo_portal(name):
+    """The Silo 81 surface portal: a concrete headwall in the hillside, one blast-door leaf open on the dark,
+    wing walls running back into the slope, a dead lamp, snow on every ledge. Faces +y."""
+    b = Builder(name); m = _road_mats()
+    W, H, D = 9.0, 5.6, 1.4
+    OW, OH = 4.2, 3.8
+    b.box(-W / 2, -OW / 2, 0, D, 0, H, m["concrete"])                        # piers
+    b.box(OW / 2, W / 2, 0, D, 0, H, m["concrete"])
+    b.box(-OW / 2, OW / 2, 0, D, OH, H, m["concrete"])                       # lintel
+    b.box(-W / 2 - 0.1, W / 2 + 0.1, 0.0, D + 0.15, H, H + 0.25, m["concrete_d"])   # coping
+    b.box(-W / 2, W / 2, 0.1, D + 0.1, H + 0.25, H + 0.36, m["snow"])
+    b.box(-OW / 2 - 0.25, OW / 2 + 0.25, D, D + 0.12, OH - 0.05, OH + 0.25, m["concrete_d"])   # door head
+    b.box(-OW / 2, OW / 2, -2.5, 0.05, 0, OH, m["dark"])                       # the dark inside
+    # blast doors: left leaf shut, right leaf swung in and jammed
+    b.box(-OW / 2 + 0.05, 0.0, 0.25, 0.55, 0.0, OH - 0.05, m["steel"])
+    for z in (0.6, 1.6, 2.6):
+        b.box(-OW / 2 + 0.15, -0.1, 0.55, 0.6, z, z + 0.16, m["steel_l"])
+    Ml = Matrix.Translation((OW / 2 - 0.05, 0.4, 0)) @ Matrix.Rotation(math.radians(-112), 4, "Z")
+    b.box(0.0, OW / 2 - 0.05, -0.15, 0.15, 0.0, OH - 0.05, m["steel"], Ml)
+    b.box(-0.65, 0.65, D + 0.01, D + 0.06, 1.2, 1.3, m["yellow"])                # chevron band at the threshold
+    # wing walls stepping back into the slope
+    for sgn in (-1, 1):
+        x0 = sgn * W / 2
+        for k in range(4):
+            h = H - 0.9 * (k + 1)
+            if h <= 0.4:
+                break
+            Mw = Matrix.Translation((x0, 0.0, 0)) @ Matrix.Rotation(math.radians(sgn * -32), 4, "Z")
+            a0, a1 = sorted((sgn * (k * 1.3), sgn * ((k + 1) * 1.3)))
+            b.box(a0, a1, 0.0, 0.6, 0, h, m["concrete_d"] if k % 2 else m["concrete"], Mw)
+            b.box(a0, a1, 0.0, 0.6, h, h + 0.12, m["snow"], Mw)
+    # dead lamp and a conduit
+    b.box(-0.25, 0.25, D + 0.05, D + 0.35, OH + 0.55, OH + 0.75, m["steel"])
+    b.box(-0.18, 0.18, D + 0.1, D + 0.32, OH + 0.47, OH + 0.55, m["lamp"])
+    b.cyl((W / 2 - 0.7, D + 0.04, 0.3), (W / 2 - 0.7, D + 0.04, H - 0.2), 0.05, m["steel"], seg=6)
+    # stains of meltwater under the coping
+    for x in (-3.6, -2.9, 2.7, 3.5):
+        b.box(x, x + 0.18, D + 0.002, D + 0.008, 1.0, H - 0.1, m["rust_d"])
+    return b.finish(), (W, D)
+
+
+def guard_shack(name):
+    """A concrete guard post: flat roof under snow, a broken window, the door open, a stovepipe."""
+    b = Builder(name); m = _road_mats()
+    L, D, H = 3.0, 2.6, 2.7
+    b.box(-L / 2, L / 2, 0, D, 0, H, m["concrete"], faces_mat={3: m["concrete"]})
+    b.box(-L / 2 - 0.15, L / 2 + 0.15, -0.15, D + 0.2, H, H + 0.18, m["concrete_d"])
+    b.box(-L / 2 - 0.1, L / 2 + 0.1, -0.1, D + 0.15, H + 0.18, H + 0.32, m["snow"])
+    b.box(0.35, 1.2, D, D + 0.03, 0.0, 2.05, m["dark"])                        # doorway
+    Md = Matrix.Translation((1.2, D, 0)) @ Matrix.Rotation(math.radians(70), 4, "Z")
+    b.box(-0.85, 0.0, 0.0, 0.05, 0.02, 2.0, m["olive"], Md)
+    b.box(-1.15, -0.25, D, D + 0.03, 1.1, 1.75, m["glass"])                    # window, one pane gone
+    b.box(-1.2, -0.2, D + 0.02, D + 0.06, 1.05, 1.1, m["concrete_d"])
+    b.box(-0.72, -0.68, D + 0.02, D + 0.05, 1.1, 1.75, m["steel"])
+    b.cyl((-L / 2 + 0.4, 0.4, H), (-L / 2 + 0.4, 0.4, H + 0.8), 0.06, m["rust"], seg=7)
+    b.box(-L / 2 + 0.1, -L / 2 + 0.9, D + 0.01, D + 0.03, 2.1, 2.45, m["white"])  # a notice, faded
+    return b.finish(), (L, D)
+
+
+def sandbag_nest(name):
+    """A horseshoe of sandbags, three courses, open at the back, snow in the dips."""
+    b = Builder(name); m = _road_mats()
+    R = 1.5
+    for row in range(3):
+        n = 11 - row
+        for k in range(n):
+            a = math.radians(-200 + 220 * (k + 0.5 * (row % 2)) / (n - 1))
+            c = Vector((R * math.cos(a), 1.5 + R * math.sin(a), 0.13 + row * 0.24))
+            ellipsoid(b, c, (0.3, 0.17, 0.13), m["sand"], seg=8)
+        if row == 2:
+            for k in range(0, n, 2):
+                a = math.radians(-200 + 220 * k / (n - 1))
+                ellipsoid(b, Vector((R * math.cos(a), 1.5 + R * math.sin(a), 0.72)), (0.24, 0.13, 0.05), m["snow"], seg=6)
+    return b.finish(), (3.4, 3.2)
+
+
+def road_barrier(name, L=4.0):
+    """Checkpoint boom: concrete blocks, a counterweight post and a striped boom snapped and hanging."""
+    b = Builder(name); m = _road_mats()
+    b.box(-L / 2 - 0.3, -L / 2 + 0.3, 0.0, 0.6, 0.0, 0.9, m["concrete"])
+    b.box(-L / 2 - 0.3, -L / 2 + 0.3, 0.0, 0.6, 0.9, 0.98, m["snow"])
+    b.box(-L / 2 - 0.08, -L / 2 + 0.08, 0.22, 0.38, 0.9, 1.25, m["steel"])
+    for i in range(6):                                                 # boom: red and white bands
+        x0 = -L / 2 + i * (L * 0.62) / 6
+        b.box(x0, x0 + L * 0.62 / 6, 0.25, 0.35, 1.08, 1.18, m["red"] if i % 2 == 0 else m["white"])
+    Mb = Matrix.Translation((-L / 2 + L * 0.62, 0.3, 1.13)) @ Matrix.Rotation(math.radians(-58), 4, "Y")
+    for i in range(3):                                                 # the broken end hanging down
+        b.box(i * 0.4, (i + 1) * 0.4, -0.05, 0.05, -0.05, 0.05, m["white"] if i % 2 == 0 else m["red"], Mb)
+    b.box(L / 2 - 0.3, L / 2 + 0.3, 0.0, 0.6, 0.0, 0.9, m["concrete"])
+    b.box(L / 2 - 0.3, L / 2 + 0.3, 0.0, 0.6, 0.9, 0.98, m["snow"])
+    return b.finish(), (L + 0.6, 0.6)
+
+
+def _lattice(b, m, H, base, top, mat, braces=7):
+    """A four-legged steel lattice tower in the local frame (z up)."""
+    legs = [(sx, sy) for sx in (-1, 1) for sy in (-1, 1)]
+    for sx, sy in legs:
+        b.cyl((sx * base, sy * base, 0), (sx * top, sy * top, H), 0.07, mat, seg=5)
+    for k in range(braces):
+        z0, z1 = H * k / braces, H * (k + 1) / braces
+        w0 = base + (top - base) * k / braces
+        w1 = base + (top - base) * (k + 1) / braces
+        for (ax, ay), (bx, by) in (((-1, -1), (1, -1)), ((1, -1), (1, 1)), ((1, 1), (-1, 1)), ((-1, 1), (-1, -1))):
+            b.cyl((ax * w0, ay * w0, z0), (bx * w1, by * w1, z1), 0.035, mat, seg=4)
+            b.cyl((bx * w0, by * w0, z0), (ax * w1, ay * w1, z1), 0.035, mat, seg=4)
+
+
+def power_pylon(name, lean=11.0):
+    """A high-voltage pylon leaning over the road, cross-arms, insulators and dangling cable ends.
+    The base stands at the origin; the whole tower tips towards +y by lean degrees."""
+    b = Builder(name); m = _road_mats()
+    H = 15.0
+    sub = Builder(name + "_t")
+    _lattice(sub, m, H, 1.6, 0.45, m["steel"])
+    for z, w in ((H - 3.0, 4.2), (H - 0.8, 3.0)):
+        sub.box(-w, w, -0.12, 0.12, z, z + 0.25, m["steel"])
+        for x in (-w + 0.2, w - 0.2):
+            sub.cyl((x, 0, z), (x, 0, z - 1.0), 0.09, m["white"], seg=6)
+    sub.box(-0.5, 0.5, -0.5, 0.5, H, H + 0.6, m["steel"])
+    me = bpy.data.meshes.new(name + "_tmp")
+    sub.bm.to_mesh(me); sub.bm.free()
+    # move it over: tip, then copy into the main builder
+    M = Matrix.Rotation(math.radians(-lean), 4, "X")
+    tmp = bmesh.new(); tmp.from_mesh(me)
+    bmesh.ops.transform(tmp, matrix=M, verts=tmp.verts)
+    offset = len(b.mats)
+    for mt in sub.mats:
+        b.mi(mt)
+    for f in tmp.faces:
+        f.material_index = b.mats.index(sub.mats[f.material_index])
+    tmp.to_mesh(me); tmp.free()
+    b.bm.from_mesh(me)
+    bpy.data.meshes.remove(me)
+    for sx in (-1, 1):                                                  # concrete feet
+        for sy in (-1, 1):
+            b.box(sx * 1.6 - 0.35, sx * 1.6 + 0.35, sy * 1.6 - 0.35, sy * 1.6 + 0.35, 0, 0.4, m["concrete"])
+    # cables hanging from the arms down to the snow
+    tip = M @ Vector((4.0, 0, H - 3.2))
+    for dx in (0.0, -8.0):
+        p0 = M @ Vector((4.0 + dx, 0, H - 3.2))
+        p1 = Vector((p0.x + 1.0, p0.y + 3.0, 0.05))
+        b.cyl(p0, p1, 0.03, m["dark"], seg=4)
+    return b.finish(), (4.2, 4.2)
+
+
+def fallen_pylon(name, L=14.0):
+    """A pylon down in the snow along x, broken in two, arms crumpled."""
+    b = Builder(name); m = _road_mats()
+    sub = Builder(name + "_t")
+    _lattice(sub, m, L, 1.4, 0.5, m["rust"], braces=6)
+    me = bpy.data.meshes.new(name + "_tmp"); sub.bm.to_mesh(me); sub.bm.free()
+    tmp = bmesh.new(); tmp.from_mesh(me)
+    M = (Matrix.Translation((-L / 2, 1.4, 1.25)) @ Matrix.Rotation(math.radians(90), 4, "Y")
+         @ Matrix.Rotation(math.radians(45), 4, "Z"))                    # on its side, along x, one leg-pair down
+    bmesh.ops.transform(tmp, matrix=M, verts=tmp.verts)
+    for mt in sub.mats:
+        b.mi(mt)
+    for f in tmp.faces:
+        f.material_index = b.mats.index(sub.mats[f.material_index])
+    tmp.to_mesh(me); tmp.free(); b.bm.from_mesh(me); bpy.data.meshes.remove(me)
+    for k, (y0, z0) in enumerate(((0.6, 0.15), (2.2, 0.35))):             # the cross-arm, twisted, in the snow
+        b.cyl((L / 2 - 0.6, y0, z0), (L / 2 + 3.2, y0 + 0.9, 0.08), 0.07, m["rust"], seg=5)
+    for t in range(5):
+        x = L / 2 - 0.4 + t * 0.75
+        b.cyl((x, 0.6 + t * 0.18, 0.12), (x + 0.4, 2.2 + t * 0.18, 0.3), 0.035, m["rust"], seg=4)
+    return b.finish(), (L, 2.8)                  # (no snow lumps: the Godot ground and mounds carry the snow)
+
+
+def box_trailer(name, cab_angle=48.0):
+    """A red box trailer, jack-knifed: the cab folded back against it at cab_angle, tyres flat, snow on top."""
+    b = Builder(name); m = _road_mats()
+    L, W, H = 11.5, 2.5, 3.6
+    b.box(-L / 2, L / 2, 0.0, W, 1.1, H, m["red"])
+    for i in range(16):                                                # ribs
+        x = -L / 2 + 0.3 + i * (L - 0.6) / 15
+        b.box(x - 0.05, x + 0.05, -0.02, W + 0.02, 1.1, H, m["red"] if i % 3 else m["rust"])
+    b.box(-L / 2 + 0.3, L / 2 - 0.3, 0.2, W - 0.2, H, H + 0.12, m["snow"])
+    b.box(-L / 2, L / 2, 0.3, W - 0.3, 0.75, 1.1, m["dark"])                 # chassis
+    for x in (-L / 2 + 0.9, -L / 2 + 2.1):
+        for y in (0.15, W - 0.15):
+            b.cyl((x, y - 0.25, 0.5), (x, y + 0.25, 0.5), 0.5, m["dark"], seg=12)
+    b.box(-L / 2 + 0.2, -L / 2 + 0.25, 0.3, W - 0.3, 1.2, H - 0.2, m["steel"])   # rear doors
+    for k, (x0, w, z0, h) in enumerate(((-4.9, 0.25, 1.4, 1.9), (-2.6, 0.18, 2.2, 1.3), (-0.4, 0.3, 1.2, 2.0), (1.8, 0.2, 1.7, 1.6),
+                                         (3.9, 0.28, 1.3, 2.1), (-3.6, 1.6, 1.1, 0.25), (2.4, 2.2, 1.1, 0.3))):
+        b.box(x0, x0 + w, W + 0.03, W + 0.045, z0, z0 + h, m["rust_d"] if k % 2 else m["rust"])   # streaks and a dirty skirt
+    b.box(-L / 2 + 0.6, -L / 2 + 4.2, W + 0.03, W + 0.045, 2.6, 3.2, m["white"])      # what is left of the lettering
+    # the cab, folded round on the fifth wheel
+    Mc = Matrix.Translation((L / 2 - 0.6, W / 2, 0)) @ Matrix.Rotation(math.radians(cab_angle), 4, "Z")
+    b.box(0.2, 2.1, -1.25, 1.25, 0.95, 3.1, m["olive"], Mc)                    # cab box
+    b.box(2.1, 3.2, -1.15, 1.15, 0.95, 1.95, m["olive"], Mc)                   # bonnet
+    b.quad([Mc @ Vector((2.1, -1.1, 1.95)), Mc @ Vector((2.1, 1.1, 1.95)), Mc @ Vector((2.1, 1.1, 3.0)), Mc @ Vector((2.1, -1.1, 3.0))], m["olive"])
+    b.box(2.08, 2.14, -1.05, 1.05, 2.05, 2.9, m["glass"], Mc)                  # windscreen
+    for y in (-1.26, 1.24):
+        b.box(1.0, 1.9, y, y + 0.02, 2.0, 2.85, m["glass"], Mc)              # side windows
+        b.box(2.0, 2.06, y * 1.12, y * 1.12 + 0.05, 2.2, 2.6, m["dark"], Mc)  # mirrors
+        b.box(0.4, 1.0, y * 1.02, y * 1.02 + 0.04, 0.5, 0.62, m["steel"], Mc)  # step
+    b.box(3.2, 3.24, -0.9, 0.9, 1.1, 1.8, m["dark"], Mc)                       # grille
+    for k in range(6):
+        b.box(3.24, 3.26, -0.85 + k * 0.32, -0.75 + k * 0.32, 1.15, 1.75, m["steel"], Mc)
+    b.box(3.15, 3.4, -1.2, 1.2, 0.6, 0.85, m["steel_l"], Mc)                  # bumper
+    for y in (-0.95, 0.95):
+        b.cyl(Mc @ Vector((3.25, y, 1.3)), Mc @ Vector((3.32, y, 1.3)), 0.11, m["glass"], seg=8)
+    b.box(0.2, 2.1, -1.2, 1.2, 3.1, 3.24, m["snow"], Mc)
+    b.box(2.2, 3.1, -1.05, 1.05, 1.95, 2.02, m["snow"], Mc)
+    for x0 in (0.4, 1.4):                                                      # rust round the wheel arch
+        b.box(x0, x0 + 0.5, -1.26, -1.25, 0.95, 1.3, m["rust_d"], Mc)
+    b.box(-1.8, 0.2, -1.1, 1.1, 0.7, 1.0, m["dark"], Mc)
+    for x in (-1.2, 1.8):
+        for y in (-1.15, 1.15):
+            b.cyl(Mc @ Vector((x, y - 0.25, 0.5)), Mc @ Vector((x, y + 0.25, 0.5)), 0.5, m["dark"], seg=12)
+    return b.finish(), (L, W)
+
+
+def billboard(name, W=6.4, H=2.8, z=3.0):
+    """Steel posts and a weathered board (the text is added by the level builder). Faces +y."""
+    b = Builder(name); m = _road_mats()
+    for x in (-W / 2 + 0.8, W / 2 - 0.8):
+        b.box(x - 0.12, x + 0.12, 0.1, 0.34, 0.0, z + H * 0.8, m["steel"])
+        b.box(x - 0.3, x + 0.3, 0.0, 0.45, 0.0, 0.35, m["concrete"])
+    b.box(-W / 2, W / 2, 0.34, 0.42, z, z + H, m["steel_l"])
+    b.box(-W / 2 + 0.06, W / 2 - 0.06, 0.42, 0.43, z + 0.06, z + H - 0.06, m["white"])
+    b.box(-W / 2 + 0.06, W / 2 - 0.06, 0.43, 0.432, z + 0.06, z + 0.6, m["teal"])          # a painted stripe
+    b.quad([(W / 2 - 1.6, 0.433, z + H - 0.06), (W / 2 - 0.06, 0.433, z + H - 0.06), (W / 2 - 0.06, 0.433, z + H - 1.0)], m["steel"])
+    b.box(-W / 2, W / 2, 0.3, 0.46, z + H, z + H + 0.12, m["snow"])
+    b.box(-W / 2 + 0.3, W / 2 - 0.3, 0.45, 0.9, z - 0.05, z + 0.02, m["steel"])               # catwalk
+    return b.finish(), (W, 0.9)
+
+
+def army_truck_side(name):
+    """A GAZ-66-style army truck on its side: olive cab, canvas tilt torn off its hoops, wheels in the air."""
+    b = Builder(name); m = _road_mats()
+    M = Matrix.Translation((0, 0.0, 0.0)) @ Matrix.Rotation(math.radians(-88), 4, "X") @ Matrix.Translation((0, -1.25, 0))
+    def bx(x0, x1, y0, y1, z0, z1, mat):
+        b.box(x0, x1, y0, y1, z0, z1, mat, M)
+    bx(-3.2, 3.2, -1.1, 1.1, 0.7, 1.05, m["dark"])                          # frame
+    bx(1.2, 3.2, -1.2, 1.2, 1.05, 2.7, m["olive"])                           # cab
+    bx(3.0, 3.22, -1.0, 1.0, 1.9, 2.55, m["glass"])
+    bx(-3.4, 1.1, -1.25, 1.25, 1.05, 1.6, m["olive"])                        # bed
+    for x in (-3.0, -1.8, -0.6, 0.6):                                        # hoops, canvas half gone
+        b.cyl(M @ Vector((x, -1.2, 1.6)), M @ Vector((x, -1.2, 2.9)), 0.04, m["dark"], seg=4)
+        b.cyl(M @ Vector((x, 1.2, 1.6)), M @ Vector((x, 1.2, 2.9)), 0.04, m["dark"], seg=4)
+    bx(-3.4, -0.9, -1.3, 1.3, 2.9, 3.0, m["canvas"])
+    for x in (-2.3, 2.2):
+        for y in (-1.2, 1.2):
+            b.cyl(M @ Vector((x, y - 0.25, 0.55)), M @ Vector((x, y + 0.25, 0.55)), 0.55, m["dark"], seg=12)
+    for k in range(4):                                                      # spilled jerrycans
+        b.box(-2.0 + k * 0.6, -1.6 + k * 0.6, 2.6 + 0.3 * (k % 2), 3.0 + 0.3 * (k % 2), 0.0, 0.45, m["olive"])
+    ellipsoid(b, (0.0, 1.5, 0.0), (3.4, 1.0, 0.3), m["snow"], seg=10)
+    return b.finish(), (6.8, 3.0)
+
+
+def burned_bus(name):
+    """A burned-out bus: black and rust shell, empty windows, sitting on its rims."""
+    b = Builder(name); m = _road_mats()
+    L, W, H = 10.5, 2.5, 3.0
+    b.box(-L / 2, L / 2, 0.0, W, 0.35, 1.25, m["black"])
+    for i in range(9):
+        x = -L / 2 + 0.25 + i * (L - 0.5) / 9
+        b.box(x, x + 0.18, 0.0, W, 1.25, H - 0.2, m["rust_d"] if i % 2 else m["black"])
+        b.box(x + 0.18, x + (L - 0.5) / 9, 0.06, W - 0.06, 1.25, H - 0.2, m["dark"])     # window holes
+    b.box(-L / 2, L / 2, 0.0, W, H - 0.2, H, m["rust"])
+    b.box(-L / 2 + 0.6, L / 2 - 0.6, 0.3, W - 0.3, H, H + 0.1, m["snow"])
+    for x in (-L / 2 + 2.0, L / 2 - 2.2):
+        for y in (0.05, W - 0.05):
+            b.cyl((x, y - 0.12, 0.35), (x, y + 0.12, 0.35), 0.35, m["rust_d"], seg=10)
+    return b.finish(), (L, W)
+
+
+def shipping_container(name, paint="red"):
+    b = Builder(name); m = _road_mats()
+    c = m.get(paint, m["red"])
+    L, W, H = 6.0, 2.45, 2.6
+    b.box(-L / 2, L / 2, 0.0, W, 0.0, H, c)
+    for i in range(23):
+        x = -L / 2 + 0.2 + i * (L - 0.4) / 22
+        b.box(x - 0.04, x + 0.04, -0.03, W + 0.03, 0.15, H - 0.12, c if i % 4 else m["rust"])
+    b.box(-L / 2, L / 2, -0.04, W + 0.04, H - 0.12, H, m["steel"])
+    b.box(-L / 2, L / 2, -0.04, W + 0.04, 0.0, 0.15, m["steel"])
+    b.box(L / 2, L / 2 + 0.04, 0.1, W - 0.1, 0.15, H - 0.15, m["steel"])
+    b.box(-L / 2 + 0.2, L / 2 - 0.2, 0.2, W - 0.2, H, H + 0.1, m["snow"])
+    return b.finish(), (L, W)
+
+
+def guardrail(name, L=6.0, bent=0.0, seed=0):
+    """Steel W-beam guardrail on posts; bent: how far (m) the middle is pushed out by an old crash."""
+    b = Builder(name); m = _road_mats()
+    n = int(L / 2.0) + 1
+    pts = []
+    for i in range(n):
+        x = -L / 2 + i * L / (n - 1)
+        y = 0.1 + bent * math.sin(math.pi * i / (n - 1)) ** 2
+        pts.append((x, y))
+        tilt = Matrix.Translation((x, y, 0)) @ Matrix.Rotation(math.radians(bent * 25 * math.sin(math.pi * i / (n - 1))), 4, "X")
+        b.box(-0.06, 0.06, -0.06, 0.06, 0.0, 0.85, m["steel"], tilt)
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        ang = math.atan2(y1 - y0, x1 - x0)
+        Ms = Matrix.Translation((x0, y0, 0)) @ Matrix.Rotation(ang, 4, "Z")
+        Lg = math.hypot(x1 - x0, y1 - y0)
+        b.box(0, Lg, 0.06, 0.12, 0.5, 0.8, m["steel_l"], Ms)
+        b.box(0, Lg, 0.06, 0.13, 0.8, 0.84, m["snow"], Ms)
+    return b.finish(), (L, 0.4 + bent)
+
+
+def dead_tree(name, seed=0, H=6.0):
+    """A dead larch or birch: tapering trunk and a few bare branches (two levels)."""
+    import random
+    rng = random.Random(seed)
+    b = Builder(name); m = _road_mats()
+    top = Vector((rng.uniform(-0.3, 0.3), 0.3 + rng.uniform(-0.3, 0.3), H))
+    base = Vector((0, 0.3, 0))
+    b.cyl(base, top, 0.16, m["bark"], seg=7, r1=0.03)
+    for k in range(rng.randint(5, 8)):
+        t = rng.uniform(0.3, 0.85)
+        p = base.lerp(top, t)
+        a = rng.uniform(0, 2 * math.pi)
+        Lb = (1.0 - t) * H * rng.uniform(0.35, 0.55)
+        d = Vector((math.cos(a), math.sin(a), rng.uniform(0.2, 0.7))).normalized()
+        q = p + d * Lb
+        b.cyl(p, q, 0.06 * (1 - t) + 0.015, m["bark"], seg=5, r1=0.01)
+        for _ in range(2):
+            a2 = a + rng.uniform(-0.9, 0.9)
+            d2 = Vector((math.cos(a2), math.sin(a2), rng.uniform(0.3, 0.9))).normalized()
+            p2 = p.lerp(q, rng.uniform(0.4, 0.8))
+            b.cyl(p2, p2 + d2 * Lb * 0.45, 0.012, m["bark"], seg=4, r1=0.004)
+    return b.finish(), (0.8, 0.8)
+
+
+def rest_kiosk(name):
+    """The rest-stop kiosk: a low building with a shop window, door, a roof sign (text added by the
+    builder) and a stovepipe."""
+    b = Builder(name); m = _road_mats()
+    L, D, H = 6.0, 4.0, 3.0
+    b.box(-L / 2, L / 2, 0, D, 0, H, m["white"])
+    b.box(-L / 2, L / 2, 0, D, 0, 0.6, m["concrete_d"])
+    b.box(-L / 2 - 0.2, L / 2 + 0.2, -0.2, D + 0.3, H, H + 0.2, m["teal"])
+    b.box(-L / 2 - 0.1, L / 2 + 0.1, -0.1, D + 0.2, H + 0.2, H + 0.32, m["snow"])
+    b.box(-2.6, -0.3, D, D + 0.03, 0.8, 2.3, m["glass"])                        # shop window, dark
+    for x in (-1.5,):
+        b.box(x - 0.04, x + 0.04, D + 0.02, D + 0.05, 0.8, 2.3, m["steel"])
+    b.box(0.6, 1.6, D, D + 0.03, 0.0, 2.15, m["dark"])                          # the door open
+    Md = Matrix.Translation((1.6, D, 0)) @ Matrix.Rotation(math.radians(80), 4, "Z")
+    b.box(-1.0, 0.0, 0.0, 0.05, 0.02, 2.1, m["teal"], Md)
+    b.box(-1.8, 1.8, D * 0.5 - 0.06, D * 0.5 + 0.06, H + 0.32, H + 1.3, m["steel_l"])   # roof sign board
+    b.cyl((L / 2 - 0.6, 0.6, H), (L / 2 - 0.6, 0.6, H + 1.2), 0.07, m["rust"], seg=7)
+    return b.finish(), (L, D)
+
+
+def fuel_pump(name, broken=False):
+    b = Builder(name); m = _road_mats()
+    M = Matrix.Rotation(math.radians(-20 if broken else 0), 4, "Y")
+    b.box(-0.45, 0.45, 0.0, 0.7, 0.0, 0.25, m["concrete"])
+    b.box(-0.3, 0.3, 0.1, 0.55, 0.25, 1.75, m["red"], M)
+    b.box(-0.24, 0.24, 0.55, 0.57, 1.0, 1.5, m["glass"] if not broken else m["dark"], M)
+    b.box(-0.32, 0.32, 0.08, 0.57, 1.75, 1.85, m["white"], M)
+    b.cyl(M @ Vector((0.3, 0.45, 1.2)), Vector((0.55, 0.9, 0.05)), 0.025, m["dark"], seg=5)
+    return b.finish(), (0.9, 0.7)
+
+
+def grave_marker(name, seed=0):
+    """A grave outside the wall: a cross of timber or exhaust pipe, a hubcap or number plate, a mound."""
+    import random
+    rng = random.Random(seed)
+    b = Builder(name); m = _road_mats()
+    ellipsoid(b, (0, 0.8, -0.02), (0.32, 0.7, 0.08), toon("GraveEarth", (0.27, 0.23, 0.20), noise=0.35, noise_scale=6.0), seg=10)
+    mat = rng.choice([m["wood"], m["rust"], m["steel"]])
+    tilt = Matrix.Rotation(math.radians(rng.uniform(-8, 8)), 4, "Y")
+    b.box(-0.04, 0.04, 0.0, 0.08, 0.0, 1.1, mat, tilt)
+    b.box(-0.3, 0.3, 0.0, 0.08, 0.72, 0.8, mat, tilt)
+    if rng.random() < 0.5:
+        b.cyl(tilt @ Vector((0, 0.09, 0.5)), tilt @ Vector((0, 0.12, 0.5)), 0.17, m["steel_l"], seg=12)
+    else:
+        b.box(-0.24, 0.24, 0.085, 0.1, 0.36, 0.5, m["yellow"], tilt)
+    return b.finish(), (0.9, 1.9)
+
+
+def notice_board(name):
+    b = Builder(name); m = _road_mats()
+    for x in (-0.8, 0.8):
+        b.box(x - 0.06, x + 0.06, 0.0, 0.12, 0.0, 2.0, m["wood"])
+    b.box(-0.95, 0.95, 0.1, 0.16, 0.9, 1.9, m["wood"])
+    for k, (x, z, w, h) in enumerate(((-0.7, 1.25, 0.5, 0.55), (-0.05, 1.05, 0.45, 0.7), (0.5, 1.3, 0.35, 0.45))):
+        b.box(x, x + w, 0.16, 0.17, z, z + h, m["white"])
+    b.box(-1.0, 1.0, 0.0, 0.25, 1.9, 1.98, m["snow"])
+    return b.finish(), (2.0, 0.3)

@@ -7,6 +7,43 @@ const PLAYER_JSON := "res://characters/player_male/character.json"
 const WORM_JSON := "res://characters/pipe_worm/character.json"
 const TIBOR_JSON := "res://characters/tibor/character.json"
 const OVERSEER_JSON := "res://characters/overseer/character.json"
+const CHANGED_JSON := "res://characters/changed/character.json"
+const TOWNSFOLK_JSON := "res://characters/townsfolk/character.json"
+const FERAL_JSON := "res://characters/feral/character.json"
+const INFECTED_JSON := "res://characters/infected/character.json"
+## Enemy kinds. "worms" below means every hostile creature in the level (the name stuck from Level 3).
+const ENEMY := {
+	"worm": {"json": WORM_JSON, "name": "Pipe worm", "hp": 14, "ap": 6, "atk_ap": 3, "dmg": [3, 6], "hit": 70, "speed": 1.0,
+			 "attack": "A worm bites you for %d.", "kill": "The worm thrashes and goes limp.",
+			 "last": "The last worm curls up and stops moving.", "fatal": "The worm's teeth find your throat.",
+			 "look": "Pipe worm: blind, toothed, as thick as a forearm. They chew the lagging for the warmth.",
+			 "wake": "The worms stop chewing. Blind heads turn towards your footsteps."},
+	"changed": {"json": CHANGED_JSON, "name": "Changed", "hp": 18, "ap": 6, "atk_ap": 3, "dmg": [3, 5], "hit": 65, "speed": 0.8,
+				"attack": "It rakes you with its nails for %d.", "kill": "It folds into the snow and is still.",
+				"last": "The road goes quiet. Only the wind now.", "fatal": "Cold hands close around your throat.",
+				"look": "It was a person once. The coat still is. The skin under it is the colour of old candle wax.",
+				"wake": "It straightens up. The head tips over, too far, and it starts towards you."},
+	## Tier 1 of the Firn Strata (built in Blender: tools/blender/feral.py, infected.py). Brain-dead, drawn to warmth and noise.
+	"feral": {"json": FERAL_JSON, "name": "Feral", "hp": 14, "ap": 8, "atk_ap": 3, "dmg": [3, 6], "hit": 70, "speed": 1.0,
+			  "attack": "It snaps its jaws shut on you for %d.", "kill": "It thrashes in the snow, the ice on its back cracking, and goes still.",
+			  "last": "The road goes quiet. Only the wind now.", "fatal": "The jaws find your throat.",
+			  "look": "Feral: something that went on all fours a long time ago. Ice has grown out of its spine like a crest of glass.",
+			  "wake": "A crest of ice lifts out of the snow. It turns its head towards your warmth."},
+	"infected": {"json": INFECTED_JSON, "name": "Infected", "hp": 20, "ap": 6, "atk_ap": 3, "dmg": [3, 5], "hit": 65, "speed": 1.0,
+				 "attack": "It rakes you with its nails for %d.", "kill": "It folds into the snow and does not get up.",
+				 "last": "The road goes quiet. Only the wind now.", "fatal": "Cold, bloody hands close around your throat.",
+				 "look": "Infected: it was a person once. The hood is still up. The mouth will not close.",
+				 "wake": "It straightens up, the head tipping too far, and starts towards you, dragging one leg."},
+	## Junk Town's people: neutral until the player attacks one, then the whole town fights (group "town").
+	"townsfolk": {"json": TOWNSFOLK_JSON, "name": "Junk Town local", "hp": 16, "ap": 6, "atk_ap": 3, "dmg": [2, 5], "hit": 60, "speed": 1.0,
+				"attack": "A fist and a length of pipe: %d.", "kill": "They go down in the slush and stay down.",
+				"last": "Junk Town is quiet. Nobody here will trade with you now.", "fatal": "They keep hitting long after you stop moving.",
+				"look": "One of Junk Town's people: patched coat, cold hands, watching you.",
+				"wake": "The town turns on you."},
+}
+## Coat colours of the Changed (brown parka, blue ski jacket, grey work coat) and their skin.
+const CHANGED_COATS := [Color(0.22, 0.17, 0.13), Color(0.15, 0.18, 0.23), Color(0.19, 0.19, 0.18)]
+const CHANGED_SKIN := Color(0.74, 0.75, 0.70)
 const TIBOR_START := Vector2(-3.0, 0.2)         # comes in from the lift landing
 const TIBOR_POST := Vector2(1.2, -0.9)          # then waits in the corridor by the stairs
 const OVERSEER_POS := Vector2(-27.8, 7.2)       # standing beside his desk in the Administration Office on L4W
@@ -38,6 +75,11 @@ var action := ""
 var overwatch := 0
 var pending_overwatch: Actor = null
 var pending_combat := false
+var pending_group := ""                 # encounter group that tripped combat ("" = every enemy in the level)
+var pending_msg := ""
+var engaged: Array = []                 # enemies in the current fight
+var combat_round := 0
+var last_attacker := "worm"
 var focus: Node2D
 var hover_hex := Vector2i(999999, 0)
 var hover_worm: Actor = null
@@ -46,11 +88,11 @@ var path_preview: Array = []
 var dialog_handler := Callable()
 var rng := RandomNumberGenerator.new()
 var stats := {"hp": 40, "hp_max": 40, "ap": AP_MAX, "str": 6, "lockpick": 45, "medkits": 2, "kit": false}
-var state := {"L2": {}, "L2W": {}, "L3": {"dead": [], "pipe_fixed": false}, "L4W": {}, "L4E": {}, "L5": {}, "L1": {}, "JT": {}}
+var state := {"L2": {}, "L2W": {}, "L3": {"dead": [], "pipe_fixed": false}, "L4W": {}, "L4E": {}, "L5": {}, "L1": {}, "RD": {"dead": []}}
 var flags := {"visited_L3": false, "found_leak": false, "seen_worms": false, "door_seen": false,
 			  "quest": "none", "cold_quest": "none", "long_cold": "none", "visited_L4E": false,
 			  "visited_L5": false, "visited_L1": false, "left_silo": false,
-			  "reached_junk_town": false, "met_rook": false, "met_mara": false,
+			  "reached_junk_town": false, "town_hostile": false, "met_rook": false, "met_mara": false,
 			  "inspected_assembly": false, "identified_instability": false}
 var tibor: Actor = null
 var overseer: Actor = null
@@ -80,7 +122,7 @@ func _ready() -> void:
 	load_level("L2", Vector2.INF)
 	hud.log_msg("Click to move. 1-5 or click the bar to pick an action, then click a target. Right-click cancels.", Hud.DIM)
 	var testing := false
-	for a in ["--autotest", "--test-commons", "--test-command", "--test-new-levels", "--view-pipe"]:
+	for a in ["--autotest", "--test-commons", "--test-command", "--test-new-levels", "--view-pipe", "--test-road"]:
 		testing = testing or a in OS.get_cmdline_user_args()
 	for a in OS.get_cmdline_user_args():
 		testing = testing or a.begins_with("--shot=")
@@ -92,6 +134,8 @@ func _ready() -> void:
 		autotest.call_deferred()
 	elif "--test-commons" in OS.get_cmdline_user_args():
 		test_commons.call_deferred()
+	elif "--test-road" in OS.get_cmdline_user_args():
+		test_road.call_deferred()
 	elif "--test-command" in OS.get_cmdline_user_args():
 		test_command.call_deferred()
 	elif "--test-new-levels" in OS.get_cmdline_user_args():
@@ -113,6 +157,11 @@ func _shot(spec: String) -> void:
 		Input.warp_mouse(Vector2(float(p[4]), float(p[5])))
 	else:
 		Input.warp_mouse(Vector2(-50, -50))
+	if OS.has_environment("SHOT_ZOOM"):            # debug: wider shots (ignores the level's zoom limits)
+		cam.zoom = Vector2.ONE * float(OS.get_environment("SHOT_ZOOM"))
+		cam.limit_left = -10000000; cam.limit_top = -10000000; cam.limit_right = 10000000; cam.limit_bottom = 10000000
+	if OS.has_environment("SHOT_NOHUD"):
+		hud.visible = false
 	await get_tree().create_timer(2.5).timeout
 	get_viewport().get_texture().get_image().save_png(p[0])
 	get_tree().quit()
@@ -150,12 +199,23 @@ func load_level(id: String, arrive: Vector2) -> void:
 	focus = player
 	cam.position = player.position + Vector2(0, Hex.VSCALE * -80)
 	cam.reset_smoothing()
-	var bg: Dictionary = level.data["bg"]
-	var tex: Texture2D = level.get_child(0).texture
-	cam.limit_left = int(bg["x0"]) - 300
-	cam.limit_top = int(bg["y0"]) - 300
-	cam.limit_right = int(bg["x0"] + tex.get_width()) + 300
-	cam.limit_bottom = int(bg["y0"] + tex.get_height()) + 300
+	cam.limit_left = int(level.bg_rect.position.x) - 300
+	cam.limit_top = int(level.bg_rect.position.y) - 300
+	cam.limit_right = int(level.bg_rect.end.x) + 300
+	cam.limit_bottom = int(level.bg_rect.end.y) + 300
+	if not state.has(id):
+		state[id] = {}
+	if not state[id].has("dead"):
+		state[id]["dead"] = []
+	for k in level.data["spawns"].get("enemies", []).size():
+		var e: Dictionary = level.data["spawns"]["enemies"][k]
+		if k in state[id]["dead"]:
+			continue
+		_spawn_enemy(e, k)
+	for k in level.data["spawns"].get("folk", []).size():          # neutral townsfolk; indexes 100+ in the dead list
+		if (100 + k) in state[id]["dead"]:
+			continue
+		_spawn_folk(level.data["spawns"]["folk"][k], 100 + k, flags.get("town_hostile", false))
 	var i := 0
 	for w in level.data["spawns"]["worms"]:
 		if not (i in state["L3"]["dead"]):
@@ -165,6 +225,7 @@ func load_level(id: String, arrive: Vector2) -> void:
 			a.display_name = "Pipe worm"
 			a.hp = WORM_HP; a.hp_max = WORM_HP
 			a.set_meta("index", i)
+			a.set_meta("lvl", "L3")
 			level.sorted.add_child(a)
 			a.place_at_hex(level.nearest_walkable(Vector2(w[0], w[1])))
 			if w.size() > 3 and w[3] == "chew" and a.has_clip("chew"):
@@ -220,9 +281,9 @@ func _unhandled_input(e: InputEvent) -> void:
 	elif e is InputEventMouseButton and e.pressed:
 		match e.button_index:
 			MOUSE_BUTTON_WHEEL_UP:
-				cam.zoom = (cam.zoom * 1.1).clamp(Vector2(0.35, 0.35), Vector2(1.1, 1.1))
+				cam.zoom = (cam.zoom * 1.1).clamp(Vector2(0.35, 0.35), Vector2.ONE * float(level.data.get("max_zoom", 1.1)))
 			MOUSE_BUTTON_WHEEL_DOWN:
-				cam.zoom = (cam.zoom / 1.1).clamp(Vector2(0.35, 0.35), Vector2(1.1, 1.1))
+				cam.zoom = (cam.zoom / 1.1).clamp(Vector2(0.35, 0.35), Vector2.ONE * float(level.data.get("max_zoom", 1.1)))
 			MOUSE_BUTTON_RIGHT:
 				if hud.dialog_open():
 					hud.close_dialog()
@@ -266,8 +327,10 @@ func _update_hover() -> void:
 	hover_hex = Hex.screen_to_hex(world)
 	path_preview = []
 	var tip := ""
-	if hover_worm:
-		tip = "Pipe worm  -  %d/%d HP" % [hover_worm.hp, hover_worm.hp_max]
+	if hover_worm and hover_worm.team == "neutral" and action != "attack":
+		tip = "%s  (click to talk)" % hover_worm.display_name
+	elif hover_worm:
+		tip = "%s  -  %d/%d HP" % [hover_worm.display_name, hover_worm.hp, hover_worm.hp_max]
 		if action in ["", "attack"]:
 			var ok := level.line_of_sight(player.hex, hover_worm.hex)
 			tip += "\nShoot: %d%% to hit, %d AP" % [hit_chance(player.hex, hover_worm.hex), SHOT_AP] if ok else "\nNo clear shot"
@@ -296,7 +359,7 @@ func _update_hover() -> void:
 func worm_at(world: Vector2) -> Actor:
 	var best: Actor = null
 	for w in worms:
-		if w.alive and w.sprite_rect().grow(-6).has_point(world):
+		if w.alive and w.visible and w.sprite_rect().grow(-6).has_point(world):
 			if best == null or w.position.y > best.position.y:
 				best = w
 	return best
@@ -307,7 +370,7 @@ func occupied(except: Actor) -> Array:
 	if player != except and player.alive:
 		out.append(player.hex)
 	for w in worms:
-		if w != except and w.alive:
+		if w != except and w.alive and not w.get_meta("hidden", false):
 			out.append(w.hex)
 	if tibor and tibor != except:
 		out.append(tibor.hex)
@@ -340,7 +403,7 @@ func _click() -> void:
 				hud.log_msg("Pick a target for the Tokarev.", Hud.DIM)
 		"inspect":
 			if worm:
-				hud.log_msg("Pipe worm: blind, toothed, as thick as a forearm. They chew the lagging for the warmth. (%d/%d HP)" % [worm.hp, worm.hp_max])
+				hud.log_msg("%s (%d/%d HP)" % [_kind(worm)["look"], worm.hp, worm.hp_max])
 			elif not target.is_empty():
 				interact(target)
 			else:
@@ -351,7 +414,11 @@ func _click() -> void:
 			else:
 				hud.log_msg("Use the welding kit on something that needs welding.", Hud.DIM)
 		_:
-			if worm:
+			if worm and worm.team == "neutral" and mode != "combat":
+				talk_folk(worm)
+			elif worm and worm.team == "neutral":
+				hud.log_msg("%s keeps out of it. Use the attack action if you mean it." % worm.display_name, Hud.DIM)
+			elif worm:
 				attack(worm)
 			elif npc_at(world) and mode != "combat":
 				if npc_at(world) == overseer:
@@ -417,7 +484,8 @@ func walk(path: Array) -> void:
 	busy = false
 	if pending_combat:
 		pending_combat = false
-		start_combat("The worms stop chewing. Blind heads turn towards your footsteps.")
+		start_combat(pending_msg if pending_msg != "" else str(ENEMY["worm"]["wake"]), pending_group)
+		pending_msg = ""; pending_group = ""
 	refresh()
 
 
@@ -430,11 +498,31 @@ func _on_player_step(h: Vector2i) -> void:
 		if not flags["found_leak"] and Hex.plan_to_ground(Vector2(level.pipe["u"], level.pipe["v"])).distance_to(player.ground) < 5.0:
 			flags["found_leak"] = true
 			hud.log_msg("Water sprays from the heating flow, the lowest pipe on the wall. A worm hangs off it with its teeth in the steel.")
-		for w in worms:
-			if w.alive and Hex.distance(h, w.hex) <= SIGHT and level.line_of_sight(h, w.hex):
-				player.stop_now()
-				pending_combat = true
-				return
+	_on_step_outdoors(h)
+	for w in worms:
+		if not w.alive or w.get_meta("hidden", false) or w.team == "neutral":
+			continue
+		var d := Hex.distance(h, w.hex)
+		if w.has_meta("speak") and d <= int(w.get_meta("speak_d")):
+			hud.log_msg(str(w.get_meta("speak")), Color(0.8, 0.82, 0.9))
+			w.remove_meta("speak")
+		if d <= int(w.get_meta("wake", SIGHT)) and level.line_of_sight(h, w.hex):
+			player.stop_now()
+			pending_combat = true
+			pending_group = w.get_meta("group", "")
+			pending_msg = str(_kind(w)["wake"])
+			return
+
+
+## Outdoors: arriving at Junk Town completes the objective.
+func _on_step_outdoors(h: Vector2i) -> void:
+	if level_id != "RD" or flags["reached_junk_town"]:
+		return
+	if str(level.room_of.get(h, "")).begins_with("jt_"):
+		flags["reached_junk_town"] = true
+		hud.show_banner("JUNK TOWN")
+		hud.log_msg("Inside the wall. Smoke, voices, a dog somewhere, goats. Warm light in the windows. People live here.", Hud.GREEN)
+		refresh()
 
 
 func go_near(t: Dictionary) -> bool:
@@ -883,20 +971,122 @@ func _tibor_to_post() -> void:
 
 # ================================================================== combat
 func live_worms() -> Array:
-	return worms.filter(func(w): return w.alive)
+	return worms.filter(func(w): return w.alive and w.team != "neutral")
 
 
-func start_combat(msg: String) -> void:
+## The enemies in the current fight (alive). Outside combat, every living one.
+func live_engaged() -> Array:
+	if mode != "combat":
+		return live_worms()
+	return engaged.filter(func(w): return w.alive)
+
+
+func _kind(w: Actor) -> Dictionary:
+	return ENEMY.get(w.kind, ENEMY["worm"])
+
+
+## One enemy from a level's spawns.enemies entry:
+## {kind, u, v, dir, group, wake (hexes), state: "idle" | "still" | "hidden", coat, speak, speak_d}
+func _spawn_enemy(e: Dictionary, k: int) -> void:
+	var spec: Dictionary = ENEMY[e["kind"]]
+	var a := Actor.new()
+	a.speed = float(spec.get("speed", 1.0))
+	a.setup(spec["json"], e["kind"])
+	a.team = "hostile"
+	a.display_name = spec["name"]
+	a.hp = int(spec["hp"]); a.hp_max = a.hp
+	a.set_meta("index", k)
+	a.set_meta("lvl", level_id)
+	a.set_meta("group", e.get("group", ""))
+	a.set_meta("wake", int(e.get("wake", SIGHT)))
+	if e.has("speak"):
+		a.set_meta("speak", e["speak"]); a.set_meta("speak_d", int(e.get("speak_d", 18)))
+	if a.puppet and e["kind"] == "changed":
+		a.puppet.set_duotone(CHANGED_COATS[int(e.get("coat", k)) % CHANGED_COATS.size()], CHANGED_SKIN)
+	level.sorted.add_child(a)
+	a.place_at_hex(level.nearest_walkable(Vector2(e["u"], e["v"]), 2.5))
+	a.play("idle", int(e.get("dir", 0)))
+	a.sprite.speed_scale = rng.randf_range(0.8, 1.05)
+	if e.get("state", "idle") == "hidden":            # under the snow until the fight brings it up
+		a.set_meta("hidden", true)
+		a.visible = false
+	a.stepped.connect(_on_worm_step.bind(a))
+	worms.append(a)
+
+
+## A Junk Town local: {u, v, dir, name, bark, coat}. Neutral (talks when clicked) unless the town is hostile.
+func _spawn_folk(f: Dictionary, k: int, hostile: bool) -> void:
+	_spawn_enemy({"kind": "townsfolk", "u": f["u"], "v": f["v"], "dir": f.get("dir", 0), "group": "town", "wake": 0}, k)
+	var a: Actor = worms[-1]
+	a.team = "hostile" if hostile else "neutral"
+	a.display_name = str(f.get("name", "Junk Town local"))
+	a.set_meta("bark", str(f.get("bark", "")))
+	if a.puppet:
+		var c: Array = f.get("coat", [0.2, 0.19, 0.17])
+		a.puppet.set_duotone(Color(c[0], c[1], c[2]), Color(0.66, 0.56, 0.45), 0.0)
+	a.sprite.speed_scale = rng.randf_range(0.7, 0.95)
+
+
+func talk_folk(w: Actor) -> void:
+	player.face_ground(w.ground)
+	player.play(player.idle_clip(false), player.dir)
+	w.face_ground(player.ground)
+	w.play("idle", w.dir)
+	var line: String = w.get_meta("bark", "")
+	hud.log_msg("%s: \"%s\"" % [w.display_name, line] if line != "" else "%s nods at you and goes back to the fire." % w.display_name, Color(0.85, 0.82, 0.7))
+
+
+## Attacking a local turns all of Junk Town against you.
+func provoke_town() -> void:
+	if flags.get("town_hostile", false):
+		return
+	flags["town_hostile"] = true
+	for w in worms:
+		if w.alive and w.team == "neutral":
+			w.team = "hostile"
+	hud.log_msg("Shouts go up across the yard. Junk Town has decided what you are.", Color(0.95, 0.6, 0.45))
+
+
+## Hidden members of a group come up out of the snow.
+func _rise(group: String) -> void:
+	var risen := 0
+	for w in worms:
+		if w.alive and w.get_meta("hidden", false) and w.get_meta("group", "") == group:
+			w.set_meta("hidden", false)
+			w.visible = true
+			w.modulate.a = 0.0
+			w.face_ground(player.ground)
+			w.play("idle", w.dir)
+			create_tween().tween_property(w, "modulate:a", 1.0, 0.8)
+			if mode == "combat":
+				w.set_meta("combat", true)
+				w.ring_color = Color(0.85, 0.25, 0.2, 0.8)
+			risen += 1
+	if risen > 0:
+		hud.log_msg(("Two more" if risen == 2 else ("Another" if risen == 1 else "More of them")) +
+			" come up out of the snow, shaking it off like sleepers.", Color(0.95, 0.6, 0.45))
+		await get_tree().create_timer(0.8).timeout
+
+
+func start_combat(msg: String, group := "") -> void:
 	if mode == "combat":
 		return
+	engaged.clear()
+	for w in live_worms():
+		if group == "" or w.get_meta("group", "") == group or Hex.distance(w.hex, player.hex) <= 10 and not w.get_meta("hidden", false):
+			engaged.append(w)
 	mode = "combat"
 	my_turn = true
+	combat_round = 1
 	stats["ap"] = AP_MAX
 	overwatch = 0
-	flags["seen_worms"] = true
+	if level_id == "L3":
+		flags["seen_worms"] = true
 	player.set_meta("combat", true)
 	player.play("pistol_idle", player.dir)
-	for w in live_worms():
+	for w in engaged:
+		if w.get_meta("hidden", false):
+			continue
 		w.set_meta("combat", true)
 		w.ring_color = Color(0.85, 0.25, 0.2, 0.8)
 		if w.get_meta("latched", false):
@@ -935,8 +1125,9 @@ func end_combat() -> void:
 	aim_target = null
 	player.play("idle", player.dir)
 	hud.show_banner("COMBAT OVER")
-	hud.log_msg("The last worm curls up and stops moving.", Hud.GREEN)
-	if state["L3"]["pipe_fixed"]:
+	hud.log_msg(str(ENEMY.get(last_attacker, ENEMY["worm"])["last"]), Hud.GREEN)
+	engaged.clear()
+	if level_id == "L3" and state["L3"]["pipe_fixed"]:
 		_finish_job()
 	refresh()
 
@@ -949,6 +1140,8 @@ func hit_chance(a: Vector2i, b: Vector2i) -> int:
 func attack(w: Actor) -> void:
 	if not w.alive:
 		return
+	if w.team == "neutral":
+		provoke_town()
 	if not level.line_of_sight(player.hex, w.hex):
 		hud.log_msg("No clear shot from here.", Hud.DIM)
 		return
@@ -956,7 +1149,7 @@ func attack(w: Actor) -> void:
 		hud.log_msg("Out of range.", Hud.DIM)
 		return
 	if mode == "explore":
-		start_combat("You draw the Tokarev and fire first.")
+		start_combat("You draw the Tokarev and fire first.", w.get_meta("group", ""))
 	if not my_turn:
 		return
 	if stats["ap"] < SHOT_AP:
@@ -1006,7 +1199,7 @@ func damage(a: Actor, dmg: int) -> void:
 		if stats["hp"] <= 0:
 			player.alive = false
 			player.play("death", player.dir)
-			hud.log_msg("The worm's teeth find your throat.", Hud.RED)
+			hud.log_msg(str(ENEMY.get(last_attacker, ENEMY["worm"])["fatal"]), Hud.RED)
 			hud.show_death()
 		else:
 			_react(a)
@@ -1018,8 +1211,11 @@ func damage(a: Actor, dmg: int) -> void:
 	if a.hp <= 0:
 		a.alive = false
 		a.ring_color = Color(0, 0, 0, 0)
-		state["L3"]["dead"].append(a.get_meta("index"))
-		hud.log_msg("The worm thrashes and goes limp.", Hud.GREEN)
+		state[a.get_meta("lvl", "L3")]["dead"].append(a.get_meta("index"))
+		last_attacker = a.kind
+		hud.log_msg(str(_kind(a)["kill"]), Hud.GREEN)
+	elif a.get_meta("group", "") != "" and mode == "combat":
+		_rise(a.get_meta("group", ""))                 # shooting one brings up the ones under the snow
 	_wound_anim(a)
 
 
@@ -1039,7 +1235,10 @@ func _react(a: Actor) -> void:
 
 
 func _check_combat_over() -> void:
-	if mode == "combat" and live_worms().is_empty():
+	if mode == "combat" and not live_engaged().is_empty() and live_engaged().all(func(w): return w.get_meta("hidden", false)):
+		for g in _engaged_groups():
+			await _rise(g)
+	if mode == "combat" and live_engaged().is_empty():
 		end_combat()
 
 
@@ -1088,9 +1287,10 @@ func end_turn() -> void:
 	await enemy_phase()
 	if not player.alive:
 		return
-	if live_worms().is_empty():
+	if live_engaged().is_empty():
 		end_combat()
 		return
+	combat_round += 1
 	my_turn = true
 	stats["ap"] = AP_MAX
 	if overwatch > 0:
@@ -1101,7 +1301,11 @@ func end_turn() -> void:
 
 
 func enemy_phase() -> void:
-	var order := live_worms()
+	if combat_round >= 2:
+		for g in _engaged_groups():
+			await _rise(g)
+	await _support_fire()
+	var order := live_engaged().filter(func(w): return not w.get_meta("hidden", false))
 	order.sort_custom(func(a, b): return Hex.distance(a.hex, player.hex) < Hex.distance(b.hex, player.hex))
 	for w in order:
 		if not player.alive:
@@ -1112,16 +1316,49 @@ func enemy_phase() -> void:
 			await get_tree().create_timer(0.25).timeout
 
 
+func _engaged_groups() -> Array:
+	var out: Array = []
+	for w in engaged:
+		var g: String = w.get_meta("group", "")
+		if g != "" and not (g in out):
+			out.append(g)
+	return out
+
+
+## Settlement guards fire from the wall at enemies in a supported group (level.data.support).
+func _support_fire() -> void:
+	for sp in level.data.get("support", []):
+		if not (sp["group"] in _engaged_groups()) or combat_round < int(sp.get("after_round", 2)):
+			continue
+		var targets := live_engaged().filter(func(w): return w.get_meta("group", "") == sp["group"] and not w.get_meta("hidden", false))
+		if targets.is_empty():
+			continue
+		var w: Actor = targets[rng.randi_range(0, targets.size() - 1)]
+		var from := Hex.plan_to_screen(Vector2(sp["u"], sp["v"]), float(sp.get("z", 5.0)))
+		var hit := rng.randi_range(1, 100) <= int(sp.get("hit", 60))
+		focus = w
+		hud.log_msg(str(sp.get("msg", "A rifle cracks from the wall.")), Color(0.85, 0.75, 0.45))
+		_tracer(from, Actor.aim_to_screen(w.aim_point("body")), hit)
+		if hit:
+			damage(w, rng.randi_range(6, 10))
+		else:
+			_float(w.position + Vector2(0, Hex.VSCALE * -60), "MISS", Hud.DIM)
+		await get_tree().create_timer(0.7).timeout
+
+
 func worm_turn(w: Actor) -> void:
 	await _wait_unlatched(w)
-	w.ap = WORM_AP
+	w.ap = int(_kind(w)["ap"])
 	var guard := 0
 	while w.alive and player.alive and w.ap > 0 and guard < 8:
 		guard += 1
 		if Hex.distance(w.hex, player.hex) == 1:
-			if w.ap >= 3:
+			var cost := int(_kind(w)["atk_ap"])
+			if w.ap >= cost:
 				await bite(w)
-				w.ap -= 3
+				w.ap -= cost
+				if w.kind != "worm":
+					break                                # one attack a turn
 				continue
 			break
 		var path := _path_to_player(w)
@@ -1170,9 +1407,11 @@ func bite(w: Actor) -> void:
 	w.face_ground(player.ground)
 	w.play("bite", w.dir)
 	await w.action_point
-	if rng.randi_range(1, 100) <= 70:
-		var dmg := rng.randi_range(3, 6)
-		hud.log_msg("A worm bites you for %d." % dmg, Hud.RED)
+	var spec := _kind(w)
+	if rng.randi_range(1, 100) <= int(spec["hit"]):
+		var dmg := rng.randi_range(int(spec["dmg"][0]), int(spec["dmg"][1]))
+		last_attacker = w.kind
+		hud.log_msg(str(spec["attack"]) % dmg, Hud.RED)
 		damage(player, dmg)
 	else:
 		_float(player.position + Vector2(0, Hex.VSCALE * -300), "MISS", Hud.DIM)
@@ -1734,3 +1973,63 @@ func test_new_levels() -> void:
 		print("  reached ", player.hex == target, "  in room ", level._in_room(Hex.hex_to_plan(player.hex)))
 	print("TEST NEW LEVELS END")
 	get_tree().quit()
+
+
+## --test-road: out of the Silo portal, along the road, through the first Changed and the gate fight,
+## into Junk Town. Prints each step; ends with "ROAD TEST end" and whether the objective completed.
+func test_road() -> void:
+	flags["long_cold"] = "active"
+	load_level("RD", Vector2.INF)
+	await get_tree().create_timer(0.5).timeout
+	print("ROAD start at ", player.hex, " enemies ", worms.size(), " walkable ", level.walkable.size())
+	for leg in [Vector2(20.0, 0.0), Vector2(31.0, -0.5), Vector2(46.0, 0.0), Vector2(52.0, 0.0), Vector2(70.0, 0.0), Vector2(77.0, -1.8)]:
+		var tries := 0
+		while tries < 40 and player.alive:
+			tries += 1
+			var goal := level.nearest_walkable(leg, 3.0)
+			if mode == "combat":
+				await _test_fight_round()
+				continue
+			if Hex.distance(player.hex, goal) <= 1:
+				break
+			await move_to(goal)
+			await get_tree().process_frame
+		print("ROAD leg ", leg, " at ", player.hex, " room ", level.room_of.get(player.hex, ""), " hp ", stats["hp"], " mode ", mode)
+	print("ROAD reached_junk_town ", flags["reached_junk_town"], " alive ", player.alive, " dead ", state["RD"]["dead"])
+	# the town: every local is neutral, nobody hostile stands inside the wall, talking works, attacking turns the town
+	var folk := worms.filter(func(w): return w.kind == "townsfolk")
+	var hostile_inside := live_worms().filter(func(w): return str(level.room_of.get(w.hex, "")).begins_with("jt_")).size()
+	print("TOWN folk ", folk.size(), " neutral ", folk.filter(func(w): return w.team == "neutral").size(), " hostile inside ", hostile_inside)
+	if not folk.is_empty() and mode == "explore":
+		talk_folk(folk[0])
+		provoke_town()
+		start_combat("test", "town")
+		print("TOWN provoked hostile ", flags["town_hostile"], " engaged ", live_engaged().size(), " mode ", mode)
+	print("ROAD TEST end")
+	get_tree().quit()
+
+
+func _test_fight_round() -> void:
+	while busy or not my_turn:
+		await get_tree().process_frame
+		if not player.alive:
+			return
+	var guard := 0
+	while mode == "combat" and stats["ap"] >= SHOT_AP and guard < 6:
+		guard += 1
+		var tgt: Actor = null
+		for w in live_engaged():
+			if w.get_meta("hidden", false):
+				continue
+			if level.line_of_sight(player.hex, w.hex) and Hex.distance(player.hex, w.hex) <= RANGE and (tgt == null or Hex.distance(w.hex, player.hex) < Hex.distance(tgt.hex, player.hex)):
+				tgt = w
+		if tgt == null:
+			break
+		await attack(tgt)
+	if stats["hp"] < 20 and stats["medkits"] > 0 and stats["ap"] >= MED_AP:
+		use_medkit()
+	if mode == "combat":
+		print("ROAD round ", combat_round, " hp ", stats["hp"], " engaged ", live_engaged().size())
+		await end_turn()
+	while mode == "combat" and (busy or not my_turn) and player.alive:
+		await get_tree().process_frame

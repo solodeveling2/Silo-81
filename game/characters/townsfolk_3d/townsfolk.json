@@ -1,0 +1,29 @@
+{
+ "fps_src": 24,
+ "clips": {
+  "idle": "idle",
+  "walk": "walk",
+  "hit": "hit",
+  "death": "death",
+  "bite": "claw"
+ },
+ "idle_loop_src": [
+  0,
+  48
+ ],
+ "height_m": 1.72,
+ "exposure": 1.1,
+ "lengths": {
+  "claw": 22,
+  "death": 58,
+  "fall": 72,
+  "hit": 31,
+  "idle": 368,
+  "run": 30,
+  "walk": 56
+ },
+ "claw": {
+  "frames": 22,
+  "hit": 13
+ }
+}

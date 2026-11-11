@@ -27,7 +27,13 @@ const LIVE_3D := {
 	"res://characters/tibor/character.json": ["res://characters/tibor_3d/tibor.glb", "res://characters/tibor_3d/tibor.json"],
 	"res://characters/overseer/character.json": ["res://characters/overseer_3d/overseer.glb", "res://characters/overseer_3d/overseer.json"],
 	"res://characters/pipe_worm/character.json": ["res://characters/pipe_worm_3d/worm.bin", "res://characters/pipe_worm_3d/worm.json"],
+	"res://characters/changed/character.json": ["res://characters/changed_3d/changed.glb", "res://characters/changed_3d/changed.json"],
+	"res://characters/feral/character.json": ["res://characters/feral_3d/feral.glb", "res://characters/feral_3d/feral.json"],
+	"res://characters/infected/character.json": ["res://characters/infected_3d/infected.glb", "res://characters/infected_3d/infected.json"],
+	"res://characters/townsfolk/character.json": ["res://characters/changed_3d/changed.glb", "res://characters/townsfolk_3d/townsfolk.json"],
 }
+static var _blank := {}                           # frame size -> transparent texture (clock for live-only characters)
+var speed := 1.0                                  # walk-speed multiplier (the Changed shamble)
 var ground := Vector2.ZERO      # metres
 var hex := Vector2i.ZERO
 var path: Array = []            # ground points still to reach
@@ -80,9 +86,17 @@ func _build_frames(json_path: String) -> SpriteFrames:
 			frames.add_animation(anim_name)
 			frames.set_animation_loop(anim_name, info["loop"])
 			frames.set_animation_speed(anim_name, info["fps"])
-			var sheet: Texture2D = load(base + "/" + dinfo["sheet"])
 			var fw: int = dinfo["frame_size"][0]
 			var fh: int = dinfo["frame_size"][1]
+			if not dinfo.has("sheet"):                # live 3D only: blank frames, the puppet is the picture
+				var key := "%dx%d" % [fw, fh]
+				if not _blank.has(key):
+					var img := Image.create(fw, fh, false, Image.FORMAT_RGBA8)
+					_blank[key] = ImageTexture.create_from_image(img)
+				for i in int(info["frames"]):
+					frames.add_frame(anim_name, _blank[key])
+				continue
+			var sheet: Texture2D = load(base + "/" + dinfo["sheet"])
 			var cols: int = dinfo["columns"]
 			for i in int(info["frames"]):
 				var tex := AtlasTexture.new()
@@ -117,7 +131,7 @@ func play(a: String, d: int, keep_phase := false) -> void:
 	_switching = true
 	sprite.play("%s_%d" % [a, d])
 	if kind != "worm":
-		sprite.speed_scale = CLIP_SPEED.get(a, 1.0)
+		sprite.speed_scale = CLIP_SPEED.get(a, 1.0) * (speed if a in STEP_CLIPS else 1.0)
 	if keep_phase:
 		sprite.set_frame_and_progress(f % sprite.sprite_frames.get_frame_count(sprite.animation), p)
 	_switching = false

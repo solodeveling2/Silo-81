@@ -1,0 +1,34 @@
+{
+ "fps_src": 24,
+ "clips": {
+  "idle": "idle",
+  "walk": "walk",
+  "bite": "bite",
+  "hit": "hit",
+  "death": "death"
+ },
+ "idle_loop_src": [
+  0,
+  48
+ ],
+ "height_m": 0.75,
+ "exposure": 1.05,
+ "creature": "feral",
+ "lengths": {
+  "idle": 48,
+  "walk": 20,
+  "bite": 22,
+  "hit": 14,
+  "death": 36
+ },
+ "view": {
+  "w": 460,
+  "h": 440,
+  "foot_y": 290,
+  "big_w": 640,
+  "big_h": 520,
+  "big_foot_y": 300
+ },
+ "walk_v": 0.04,
+ "bite_hit": 11
+}

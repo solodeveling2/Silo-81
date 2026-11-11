@@ -1,0 +1,475 @@
+{
+ "name": "townsfolk",
+ "live_only": true,
+ "pixels_per_metre": 165.0,
+ "height_m": 1.72,
+ "direction_order": "0=right, then counter-clockwise: 1=up-right, 2=up-left, 3=left, 4=down-left, 5=down-right",
+ "aim_points": {
+  "body": [
+   0.05,
+   1.05
+  ],
+  "head": [
+   0.1,
+   1.5
+  ]
+ },
+ "animations": {
+  "idle": {
+   "fps": 12,
+   "frames": 48,
+   "loop": true,
+   "directions": {
+    "0": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "5": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    }
+   }
+  },
+  "walk": {
+   "fps": 24,
+   "frames": 56,
+   "loop": true,
+   "directions": {
+    "0": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      7.303,
+      -0.0
+     ]
+    },
+    "1": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      3.652,
+      -4.626
+     ]
+    },
+    "2": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      -3.652,
+      -4.626
+     ]
+    },
+    "3": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      -7.303,
+      -0.0
+     ]
+    },
+    "4": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      -3.652,
+      4.626
+     ]
+    },
+    "5": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      3.652,
+      4.626
+     ]
+    }
+   }
+  },
+  "hit": {
+   "fps": 24,
+   "frames": 24,
+   "loop": false,
+   "directions": {
+    "0": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "5": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    }
+   }
+  },
+  "death": {
+   "fps": 24,
+   "frames": 59,
+   "loop": false,
+   "directions": {
+    "0": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "5": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    }
+   }
+  },
+  "bite": {
+   "fps": 24,
+   "frames": 23,
+   "loop": false,
+   "action_frame": 13,
+   "directions": {
+    "0": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "5": {
+     "frame_size": [
+      110,
+      300
+     ],
+     "feet_anchor": [
+      55.0,
+      282.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    }
+   }
+  }
+ }
+}

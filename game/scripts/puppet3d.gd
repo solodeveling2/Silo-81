@@ -46,6 +46,10 @@ var _dirty := 2                          # frames still to re-render after a res
 
 func setup(glb_path: String, json_path: String) -> void:
 	cfg = JSON.parse_string(FileAccess.get_file_as_string(json_path))
+	if cfg.has("view"):                                 # long creatures need room in front of the feet
+		var v: Dictionary = cfg["view"]
+		W = int(v.get("w", W)); H = int(v.get("h", H)); FOOT_Y = int(v.get("foot_y", FOOT_Y))
+		BIG_W = int(v.get("big_w", BIG_W)); BIG_H = int(v.get("big_h", BIG_H)); BIG_FOOT_Y = int(v.get("big_foot_y", BIG_FOOT_Y))
 	vp = SubViewport.new()
 	vp.size = Vector2i(W, H)
 	vp.transparent_bg = true
@@ -253,6 +257,16 @@ func _dress(n: Node) -> void:
 		_dress(c)
 
 
+## Duotone recolour on every toon material (the Changed): coat colour, skin colour.
+func set_duotone(dark: Color, light: Color, mottle := 1.0) -> void:
+	for m in _toon_mats:
+		(m as ShaderMaterial).set_shader_parameter("duo_mottle", mottle)
+		(m as ShaderMaterial).set_shader_parameter("duotone", true)
+		(m as ShaderMaterial).set_shader_parameter("duo_dark", dark)
+		(m as ShaderMaterial).set_shader_parameter("duo_light", light)
+	_last_key = ""
+
+
 func set_flash(c: Color) -> void:
 	for m in _toon_mats:
 		(m as ShaderMaterial).set_shader_parameter("flash", c)
@@ -325,6 +339,7 @@ func sync(clip: String, t_frames: float, fps: float, facing_deg: float, pitch: f
 		gun.visible = clip.begins_with("pistol")
 	if not is_nan(pitch) and w > 0.0:
 		_apply_pitch(pitch * w)
+	_apply_pose_offsets()
 
 
 func _yaw_for(facing_deg: float) -> float:
@@ -371,6 +386,22 @@ func _apply_inplace(clip: String, t: float) -> void:
 		shift.position = Vector3(-off.x, 0.0, -off.y)
 	else:
 		shift.position = Vector3.ZERO
+
+
+func _apply_pose_offsets() -> void:
+	"""Constant twists on top of every pose (cfg pose_offsets: bone, x, y, z degrees in the bone's frame)."""
+	if skel == null:
+		return
+	for po in cfg.get("pose_offsets", []):
+		var b := _bone(str(po[0]))
+		if b < 0:
+			continue
+		var q := Quaternion.from_euler(Vector3(deg_to_rad(float(po[1])), deg_to_rad(float(po[2])), deg_to_rad(float(po[3]))))
+		skel.set_bone_pose_rotation(b, skel.get_bone_pose_rotation(b) * q)
+	for ps in cfg.get("pose_scales", []):
+		var b := _bone(str(ps[0]))
+		if b >= 0:
+			skel.set_bone_pose_scale(b, Vector3(float(ps[1]), float(ps[2]), float(ps[3])))
 
 
 func _apply_pitch(deg: float) -> void:

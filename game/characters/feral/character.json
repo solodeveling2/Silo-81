@@ -1,0 +1,475 @@
+{
+ "name": "feral",
+ "live_only": true,
+ "pixels_per_metre": 165.0,
+ "height_m": 0.75,
+ "direction_order": "0=right, then counter-clockwise: 1=up-right, 2=up-left, 3=left, 4=down-left, 5=down-right",
+ "aim_points": {
+  "body": [
+   0.0,
+   0.5
+  ],
+  "head": [
+   0.55,
+   0.6
+  ]
+ },
+ "animations": {
+  "idle": {
+   "fps": 12,
+   "frames": 24,
+   "loop": true,
+   "directions": {
+    "0": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "5": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    }
+   }
+  },
+  "walk": {
+   "fps": 24,
+   "frames": 20,
+   "loop": true,
+   "directions": {
+    "0": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      6.6,
+      -0.0
+     ]
+    },
+    "1": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      6.6,
+      -0.0
+     ]
+    },
+    "2": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      6.6,
+      -0.0
+     ]
+    },
+    "3": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      6.6,
+      -0.0
+     ]
+    },
+    "4": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      6.6,
+      -0.0
+     ]
+    },
+    "5": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      6.6,
+      -0.0
+     ]
+    }
+   }
+  },
+  "bite": {
+   "fps": 24,
+   "frames": 22,
+   "loop": false,
+   "directions": {
+    "0": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "5": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    }
+   },
+   "action_frame": 11
+  },
+  "hit": {
+   "fps": 24,
+   "frames": 14,
+   "loop": false,
+   "directions": {
+    "0": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "5": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    }
+   }
+  },
+  "death": {
+   "fps": 24,
+   "frames": 36,
+   "loop": false,
+   "directions": {
+    "0": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "1": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "2": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "3": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "4": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    },
+    "5": {
+     "frame_size": [
+      250,
+      190
+     ],
+     "feet_anchor": [
+      125.0,
+      172.0
+     ],
+     "step_px": [
+      0.0,
+      -0.0
+     ]
+    }
+   }
+  }
+ }
+}

@@ -885,12 +885,12 @@
    "id": "to_jt_from_l1",
    "u": -2.6,
    "v": -1.4,
-   "to": "JT",
+   "to": "RD",
    "arrive": [
-    -3.0,
-    0.0
+    4.5,
+    8.2
    ],
-   "name": "Snow road to Junk Town",
+   "name": "Surface portal: the road to Junk Town",
    "text": "The surface blast gate opens onto the snow road east, toward Junk Town."
   }
  ],

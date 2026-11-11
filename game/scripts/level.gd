@@ -34,8 +34,118 @@ var pipe := {}
 var wall_parts: Array = []          # {sprite, mat, rect, y, sort, wall, room_id, fade, cut, alpha}
 var pipe_node: Sprite2D
 var water = null   # Array of the water particle emitters, made on first use
+var bg_rect := Rect2()                # screen rectangle the ground covers (camera limits)
 var creatures: Array = []  # live 3D animals (Puppet3D), e.g. Junk Town goats: {p, facing, phase}
 var grazers: Array = []   # {s: Sprite2D, phase: float} — goat heads nodding while they eat
+
+
+const GROUND_PX_PER_M := 128.0           # texel density of game/levels/_ground textures
+var _ground_tex := {}
+
+
+func _gtex(name: String) -> Texture2D:
+	if not _ground_tex.has(name):
+		_ground_tex[name] = _load_tex("res://levels/_ground/%s.png" % name)
+	return _ground_tex[name]
+
+
+## The outdoor ground: tiling textures on plan rectangles, soft decals, snow drifts and lamp pools,
+## in the level's light (docs/VISUAL_DIRECTION.md). Everything here lies under the sorted sprites.
+func _build_ground(G: Dictionary) -> void:
+	var holder := Node2D.new()
+	add_child(holder)
+	var amb := Color(G.get("ambient", [1, 1, 1])[0], G.get("ambient", [1, 1, 1])[1], G.get("ambient", [1, 1, 1])[2])
+	var floors: Array = G.get("floors", []).duplicate()
+	floors.sort_custom(func(a, b): return int(a["layer"]) < int(b["layer"]))
+	for f in floors:
+		var r: Array = f["r"]
+		var pts := PackedVector2Array(); var uvs := PackedVector2Array()
+		for c in [Vector2(r[0], r[2]), Vector2(r[1], r[2]), Vector2(r[1], r[3]), Vector2(r[0], r[3])]:
+			pts.append(Hex.plan_to_screen(c))
+			uvs.append(Vector2(c.x, -c.y) * GROUND_PX_PER_M)
+		var poly := Polygon2D.new()
+		poly.polygon = pts; poly.uv = uvs
+		poly.texture = _gtex(str(f["tex"]))
+		poly.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+		var t: Array = f.get("tint", [1, 1, 1])
+		poly.color = Color(t[0] * amb.r, t[1] * amb.g, t[2] * amb.b)
+		holder.add_child(poly)
+	var patches: Array = G.get("patches", []).duplicate()
+	patches.sort_custom(func(a, b): return int(a["layer"]) < int(b["layer"]))
+	for pt in patches:
+		var r: Array = pt["r"]
+		var c := Vector2((r[0] + r[1]) * 0.5, (r[2] + r[3]) * 0.5)
+		var hw := (float(r[1]) - float(r[0])) * 0.5; var hh := (float(r[3]) - float(r[2])) * 0.5
+		var rot := deg_to_rad(float(pt.get("ang", 0.0)))
+		var pts := PackedVector2Array(); var uvs := PackedVector2Array()
+		var tex := _gtex(str(pt.get("tex", "softrect")))
+		var ts := tex.get_size()
+		for k in [[-1, -1, 0, 0], [1, -1, 1, 0], [1, 1, 1, 1], [-1, 1, 0, 1]]:
+			var off := Vector2(k[0] * hw, k[1] * hh).rotated(rot)
+			pts.append(Hex.plan_to_screen(c + off)); uvs.append(Vector2(k[2], k[3]) * ts)
+		var poly := Polygon2D.new()
+		poly.polygon = pts; poly.uv = uvs; poly.texture = tex
+		var col: Array = pt["rgb"]
+		poly.color = Color(col[0] * amb.r, col[1] * amb.g, col[2] * amb.b, float(pt.get("a", 0.85)))
+		holder.add_child(poly)
+	for md in G.get("mounds", []):
+		_mound(holder, Vector2(md[0], md[1]), float(md[2]), float(md[3]), float(md[4]), amb)
+	var soft := _gtex("soft")
+	if not G.get("smoke", []).is_empty():               # smoke from barrels and chimneys, drifting with the wind
+		var sky := Node2D.new()
+		sky.z_index = 40                                    # over the props
+		add_child.call_deferred(sky)
+		for sm in G["smoke"]:
+			var em := CPUParticles2D.new()
+			em.texture = soft
+			em.amount = 10
+			em.lifetime = 5.0
+			em.preprocess = 5.0
+			em.position = Hex.plan_to_screen(Vector2(sm["u"], sm["v"]), float(sm["z"]))
+			em.direction = Vector2(0.15, -1.0)
+			em.spread = 12.0
+			em.initial_velocity_min = 22.0; em.initial_velocity_max = 34.0
+			em.gravity = Vector2(14.0, -6.0)
+			var k := float(sm.get("k", 1.0))
+			em.scale_amount_min = 0.12 * k; em.scale_amount_max = 0.2 * k
+			var sc := Curve.new()                             # puff: swells, then thins away to nothing
+			sc.add_point(Vector2(0.0, 0.25)); sc.add_point(Vector2(0.55, 1.0)); sc.add_point(Vector2(1.0, 0.0))
+			em.scale_amount_curve = sc
+			em.color = Color(0.38, 0.38, 0.40, 0.32 * k)          # (a colour ramp hides the particles in this scene)
+			sky.add_child(em)
+	for pl in G.get("pools", []):
+		var spr := Sprite2D.new()
+		spr.texture = soft
+		var mat := CanvasItemMaterial.new(); mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+		spr.material = mat
+		var rad := float(pl["r"]) * 0.8 * Hex.PPM
+		spr.scale = Vector2(rad * 2.0 / soft.get_width(), rad * 2.0 * Hex.SIN_E / soft.get_height())
+		spr.position = Hex.plan_to_screen(Vector2(pl["u"], pl["v"]))
+		var lc: Array = pl["rgb"]
+		spr.modulate = Color(lc[0] * 0.13, lc[1] * 0.1, lc[2] * 0.06)
+		holder.add_child(spr)
+
+
+## A snow drift: an ellipse dome in three toon bands (shade rim, mid, lit cap towards the key light),
+## the cap raised by its height so it reads as a mound from the 47-degree camera.
+func _mound(parent: Node2D, c: Vector2, ru: float, rv: float, h: float, amb: Color) -> void:
+	var lift := Vector2(0, -h * Hex.COS_E * Hex.PPM)
+	var key := Vector2(-0.22, 0.0)                      # the cap leans to the lit side (the key comes from -u in plan)
+	var bands := [[1.0, 0.0, Color(0.76, 0.80, 0.86)], [0.82, 0.55, Color(0.85, 0.89, 0.94)], [0.55, 0.9, Color(0.91, 0.94, 0.98)]]   # final colours, matched to the lit snow (no ambient: it pushed them blue)
+	for b in bands:
+		var k: float = b[0]
+		var up: float = b[1]
+		var pts := PackedVector2Array()
+		var cc := c + Vector2(key.x * ru, key.y * rv) * (1.0 - k) * 2.0
+		for i in 24:
+			var a := TAU * i / 24.0
+			pts.append(Hex.plan_to_screen(cc + Vector2(cos(a) * ru * k, sin(a) * rv * k)) + lift * up)
+		var poly := Polygon2D.new()
+		poly.polygon = pts
+		var col: Color = b[2]
+		poly.color = col
+		poly.antialiased = true
+		parent.add_child(poly)
 
 
 static func _load_tex(path: String) -> Texture2D:
@@ -60,23 +170,43 @@ func build(dir: String, state: Dictionary) -> void:
 	data = JSON.parse_string(FileAccess.get_file_as_string(dir + "/level.json"))
 	if abs(float(data.get("elev_deg", 30.0)) - Hex.ELEV_DEG) > 0.01:
 		push_warning("%s was rendered at %s degrees but the game projects at %s: rebuild it" % [dir, data.get("elev_deg", 30.0), Hex.ELEV_DEG])
-	var bg := Sprite2D.new()
-	bg.centered = false
-	bg.texture = _load_tex(dir + "/" + data["bg"]["file"])
-	bg.position = Vector2(data["bg"]["x0"], data["bg"]["y0"])
-	add_child(bg)
+	var bgd: Dictionary = data["bg"]
+	if bgd.has("none"):                          # outdoors: Godot draws the ground (_build_ground)
+		_build_ground(data.get("ground", {}))
+		bg_rect = Rect2(bgd["x0"], bgd["y0"], bgd["w"], bgd["h"])
+	elif bgd.has("tiles"):                         # big outdoor level: ground in tiles, rendered at a lower resolution
+		var holder := Node2D.new()
+		add_child(holder)
+		var k := float(bgd.get("scale", 1.0))
+		for t in bgd["tiles"]:
+			var ts := Sprite2D.new()
+			ts.centered = false
+			ts.texture = _load_tex(dir + "/" + t["file"])
+			ts.position = Vector2(t["x0"], t["y0"])
+			ts.scale = Vector2(k, k)
+			holder.add_child(ts)
+		bg_rect = Rect2(bgd["x0"], bgd["y0"], bgd["w"], bgd["h"])
+	else:
+		var bg := Sprite2D.new()
+		bg.centered = false
+		bg.texture = _load_tex(dir + "/" + bgd["file"])
+		bg.position = Vector2(bgd["x0"], bgd["y0"])
+		add_child(bg)
+		bg_rect = Rect2(bg.position, bg.texture.get_size())
 	dark_layer = Node2D.new(); add_child(dark_layer)
 	marks = Node2D.new(); add_child(marks)
 	sorted = Node2D.new(); sorted.y_sort_enabled = true; add_child(sorted)
 
 	for r in data["blocked"]:
 		blocked.append(r)
+	var sk := 1.0 / float(data.get("sprite_scale", 1.0))
 	for p in data["props"]:
 		var n := Node2D.new()
 		n.position = Vector2(p["sort"][0], p["sort"][1])
 		var s := Sprite2D.new()
 		s.centered = false
 		s.texture = _load_tex(dir + "/" + p["sprite"])
+		s.scale = Vector2(sk, sk)
 		s.position = Vector2(p["x0"], p["y0"]) - n.position
 		n.add_child(s)
 		sorted.add_child(n)
@@ -87,17 +217,22 @@ func build(dir: String, state: Dictionary) -> void:
 			s.position = piv - n.position
 			s.offset = Vector2(-sz.x * 0.5, -sz.y * 1.00)
 			grazers.append({"s": s, "phase": float(p["x0"]) * 0.013})
-		var rect := Rect2(Vector2(p["x0"], p["y0"]), s.texture.get_size())
+		var rect := Rect2(Vector2(p["x0"], p["y0"]), s.texture.get_size() * sk)
 		props.append({"data": p, "node": n, "sprite": s, "rect": rect})
 		blocked.append(_grow(p["footprint"], 0.08))
 
-	for c in data.get("creatures", []):           # live 3D animals (CLAUDE.md: anything that moves is 3D)
-		var coat := "piebald" if creatures.size() % 3 == 1 else "brown"
-		var base := "res://characters/%s_3d/%s_%s" % [c["kind"], c["kind"], coat]
+	for c in data.get("creatures", []):           # live 3D animals and townsfolk (CLAUDE.md: anything that moves is 3D)
+		var base: String
+		if c["kind"] == "person":                 # the civilian body in its own coat colour and warm skin
+			base = "res://characters/tibor_3d/tibor"
+		else:
+			base = "res://characters/%s_3d/%s_%s" % [c["kind"], c["kind"], "piebald" if creatures.size() % 3 == 1 else "brown"]
 		if not FileAccess.file_exists(base + ".json"):
 			continue
 		var pup := Puppet3D.new()
 		pup.setup(base + ".glb", base + ".json")
+		if c.has("coat"):
+			pup.set_duotone(Color(c["coat"][0], c["coat"][1], c["coat"][2]), Color(c["skin"][0], c["skin"][1], c["skin"][2]), 0.0)
 		var cn := Node2D.new()
 		cn.position = Hex.plan_to_screen(Vector2(c["u"], c["v"]))
 		cn.add_child(pup)

@@ -1,6 +1,6 @@
 # The Road to Junk Town — first outdoor area
 
-**Status: approved design brief (story + level), not yet built.** Read with `docs/LEVEL_DESIGN.md`,
+**Status: built as level `RD` (Nov 2026): the road, the three encounters, Junk Town and its wall. Not yet: Rook, Mara, loot. See `docs/JUNK_TOWN_ASSETS.md`.** Read with `docs/LEVEL_DESIGN.md`,
 `docs/WORLD_ARCHITECTURE.md`, `docs/VISUAL_DIRECTION.md` and
 `docs/wasteland3_level_design_knowledge_base.md`.
 

@@ -95,9 +95,9 @@ Meridian → Junk Town → Mara), Tibor's short warning, the new objectives, and
 hook. Voice script, casting and the eight recorded MP3s are in `docs/VOICE_LINES.md` and
 `game/audio/voice/`.
 
-Junk Town's four missing modules are built procedurally and a blockout level (`JT`) renders from
-`build.py`; the grazers' heads nod in `level.gd`. See `docs/JUNK_TOWN_ASSETS.md` and
-`docs/JUNK_TOWN_BLOCKOUT.png`. `JT` is not yet copied to `game/levels/` or wired to the L1 exit.
+The road and Junk Town are built: level `RD` (portal -> road -> three Changed encounters -> walled town),
+entered from the L1 surface portal. Tripo models for the wall and shacks, live 3D Changed and goats,
+Godot-drawn ground for big outdoor levels. See `docs/JUNK_TOWN_ASSETS.md`; test with `-- --test-road`.
 
 **Milestone 1 - make the live 3D characters solid (small, do first)**
 1. Browser check with the user: smoothness in Level 3 (player + three worms). If it stutters on weaker

@@ -1,0 +1,99 @@
+{
+ "fps_src": 24,
+ "clips": {
+  "idle": "idle",
+  "walk": "walk",
+  "hit": "hit",
+  "death": "death",
+  "bite": "claw"
+ },
+ "idle_loop_src": [
+  0,
+  48
+ ],
+ "height_m": 1.72,
+ "exposure": 1.25,
+ "pose_offsets": [
+  [
+   "mixamorig_Head",
+   18,
+   8,
+   40
+  ],
+  [
+   "mixamorig_Neck",
+   22,
+   0,
+   12
+  ],
+  [
+   "mixamorig_Spine2",
+   16,
+   0,
+   -8
+  ],
+  [
+   "mixamorig_Spine1",
+   22,
+   0,
+   -8
+  ],
+  [
+   "mixamorig_LeftShoulder",
+   0,
+   0,
+   -26
+  ],
+  [
+   "mixamorig_LeftArm",
+   0,
+   0,
+   -10
+  ],
+  [
+   "mixamorig_RightArm",
+   8,
+   0,
+   14
+  ]
+ ],
+ "pose_scales": [
+  [
+   "mixamorig_LeftForeArm",
+   1.0,
+   1.18,
+   1.0
+  ],
+  [
+   "mixamorig_RightForeArm",
+   1.0,
+   1.18,
+   1.0
+  ],
+  [
+   "mixamorig_LeftHand",
+   0.95,
+   1.4,
+   0.95
+  ],
+  [
+   "mixamorig_RightHand",
+   0.95,
+   1.4,
+   0.95
+  ]
+ ],
+ "lengths": {
+  "claw": 22,
+  "death": 58,
+  "fall": 72,
+  "hit": 31,
+  "idle": 368,
+  "run": 30,
+  "walk": 56
+ },
+ "claw": {
+  "frames": 22,
+  "hit": 13
+ }
+}
