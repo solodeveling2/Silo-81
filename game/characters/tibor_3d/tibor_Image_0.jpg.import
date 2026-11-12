@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cegfvberkgw4m"
-path="res://.godot/imported/overseer_overseer_basecolor.png-443ae15c36d2b7830b85b75588187433.ctex"
+uid="uid://cfwrovq5lu8jj"
+path="res://.godot/imported/tibor_Image_0.jpg-510ba32b3cfd08d7f721ac2fd464d355.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "d525a1016534e96c1d6ba56a0c0346ad"
+"md5": "b4c8dee97248a3abd39df90f6c988aad"
 }
 
 [deps]
 
-source_file="res://characters/overseer_3d/overseer_overseer_basecolor.png"
-dest_files=["res://.godot/imported/overseer_overseer_basecolor.png-443ae15c36d2b7830b85b75588187433.ctex"]
+source_file="res://characters/tibor_3d/tibor_Image_0.jpg"
+dest_files=["res://.godot/imported/tibor_Image_0.jpg-510ba32b3cfd08d7f721ac2fd464d355.ctex"]
 
 [params]
 

@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bihoamlb62tyj"
-path="res://.godot/imported/player_silo81_player_male_basecolor.jpg-093cb9cfc5baa24c5419e57159e9263b.ctex"
+uid="uid://b7ttawy2kvu5h"
+path="res://.godot/imported/player_Image_0.jpg-ad11ea57be38ebcb6982b87479d2ab7f.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "61c9b421e2b42f5de46f4f9fbc515d3b"
+"md5": "1fcb4e8c1d103a467949c0271457f491"
 }
 
 [deps]
 
-source_file="res://characters/player_3d/player_silo81_player_male_basecolor.jpg"
-dest_files=["res://.godot/imported/player_silo81_player_male_basecolor.jpg-093cb9cfc5baa24c5419e57159e9263b.ctex"]
+source_file="res://characters/player_3d/player_Image_0.jpg"
+dest_files=["res://.godot/imported/player_Image_0.jpg-ad11ea57be38ebcb6982b87479d2ab7f.ctex"]
 
 [params]
 

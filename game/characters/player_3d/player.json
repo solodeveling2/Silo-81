@@ -93,5 +93,8 @@
   "pistol_lower",
   "pistol_hold"
  ],
- "height_m": 1.75
+ "height_m": 1.75,
+ "normal_strength": 1.6,
+ "band_soft": 0.06,
+ "rim": 0.6
 }
