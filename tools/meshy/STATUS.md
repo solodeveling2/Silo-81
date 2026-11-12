@@ -18,3 +18,15 @@ Credits: 1,454 -> 89 after 80 models (workspace ~14.5 each; Agent ~19-23.5 each 
 Left: R2, R3, J2, J3 (35 models) and the 22 textures: needs a top-up. Gemini image quota is used up.
 Downloads: pick only the textured tile/entry; Meshy also lists an untextured copy of every model (the small ~100 KB files).
 Meshy names downloads by its own titles, so each GLB is matched to its plan name by look when installing.
+
+## Nov 12, afternoon
+- Downloaded and named in source/props3d/meshy/ (69 textured GLBs, not committed: ~480 MB):
+  S1, S2, S3 (9, no toolbox), S5, S6, R1, J1. S4 (9, no temp_monitor/toolbox: those two never generated) is
+  set up in the "DOWNLOAD S4" tab. "Forgotten Control Room" = the monitors desk.
+- The user topped up and asked not to make unneeded decorations. Remaining list cut to what the levels place:
+  running now: road_container, road_guardrail, road_dead_tree, road_rest_kiosk, road_fuel_pump, road_grave,
+  road_notice_board, jt_gate_open, jt_oil_drum, jt_burn_barrel.
+  next: jt_laundry_line, jt_firewood, jt_tyre_stack, jt_scrap_pile, jt_animal_pen, silo81_toolbox, silo81_temp_monitor.
+  Dropped: R3 terrain pieces (rocks, drifts, shrubs, reeds, ruts, rubble, hill) and J3 extras - terrain stays
+  ground textures + kit mounds.
+- Downloads: list view in the Workspace gallery, left tile of each group = textured.
