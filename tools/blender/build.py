@@ -2698,7 +2698,7 @@ MESHY = {
     "table": lambda p: _m("silo81_table", "box", p.get("L", 1.2), 0.7, 0.76),
     "stool": _m("silo81_stool", "z", 0.36, 0.36, 0.62),
     "curtain": _m("silo81_curtain", "z", 0.65, 0.1, 1.9),
-    "toolbox": _m("silo81_toolbox", "x", 1.0, 0.3, 1.0),
+    "toolbox": _m("silo81_toolbox", "z", 0.78, 0.47, 1.0),
     "crate": _m("silo81_crate", "x", 0.62, 0.62, 0.62),
     "bucket": _m("silo81_bucket", "z", 0.34, 0.34, 0.35),
     "shelf": lambda p: _m("silo81_linen_shelf", "z", 1.1, 0.45, 1.9) if p.get("linen") else _m("silo81_kitchen_shelf", "z", 1.1, 0.45, 1.8),
@@ -2892,7 +2892,7 @@ for i, p in enumerate(LV["props"]):
     # footprint needs the size: build a throwaway to measure only on first use
     f, off, wh = sprite_for(keyargs, build)
     L, Dp = {"bunk": (2.0, 0.9), "bed": (2.0, 0.9), "locker": (p.get("w", 0.55), 0.5), "desk": (1.2, 0.6), "chair": (0.5, 0.5),
-             "table": (p.get("L", 1.2), 0.7), "stool": (0.36, 0.36), "curtain": (0.65, 0.1), "toolbox": (1.0, 0.3), "crate": (0.62, 0.62),
+             "table": (p.get("L", 1.2), 0.7), "stool": (0.36, 0.36), "curtain": (0.65, 0.1), "toolbox": (0.78, 0.47) if os.path.exists(os.path.join(kit.GLB_DIR, "meshy/silo81_toolbox.glb")) else (1.0, 0.3), "crate": (0.62, 0.62),
              "bucket": (0.34, 0.34), "shelf": (1.1, 0.45), "sinks": (0.7 * p.get("n", 3), 0.45), "stall": (0.9, 1.2), "laundry": (1.8, 0.25),
              "pump": (1.2, 0.7), "workbench": (1.8, 0.7), "bench": (p.get("L", 2.2), 0.32), "stove": (1.6, 0.8),
              "counter": (p.get("L", 2.0), 0.62), "cabinet": (0.48, 0.62), "medscreen": (1.8, 0.2), "medcab": (0.9, 0.42),

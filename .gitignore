@@ -16,3 +16,7 @@ game/*.zip
 *.tmp
 *.blend1
 source/meshy/
+
+.sv/
+.sv_at.log
+__pycache__/
