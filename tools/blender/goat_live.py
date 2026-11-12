@@ -71,10 +71,13 @@ def cyl(p0, p1, r0, r1, mi, bone, seg=7):
 ellipsoid((0, 0.02, 0.47), (0.19, 0.40, 0.21), COAT_I, "body", seg=12)
 ellipsoid((0, 0.04, 0.37), (0.14, 0.30, 0.10), BELLY_I, "body", seg=10)
 ellipsoid((0, -0.30, 0.52), (0.16, 0.14, 0.18), COAT_I, "body", seg=10)    # shoulders
+LEGS = {}                                           # bone name -> hip point
 for sx in (-1, 1):
     for y in (-0.27, 0.27):
-        cyl((sx * 0.11, y, 0.38), (sx * 0.11, y + 0.01, 0.06), 0.045, 0.032, COAT_I, "body")
-        cyl((sx * 0.11, y + 0.01, 0.06), (sx * 0.11, y + 0.01, 0.0), 0.035, 0.037, HOOF_I, "body")
+        leg = ("f" if y < 0 else "b") + ("l" if sx < 0 else "r")
+        LEGS[leg] = Vector((sx * 0.11, y, 0.40))
+        cyl((sx * 0.11, y, 0.38), (sx * 0.11, y + 0.01, 0.06), 0.045, 0.032, COAT_I, leg)
+        cyl((sx * 0.11, y + 0.01, 0.06), (sx * 0.11, y + 0.01, 0.0), 0.035, 0.037, HOOF_I, leg)
 cyl((0, 0.38, 0.58), (0, 0.44, 0.72), 0.035, 0.012, COAT_I, "body", seg=5)    # tail, cocked up
 
 # ---- neck and head (built in the rest pose: head up, looking forward)
@@ -114,8 +117,10 @@ b_neck = eb.new("neck"); b_neck.head = NECK0; b_neck.tail = NECK1; b_neck.parent
 b_head = eb.new("head"); b_head.head = NECK1; b_head.tail = H + Vector((0, -0.16, -0.03)); b_head.parent = b_neck
 for b in (b_neck, b_head):
     b.roll = 0.0
+for leg, hip in LEGS.items():                        # legs hang from the body; swing about their x axis
+    lb = eb.new(leg); lb.head = hip; lb.tail = (hip.x, hip.y + 0.01, 0.0); lb.parent = b_body; lb.roll = 0.0
 bpy.ops.object.mode_set(mode="OBJECT")
-for name in ("body", "neck", "head"):
+for name in ("body", "neck", "head") + tuple(LEGS):
     vg = body.vertex_groups.new(name=name)
     vg.add([i for i, g in vg_idx.items() if g == name], 1.0, "REPLACE")
 body.parent = arm
@@ -130,13 +135,17 @@ for pb in P:
     pb.rotation_mode = "XYZ"
 
 
-def key(f, neck_pitch, head_pitch, neck_yaw=0.0, body_roll=0.0):
-    """Angles in degrees; positive pitch lowers the head."""
+def key(f, neck_pitch, head_pitch, neck_yaw=0.0, body_roll=0.0, legs=None, bob=0.0):
+    """Angles in degrees; positive pitch lowers the head. legs: {bone: swing degrees}."""
     P["neck"].rotation_euler = (math.radians(neck_pitch), 0.0, math.radians(neck_yaw))
     P["head"].rotation_euler = (math.radians(head_pitch), 0.0, 0.0)
     P["body"].rotation_euler = (0.0, math.radians(body_roll), 0.0)
+    P["body"].location = (0.0, 0.0, bob)
+    for leg in LEGS:
+        P[leg].rotation_euler = (math.radians((legs or {}).get(leg, 0.0)), 0.0, 0.0)
     for pb in P:
         pb.keyframe_insert("rotation_euler", frame=f)
+        pb.keyframe_insert("location", frame=f)
 
 
 DOWN, CROP = 62, 30
@@ -153,10 +162,25 @@ key(72, 18, 6, 10, 0)
 key(84, DOWN - 2, CROP - 2, 2)                     # back down to the hay
 key(N,  DOWN, CROP)
 sc.frame_start, sc.frame_end = 0, N
+act.use_fake_user = True
+
+# ---- the walk (1 s at 24 fps): diagonal pairs swing together, the body bobs twice, the head nods
+W = 24
+walk = bpy.data.actions.new("walk"); walk.use_fake_user = True
+arm.animation_data.action = walk
+SW = 22.0
+for f in range(0, W + 1, 2):
+    ph = 2 * math.pi * f / W
+    a = SW * math.sin(ph)
+    key(f, 14 + 4 * math.sin(2 * ph), 4, 0.0, 0.0,
+        legs={"fl": a, "br": a, "fr": -a, "bl": -a}, bob=0.012 * abs(math.cos(ph)))
+arm.animation_data.action = act
 
 bpy.ops.export_scene.gltf(filepath=OUT + ".glb", export_format="GLB", export_animations=True,
                           export_animation_mode="ACTIONS", export_force_sampling=True, export_frame_range=False,
                           export_def_bones=False, export_apply=False, use_selection=False)
-json.dump({"fps_src": 24, "clips": {"idle": "graze"}, "idle_loop_src": [0, N], "height_m": 0.85,
+# a foot moves 2 * 0.40 * sin(22) = 0.30 m over its 12-frame stance: about 0.025 m a frame (0.6 m/s)
+json.dump({"fps_src": 24, "clips": {"idle": "graze", "walk": "walk"}, "idle_loop_src": [0, N], "height_m": 0.85,
+           "walk_m_per_frame": 0.025, "walk_frames": W,
            "creature": "goat", "coat": COAT}, open(OUT + ".json", "w"), indent=1)
 print("exported", OUT, COAT, len(me.vertices), "verts")

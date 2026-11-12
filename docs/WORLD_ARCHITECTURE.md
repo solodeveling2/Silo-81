@@ -80,8 +80,8 @@ screen between ordinary outdoor areas.
 | File | Role |
 |---|---|
 | `game/scripts/game.gd` | Orchestrator: root, camera, HUD, player, `load_level(id, arrive)`, state/flags, NPC/enemy spawns |
-| `game/scripts/level.gd` | Parses `level.json`, renders `bg.png`, y-sorted props, wall cutaway, AStar2D hex grid, line of sight, room-based wall fade |
-| `game/scripts/hex.gd` | Plan `(u,v)` ↔ metres ↔ screen pixels (165 px/m at 47°) ↔ axial hex `(q,r)`, 0.6396 m hexes |
+| `game/scripts/level.gd` | Parses `level.json`, renders `bg.png`, y-sorted props, wall cutaway, AStar2D square tile grid (8-way, no corner cutting), line of sight, room-based wall fade |
+| `game/scripts/hex.gd` | Plan `(u,v)` ↔ metres ↔ screen pixels (165 px/m at 47°) ↔ tile `(u,v)` cells, 0.64 m squares (the file keeps its old name) |
 | `game/scripts/actor.gd` / `puppet3d.gd` | Live 3D GLB characters in orthographic SubViewports; hex pathfinding; no foot sliding |
 | `tools/blender/build.py` + `kit.py` | Level construction and pre-rendered art pipeline |
 | `game/levels/L1…L5` | Existing interiors, connected by bulkheads and lifts |

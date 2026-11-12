@@ -1,13 +1,16 @@
 {
  "fps_src": 24,
  "clips": {
-  "idle": "graze"
+  "idle": "graze",
+  "walk": "walk"
  },
  "idle_loop_src": [
   0,
   96
  ],
  "height_m": 0.85,
+ "walk_m_per_frame": 0.025,
+ "walk_frames": 24,
  "creature": "goat",
  "coat": "brown"
 }

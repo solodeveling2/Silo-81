@@ -2537,6 +2537,174 @@ PROP_FN = {
     "control_panel": lambda p: kit.control_panel("ControlPanel"),
     "temp_monitor": lambda p: kit.temp_monitor("TempMonitor"),
 }
+
+# ---- Meshy models (Nov 2026, source/props3d/meshy, plan in tools/meshy/plan.py). Every kind below uses
+# its Meshy model when the file is there, else the older Tripo/kit model above. All Meshy props face -y,
+# so rot=180 turns the front to the kit's +y. fit "x" sizes by length L, "z" by height H, "box" stretches
+# to L x D x H. A kind maps to (file, fit, L, D, H) or to a function of the placement p returning that.
+OUTDOOR = bool(LV.get("godot_ground"))
+
+
+def _m(f, fit, L, D, H):
+    return ("meshy/%s.glb" % f, fit, L, D, H)
+
+
+MESHY = {
+    "bunk": lambda p: _m("silo81_bunk_stripped" if p.get("stripped") else ("silo81_bunk_a", "silo81_bunk_b")[p.get("k", 0) % 2], "x", 2.0, 0.9, 1.7),
+    "bed": lambda p: _m("silo81_bed_player", "x", 2.0, 0.9, 0.8),
+    "locker": lambda p: None if p.get("open") else (_m("silo81_locker_double", "z", 1.0, 0.5, 1.9) if p.get("w", 0.55) >= 0.9 else _m("silo81_locker", "z", 0.55, 0.5, 1.9)),
+    "desk": _m("silo81_desk", "x", 1.2, 0.6, 0.95),
+    "chair": lambda p: None if p.get("overturned") else _m("silo81_chair", "z", 0.5, 0.5, 0.9),
+    "table": lambda p: _m("silo81_table", "box", p.get("L", 1.2), 0.7, 0.76),
+    "stool": _m("silo81_stool", "z", 0.36, 0.36, 0.62),
+    "curtain": _m("silo81_curtain", "z", 0.65, 0.1, 1.9),
+    "toolbox": _m("silo81_toolbox", "x", 1.0, 0.3, 1.0),
+    "crate": _m("silo81_crate", "x", 0.62, 0.62, 0.62),
+    "bucket": _m("silo81_bucket", "z", 0.34, 0.34, 0.35),
+    "shelf": lambda p: _m("silo81_linen_shelf", "z", 1.1, 0.45, 1.9) if p.get("linen") else _m("silo81_kitchen_shelf", "z", 1.1, 0.45, 1.8),
+    "sinks": lambda p: _m("silo81_sinks", "x", 0.7 * p.get("n", 3), 0.45, 1.6),
+    "stall": _m("silo81_toilet_stall", "z", 0.9, 1.2, 2.05),
+    "laundry": lambda p: _m("jt_laundry_line", "x", p.get("L", 4.0), 0.3, 2.0) if OUTDOOR else _m("silo81_laundry", "x", 1.8, 0.6, 1.6),
+    "pump": _m("silo81_pump", "x", 1.2, 0.7, 0.9),
+    "workbench": _m("silo81_workbench", "x", 1.8, 0.7, 1.6),
+    "bench": lambda p: _m("silo81_bench", "box", p.get("L", 2.2), 0.32, 0.45),
+    "stove": _m("silo81_stove", "x", 1.6, 0.8, 0.95),
+    "counter": lambda p: None if p.get("hatch") else _m("silo81_counter", "box", p.get("L", 2.0), 0.62, 0.92),
+    "cabinet": _m("silo81_filing_cabinet", "z", 0.48, 0.62, 1.3),
+    "medscreen": _m("silo81_medscreen", "x", 1.8, 0.2, 1.7),
+    "medcab": _m("silo81_medcab", "z", 0.9, 0.42, 1.8),
+    "schooldesk": _m("silo81_schooldesk", "x", 1.1, 0.85, 0.8),
+    "sacks": _m("silo81_sacks", "x", 1.1, 0.6, 0.7),
+    "files": _m("silo81_file_shelf", "z", 1.1, 0.42, 1.9),
+    "terminal": _m("silo81_terminal", "x", 1.4, 0.7, 1.3),
+    "radioset": _m("silo81_radioset", "x", 1.6, 0.6, 1.7),
+    "maptable": _m("silo81_maptable", "x", 1.8, 1.1, 0.9),
+    "floorlamp": _m("silo81_floorlamp", "z", 0.3, 0.3, 1.6),
+    "safe": _m("silo81_safe", "z", 0.7, 0.6, 1.0),
+    "lathe": _m("silo81_lathe", "x", 1.8, 0.6, 1.3),
+    "monitors": _m("silo81_monitors", "x", 1.3, 0.65, 1.4),
+    "boiler_assembly": _m("silo81_boiler", "x", 3.4, 1.6, 2.4),
+    "control_panel": _m("silo81_control_panel", "x", 1.8, 0.62, 1.6),
+    "temp_monitor": _m("silo81_temp_monitor", "x", 1.5, 0.65, 1.5),
+    # ---- the road and Junk Town
+    "guard_shack": _m("road_guard_shack", "x", 3.0, 2.6, 2.6),
+    "sandbag_nest": _m("road_sandbag_nest", "x", 3.4, 3.2, 1.0),
+    "road_barrier": lambda p: _m("road_barrier", "x", p.get("L", 4.0) + 0.6, 0.6, 1.3),
+    "power_pylon": _m("road_power_pylon", "z", 4.2, 4.2, 14.0),
+    "fallen_pylon": lambda p: _m("road_fallen_pylon", "x", p.get("L", 14.0), 2.8, 2.5),
+    "box_trailer": _m("road_box_trailer", "x", 11.5, 2.5, 3.6),
+    "burned_bus": _m("road_burned_bus", "x", 10.5, 2.5, 2.9),
+    "army_truck_side": _m("road_army_truck", "x", 6.8, 3.0, 2.6),
+    "container": _m("road_container", "x", 6.0, 2.45, 2.6),
+    "guardrail": lambda p: _m("road_guardrail", "x", p.get("L", 6.0), 0.4, 0.8),
+    "dead_tree": lambda p: _m("road_dead_tree", "z", 0.8, 0.8, p.get("H", 6.0)),
+    "fuel_pump": _m("road_fuel_pump", "z", 0.9, 0.7, 1.8),
+    "grave": _m("road_grave", "x", 0.9, 1.9, 1.2),
+    "notice_board": _m("road_notice_board", "x", 2.0, 0.3, 2.1),
+    "oil_drum": _m("jt_oil_drum", "z", 0.58, 0.58, 0.9),
+    "burn_barrel": _m("jt_burn_barrel", "z", 0.58, 0.58, 0.9),
+    "tyre_stack": _m("jt_tyre_stack", "x", 0.66, 0.66, 0.9),
+    "scrap_pile": _m("jt_scrap_pile", "x", 2.0, 1.6, 1.0),
+    "animal_pen": _m("jt_animal_pen", "x", 4.2, 3.0, 1.2),
+    "firewood": _m("jt_firewood", "x", 1.6, 0.7, 1.2),
+    "market_stall": _m("jt_market_stall", "x", 2.8, 1.9, 2.4),
+    "junk_gate_open": _m("jt_gate_open", "x", 4.6, 0.4, 3.0),
+    "junk_watchtower": _m("jt_watchtower", "z", 2.6, 1.8, 6.2),
+    "scrap_house": lambda p: _m("jt_scrap_house_" + "abcd"[p.get("seed", 0) % 4], "x", p.get("L", 4.4), p.get("D", 4.0), 3.0),
+}
+# Tripo GLB keys (glbp props) now remade in Meshy
+MESHY_GLBP = {"jt_van_a": "jt_van_a", "jt_van_b": "jt_van_b", "jt_van_ladder": "jt_van_ladder", "jt_car": "jt_car", "jt_tower": "jt_watchtower"}
+
+
+def meshy_spec(kind, p):
+    m = MESHY.get(kind)
+    spec = m(p) if callable(m) else m
+    if spec and os.path.exists(os.path.join(kit.GLB_DIR, spec[0])):
+        return spec
+    return None
+
+
+def _bounds(ob):
+    vs = [v.co for v in ob.data.vertices]
+    return (min(v.x for v in vs), max(v.x for v in vs), min(v.y for v in vs), max(v.y for v in vs), min(v.z for v in vs), max(v.z for v in vs))
+
+
+def meshy_prop(kind, p, spec):
+    f, fit, L, D, H = spec
+    ob, size = kit.glb_prop(kind, f, L, D, rot=180, fit=fit, H=H, mirror=p.get("mirror", False))
+    if kind == "army_truck_side":                     # the GAZ lies on its side, wheels towards the road (-y)
+        me = ob.data
+        me.transform(Matrix.Rotation(math.radians(90), 4, "X"))
+        x0, x1, y0, y1, z0, z1 = _bounds(ob)
+        me.transform(Matrix.Translation((0, -y0, -z0)))
+        size = (size[0], y1 - y0)
+    return ob, size
+
+
+def _sign_on(ob, size, texts):
+    """Lettering on the front of a Meshy model: texts = (body, font, size, rgb, x, z-fraction of height, rot)."""
+    x0, x1, y0, y1, z0, z1 = _bounds(ob)
+    out = [ob]
+    for body, font, sz, rgb, x, zf, rot in texts:
+        out.append(_front_text(body, font, sz, rgb, x, y1 + 0.03, z0 + (z1 - z0) * zf, rot))
+    return out, size
+
+
+def _with_meshy(kind, fallback):
+    def fn(p):
+        spec = meshy_spec(kind, p)
+        return meshy_prop(kind, p, spec) if spec else fallback(p)
+    return fn
+
+
+for _k in list(MESHY):
+    if _k in PROP_FN:
+        PROP_FN[_k] = _with_meshy(_k, PROP_FN[_k])
+_glbp_old = PROP_FN["glbp"]
+
+
+def _glbp_meshy(p):
+    f = MESHY_GLBP.get(p.get("key"))
+    if f and os.path.exists(os.path.join(kit.GLB_DIR, "meshy/%s.glb" % f)):
+        c = GLB_PROPS[p["key"]]
+        sc = p.get("size", 1.0)
+        ob, size = kit.glb_prop(p["key"], "meshy/%s.glb" % f, c.get("L", 1.0) * sc, c.get("D", 1.0) * sc, rot=180,
+                                fit=c["fit"], H=(c.get("H") or 0) * sc or None, mirror=p.get("mirror", False))
+        if p.get("turn"):
+            me = ob.data
+            cy = size[1] / 2
+            me.transform(Matrix.Translation((0, cy, 0)) @ Matrix.Rotation(math.radians(p["turn"]), 4, "Z") @ Matrix.Translation((0, -cy, 0)))
+            ys = [v.co.y for v in me.vertices]
+            me.transform(Matrix.Translation((0, -min(ys), 0)))
+        return ob, size
+    return _glbp_old(p)
+
+
+PROP_FN["glbp"] = _glbp_meshy
+
+# signs keep their real lettering on the Meshy bodies
+_SIGNS = {
+    "silo_portal": (_m("road_silo_portal", "x", 9.0, 1.4, 4.5), [("SILO 81", STENCIL, 0.62, (0.80, 0.78, 0.70), 0.0, 0.86, 0),
+                                                                 ("SURFACE ACCESS", STENCIL, 0.24, (0.80, 0.78, 0.70), 0.0, 0.77, 0)]),
+    "billboard": (_m("road_billboard", "x", 6.4, 0.9, 5.0), [("NEW MERIDIAN", OSWALD, 0.62, (0.14, 0.24, 0.26), 0.0, 0.84, 0),
+                                                            ("40 km  ->", OSWALD, 0.8, (0.55, 0.20, 0.12), 0.0, 0.68, 0),
+                                                            ("EVACUATION ROUTE", OSWALD, 0.22, (0.86, 0.85, 0.80), 0.0, 0.58, 0)]),
+    "rest_kiosk": (_m("road_rest_kiosk", "x", 6.0, 4.0, 3.2), [("NO FUEL", OSWALD, 0.45, (0.60, 0.17, 0.12), 0.0, 0.88, 0)]),
+}
+
+
+def _sign_fn(kind, fallback):
+    def fn(p):
+        spec, texts = _SIGNS[kind]
+        if not os.path.exists(os.path.join(kit.GLB_DIR, spec[0])):
+            return fallback(p)
+        ob, size = meshy_prop(kind, p, spec)
+        return _sign_on(ob, size, texts)
+    return fn
+
+
+for _k in _SIGNS:
+    PROP_FN[_k] = _sign_fn(_k, PROP_FN[_k])
 cache = {}
 
 

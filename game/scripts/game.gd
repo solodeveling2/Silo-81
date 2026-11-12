@@ -85,6 +85,8 @@ var combat_round := 0
 var last_attacker := "worm"
 var focus: Node2D
 var hover_hex := Vector2i(999999, 0)
+var player_step_costs: Array = []      # AP per step of the current combat move (diagonals 1, 2, 1, 2...)
+var reach := {}                        # combat: cell -> AP it costs to get there this turn
 var hover_worm: Actor = null
 var hover_target := {}
 var path_preview: Array = []
@@ -165,6 +167,9 @@ func _shot(spec: String) -> void:
 		cam.limit_left = -10000000; cam.limit_top = -10000000; cam.limit_right = 10000000; cam.limit_bottom = 10000000
 	if OS.has_environment("SHOT_NOHUD"):
 		hud.visible = false
+	if OS.has_environment("SHOT_COMBAT"):          # debug: show the combat grid (reach tiles) at this spot
+		await get_tree().create_timer(0.5).timeout
+		start_combat("shot", OS.get_environment("SHOT_COMBAT"))
 	await get_tree().create_timer(2.5).timeout
 	get_viewport().get_texture().get_image().save_png(p[0])
 	get_tree().quit()
@@ -352,9 +357,12 @@ func _update_hover() -> void:
 	elif level.walkable.has(hover_hex) and action == "" and can_act():
 		path_preview = level.find_path(player.hex, hover_hex, occupied(player))
 		if mode == "combat" and not path_preview.is_empty():
-			tip = "Move: %d AP" % path_preview.size()
-			if path_preview.size() > stats["ap"]:
-				tip = "Move: %d AP (you have %d)" % [path_preview.size(), stats["ap"]]
+			var mc := 0
+			for c in Hex.step_costs(player.hex, path_preview):
+				mc += int(c)
+			tip = "Move: %d AP" % mc
+			if mc > stats["ap"]:
+				tip = "Move: %d AP (you have %d)" % [mc, stats["ap"]]
 	hud.show_tooltip(tip, get_viewport().get_mouse_position())
 	marks.queue_redraw()
 
@@ -479,10 +487,17 @@ func walk(path: Array) -> void:
 		if stats["ap"] <= 0:
 			hud.log_msg("No action points left. End your turn.", Hud.DIM)
 			return
-		path = path.slice(0, stats["ap"])
+		path = path.slice(0, Hex.affordable(player.hex, path, stats["ap"]))
+		if path.is_empty():
+			hud.log_msg("Not enough action points to move there.", Hud.DIM)
+			return
+		player_step_costs = Hex.step_costs(player.hex, path)
 	busy = true
 	var clip := ("run" if sprint else "walk") if mode == "explore" else "walk"
-	player.follow(path, clip)
+	if mode == "explore":
+		player.follow_points(level.smooth(player.hex, path), clip)   # Wasteland 3: free movement out of combat
+	else:
+		player.follow(path, clip)
 	await player.arrived
 	busy = false
 	if pending_combat:
@@ -494,7 +509,7 @@ func walk(path: Array) -> void:
 
 func _on_player_step(h: Vector2i) -> void:
 	if mode == "combat":
-		stats["ap"] -= 1
+		stats["ap"] -= int(player_step_costs.pop_front()) if not player_step_costs.is_empty() else 1
 		refresh()
 		return
 	if level_id == "L3":
@@ -1374,7 +1389,10 @@ func worm_turn(w: Actor) -> void:
 		var path := _path_to_player(w)
 		if path.is_empty():
 			break
-		path = path.slice(0, w.ap)
+		path = path.slice(0, Hex.affordable(w.hex, path, w.ap))
+		if path.is_empty():
+			break
+		w.set_meta("step_costs", Hex.step_costs(w.hex, path))
 		w.follow(path, str(_kind(w).get("move", "")) if w.has_clip(str(_kind(w).get("move", ""))) else "")
 		await w.arrived
 		if pending_overwatch == w:
@@ -1400,7 +1418,8 @@ func _path_to_player(w: Actor) -> Array:
 func _on_worm_step(h: Vector2i, w: Actor) -> void:
 	if mode != "combat":
 		return
-	w.ap -= 1
+	var costs: Array = w.get_meta("step_costs", [])
+	w.ap -= int(costs.pop_front()) if not costs.is_empty() else 1
 	if overwatch > 0 and Hex.distance(player.hex, h) <= RANGE and level.line_of_sight(player.hex, h):
 		w.stop_now()
 		pending_overwatch = w
@@ -1535,6 +1554,7 @@ func objectives() -> Array:
 
 func refresh() -> void:
 	var combat := mode == "combat"
+	reach = level.reach_from(player.hex, int(stats["ap"]), occupied(player)) if (combat and my_turn and player and level and not busy) else {}
 	var mt := "EXPLORING"
 	if combat:
 		mt = "YOUR TURN" if my_turn else "WORMS' TURN"
@@ -1756,18 +1776,38 @@ class Marks extends Node2D:
 				if w.alive:
 					draw_colored_polygon(Hex.hex_polygon(w.hex), Color(0.8, 0.2, 0.15, 0.22))
 		var p: Array = game.path_preview
-		for i in p.size():
-			var ok: bool = (not combat) or i < game.stats["ap"]
-			var c := Color(0.55, 0.85, 0.45, 0.45) if ok else Color(0.85, 0.3, 0.25, 0.4)
-			draw_colored_polygon(Hex.hex_polygon(p[i], 0.5), c)
+		if combat:
+			# Wasteland 3: the grid shows in combat only. Blue = move and still shoot, orange = move only.
+			for h in game.reach:
+				if h == game.player.hex:
+					continue
+				var left: int = int(game.stats["ap"]) - int(game.reach[h])
+				var col := Color(0.30, 0.62, 0.95, 0.20) if left >= game.SHOT_AP else Color(0.95, 0.58, 0.20, 0.20)
+				var poly := Hex.hex_polygon(h, 0.92)
+				draw_colored_polygon(poly, col)
+				poly.append(poly[0])
+				draw_polyline(poly, Color(col.r, col.g, col.b, 0.55), 1.0, true)
+			for i in p.size():
+				var ok: bool = game.reach.has(p[i])
+				var c := Color(0.85, 0.95, 1.0, 0.55) if ok else Color(0.85, 0.3, 0.25, 0.4)
+				draw_colored_polygon(Hex.hex_polygon(p[i], 0.4), c)
 		var h: Vector2i = game.hover_hex
 		if lv.walkable.has(h):
 			var c2 := Color(0.95, 0.88, 0.6, 0.9)
 			if game.action == "attack":
 				c2 = Color(0.95, 0.35, 0.3, 0.9)
-			var poly := Hex.hex_polygon(h)
-			poly.append(poly[0])
-			draw_polyline(poly, c2, 2.5, true)
+			if combat:
+				var poly2 := Hex.hex_polygon(h)
+				poly2.append(poly2[0])
+				draw_polyline(poly2, c2, 2.5, true)
+			elif not p.is_empty():
+				# out of combat: just a destination marker on the ground, no grid
+				var g := Hex.hex_to_ground(h)
+				var ring := PackedVector2Array()
+				for k in 25:
+					var a := TAU * k / 24.0
+					ring.append(Hex.ground_to_screen(g + Vector2(cos(a), sin(a)) * 0.22))
+				draw_polyline(ring, c2, 2.0, true)
 
 
 # ================================================================== automated playthrough for testing

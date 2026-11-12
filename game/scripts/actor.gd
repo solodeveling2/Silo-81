@@ -1,6 +1,7 @@
 class_name Actor
 extends Node2D
-## A pre-rendered character with 6 hex facings, Fallout-style.
+## A character on the square grid: drawn live in 3D (puppet3d) with any facing; the 6-direction sprite
+## sheets are the clock and the fallback.
 ## Locomotion clips animate in place; every new animation frame moves the actor along its
 ## path by the stride measured in Blender, so the feet stay planted and never slide.
 
@@ -36,6 +37,8 @@ static var _blank := {}                           # frame size -> transparent te
 var speed := 1.0                                  # walk-speed multiplier (the Changed shamble)
 var ground := Vector2.ZERO      # metres
 var hex := Vector2i.ZERO
+var face_deg := 0.0                  # exact ground facing for the live 3D model
+var free_move := false               # straight-line move (out of combat): emit stepped on every cell crossed
 var path: Array = []            # ground points still to reach
 var move_clip := "walk"
 var alive := true
@@ -114,6 +117,8 @@ func play(a: String, d: int, keep_phase := false) -> void:
 	if not has_clip(a):
 		return
 	if a == "pistol_hold" and is_aiming():
+		if posmod(int(roundf(face_deg / 60.0)), 6) != d:
+			face_deg = d * 60.0
 		anim = a; dir = d
 		var hinfo: Dictionary = data["animations"][a]["directions"][str(d)]
 		sprite.offset = -Vector2(hinfo["feet_anchor"][0], hinfo["feet_anchor"][1])
@@ -125,6 +130,8 @@ func play(a: String, d: int, keep_phase := false) -> void:
 	var f := sprite.frame
 	var p := sprite.frame_progress
 	anim = a
+	if posmod(int(roundf(face_deg / 60.0)), 6) != d:
+		face_deg = d * 60.0                 # a caller chose a sprite direction: face it exactly
 	dir = d
 	var dinfo: Dictionary = data["animations"][a]["directions"][str(d)]
 	sprite.offset = -Vector2(dinfo["feet_anchor"][0], dinfo["feet_anchor"][1])
@@ -146,6 +153,12 @@ func place_at_hex(h: Vector2i) -> void:
 func face_ground(target: Vector2) -> void:
 	if target.distance_to(ground) > 0.01:
 		dir = Hex.dir_towards(ground, target)
+		face_deg = Hex.angle_towards(ground, target)
+
+
+func _turn_to(target: Vector2) -> int:
+	face_deg = Hex.angle_towards(ground, target)
+	return Hex.dir_towards(ground, target)
 
 
 ## Walk (or run, or crawl) through a list of hexes. Emits stepped at each hex centre and arrived at the end.
@@ -156,9 +169,22 @@ func follow(hexes: Array, clip: String = "") -> void:
 	if path.is_empty():
 		arrived.emit.call_deferred()
 		return
+	free_move = false
 	move_clip = clip if clip != "" else ("crawl" if kind == "worm" else "walk")
 	aim_pitch = NAN                                   # you lower the gun to walk
-	play(move_clip, Hex.dir_towards(ground, path[0]))
+	play(move_clip, _turn_to(path[0]))
+
+
+## Free movement (out of combat): walk straight through ground points; stepped fires on each new cell.
+func follow_points(points: Array, clip: String = "") -> void:
+	path = points.duplicate()
+	if path.is_empty():
+		arrived.emit.call_deferred()
+		return
+	free_move = true
+	move_clip = clip if clip != "" else "walk"
+	aim_pitch = NAN
+	play(move_clip, _turn_to(path[0]))
 
 
 ## Call from a stepped handler to stop right on the hex just reached.
@@ -180,7 +206,7 @@ func is_moving() -> bool:
 func aim_point(part := "body") -> Vector3:
 	var pts: Dictionary = data.get("aim_points", {})
 	var fz: Array = pts.get(part, pts.get("body", [0.0, 0.5]))
-	var f := Vector2(cos(deg_to_rad(60.0 * dir)), sin(deg_to_rad(60.0 * dir)))
+	var f := Vector2(cos(deg_to_rad(face_deg)), sin(deg_to_rad(face_deg)))
 	var g := ground + f * float(fz[0])
 	return Vector3(g.x, g.y, float(fz[1]))
 
@@ -214,7 +240,7 @@ func muzzle_offset(clip: String) -> Vector2:
 	var dinfo: Dictionary = data["animations"].get(clip, {}).get("directions", {}).get(str(dir), {})
 	if dinfo.has("muzzle_offset_px"):
 		return Vector2(dinfo["muzzle_offset_px"][0], dinfo["muzzle_offset_px"][1])
-	var f := Vector2(cos(deg_to_rad(60.0 * dir)), sin(deg_to_rad(60.0 * dir)))
+	var f := Vector2(cos(deg_to_rad(face_deg)), sin(deg_to_rad(face_deg)))
 	return Hex.ground_to_screen(ground + f * 0.55, 1.32) - position
 
 
@@ -264,6 +290,7 @@ func _show_hold(p: float) -> void:
 ## Bring the gun onto a target and keep it there. From the lowered stance this is the raise; if
 ## already aiming, the arms swing from the held pitch to the new one (turning first if needed).
 func aim_at(target: Vector3) -> void:
+	face_deg = Hex.angle_towards(ground, Vector2(target.x, target.y))
 	var nd := Hex.dir_towards(ground, Vector2(target.x, target.y))
 	var p := pitch_for(target, nd)
 	var tag := _pitch_tag(p)
@@ -329,15 +356,21 @@ func _advance(dist: float) -> void:
 			ground = target
 			remaining -= l
 			path.pop_front()
-			hex = Hex.ground_to_hex(ground)
-			stepped.emit(hex)
+			if not free_move:
+				hex = Hex.ground_to_hex(ground)
+				stepped.emit(hex)
 			if not path.is_empty():
-				var nd := Hex.dir_towards(ground, path[0])
+				var nd := _turn_to(path[0])
 				if nd != dir:
 					play(anim, nd, true)
 		else:
 			ground += to / l * remaining
 			remaining = 0.0
+		if free_move:
+			var hc := Hex.ground_to_hex(ground)
+			if hc != hex:
+				hex = hc
+				stepped.emit(hex)
 	position = Hex.ground_to_screen(ground)
 	if path.is_empty():
 		play(idle_clip(get_meta("combat", false)), dir)
@@ -366,7 +399,7 @@ func _process(delta: float) -> void:
 		_advance(_per_frame.get(anim, 0.045) * clip_fps * delta)
 	if puppet:
 		var fps := float(data["animations"].get(anim, {}).get("fps", 24))
-		puppet.sync(anim, sprite.frame + sprite.frame_progress, fps, dir * 60.0, aim_pitch, delta)
+		puppet.sync(anim, sprite.frame + sprite.frame_progress, fps, face_deg, aim_pitch, delta)
 	queue_redraw()
 
 

@@ -3,17 +3,19 @@ class_name Hex
 ## plan (u, v): the 45-degree grid the rooms are laid out on.
 ## ground (x, y): metres, x to screen right, y north (away from the camera).
 ## screen: Godot pixels at 165 px per metre, camera ELEV_DEG above the ground (level/camera.json).
-## Hexes are pointy-topped in ground space, 0.64 m apart (14 frames of the walk cycle).
 
 const PPM := 165.0
-const S := 0.6396
 const R2 := 0.70710678
-const COS30 := 0.8660254                  # hexagon geometry, not the camera
 const ELEV_DEG := 47.0                     # must match level/camera.json (level.gd checks each level)
 const SIN_E := 0.7313537                   # sin(47): ground depth on screen
 const COS_E := 0.6819984                   # cos(47): height on screen
-const VSCALE := COS_E / COS30              # screen heights relative to the old 30-degree view
-const DIRS := [Vector2i(1, 0), Vector2i(1, -1), Vector2i(0, -1), Vector2i(-1, 0), Vector2i(-1, 1), Vector2i(0, 1)]
+const VSCALE := COS_E / 0.8660254          # screen heights relative to the old 30-degree view
+## Wasteland 3 style: square cells on the plan axes (the room walls), 8 neighbours. The grid is only
+## drawn in combat; out of combat the player moves freely (paths are straightened, see Level.smooth).
+## The names say "hex" for history: a "hex" is now one square cell, Vector2i(u, v) in plan cells.
+const CELL := 0.64                        # the old hex spacing: same reach per AP, fits the narrow gaps
+const DIRS := [Vector2i(1, 0), Vector2i(1, 1), Vector2i(0, 1), Vector2i(-1, 1), Vector2i(-1, 0), Vector2i(-1, -1), Vector2i(0, -1), Vector2i(1, -1)]
+const HALF_DIRS := [Vector2i(1, 0), Vector2i(1, 1), Vector2i(0, 1), Vector2i(-1, 1)]   # each edge once
 
 
 static func plan_to_ground(p: Vector2) -> Vector2:
@@ -36,60 +38,79 @@ static func plan_to_screen(p: Vector2, z: float = 0.0) -> Vector2:
 	return ground_to_screen(plan_to_ground(p), z)
 
 
+static func hex_to_plan(h: Vector2i) -> Vector2:
+	return Vector2(h) * CELL
+
+
 static func hex_to_ground(h: Vector2i) -> Vector2:
-	return Vector2(S * (h.x + h.y * 0.5), -S * COS30 * h.y)
+	return plan_to_ground(hex_to_plan(h))
 
 
 static func hex_to_screen(h: Vector2i) -> Vector2:
 	return ground_to_screen(hex_to_ground(h))
 
 
-static func hex_to_plan(h: Vector2i) -> Vector2:
-	return ground_to_plan(hex_to_ground(h))
-
-
 static func ground_to_hex(g: Vector2) -> Vector2i:
-	var r := -g.y / (S * COS30)
-	var q := g.x / S - r * 0.5
-	return cube_round(q, r)
+	var p := ground_to_plan(g) / CELL
+	return Vector2i(int(roundf(p.x)), int(roundf(p.y)))
 
 
 static func screen_to_hex(p: Vector2) -> Vector2i:
 	return ground_to_hex(screen_to_ground(p))
 
 
-static func cube_round(q: float, r: float) -> Vector2i:
-	var s := -q - r
-	var rq := roundf(q)
-	var rr := roundf(r)
-	var rs := roundf(s)
-	var dq := absf(rq - q)
-	var dr := absf(rr - r)
-	var ds := absf(rs - s)
-	if dq > dr and dq > ds:
-		rq = -rr - rs
-	elif dr > ds:
-		rr = -rq - rs
-	return Vector2i(int(rq), int(rr))
-
-
+## Grid distance in cells: a diagonal counts 1, every second diagonal 2 (about 1.5 on average).
 static func distance(a: Vector2i, b: Vector2i) -> int:
-	var d := a - b
-	return int((absi(d.x) + absi(d.y) + absi(d.x + d.y)) / 2)
+	var dx := absi(a.x - b.x)
+	var dy := absi(a.y - b.y)
+	return maxi(dx, dy) + mini(dx, dy) / 2
+
+
+## Action-point cost of walking a cell path starting at from: 1 per straight step, diagonals 1, 2, 1, 2...
+static func step_costs(from: Vector2i, path: Array) -> Array:
+	var out := []
+	var prev := from
+	var diag := 0
+	for h in path:
+		var d: Vector2i = h - prev
+		if d.x != 0 and d.y != 0:
+			diag += 1
+			out.append(2 if diag % 2 == 0 else 1)
+		else:
+			out.append(1)
+		prev = h
+	return out
+
+
+## How many steps of path the given action points pay for.
+static func affordable(from: Vector2i, path: Array, ap: int) -> int:
+	var n := 0
+	var spent := 0
+	for c in step_costs(from, path):
+		if spent + c > ap:
+			break
+		spent += c
+		n += 1
+	return n
+
+
+## Facing in degrees on the ground (0 = screen right, counter-clockwise), and the nearest of the
+## six sprite directions the pre-rendered fallback sheets have.
+static func angle_towards(from_g: Vector2, to_g: Vector2) -> float:
+	return rad_to_deg(atan2(to_g.y - from_g.y, to_g.x - from_g.x))
 
 
 static func dir_towards(from_g: Vector2, to_g: Vector2) -> int:
-	var a := rad_to_deg(atan2(to_g.y - from_g.y, to_g.x - from_g.x))
-	return posmod(int(roundf(a / 60.0)), 6)
+	return posmod(int(roundf(angle_towards(from_g, to_g) / 60.0)), 6)
 
 
+## The cell outline on screen (a diamond: the grid runs along the walls, 45 degrees to the screen).
 static func hex_polygon(h: Vector2i, scale: float = 0.94) -> PackedVector2Array:
-	var c := hex_to_ground(h)
-	var rad := S / sqrt(3.0) * scale
+	var c := hex_to_plan(h)
+	var r := CELL * 0.5 * scale
 	var pts := PackedVector2Array()
-	for k in 6:
-		var a := deg_to_rad(30.0 + 60.0 * k)
-		pts.append(ground_to_screen(c + Vector2(cos(a), sin(a)) * rad))
+	for o in [Vector2(-r, -r), Vector2(r, -r), Vector2(r, r), Vector2(-r, r)]:
+		pts.append(plan_to_screen(c + o))
 	return pts
 
 

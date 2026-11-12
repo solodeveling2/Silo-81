@@ -1,7 +1,8 @@
 # Silo 81 - notes for Claude
 
-Fallout 1/2-style isometric RPG in Godot 4.3 (GDScript, Compatibility renderer). Hex grid,
-turn-based combat only, Wasteland 3-style action bar. See README.md for layout and build commands.
+Fallout 1/2-style isometric RPG in Godot 4.3 (GDScript, Compatibility renderer). Wasteland 3-style grid:
+free movement out of combat, a square 0.64 m tile grid only in turn-based combat (blue tiles = can still
+shoot after moving, orange = move only; straight step 1 AP, diagonals alternate 1/2), Wasteland 3-style action bar. See README.md for layout and build commands.
 
 ## Permanent rules
 

@@ -1,6 +1,6 @@
 # Silo 81
 
-A 2D isometric post-apocalyptic RPG in the spirit of Fallout 1 and 2, built in Godot 4.3. Exploration is real time and combat is turn-based on a hex grid. The art is pre-rendered from 3D in a toon style.
+A 2D isometric post-apocalyptic RPG in the spirit of Fallout 1 and 2, built in Godot 4.3. Exploration is real time with free movement; combat is turn-based on a Wasteland 3-style square tile grid. The art is pre-rendered from 3D in a toon style.
 
 This repository holds the first playable slice and the tools that build its art.
 
@@ -58,7 +58,7 @@ godot --headless --fixed-fps 60 --path game -- --autotest
 
 ```
 game/                      Godot project
-  scripts/                 game.gd (rules, turns, AI), level.gd (map, hexes, doors),
+  scripts/                 game.gd (rules, turns, AI), level.gd (map, tiles, doors),
                            actor.gd (sprites, slide-free movement), hud.gd (UI), hex.gd (coordinates)
   characters/              sprite sheets + character.json (player, pipe worm)
   levels/L2, L2W, L3, L4W  pre-rendered background, prop and door sprites, level.json
@@ -96,7 +96,7 @@ Everything uses one camera: orthographic, 47 degrees above the ground (tools/ble
 
 - **Walls.** Interior walls are cut down to stubs, dollhouse style, so rooms stay readable. Only the outer back walls stand full height.
 - **Draw order.** Props, doors and characters are separate sprites, sorted by their footprint.
-- **Hexes.** A hex is 0.64 m: exactly 14 frames of the walk cycle.
+- **Tiles.** A combat tile is 0.64 m square: exactly 14 frames of the walk cycle. Out of combat the player walks a smoothed path, not tile to tile.
 - **Aiming.** Every character records its height and where to hit it (body, head), measured on the 3D model. The shot is rendered at six gun angles, from 60 degrees down to 40 up, and the game picks the one that lines up with the target, so the pistol points down at a worm on the floor and up at anything taller. The tracer starts at the muzzle measured on the firing frame.
 - **No foot sliding.** Characters move by the stride measured in Blender for each animation frame, so their feet don't slide.
 

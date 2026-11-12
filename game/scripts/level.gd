@@ -237,7 +237,17 @@ func build(dir: String, state: Dictionary) -> void:
 		cn.position = Hex.plan_to_screen(Vector2(c["u"], c["v"]))
 		cn.add_child(pup)
 		sorted.add_child(cn)
-		creatures.append({"p": pup, "facing": float(c.get("facing", 0.0)), "phase": float(c.get("phase", 0.0))})
+		var home := Hex.plan_to_ground(Vector2(c["u"], c["v"]))
+		var area := []                            # the pen it lives in (plan footprint), if any
+		for pr in data.get("props", []):
+			if pr.get("type", "") == "animal_pen":
+				var fp: Array = pr["footprint"]
+				if Hex.point_rect_dist(Vector2(c["u"], c["v"]), fp) < 1.0:
+					area = [fp[0] + 0.45, fp[1] - 0.45, fp[2] + 0.45, fp[3] - 0.45]
+		creatures.append({"p": pup, "n": cn, "facing": float(c.get("facing", 0.0)), "phase": float(c.get("phase", 0.0)),
+						  "g": home, "home": home, "area": area, "walks": pup.cfg.get("clips", {}).has("walk"), "state": "graze",
+						  "timer": 3.0 + float(c.get("phase", 0.0)), "target": home, "t": 0.0,
+						  "speed": float(pup.cfg.get("walk_m_per_frame", 0.025)) * 24.0})
 
 	for wp in data.get("wallparts", []):          # full-height walls, in strips that sort and fade
 		var n := Node2D.new()
@@ -795,7 +805,7 @@ func _add_piece(along_u: bool, a: Vector2, s0: float, s1: float, door: String) -
 func _in_room(p: Vector2) -> String:
 	for r in data["rooms"]:
 		var rr: Array = r["r"]
-		if p.x > rr[0] and p.x < rr[1] and p.y > rr[2] and p.y < rr[3]:
+		if p.x >= rr[0] and p.x < rr[1] and p.y >= rr[2] and p.y < rr[3]:   # half-open: rooms that touch share no dead line
 			return r["id"]
 	return ""
 
@@ -832,15 +842,13 @@ func _edge_door(a: Vector2i, b: Vector2i) -> String:
 
 func _build_grid() -> void:
 	var bnd: Array = data["bounds"]
-	var corners := [Vector2(bnd[0], bnd[2]), Vector2(bnd[0], bnd[3]), Vector2(bnd[1], bnd[2]), Vector2(bnd[1], bnd[3])]
-	var qmin := 99999; var qmax := -99999; var rmin := 99999; var rmax := -99999
-	for c in corners:
-		var h := Hex.ground_to_hex(Hex.plan_to_ground(c))
-		qmin = mini(qmin, h.x); qmax = maxi(qmax, h.x); rmin = mini(rmin, h.y); rmax = maxi(rmax, h.y)
-	qmin -= 30; qmax += 30
-	for r in range(rmin - 2, rmax + 3):
-		for q in range(qmin, qmax + 1):
-			var h := Vector2i(q, r)
+	var umin := int(floor(float(bnd[0]) / Hex.CELL)) - 1
+	var umax := int(ceil(float(bnd[1]) / Hex.CELL)) + 1
+	var vmin := int(floor(float(bnd[2]) / Hex.CELL)) - 1
+	var vmax := int(ceil(float(bnd[3]) / Hex.CELL)) + 1
+	for v in range(vmin, vmax + 1):
+		for u in range(umin, umax + 1):
+			var h := Vector2i(u, v)
 			if _hex_ok(h):
 				walkable[h] = true
 				room_of[h] = _in_room(Hex.hex_to_plan(h))
@@ -848,10 +856,17 @@ func _build_grid() -> void:
 				pid[h] = id
 				astar.add_point(id, Hex.hex_to_ground(h))
 	for h in walkable:
-		for k in 3:                       # each edge once: directions 0, 1, 2
-			var n: Vector2i = h + Hex.DIRS[k]
+		for dd in Hex.HALF_DIRS:           # each edge once
+			var d: Vector2i = dd
+			var n: Vector2i = h + d
 			if not walkable.has(n):
 				continue
+			if d.x != 0 and d.y != 0:      # a diagonal may not cut a corner: both side cells free and joined
+				var a: Vector2i = h + Vector2i(d.x, 0)
+				var b: Vector2i = h + Vector2i(0, d.y)
+				if not (walkable.has(a) and walkable.has(b)) or _edge_door(h, a) != "" or _edge_door(h, b) != "" \
+						or _edge_door(a, n) != "" or _edge_door(b, n) != "":
+					continue
 			var e := _edge_door(h, n)
 			if e == "#":
 				continue
@@ -863,7 +878,82 @@ func _build_grid() -> void:
 				door_edges[e].append([pid[h], pid[n]])
 				if doors.has(e) and doors[e]["open"]:
 					astar.connect_points(pid[h], pid[n])
-	print("level ", data["level"], ": ", walkable.size(), " walkable hexes")
+	print("level ", data["level"], ": ", walkable.size(), " walkable cells")
+
+
+## Combat reach: every cell the actor at start can walk to with ap, and its cheapest AP cost
+## (straight steps 1, diagonals alternating 1 and 2), following the same graph as find_path.
+func reach_from(start: Vector2i, ap: int, occupied: Array = []) -> Dictionary:
+	var best := {}                       # [cell, parity] -> cost
+	var out := {start: 0}
+	if not pid.has(start):
+		return out
+	var open := [[0, start, 0]]          # cost, cell, diagonals taken so far (parity)
+	best[[start, 0]] = 0
+	while not open.is_empty():
+		var bi := 0
+		for i in open.size():
+			if open[i][0] < open[bi][0]:
+				bi = i
+		var cur: Array = open.pop_at(bi)
+		var c: int = cur[0]
+		var h: Vector2i = cur[1]
+		var par: int = cur[2]
+		for nid in astar.get_point_connections(pid[h]):
+			var n := Hex.ground_to_hex(astar.get_point_position(nid))
+			if n in occupied:
+				continue
+			var d := n - h
+			var diag := d.x != 0 and d.y != 0
+			var step := (2 if par == 1 else 1) if diag else 1
+			var nc := c + step
+			if nc > ap:
+				continue
+			var np := (1 - par) if diag else par
+			var key := [n, np]
+			if best.has(key) and best[key] <= nc:
+				continue
+			best[key] = nc
+			if not out.has(n) or out[n] > nc:
+				out[n] = nc
+			open.append([nc, n, np])
+	return out
+
+
+## Free movement out of combat: straighten a cell path into the fewest straight segments that stay
+## on walkable cells and cross no wall or closed door. Returns ground points (the last is the goal).
+func smooth(from: Vector2i, path: Array) -> Array:
+	var cells: Array = [from] + path
+	var out: Array = []
+	var i := 0
+	while i < cells.size() - 1:
+		var j := cells.size() - 1
+		while j > i + 1 and not _straight_ok(cells[i], cells[j]):
+			j -= 1
+		out.append(Hex.hex_to_ground(cells[j]))
+		i = j
+	return out
+
+
+func _straight_ok(a: Vector2i, b: Vector2i) -> bool:
+	var pa := Hex.hex_to_plan(a)
+	var pb := Hex.hex_to_plan(b)
+	var n := int(ceil(pa.distance_to(pb) / (Hex.CELL * 0.25)))
+	var prev := a
+	for k in range(1, n + 1):
+		var p := pa.lerp(pb, float(k) / n)
+		for o in [Vector2(0.22, 0.22), Vector2(-0.22, 0.22), Vector2(0.22, -0.22), Vector2(-0.22, -0.22)]:
+			if not walkable.has(Hex.ground_to_hex(Hex.plan_to_ground(p + o * Hex.CELL))):
+				return false
+		var h := Hex.ground_to_hex(Hex.plan_to_ground(p))
+		if h != prev:
+			if not pid.has(h) or not pid.has(prev):
+				return false
+			var e := _edge_door(prev, h)
+			if e == "#" or (e != "" and not (doors.has(e) and doors[e]["open"])):
+				return false
+			prev = h
+	return true
 
 
 func find_path(from: Vector2i, to: Vector2i, occupied: Array = []) -> Array:
@@ -1049,10 +1139,58 @@ func approach_hexes(target: Dictionary) -> Array:
 	return out
 
 
+func _creature_step(c: Dictionary, dt: float) -> void:
+	if not c["walks"]:
+		return
+	c["timer"] = float(c["timer"]) - dt
+	if c["state"] == "graze":
+		if c["timer"] > 0.0:
+			return
+		var tgt: Vector2 = c["g"]
+		for _try in 12:                          # a spot in the pen, away from the other animals
+			var p_plan: Vector2
+			if c["area"].is_empty():
+				p_plan = Hex.ground_to_plan(c["home"]) + Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0))
+			else:
+				var a: Array = c["area"]
+				p_plan = Vector2(randf_range(a[0], a[1]), randf_range(a[2], a[3]))
+			var g := Hex.plan_to_ground(p_plan)
+			if g.distance_to(c["g"]) < 0.6:
+				continue
+			var free := true
+			for o in creatures:
+				if o != c and (g.distance_to(o["g"]) < 0.7 or g.distance_to(o["target"]) < 0.7):
+					free = false
+			if free:
+				tgt = g
+				break
+		c["target"] = tgt
+		c["state"] = "walk"
+		c["t"] = 0.0
+		return
+	# walking: turn towards the target (no more than 140 degrees a second), then step on
+	var to: Vector2 = c["target"] - c["g"]
+	var want := rad_to_deg(atan2(to.y, to.x))
+	var diff := wrapf(want - float(c["facing"]), -180.0, 180.0)
+	c["facing"] = float(c["facing"]) + clampf(diff, -140.0 * dt, 140.0 * dt)
+	c["t"] = float(c["t"]) + dt
+	if absf(diff) < 35.0:
+		var step: float = minf(float(c["speed"]) * dt, to.length())
+		c["g"] = c["g"] + to.normalized() * step
+		(c["n"] as Node2D).position = Hex.ground_to_screen(c["g"])
+	if to.length() < 0.03 or c["t"] > 12.0:
+		c["state"] = "graze"
+		c["timer"] = randf_range(4.0, 10.0)
+
+
 func _process(_dt: float) -> void:
 	var t := Time.get_ticks_msec() / 1000.0
-	for c in creatures:                           # 12 poses a second: the grazing loop at half its source rate
-		(c["p"] as Puppet3D).sync("idle", (t + c["phase"]) * 12.0, 12.0, c["facing"], NAN, _dt)
+	for c in creatures:                           # graze a while, amble to another spot in the pen, graze again
+		_creature_step(c, _dt)
+		if c["state"] == "walk":
+			(c["p"] as Puppet3D).sync("walk", c["t"] * 24.0, 24.0, c["facing"], NAN, _dt)
+		else:                                     # 12 poses a second: the grazing loop at half its source rate
+			(c["p"] as Puppet3D).sync("idle", (t + c["phase"]) * 12.0, 12.0, c["facing"], NAN, _dt)
 	for g in grazers:
 		var ph: float = g["phase"]
 		g["s"].rotation = sin(t * 1.25 + ph) * 0.10 + sin(t * 2.9 + ph) * 0.035
