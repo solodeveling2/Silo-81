@@ -51,6 +51,30 @@ func _gtex(name: String) -> Texture2D:
 
 ## The outdoor ground: tiling textures on plan rectangles, soft decals, snow drifts and lamp pools,
 ## in the level's light (docs/VISUAL_DIRECTION.md). Everything here lies under the sorted sprites.
+func _road_strip(holder: Node2D, rd: Dictionary, amb: Color) -> void:
+	var pts: Array = rd["pts"]
+	var hw := float(rd.get("w", 6.0)) * 0.5
+	var left := PackedVector2Array(); var right := PackedVector2Array()
+	for i in pts.size():
+		var a: Array = pts[max(i - 1, 0)]
+		var b: Array = pts[min(i + 1, pts.size() - 1)]
+		var t := Vector2(b[0] - a[0], b[1] - a[1]).normalized()
+		var n := Vector2(-t.y, t.x) * hw
+		var c := Vector2(pts[i][0], pts[i][1])
+		left.append(c + n); right.append(c - n)
+	right.reverse()
+	var poly_pts := PackedVector2Array(); var uvs := PackedVector2Array()
+	for c in left + right:
+		poly_pts.append(Hex.plan_to_screen(c))
+		uvs.append(Vector2(c.x, -c.y) * GROUND_PX_PER_M)
+	var poly := Polygon2D.new()
+	poly.polygon = poly_pts; poly.uv = uvs
+	poly.texture = _gtex(str(rd.get("tex", "asphalt")))
+	poly.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	poly.color = amb
+	holder.add_child(poly)
+
+
 func _build_ground(G: Dictionary) -> void:
 	var holder := Node2D.new()
 	add_child(holder)
@@ -70,6 +94,8 @@ func _build_ground(G: Dictionary) -> void:
 		var t: Array = f.get("tint", [1, 1, 1])
 		poly.color = Color(t[0] * amb.r, t[1] * amb.g, t[2] * amb.b)
 		holder.add_child(poly)
+	for rd in G.get("roads", []):                       # curved roads: a strip along the centre line, world-tiled
+		_road_strip(holder, rd, amb)
 	var patches: Array = G.get("patches", []).duplicate()
 	patches.sort_custom(func(a, b): return int(a["layer"]) < int(b["layer"]))
 	for pt in patches:
@@ -129,22 +155,27 @@ func _build_ground(G: Dictionary) -> void:
 ## A snow drift: an ellipse dome in three toon bands (shade rim, mid, lit cap towards the key light),
 ## the cap raised by its height so it reads as a mound from the 47-degree camera.
 func _mound(parent: Node2D, c: Vector2, ru: float, rv: float, h: float, amb: Color) -> void:
+	## a snow drift: a cool soft shadow on the shade side, then a body, cap and highlight stacked up and leaning
+	## towards the key (from -u in plan). Soft-edged layers, so it rises out of the snowfield instead of sitting on it.
 	var lift := Vector2(0, -h * Hex.COS_E * Hex.PPM)
-	var key := Vector2(-0.22, 0.0)                      # the cap leans to the lit side (the key comes from -u in plan)
-	var bands := [[1.0, 0.0, Color(0.76, 0.80, 0.86)], [0.82, 0.55, Color(0.85, 0.89, 0.94)], [0.55, 0.9, Color(0.91, 0.94, 0.98)]]   # final colours, matched to the lit snow (no ambient: it pushed them blue)
-	for b in bands:
-		var k: float = b[0]
-		var up: float = b[1]
-		var pts := PackedVector2Array()
-		var cc := c + Vector2(key.x * ru, key.y * rv) * (1.0 - k) * 2.0
-		for i in 24:
-			var a := TAU * i / 24.0
-			pts.append(Hex.plan_to_screen(cc + Vector2(cos(a) * ru * k, sin(a) * rv * k)) + lift * up)
+	var soft := _gtex("soft")
+	var ts := soft.get_size()
+	var layers := [   # scale, lift fraction, plan offset (in radii), colour
+		[1.18, 0.0, Vector2(0.22, -0.10), Color(0.58, 0.65, 0.77, 0.55)],
+		[1.0, 0.30, Vector2(0.0, 0.0), Color(0.78, 0.83, 0.90, 0.9)],
+		[0.74, 0.65, Vector2(-0.14, 0.04), Color(0.80, 0.85, 0.92, 0.85)],
+		[0.44, 0.95, Vector2(-0.26, 0.08), Color(0.84, 0.88, 0.94, 0.5)],
+	]
+	for L in layers:
+		var k: float = L[0]
+		var cc: Vector2 = c + Vector2(L[2].x * ru, L[2].y * rv)
+		var pts := PackedVector2Array(); var uvs := PackedVector2Array()
+		for q in [[-1, -1, 0, 0], [1, -1, 1, 0], [1, 1, 1, 1], [-1, 1, 0, 1]]:
+			pts.append(Hex.plan_to_screen(cc + Vector2(q[0] * ru * k, q[1] * rv * k)) + lift * float(L[1]))
+			uvs.append(Vector2(q[2], q[3]) * ts)
 		var poly := Polygon2D.new()
-		poly.polygon = pts
-		var col: Color = b[2]
-		poly.color = col
-		poly.antialiased = true
+		poly.polygon = pts; poly.uv = uvs; poly.texture = soft
+		poly.color = L[3]
 		parent.add_child(poly)
 
 
@@ -200,6 +231,25 @@ func build(dir: String, state: Dictionary) -> void:
 	for r in data["blocked"]:
 		blocked.append(r)
 	var sk := 1.0 / float(data.get("sprite_scale", 1.0))
+	if data.has("ground"):                          # outdoors: a soft contact shadow under every prop, so it sits in the snow
+		var cs := Node2D.new()
+		add_child(cs); move_child(cs, sorted.get_index())
+		var soft := _gtex("soft")
+		var ts := soft.get_size()
+		for p in data["props"]:
+			var fp: Array = p["footprint"]
+			var w := float(fp[1]) - float(fp[0]); var d := float(fp[3]) - float(fp[2])
+			if w * d < 0.04:
+				continue
+			var g := 0.22 + 0.06 * minf(w, d)          # bigger things throw a wider skirt
+			var r := [float(fp[0]) - g + 0.12, float(fp[1]) + g + 0.12, float(fp[2]) - g - 0.06, float(fp[3]) + g - 0.06]   # leaning away from the key (-u)
+			var pts := PackedVector2Array(); var uvs := PackedVector2Array()
+			for q in [[r[0], r[2], 0, 0], [r[1], r[2], 1, 0], [r[1], r[3], 1, 1], [r[0], r[3], 0, 1]]:
+				pts.append(Hex.plan_to_screen(Vector2(q[0], q[1]))); uvs.append(Vector2(q[2], q[3]) * ts)
+			var poly := Polygon2D.new()
+			poly.polygon = pts; poly.uv = uvs; poly.texture = soft
+			poly.color = Color(0.42, 0.48, 0.58, 0.32)
+			cs.add_child(poly)
 	for p in data["props"]:
 		var n := Node2D.new()
 		n.position = Vector2(p["sort"][0], p["sort"][1])
@@ -1088,7 +1138,7 @@ func pick(screen: Vector2) -> Dictionary:
 				p_kind = "heating_assembly"
 			elif p_id in ["heating_workstation", "spares_shelf"]:
 				p_kind = "heating_instability"
-			best = {"kind": p_kind, "id": p_id,
+			best = {"kind": p_kind, "id": p_id, "poi": pd.get("poi", ""),
 					"name": pd["name"], "text": pd["text"], "plan": Vector2((fp[0] + fp[1]) / 2.0, (fp[2] + fp[3]) / 2.0),
 					"footprint": fp}
 	if not best.is_empty():
@@ -1103,7 +1153,8 @@ func pick(screen: Vector2) -> Dictionary:
 		if it.has("room") and is_dark(it["room"]):
 			continue
 		if Hex.plan_to_screen(ip, 1.3).distance_to(screen) < 60 or Hex.plan_to_screen(ip).distance_to(screen) < 50:
-			return {"kind": it.get("kind", "look"), "id": it["id"], "name": it["name"], "text": it["text"], "plan": ip}
+			return {"kind": it.get("kind", "look"), "id": it["id"], "name": it["name"], "text": it["text"], "plan": ip,
+					"poi": it.get("poi", "")}
 	return {}
 
 

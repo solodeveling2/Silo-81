@@ -1,1 +1,8487 @@
-{"level": "RD", "name": "The Road to Junk Town", "ppm": 165.0, "elev_deg": 47.0, "rooms": [{"id": "rd_apron", "r": [-1.0, 10.0, 3.0, 9.7], "name": "Silo 81 surface portal"}, {"id": "rd_road", "r": [-2.0, 64.0, -3.0, 3.0], "name": "The road east"}, {"id": "rd_reststop", "r": [36.0, 51.0, 3.0, 9.4], "name": "Rest stop"}, {"id": "rd_west", "r": [-2.0, 24.0, -12.0, 12.0], "name": "Snowfield"}, {"id": "rd_mid", "r": [24.0, 50.0, -12.0, 12.5], "name": "Snowfield"}, {"id": "rd_scrap", "r": [50.0, 64.0, -12.5, 12.5], "name": "Scrapyard"}, {"id": "jt_yard", "r": [64.0, 90.6, -12.6, 12.6], "name": "Junk Town"}], "walls": [], "doors": [], "props": [{"type": "silo_portal", "footprint": [0.0, 9.0, 9.9, 11.3], "sprite": "spr_000.png", "x0": -2200.4, "y0": -3050.2, "sort": [-711.7, -1288.5], "name": "Silo 81 surface portal", "text": "Six metres of poured concrete and two blast leaves, one jammed open. Someone scratched SEALED FROM INSIDE into the pier. The door is not sealed now."}, {"type": "guard_shack", "footprint": [11.5, 14.5, 7.8, 10.4], "sprite": "spr_001.png", "x0": 85.3, "y0": -2552.7, "sort": [455.0, -1885.8], "name": "Guard post", "text": "The heater is a block of rust. The duty log stops in the middle of a sentence. The chair is still pulled up to the window."}, {"type": "sandbag_nest", "footprint": [7.3, 10.7, 4.2, 7.4], "sprite": "spr_002.png", "x0": -52.3, "y0": -1664.4, "sort": [373.4, -1262.9], "name": "Sandbag nest", "text": "Empty. Brass casings frozen into the snow, all pointing outwards."}, {"type": "road_barrier", "footprint": [4.5, 4.5, 2.1, 2.1], "sprite": "spr_003.png", "x0": -55.0, "y0": -1055.8, "sort": [280.0, -563.2], "name": "Checkpoint barrier", "text": "The boom snapped where it met the post. A child's red mitten is tied to the stump."}, {"type": "notice_board", "footprint": [10.2, 12.2, 3.3, 3.6], "sprite": "spr_004.png", "x0": 761.7, "y0": -1581.9, "sort": [904.2, -1250.1], "name": "Evacuation notice", "text": "EVACUATION - NEW MERIDIAN - 40 KM. Assemble at the depot. Bring documents, warm clothing, three days of food. The arrow pointing east has been torn half away."}, {"type": "glbp", "footprint": [-0.8, -0.55, 4.5, 7.9], "sprite": "spr_005.png", "x0": -1023.7, "y0": -879.8, "sort": [-802.1, -471.4], "name": "Perimeter fence", "text": "Chain-link, bent outwards. Whatever went through it was leaving."}, {"type": "glbp", "footprint": [13.899, 17.301, 4.879, 5.6], "sprite": "spr_006.png", "x0": 961.7, "y0": -2208.0, "sort": [1208.8, -1778.2], "name": "Perimeter fence"}, {"type": "glbp", "footprint": [2.251, 7.349, -9.2, -5.319], "sprite": "spr_007.png", "x0": 857.4, "y0": -549.6, "sort": [1407.0, 209.9], "name": "Abandoned van", "text": "Nose in the snow, doors open. The seats have been cut out for the foam."}, {"type": "glbp", "footprint": [7.945, 12.455, -6.6, -3.837], "sprite": "spr_008.png", "x0": 1389.1, "y0": -938.2, "sort": [1798.9, -425.1], "name": "Abandoned car", "text": "A family estate car. Under the snow on the back seat, a shape you decide not to look at closely."}, {"type": "glbp", "footprint": [10.993, 15.807, -10.6, -5.835], "sprite": "spr_009.png", "x0": 2130.1, "y0": -1014.9, "sort": [2522.2, -442.2], "name": "Abandoned van"}, {"type": "glbp", "footprint": [-0.905, 2.105, -7.0, -2.449], "sprite": "spr_010.png", "x0": 214.7, "y0": -167.9, "sort": [621.2, 351.9], "name": "Abandoned car"}, {"type": "army_truck_side", "footprint": [16.2, 23.0, -10.8, -7.8], "sprite": "spr_011.png", "x0": 2756.8, "y0": -1623.9, "sort": [3371.8, -878.9], "name": "Army truck", "text": "On its side. Sandbags, a field radio, jerrycans. No bodies. No tracks leading away, either."}, {"type": "dead_tree", "footprint": [-1.4, -0.6, -11.5, -10.7], "sprite": "spr_012.png", "x0": 740.1, "y0": 74.6, "sort": [1178.4, 1032.5]}, {"type": "dead_tree", "footprint": [17.4, 18.2, 8.4, 9.2], "sprite": "spr_013.png", "x0": 827.4, "y0": -3133.9, "sort": [1050.1, -2269.8]}, {"type": "dead_tree", "footprint": [22.4, 23.2, 10.2, 11.0], "sprite": "spr_014.png", "x0": 1214.7, "y0": -3950.1, "sort": [1423.4, -2850.0]}, {"type": "guardrail", "footprint": [6.0, 12.0, -3.6, -3.2], "sprite": "spr_015.png", "x0": 1078.1, "y0": -845.8, "sort": [1446.7, -477.8]}, {"type": "guardrail", "footprint": [16.0, 24.0, -3.6, -2.3], "sprite": "spr_016.png", "x0": 2140.5, "y0": -1946.4, "sort": [2677.6, -1454.9], "name": "Guardrail", "text": "Bent out by something heavy, long ago."}, {"type": "guardrail", "footprint": [14.0, 20.0, 3.2, 3.6], "sprite": "spr_017.png", "x0": 1203.4, "y0": -2119.8, "sort": [1586.7, -1740.7]}, {"type": "power_pylon", "footprint": [25.9, 30.1, 6.4, 10.6], "sprite": "spr_018.png", "x0": 1207.1, "y0": -5555.7, "sort": [2275.1, -3114.5], "name": "Leaning pylon", "text": "Leaning over the road like it is listening. Scorch marks on the legs and spent cases in the snow under it: people fought here."}, {"type": "fallen_pylon", "footprint": [24.0, 36.0, -10.8, -8.0], "sprite": "spr_019.png", "x0": 3646.2, "y0": -3098.3, "sort": [4596.9, -1757.8], "name": "Fallen pylon"}, {"type": "glbp", "footprint": [34.159, 38.641, -4.4, -1.766], "sprite": "spr_020.png", "x0": 4209.2, "y0": -3349.5, "sort": [4606.6, -2842.9], "name": "Stalled car", "text": "Doors open, engine cold for years. A suitcase on the back seat, a child's seat, a road map with New Meridian circled in pencil."}, {"type": "guardrail", "footprint": [28.5, 34.5, 3.2, 3.6], "sprite": "spr_017.png", "x0": 2895.2, "y0": -3357.0, "sort": [3278.5, -2978.0]}, {"type": "guardrail", "footprint": [44.5, 50.5, -3.6, -2.7], "sprite": "spr_021.png", "x0": 5526.0, "y0": -4162.9, "sort": [5909.5, -3784.3]}, {"type": "box_trailer", "footprint": [36.05, 47.55, 2.9, 5.4], "sprite": "spr_022.png", "x0": 3171.9, "y0": -5026.5, "sort": [4392.7, -3920.9], "name": "Jack-knifed trailer", "text": "BALTIC FREIGHT, faded to pink. The back doors were cut open with a torch. Empty, apart from frost."}, {"type": "dead_tree", "footprint": [38.4, 39.2, -11.4, -10.6], "sprite": "spr_023.png", "x0": 5556.0, "y0": -3289.0, "sort": [5810.3, -2372.1]}, {"type": "dead_tree", "footprint": [46.4, 47.2, -8.8, -8.0], "sprite": "spr_024.png", "x0": 6343.0, "y0": -4026.5, "sort": [6440.3, -3276.6]}, {"type": "dead_tree", "footprint": [34.6, 35.4, 11.2, 12.0], "sprite": "spr_025.png", "x0": 2308.5, "y0": -5030.5, "sort": [2730.1, -3976.3]}, {"type": "rest_kiosk", "footprint": [41.2, 47.2, 9.6, 13.6], "sprite": "spr_026.png", "x0": 3165.2, "y0": -5714.0, "sort": [3803.5, -4761.4], "name": "Rest stop kiosk", "text": "Shelves stripped to the brackets. A kettle on a cold stove. A radio on the counter, its battery long dead, still tuned to the emergency band."}, {"type": "fuel_pump", "footprint": [41.95, 42.85, 7.3, 8.0], "sprite": "spr_027.png", "x0": 3938.5, "y0": -4555.6, "sort": [4054.4, -4270.7], "name": "Fuel pump", "text": "NO FUEL, says the sign. The hose has been cut for the rubber."}, {"type": "fuel_pump", "footprint": [45.15, 46.05, 7.3, 8.0], "sprite": "spr_028.png", "x0": 4311.9, "y0": -4869.6, "sort": [4427.7, -4543.8], "name": "Fuel pump"}, {"type": "glbp", "footprint": [36.395, 40.805, 9.233, 11.6], "sprite": "spr_029.png", "x0": 2892.2, "y0": -4688.5, "sort": [3288.2, -4182.5], "name": "Snowed-in car", "text": "A photo tucked in the sun visor: three people squinting into summer."}, {"type": "tyre_stack", "footprint": [48.87, 49.53, 10.54, 11.2], "sprite": "spr_030.png", "x0": 4341.6, "y0": -5259.9, "sort": [4472.1, -5125.7]}, {"type": "tyre_stack", "footprint": [49.67, 50.33, 9.94, 10.6], "sprite": "spr_031.png", "x0": 4514.9, "y0": -5231.9, "sort": [4635.4, -5142.8]}, {"type": "billboard", "footprint": [51.8, 58.2, 11.5, 12.4], "sprite": "spr_032.png", "x0": 4589.3, "y0": -6699.2, "sort": [5022.8, -5712.8], "name": "Billboard", "text": "NEW MERIDIAN 40 km - EVACUATION ROUTE. Someone has painted a line of marks under it, one for each day, until they stopped."}, {"type": "container", "footprint": [52.4, 58.4, -10.4, -7.95], "sprite": "spr_033.png", "x0": 7028.1, "y0": -4623.8, "sort": [7534.1, -3944.3], "name": "Shipping container"}, {"type": "container", "footprint": [46.2, 52.2, -11.9, -9.45], "sprite": "spr_034.png", "x0": 6479.7, "y0": -3966.8, "sort": [6985.8, -3287.3]}, {"type": "burned_bus", "footprint": [51.75, 62.25, 8.1, 10.6], "sprite": "spr_035.png", "x0": 4784.6, "y0": -6579.2, "sort": [5559.5, -5661.6], "name": "Burned bus", "text": "Burned from the inside. The seats are springs."}, {"type": "glbp", "footprint": [58.441, 63.159, -12.8, -8.229], "sprite": "spr_036.png", "x0": 7956.1, "y0": -4868.8, "sort": [8320.4, -4290.8]}, {"type": "grave", "footprint": [56.6, 58.5, -5.85, -4.95], "sprite": "spr_037.png", "x0": 7191.7, "y0": -4651.8, "sort": [7344.5, -4449.9], "name": "Graves", "text": "Crosses of exhaust pipe and fence post, hubcaps for headstones. Number plates for names."}, {"type": "grave", "footprint": [58.0, 59.9, -6.35, -5.45], "sprite": "spr_038.png", "x0": 7413.4, "y0": -4728.6, "sort": [7566.2, -4526.7], "name": "Graves", "text": "Crosses of exhaust pipe and fence post, hubcaps for headstones. Number plates for names."}, {"type": "grave", "footprint": [59.4, 61.3, -5.85, -4.95], "sprite": "spr_039.png", "x0": 7506.4, "y0": -4898.8, "sort": [7671.2, -4688.8], "name": "Graves", "text": "Crosses of exhaust pipe and fence post, hubcaps for headstones. Number plates for names."}, {"type": "grave", "footprint": [56.9, 58.8, -7.85, -6.95], "sprite": "spr_040.png", "x0": 7460.0, "y0": -4506.8, "sort": [7612.9, -4304.8], "name": "Graves", "text": "Crosses of exhaust pipe and fence post, hubcaps for headstones. Number plates for names."}, {"type": "grave", "footprint": [58.4, 60.3, -8.25, -7.35], "sprite": "spr_041.png", "x0": 7675.7, "y0": -4604.6, "sort": [7834.6, -4398.7], "name": "Graves", "text": "Crosses of exhaust pipe and fence post, hubcaps for headstones. Number plates for names."}, {"type": "tyre_stack", "footprint": [52.27, 52.93, 4.74, 5.4], "sprite": "spr_042.png", "x0": 5414.9, "y0": -5032.1, "sort": [5545.4, -4920.9]}, {"type": "tyre_stack", "footprint": [53.07, 53.73, 5.34, 6.0], "sprite": "spr_030.png", "x0": 5438.3, "y0": -5174.5, "sort": [5568.8, -5040.4]}, {"type": "dead_tree", "footprint": [54.6, 55.4, -6.6, -5.8], "sprite": "spr_043.png", "x0": 6889.0, "y0": -4900.9, "sort": [7140.4, -4164.1]}, {"type": "glbp", "footprint": [62.9, 65.1, -14.3, -9.7], "sprite": "spr_044.png", "x0": 8373.5, "y0": -5100.0, "sort": [8867.1, -4437.1], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [63.55, 64.45, -9.7, -5.5], "sprite": "spr_045.png", "x0": 8032.3, "y0": -5276.0, "sort": [8353.8, -4812.6], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [63.85, 64.1, -5.7, -2.3], "sprite": "spr_046.png", "x0": 7712.4, "y0": -5527.3, "sort": [7930.8, -5117.6], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [63.1, 64.9, 2.2, 6.4], "sprite": "spr_047.png", "x0": 6592.4, "y0": -6305.8, "sort": [6965.4, -5828.0], "name": "Junk Town wall", "text": "A Zhiguli on its belly, chained to a post. Plates nailed along it: names, dates. A memorial of the road."}, {"type": "glbp", "footprint": [62.9, 65.1, 6.3, 10.9], "sprite": "spr_048.png", "x0": 5870.0, "y0": -6862.7, "sort": [6463.7, -6194.9], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [63.55, 64.45, 10.5, 14.7], "sprite": "spr_045.png", "x0": 5675.5, "y0": -6999.6, "sort": [5997.0, -6536.2], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "junk_gate_open", "footprint": [64.0, 64.0, 0.0, 0.0], "sprite": "spr_049.png", "x0": 7176.4, "y0": -6137.1, "sort": [7467.0, -5461.1], "name": "Junk Town gate", "text": "Truck-box doors on rails, open by day. Somebody up on the towers is always watching the road."}, {"type": "glbp", "footprint": [59.7, 63.9, -3.4, -2.5], "sprite": "spr_050.png", "x0": 7248.0, "y0": -5486.0, "sort": [7554.6, -5021.6], "name": "Gate leaf", "text": "A gate leaf of planks and sheet on a rail, pulled open."}, {"type": "glbp", "footprint": [59.7, 63.9, 2.5, 3.4], "sprite": "spr_051.png", "x0": 6544.7, "y0": -6000.7, "sort": [6866.2, -5525.0], "name": "Gate leaf", "text": "A gate leaf of planks and sheet on a rail, pulled open."}, {"type": "glbp", "footprint": [61.0, 62.8, -6.9, -4.3], "sprite": "spr_052.png", "x0": 7610.4, "y0": -5699.8, "sort": [7875.4, -4804.0], "name": "Gate tower", "text": "A rifleman's platform of scaffold and planks. The guard up there nods at you, rifle across his knees."}, {"type": "glbp", "footprint": [61.0, 62.8, 4.5, 7.1], "sprite": "spr_053.png", "x0": 6280.3, "y0": -6672.6, "sort": [6545.3, -5776.8], "name": "Gate tower"}, {"type": "glbp", "footprint": [64.0, 68.6, 12.4, 14.6], "sprite": "spr_054.png", "x0": 5755.0, "y0": -7472.1, "sort": [6160.3, -6809.3], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [68.6, 72.8, 13.1, 14.0], "sprite": "spr_050.png", "x0": 6361.3, "y0": -7653.4, "sort": [6667.8, -7189.0], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [72.8, 77.4, 12.4, 14.6], "sprite": "spr_055.png", "x0": 6781.7, "y0": -8228.0, "sort": [7187.0, -7560.1], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [77.4, 81.6, 12.6, 14.4], "sprite": "spr_056.png", "x0": 7341.4, "y0": -8413.4, "sort": [7700.4, -7935.6], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [81.6, 85.2, 11.9, 15.1], "sprite": "spr_057.png", "x0": 7791.7, "y0": -8829.9, "sort": [8155.4, -8268.4], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [85.2, 89.4, 13.1, 14.0], "sprite": "spr_050.png", "x0": 8298.1, "y0": -9069.8, "sort": [8604.6, -8605.4], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [89.3, 91.9, 11.6, 13.4], "sprite": "spr_058.png", "x0": 8845.1, "y0": -9693.2, "sort": [9112.1, -8797.4], "name": "Watchtower"}, {"type": "glbp", "footprint": [64.1, 66.7, 11.2, 13.0], "sprite": "spr_059.png", "x0": 5951.6, "y0": -7508.8, "sort": [6218.7, -6613.0], "name": "Watchtower"}, {"type": "glbp", "footprint": [90.9, 93.1, 6.7, 11.3], "sprite": "spr_044.png", "x0": 9190.2, "y0": -9281.1, "sort": [9683.8, -8618.2], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [91.55, 92.45, 2.5, 6.7], "sprite": "spr_045.png", "x0": 9875.7, "y0": -8706.2, "sort": [10197.2, -8242.8], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [90.9, 93.1, -2.1, 2.5], "sprite": "spr_048.png", "x0": 10116.9, "y0": -8535.2, "sort": [10710.5, -7867.3], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [91.1, 92.9, -6.1, -1.9], "sprite": "spr_047.png", "x0": 10827.6, "y0": -7986.7, "sort": [11200.6, -7508.9], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [91.55, 92.45, -10.3, -6.1], "sprite": "spr_045.png", "x0": 11369.1, "y0": -7614.0, "sort": [11690.6, -7150.6], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [90.4, 93.6, -13.9, -10.3], "sprite": "spr_060.png", "x0": 11813.3, "y0": -7379.3, "sort": [12145.6, -6817.8], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [64.3, 67.7, -14.15, -13.9], "sprite": "spr_061.png", "x0": 9115.1, "y0": -4844.6, "sort": [9336.7, -4435.0], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [67.9, 72.1, -14.9, -13.1], "sprite": "spr_062.png", "x0": 9441.5, "y0": -5256.2, "sort": [9800.5, -4778.4], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [72.3, 75.7, -14.15, -13.9], "sprite": "spr_061.png", "x0": 10048.5, "y0": -5527.3, "sort": [10270.1, -5117.6], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [75.9, 80.1, -14.45, -13.55], "sprite": "spr_050.png", "x0": 10427.4, "y0": -5925.5, "sort": [10733.9, -5461.1], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [80.1, 84.3, -14.9, -13.1], "sprite": "spr_056.png", "x0": 10864.9, "y0": -6297.2, "sort": [11223.9, -5819.4], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [84.4, 87.8, -14.15, -13.9], "sprite": "spr_061.png", "x0": 11460.3, "y0": -6559.8, "sort": [11681.8, -6150.1], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [87.9, 92.1, -14.9, -13.1], "sprite": "spr_062.png", "x0": 11774.9, "y0": -6962.8, "sort": [12134.0, -6485.0], "name": "Junk Town wall", "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."}, {"type": "glbp", "footprint": [88.6, 90.4, -12.9, -10.3], "sprite": "spr_052.png", "x0": 11530.6, "y0": -7542.9, "sort": [11795.6, -6647.1], "name": "Watchtower"}, {"type": "scrap_house", "footprint": [66.4, 72.0, 7.6, 11.8], "sprite": "spr_063.png", "x0": 6292.0, "y0": -7706.6, "sort": [6942.0, -6732.5], "name": "Bunkhouse", "text": "Bunks for travellers who reach the gate after dark. Two blankets each, and a rule about boots."}, {"type": "scrap_house", "footprint": [72.4, 76.8, 7.8, 11.8], "sprite": "spr_064.png", "x0": 6993.0, "y0": -8116.4, "sort": [7560.4, -7201.8], "name": "Clinic", "text": "A cot, a lamp, boiled rags on a line. The medic is out, but the kettle is warm."}, {"type": "scrap_house", "footprint": [78.1, 81.7, 8.6, 11.8], "sprite": "spr_065.png", "x0": 7657.4, "y0": -8534.7, "sort": [8132.1, -7688.1], "name": "Smokehouse", "text": "Goat, mostly. The smell carries to the gate."}, {"type": "scrap_house", "footprint": [82.9, 88.3, 7.2, 11.8], "sprite": "spr_066.png", "x0": 8217.4, "y0": -9098.0, "sort": [8878.8, -8114.8], "name": "Mara's garage", "text": "Half workshop, half home: a vice, a parts shelf, a stove that never goes out, and an engine block on a stand."}, {"type": "scrap_house", "footprint": [84.4, 90.2, 2.2, 7.0], "sprite": "spr_067.png", "x0": 8964.2, "y0": -8850.2, "sort": [9648.8, -7841.7], "name": "Market shack", "text": "Tin roof, salvaged counter, and a hand-painted sign: BUY - SELL - SWAP. Ammunition by the round."}, {"type": "scrap_house", "footprint": [86.2, 90.2, -6.25, 1.25], "sprite": "spr_068.png", "x0": 9846.6, "y0": -8325.3, "sort": [10582.2, -7312.7], "name": "Water store", "text": "Barrels of meltwater, boiled and counted. The cistern is padlocked twice."}, {"type": "laundry", "footprint": [70.6, 74.2, 5.9, 6.2], "sprite": "spr_069.png", "x0": 7507.7, "y0": -7103.9, "sort": [7741.2, -6694.1], "name": "Washing line", "text": "Shirts, a blanket, socks frozen stiff. Somebody here still does laundry."}, {"type": "laundry", "footprint": [83.7, 84.0, -7.9, -4.9], "sprite": "spr_070.png", "x0": 10343.2, "y0": -6992.5, "sort": [10529.7, -6608.7]}, {"type": "glbp", "footprint": [78.417, 82.783, -7.6, -5.371], "sprite": "spr_071.png", "x0": 9778.5, "y0": -6820.0, "sort": [10160.5, -6324.1], "name": "Car on blocks", "text": "Mara's project. Half its parts are in the wall already."}, {"type": "burn_barrel", "footprint": [77.0, 77.58, 0.31, 0.89], "sprite": "spr_072.png", "x0": 8866.8, "y0": -6818.5, "sort": [8947.6, -6646.3], "name": "Burn barrel", "text": "Somebody always keeps it lit. People stand round it to trade news."}, {"type": "market_stall", "footprint": [72.0, 74.8, 2.7, 4.6], "sprite": "spr_073.png", "x0": 7822.1, "y0": -7119.7, "sort": [8137.9, -6574.6], "name": "Market stall", "text": "Jars of rendered fat, valve washers, a radio that works if you hit it."}, {"type": "market_stall", "footprint": [78.8, 81.6, 2.7, 4.6], "sprite": "spr_074.png", "x0": 8615.4, "y0": -7699.9, "sort": [8931.3, -7154.8], "name": "Market stall", "text": "Boots, coats, gloves: none of them new, all of them dry."}, {"type": "market_stall", "footprint": [76.0, 78.8, -3.8, -1.9], "sprite": "spr_075.png", "x0": 9059.8, "y0": -6897.2, "sort": [9363.0, -6361.3], "name": "Market stall", "text": "Dried mushrooms, salt, a jar of something red."}, {"type": "notice_board", "footprint": [68.6, 68.9, -3.4, -1.4], "sprite": "spr_076.png", "x0": 8158.8, "y0": -5988.8, "sort": [8301.3, -5661.6], "name": "Notice board", "text": "WORK: wall repair, pays in food. LOST: grey dog, answers to Kopek. CONVOY TO NEW MERIDIAN - SUSPENDED - ASK MARA."}, {"type": "animal_pen", "footprint": [82.1, 86.3, -11.8, -8.8], "sprite": "spr_077.png", "x0": 10583.6, "y0": -6755.8, "sort": [11025.6, -6305.8], "name": "Goat pen", "text": "Three goats, a trough and a hay pile. The settlement's milk."}, {"type": "firewood", "footprint": [90.1, 90.8, -6.2, -4.6], "sprite": "spr_078.png", "x0": 11034.9, "y0": -7473.1, "sort": [11183.1, -7257.2]}, {"type": "oil_drum", "footprint": [82.2, 82.78, 5.91, 6.49], "sprite": "spr_079.png", "x0": 8824.1, "y0": -7728.1, "sort": [8901.0, -7567.8]}, {"type": "oil_drum", "footprint": [82.8, 83.38, 5.51, 6.09], "sprite": "spr_080.png", "x0": 8940.8, "y0": -7745.1, "sort": [9017.6, -7584.9]}, {"type": "oil_drum", "footprint": [87.4, 87.98, -9.49, -8.91], "sprite": "spr_081.png", "x0": 11227.6, "y0": -6857.7, "sort": [11304.4, -6697.5]}, {"type": "oil_drum", "footprint": [67.2, 67.78, -11.49, -10.91], "sprite": "spr_082.png", "x0": 9104.1, "y0": -4963.4, "sort": [9181.0, -4803.2]}, {"type": "oil_drum", "footprint": [77.9, 78.48, -9.69, -9.11], "sprite": "spr_083.png", "x0": 10142.5, "y0": -6030.0, "sort": [10219.4, -5869.8]}, {"type": "tyre_stack", "footprint": [66.4, 67.06, 5.27, 5.93], "sprite": "spr_084.png", "x0": 7078.7, "y0": -6282.7, "sort": [7132.2, -6171.8]}, {"type": "tyre_stack", "footprint": [88.4, 89.06, 7.27, 7.93], "sprite": "spr_085.png", "x0": 9412.1, "y0": -8353.6, "sort": [9465.6, -8219.7]}, {"type": "tyre_stack", "footprint": [73.2, 73.86, -8.73, -8.07], "sprite": "spr_086.png", "x0": 9505.5, "y0": -5646.3, "sort": [9559.0, -5557.5]}, {"type": "crate", "footprint": [81.4, 82.02, 1.29, 1.91], "sprite": "spr_087.png", "x0": 9265.5, "y0": -7194.3, "sort": [9346.6, -7108.8]}, {"type": "crate", "footprint": [82.0, 82.62, 0.89, 1.51], "sprite": "spr_087.png", "x0": 9382.1, "y0": -7211.4, "sort": [9463.3, -7125.8]}, {"type": "crate", "footprint": [71.6, 72.22, 1.49, 2.11], "sprite": "spr_087.png", "x0": 8098.7, "y0": -6375.1, "sort": [8179.9, -6289.6]}, {"type": "crate", "footprint": [74.2, 74.82, -1.71, -1.09], "sprite": "spr_087.png", "x0": 8775.4, "y0": -6323.9, "sort": [8856.6, -6238.4]}, {"type": "crate", "footprint": [74.8, 75.42, -1.31, -0.69], "sprite": "spr_087.png", "x0": 8798.8, "y0": -6409.3, "sort": [8880.0, -6323.7]}, {"type": "scrap_house", "footprint": [68.1, 72.7, -12.0, -6.9], "sprite": "spr_088.png", "x0": 8683.8, "y0": -6162.2, "sort": [9316.3, -5200.8], "name": "Tea house", "text": "A stove, a samovar, six stools. Payment in sugar, salt or news."}, {"type": "scrap_house", "footprint": [73.4, 79.0, -12.4, -9.8], "sprite": "spr_089.png", "x0": 9626.2, "y0": -6216.0, "sort": [10185.5, -5554.9], "name": "Tool shed", "text": "Shovels, a sledge, chain, rope. All counted, all signed out."}, {"type": "burn_barrel", "footprint": [67.4, 67.98, 2.91, 3.49], "sprite": "spr_072.png", "x0": 7443.4, "y0": -6221.2, "sort": [7524.2, -6049.0], "name": "Gate fire", "text": "The gate watch warms its hands here between shifts."}, {"type": "market_stall", "footprint": [69.4, 72.2, -4.6, -2.7], "sprite": "spr_090.png", "x0": 8383.1, "y0": -6265.8, "sort": [8686.3, -5729.8], "name": "Market stall", "text": "Batteries, sorted by how much charge someone swears is left in them."}, {"type": "crate", "footprint": [68.6, 69.22, 6.09, 6.71], "sprite": "spr_087.png", "x0": 7212.0, "y0": -6511.7, "sort": [7293.2, -6426.1]}, {"type": "crate", "footprint": [69.2, 69.82, 5.69, 6.31], "sprite": "spr_087.png", "x0": 7328.7, "y0": -6528.7, "sort": [7409.9, -6443.2]}, {"type": "crate", "footprint": [86.0, 86.62, -4.91, -4.29], "sprite": "spr_087.png", "x0": 10525.5, "y0": -7057.8, "sort": [10606.7, -6972.2]}, {"type": "crate", "footprint": [83.6, 84.22, 0.89, 1.51], "sprite": "spr_087.png", "x0": 9568.8, "y0": -7347.9, "sort": [9650.0, -7262.3]}, {"type": "crate", "footprint": [84.2, 84.82, 0.29, 0.91], "sprite": "spr_087.png", "x0": 9708.8, "y0": -7347.9, "sort": [9790.0, -7262.3]}, {"type": "firewood", "footprint": [79.0, 80.6, 7.0, 7.7], "sprite": "spr_091.png", "x0": 8305.1, "y0": -7655.3, "sort": [8452.9, -7436.4]}, {"type": "tyre_stack", "footprint": [81.2, 81.86, -5.13, -4.47], "sprite": "spr_086.png", "x0": 10018.8, "y0": -6636.1, "sort": [10072.3, -6547.3]}, {"type": "scrap_pile", "footprint": [66.6, 68.2, -8.4, -6.4], "sprite": "spr_092.png", "x0": 8493.8, "y0": -5357.5, "sort": [8727.1, -5119.7], "name": "Scrap pile", "text": "Door panels and bonnets, sorted by size. The wall eats them."}], "inspect": [], "stairs": [{"id": "to_l1_from_rd", "u": 4.5, "v": 9.6, "to": "L1", "arrive": [-2.6, 0.6], "name": "Silo 81 portal", "text": "Back down the ramp to the surface depot and the lifts."}], "spawns": {"player": [4.5, 8.2, 5], "worms": [], "enemies": [{"kind": "infected", "u": 35.0, "v": -2.4, "dir": 1, "group": "car", "wake": 10, "coat": 0, "state": "still", "speak": "A voice from the figure by the car, wet and wrong: 'Close the door. You're letting the warm out.'", "speak_d": 19}, {"kind": "feral", "u": 38.6, "v": -6.0, "dir": 3, "group": "car", "coat": 1, "state": "hidden"}, {"kind": "feral", "u": 39.4, "v": -3.0, "dir": 3, "group": "car", "coat": 2, "state": "hidden"}, {"kind": "feral", "u": 46.6, "v": 8.6, "dir": 4, "group": "reststop", "wake": 8, "coat": 2, "state": "still"}, {"kind": "feral", "u": 43.8, "v": 6.4, "dir": 2, "group": "reststop", "wake": 8, "coat": 0}, {"kind": "infected", "u": 55.6, "v": -2.0, "dir": 3, "group": "gate", "wake": 12, "coat": 1}, {"kind": "feral", "u": 53.6, "v": 4.2, "dir": 4, "group": "gate", "wake": 12, "coat": 0}, {"kind": "infected", "u": 59.0, "v": 5.2, "dir": 3, "group": "gate", "wake": 12, "coat": 2}], "folk": [{"u": 75.6, "v": 1.6, "dir": 4, "coat": [0.21, 0.19, 0.16], "name": "Woman at the barrel", "bark": "Warm your hands, Silo. Then tell me how many of you are still down there."}, {"u": 78.4, "v": 1.8, "dir": 3, "coat": [0.16, 0.18, 0.21], "name": "Old trader", "bark": "Salt for news, news for salt. What's the road like?"}, {"u": 73.4, "v": 2.0, "dir": 5, "coat": [0.25, 0.22, 0.17], "name": "Washerwoman", "bark": "If you see a grey dog, his name's Kopek. He comes for sugar."}, {"u": 80.2, "v": 2.0, "dir": 4, "coat": [0.19, 0.2, 0.17], "name": "Boot seller", "bark": "Dry boots. Not new, but dry. You'll thank me past the bridge."}, {"u": 77.4, "v": -2.0, "dir": 1, "coat": [0.22, 0.17, 0.15], "name": "Mushroom seller", "bark": "The red jar? Don't ask. Two salt."}, {"u": 66.8, "v": 1.8, "dir": 3, "coat": [0.17, 0.18, 0.17], "name": "Gate watch", "bark": "You came up the road on foot? Then you met them. Keep your voice down in here, people are tired."}, {"u": 85.0, "v": -8.4, "dir": 4, "coat": [0.2, 0.19, 0.17], "name": "Goatherd", "bark": "Three goats, one stove. Touch the goats and we have words."}, {"u": 83.6, "v": 4.0, "dir": 0, "coat": [0.16, 0.17, 0.19], "name": "Customer", "bark": "Rook sets the prices. Mara fixes what breaks. The rest of us wait for spring."}, {"u": 71.4, "v": -6.2, "dir": 2, "coat": [0.21, 0.2, 0.17], "name": "Tea drinker", "bark": "Tea's hot. That's about all I can say for today."}]}, "creatures": [{"kind": "goat", "u": 83.2, "v": -10.6, "facing": 40.0, "phase": 0.0}, {"kind": "goat", "u": 85.2, "v": -11.0, "facing": 200.0, "phase": 2.1}, {"kind": "goat", "u": 84.4, "v": -9.6, "facing": 110.0, "phase": 4.3}], "support": [{"group": "gate", "u": 62.8, "v": 5.8, "z": 5.6, "after_round": 2, "hit": 65, "msg": "A rifle cracks from the gate tower. 'Keep your head down, Silo!'"}, {"group": "gate", "u": 62.8, "v": -5.6, "z": 5.6, "after_round": 3, "hit": 55, "msg": "The second tower joins in. Somebody up there is a good shot."}], "max_zoom": 0.85, "blocked": [[17.46, 20.54, 5.3, 6.7], [28.82, 32.18, -8.34, -6.66], [45.74, 48.26, -6.13, -4.87], [6.18, 9.82, -5.09, -4.109999999999999], [56.1, 58.9, -10.7, -9.3], [1.8, 2.8, 1.8, 2.4], [6.2, 7.2, 1.8, 2.4], [63.8, 64.6, -2.5, -2.0], [63.8, 64.6, 2.0, 2.5]], "bounds": [-2.0, 92.0, -12.6, 12.6], "sprites": [], "bg": {"none": true, "x0": -4900, "y0": -11093, "w": 19834, "h": 14506}, "ground": {"ambient": [0.86, 0.93, 1.08], "floors": [{"r": [-16.0, 104.0, -24.0, 26.0], "tex": "snow", "tint": [1.02, 1.02, 1.02], "layer": -1}, {"r": [-1.0, 10.0, 3.0, 9.7], "tex": "concrete", "tint": [1, 1, 1], "layer": 2}, {"r": [-2.0, 64.0, -3.0, 3.0], "tex": "asphalt", "tint": [1, 1, 1], "layer": 2}, {"r": [36.0, 51.0, 3.0, 9.4], "tex": "concrete", "tint": [0.94, 0.94, 0.95], "layer": 2}, {"r": [-2.0, 24.0, -12.0, 12.0], "tex": "snow", "tint": [1, 1, 1], "layer": 0}, {"r": [24.0, 50.0, -12.0, 12.5], "tex": "snow", "tint": [1, 1, 1], "layer": 0}, {"r": [50.0, 64.0, -12.5, 12.5], "tex": "snow", "tint": [1, 1, 1], "layer": 0}, {"r": [64.0, 90.6, -12.6, 12.6], "tex": "yard", "tint": [1, 1, 1], "layer": 1}], "patches": [{"r": [0, 2.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [5, 7.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [10, 12.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [15, 17.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [20, 22.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [25, 27.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [30, 32.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [35, 37.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [40, 42.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [45, 47.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [50, 52.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [55, 57.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [60, 62.2, -0.08, 0.08], "ang": 0.0, "rgb": [0.78, 0.7, 0.42], "a": 0.75, "tex": "softrect", "layer": 3}, {"r": [-1.5, 63.5, -1.9, -1.5999999999999999], "ang": 0.0, "rgb": [0.3, 0.31, 0.33], "a": 0.4, "tex": "softrect", "layer": 3}, {"r": [-1.5, 63.5, -1.2, -0.8999999999999999], "ang": 0.0, "rgb": [0.3, 0.31, 0.33], "a": 0.4, "tex": "softrect", "layer": 3}, {"r": [-1.5, 63.5, 1.1, 1.4000000000000001], "ang": 0.0, "rgb": [0.3, 0.31, 0.33], "a": 0.4, "tex": "softrect", "layer": 3}, {"r": [-1.5, 63.5, 1.8, 2.1], "ang": 0.0, "rgb": [0.3, 0.31, 0.33], "a": 0.4, "tex": "softrect", "layer": 3}, {"r": [14.3, 17.7, 0.3999999999999999, 2.0], "ang": 10, "rgb": [0.5, 0.6, 0.68], "a": 0.55, "tex": "soft", "layer": 4}, {"r": [31.5, 35.5, -2.0, -0.7999999999999999], "ang": -14, "rgb": [0.5, 0.6, 0.68], "a": 0.55, "tex": "soft", "layer": 4}, {"r": [49.2, 51.8, 0.10000000000000009, 1.5], "ang": 20, "rgb": [0.5, 0.6, 0.68], "a": 0.55, "tex": "soft", "layer": 4}, {"r": [56.5, 59.5, -2.1, -1.1], "ang": 4, "rgb": [0.5, 0.6, 0.68], "a": 0.55, "tex": "soft", "layer": 4}, {"r": [-1.5, 63.5, -3.6999999999999997, -2.5], "ang": 0.0, "rgb": [0.62, 0.63, 0.65], "a": 0.6, "tex": "softrect", "layer": 3}, {"r": [-1.5, 63.5, 2.5, 3.6999999999999997], "ang": 0.0, "rgb": [0.62, 0.63, 0.65], "a": 0.6, "tex": "softrect", "layer": 3}, {"r": [6.0, 6.28, 4.08, 4.21], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [6.62, 6.9, 4.0, 4.13], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [7.24, 7.5200000000000005, 3.44, 3.57], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [7.859999999999999, 8.139999999999999, 3.3600000000000003, 3.49], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [8.48, 8.76, 2.8, 2.9299999999999997], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [9.1, 9.379999999999999, 2.72, 2.85], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [9.719999999999999, 9.999999999999998, 2.16, 2.29], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [10.34, 10.62, 2.08, 2.21], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [10.96, 11.24, 1.52, 1.65], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [11.58, 11.86, 1.4400000000000004, 1.5700000000000003], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [12.2, 12.479999999999999, 0.88, 1.01], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [12.82, 13.1, 0.8000000000000002, 0.9300000000000002], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [13.44, 13.719999999999999, 0.24000000000000032, 0.37000000000000033], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [14.06, 14.34, 0.16000000000000003, 0.29000000000000004], "ang": -25, "rgb": [0.48, 0.53, 0.6], "a": 0.6, "tex": "soft", "layer": 5}, {"r": [36.5, 41.5, -7.6, -7.0], "ang": -18, "rgb": [0.45, 0.46, 0.5], "a": 0.5, "tex": "softrect", "layer": 4}, {"r": [40.0, 47.0, 2.5, 5.0], "ang": 0, "rgb": [0.62, 0.64, 0.67], "a": 0.45, "tex": "soft", "layer": 3}, {"r": [66.0, 88.0, -1.6, 1.6], "ang": 0, "rgb": [0.5, 0.48, 0.45], "a": 0.16, "tex": "soft", "layer": 3}, {"r": [74.0, 80.0, -9.0, 9.0], "ang": 0, "rgb": [0.5, 0.48, 0.45], "a": 0.14, "tex": "soft", "layer": 3}, {"r": [68.25, 72.75, -4.4, -2.0], "ang": 15, "rgb": [0.3, 0.26, 0.22], "a": 0.32, "tex": "soft", "layer": 3}, {"r": [73.0, 78.0, 2.7, 5.3], "ang": -10, "rgb": [0.3, 0.26, 0.22], "a": 0.3, "tex": "soft", "layer": 3}, {"r": [80.0, 84.0, -5.6, -3.4], "ang": 25, "rgb": [0.3, 0.26, 0.22], "a": 0.3, "tex": "soft", "layer": 3}, {"r": [84.2, 87.8, 2.5, 4.5], "ang": -5, "rgb": [0.3, 0.26, 0.22], "a": 0.28, "tex": "soft", "layer": 3}, {"r": [65.0, 68.0, -2.3, 2.3], "ang": 0, "rgb": [0.3, 0.26, 0.22], "a": 0.34, "tex": "soft", "layer": 3}, {"r": [76.8, 80.2, -1.9, 1.1], "ang": 0, "rgb": [0.3, 0.26, 0.22], "a": 0.26, "tex": "soft", "layer": 3}, {"r": [69.5, 74.5, 7.8, 9.4], "ang": 5, "rgb": [0.3, 0.26, 0.22], "a": 0.24, "tex": "soft", "layer": 3}, {"r": [77.5, 83.5, -9.600000000000001, -8.0], "ang": -5, "rgb": [0.3, 0.26, 0.22], "a": 0.24, "tex": "soft", "layer": 3}, {"r": [66.10000000000001, 68.7, 2.16, 4.24], "ang": 0, "rgb": [0.17, 0.16, 0.15], "a": 0.45, "tex": "soft", "layer": 4}, {"r": [75.7, 78.3, -0.44000000000000006, 1.6400000000000001], "ang": 0, "rgb": [0.17, 0.16, 0.15], "a": 0.45, "tex": "soft", "layer": 4}], "mounds": [[4.5, 17.0, 10.0, 5.5, 4.2], [-6.0, 13.0, 6.0, 7.0, 3.2], [15.0, 16.5, 6.5, 4.0, 2.6], [-6.0, 3.0, 3.2, 6.0, 1.6], [-8.0, -6.0, 4.0, 5.0, 1.0], [1.0, 15.6, 4.6, 1.8, 0.9], [8.0, 16.2, 4.6, 1.8, 1.2], [15.0, 16.8, 4.6, 1.8, 0.9], [22.0, 15.6, 4.6, 1.8, 1.2], [29.0, 16.2, 4.6, 1.8, 0.9], [36.0, 16.8, 4.6, 1.8, 1.2], [43.0, 15.6, 4.6, 1.8, 0.9], [50.0, 16.2, 4.6, 1.8, 1.2], [57.0, 16.8, 4.6, 1.8, 0.9], [64.0, 15.6, 4.6, 1.8, 1.2], [71.0, 16.2, 4.6, 1.8, 0.9], [78.0, 16.8, 4.6, 1.8, 1.2], [85.0, 15.6, 4.6, 1.8, 0.9], [92.0, 16.2, 4.6, 1.8, 1.2], [2.0, -14.6, 3.8, 1.2, 0.45], [8.0, -15.0, 3.8, 1.2, 0.45], [14.0, -14.6, 3.8, 1.2, 0.45], [20.0, -15.0, 3.8, 1.2, 0.45], [26.0, -14.6, 3.8, 1.2, 0.45], [32.0, -15.0, 3.8, 1.2, 0.45], [38.0, -14.6, 3.8, 1.2, 0.45], [44.0, -15.0, 3.8, 1.2, 0.45], [50.0, -14.6, 3.8, 1.2, 0.45], [56.0, -15.0, 3.8, 1.2, 0.45], [62.0, -14.6, 3.8, 1.2, 0.45], [68.0, -15.0, 3.8, 1.2, 0.45], [74.0, -14.6, 3.8, 1.2, 0.45], [80.0, -15.0, 3.8, 1.2, 0.45], [86.0, -14.6, 3.8, 1.2, 0.45], [92.0, -15.0, 3.8, 1.2, 0.45], [94.5, -10.0, 1.6, 3.6, 0.9], [95.1, -4.0, 1.6, 3.6, 0.9], [94.5, 2.0, 1.6, 3.6, 0.9], [95.1, 8.0, 1.6, 3.6, 0.9], [94.5, 14.0, 1.6, 3.6, 0.9], [19.0, 6.0, 2.2, 1.0, 0.35], [30.5, -7.5, 2.4, 1.2, 0.4], [47.0, -5.5, 1.8, 0.9, 0.3], [8.0, -4.6, 2.6, 0.7, 0.25], [57.5, -10.0, 2.0, 1.0, 0.35], [67.5, -11.9, 2.2, 0.8, 0.28], [67.5, 11.9, 2.2, 0.8, 0.28], [72.1, -11.9, 2.2, 0.8, 0.36], [72.1, 11.9, 2.2, 0.8, 0.36], [75.5, -11.9, 2.2, 0.8, 0.44], [75.5, 11.9, 2.2, 0.8, 0.44], [80.1, -11.9, 2.2, 0.8, 0.28], [80.1, 11.9, 2.2, 0.8, 0.28], [83.5, -11.9, 2.2, 0.8, 0.36], [83.5, 11.9, 2.2, 0.8, 0.36], [88.1, -11.9, 2.2, 0.8, 0.44], [88.1, 11.9, 2.2, 0.8, 0.44], [90.2, -9.0, 0.8, 2.0, 0.3], [90.2, -5.0, 0.8, 2.0, 0.3], [90.2, -1.0, 0.8, 2.0, 0.3], [90.2, 3.0, 0.8, 2.0, 0.3], [90.2, 7.0, 0.8, 2.0, 0.3], [90.2, 11.0, 0.8, 2.0, 0.3]], "pools": [{"u": 77.0, "v": 0.6, "r": 5.0, "rgb": [0.5, 0.3, 0.08]}, {"u": 67.4, "v": 3.2, "r": 3.5, "rgb": [0.5, 0.3, 0.08]}, {"u": 85.6, "v": 9.6, "r": 4.0, "rgb": [0.5, 0.3, 0.08]}, {"u": 74.6, "v": 9.8, "r": 3.0, "rgb": [0.5, 0.3, 0.08]}, {"u": 69.2, "v": 9.4, "r": 3.0, "rgb": [0.5, 0.3, 0.08]}, {"u": 89.0, "v": 4.0, "r": 3.0, "rgb": [0.5, 0.3, 0.08]}, {"u": 84.2, "v": -10.2, "r": 3.0, "rgb": [0.3, 0.18, 0.048]}, {"u": 63.0, "v": 0.0, "r": 4.0, "rgb": [0.575, 0.345, 0.092]}], "smoke": [{"u": 67.0, "v": 11.350000000000001, "z": 4.5, "k": 0.6}, {"u": 73.0, "v": 11.350000000000001, "z": 4.5, "k": 0.6}, {"u": 78.7, "v": 11.350000000000001, "z": 4.5, "k": 1.0}, {"u": 83.5, "v": 11.350000000000001, "z": 4.5, "k": 0.6}, {"u": 89.75, "v": 6.3999999999999995, "z": 4.5, "k": 0.6}, {"u": 89.75, "v": -1.1, "z": 4.5, "k": 0.6}, {"u": 77.0, "v": 0.6, "z": 1.2, "k": 1.0}, {"u": 68.7, "v": -11.55, "z": 4.5, "k": 0.6}, {"u": 67.4, "v": 3.2, "z": 1.2, "k": 1.0}]}, "sprite_scale": 0.62, "wallparts": []}
+{
+ "level": "RD",
+ "name": "The Road to Junk Town",
+ "ppm": 165.0,
+ "elev_deg": 47.0,
+ "rooms": [
+  {
+   "id": "rd_apron",
+   "r": [
+    -1.0,
+    10.0,
+    3.0,
+    9.7
+   ],
+   "name": "Silo 81 surface portal"
+  },
+  {
+   "id": "rd_road",
+   "r": [
+    -2.0,
+    64.0,
+    -7.0,
+    3.0
+   ],
+   "name": "The road east"
+  },
+  {
+   "id": "rd_reststop",
+   "r": [
+    36.0,
+    51.0,
+    3.0,
+    9.4
+   ],
+   "name": "Rest stop"
+  },
+  {
+   "id": "rd_west",
+   "r": [
+    -2.0,
+    24.0,
+    -12.0,
+    12.0
+   ],
+   "name": "Snowfield"
+  },
+  {
+   "id": "rd_mid",
+   "r": [
+    24.0,
+    50.0,
+    -12.0,
+    12.5
+   ],
+   "name": "Snowfield"
+  },
+  {
+   "id": "rd_scrap",
+   "r": [
+    50.0,
+    64.0,
+    -12.5,
+    12.5
+   ],
+   "name": "Scrapyard"
+  },
+  {
+   "id": "jt_yard",
+   "r": [
+    64.0,
+    90.6,
+    -12.6,
+    12.6
+   ],
+   "name": "Junk Town"
+  }
+ ],
+ "walls": [],
+ "doors": [],
+ "props": [
+  {
+   "type": "silo_portal",
+   "footprint": [
+    0.0,
+    9.0,
+    9.9,
+    11.3
+   ],
+   "sprite": "spr_000.png",
+   "x0": -1327.4,
+   "y0": -2383.2,
+   "sort": [
+    -711.7,
+    -1288.5
+   ],
+   "name": "Silo 81 surface portal",
+   "text": "Six metres of poured concrete and two blast leaves, one jammed open. Someone scratched SEALED FROM INSIDE into the pier. The door is not sealed now."
+  },
+  {
+   "type": "guard_shack",
+   "footprint": [
+    11.5,
+    14.5,
+    7.8,
+    10.4
+   ],
+   "sprite": "spr_001.png",
+   "x0": 119.3,
+   "y0": -2597.7,
+   "sort": [
+    455.0,
+    -1885.8
+   ],
+   "name": "Guard post",
+   "text": "The heater is a block of rust. The duty log stops in the middle of a sentence. The chair is still pulled up to the window."
+  },
+  {
+   "type": "sandbag_nest",
+   "footprint": [
+    7.3,
+    10.7,
+    4.2,
+    7.4
+   ],
+   "sprite": "spr_002.png",
+   "x0": -20.3,
+   "y0": -1661.4,
+   "sort": [
+    373.4,
+    -1262.9
+   ],
+   "name": "Sandbag nest",
+   "text": "Empty. Brass casings frozen into the snow, all pointing outwards."
+  },
+  {
+   "type": "road_barrier",
+   "footprint": [
+    4.5,
+    4.5,
+    2.1,
+    2.1
+   ],
+   "sprite": "spr_003.png",
+   "x0": -55.0,
+   "y0": -1171.8,
+   "sort": [
+    280.0,
+    -563.2
+   ],
+   "name": "Checkpoint barrier",
+   "text": "The boom snapped where it met the post. A child's red mitten is tied to the stump."
+  },
+  {
+   "type": "notice_board",
+   "footprint": [
+    10.2,
+    12.2,
+    3.3,
+    3.6
+   ],
+   "sprite": "spr_004.png",
+   "x0": 761.7,
+   "y0": -1609.9,
+   "sort": [
+    904.2,
+    -1250.1
+   ],
+   "name": "Evacuation notice",
+   "text": "EVACUATION - NEW MERIDIAN - 40 KM. Assemble at the depot. Bring documents, warm clothing, three days of food. The arrow pointing east has been torn half away."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    -0.8,
+    -0.55,
+    4.5,
+    7.9
+   ],
+   "sprite": "spr_005.png",
+   "x0": -1023.7,
+   "y0": -879.8,
+   "sort": [
+    -802.1,
+    -471.4
+   ],
+   "name": "Perimeter fence",
+   "text": "Chain-link round the portal compound, sagging between its posts."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    16.15,
+    16.4,
+    7.9,
+    11.3
+   ],
+   "sprite": "spr_006.png",
+   "x0": 560.4,
+   "y0": -2617.6,
+   "sort": [
+    778.8,
+    -2207.9
+   ],
+   "name": "Perimeter fence",
+   "text": "Chain-link round the portal compound, sagging between its posts."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    15.535,
+    16.6,
+    4.52,
+    7.88
+   ],
+   "sprite": "spr_007.png",
+   "x0": 901.4,
+   "y0": -2341.5,
+   "sort": [
+    1151.3,
+    -1900.1
+   ],
+   "name": "Perimeter fence",
+   "text": "Chain-link, bent outwards. Whatever went through it was leaving."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    0.027,
+    4.773,
+    -6.787,
+    -4.263
+   ],
+   "sprite": "spr_008.png",
+   "x0": 500.4,
+   "y0": -307.0,
+   "sort": [
+    924.6,
+    266.7
+   ],
+   "name": "Abandoned van",
+   "text": "Doors open, nose to the tail-lights of the car in front. The seats have been cut out for the foam."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    5.149,
+    9.451,
+    -6.386,
+    -4.333
+   ],
+   "sprite": "spr_009.png",
+   "x0": 1103.3,
+   "y0": -635.1,
+   "sort": [
+    1477.0,
+    -165.6
+   ],
+   "name": "Abandoned car",
+   "text": "A family estate car. Under the snow on the back seat, a shape you decide not to look at closely."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    9.513,
+    13.687,
+    -8.399,
+    -4.536
+   ],
+   "sprite": "spr_010.png",
+   "x0": 1665.6,
+   "y0": -1048.8,
+   "sort": [
+    2108.0,
+    -438.0
+   ],
+   "name": "Abandoned van",
+   "text": "Pushed sideways by the plough, its back wheels in the ditch."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    13.398,
+    17.802,
+    -7.412,
+    -5.065
+   ],
+   "sprite": "spr_011.png",
+   "x0": 2152.1,
+   "y0": -1280.9,
+   "sort": [
+    2548.0,
+    -798.8
+   ],
+   "name": "Abandoned car",
+   "text": "Keys still in. The fuel cap is off and the tank is dry."
+  },
+  {
+   "type": "army_truck_side",
+   "footprint": [
+    17.2,
+    24.0,
+    -9.6,
+    -6.6
+   ],
+   "sprite": "spr_012.png",
+   "x0": 2686.5,
+   "y0": -1913.6,
+   "sort": [
+    3348.5,
+    -1066.6
+   ],
+   "name": "Army truck",
+   "text": "On its side below the road, where it went through the rail. Sandbags, a field radio, jerrycans. No bodies. No tracks leading away, either."
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    17.859,
+    18.541,
+    -6.2,
+    -5.519
+   ],
+   "sprite": "spr_013.png",
+   "x0": 2734.8,
+   "y0": -1170.9,
+   "sort": [
+    2807.1,
+    -1053.0
+   ],
+   "name": "Army crate",
+   "text": "Stencilled CIVIL DEFENCE - RATIONS. Thrown from the truck's bed. The lid is frozen down and the lead seal is still on it.",
+   "poi": "search"
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    18.541,
+    19.259,
+    -6.0,
+    -5.282
+   ],
+   "sprite": "spr_014.png",
+   "x0": 2787.1,
+   "y0": -1252.7,
+   "sort": [
+    2863.3,
+    -1131.4
+   ]
+  },
+  {
+   "type": "sacks",
+   "footprint": [
+    21.83,
+    22.97,
+    -6.2,
+    -5.525
+   ],
+   "sprite": "spr_015.png",
+   "x0": 3136.8,
+   "y0": -1605.3,
+   "sort": [
+    3297.5,
+    -1411.1
+   ],
+   "name": "Sandbags",
+   "text": "Spilled from the truck bed in a line. Split, frozen hard as stone."
+  },
+  {
+   "type": "guardrail",
+   "footprint": [
+    12.594,
+    18.806,
+    1.541,
+    3.115
+   ],
+   "sprite": "spr_016.png",
+   "x0": 1102.3,
+   "y0": -1969.5,
+   "sort": [
+    1560.1,
+    -1538.3
+   ]
+  },
+  {
+   "type": "guardrail",
+   "footprint": [
+    18.802,
+    24.998,
+    0.03,
+    1.721
+   ],
+   "sprite": "spr_017.png",
+   "x0": 1990.3,
+   "y0": -2378.6,
+   "sort": [
+    2453.0,
+    -1943.4
+   ]
+  },
+  {
+   "type": "guardrail",
+   "footprint": [
+    26.969,
+    33.031,
+    -0.773,
+    0.1
+   ],
+   "sprite": "spr_018.png",
+   "x0": 3128.5,
+   "y0": -2926.4,
+   "sort": [
+    3539.4,
+    -2531.2
+   ]
+  },
+  {
+   "type": "guardrail",
+   "footprint": [
+    32.971,
+    39.029,
+    -0.835,
+    0.227
+   ],
+   "sprite": "spr_019.png",
+   "x0": 3811.8,
+   "y0": -3446.2,
+   "sort": [
+    4235.7,
+    -3045.9
+   ]
+  },
+  {
+   "type": "guardrail",
+   "footprint": [
+    17.104,
+    21.296,
+    -5.465,
+    -3.279
+   ],
+   "sprite": "spr_020.png",
+   "x0": 2505.7,
+   "y0": -1541.0,
+   "sort": [
+    2750.2,
+    -1265.3
+   ],
+   "name": "Guardrail",
+   "text": "Torn out and bent down the bank where the army truck went over."
+  },
+  {
+   "type": "guardrail",
+   "footprint": [
+    24.493,
+    27.507,
+    -7.031,
+    -5.972
+   ],
+   "sprite": "spr_021.png",
+   "x0": 3564.8,
+   "y0": -1927.6,
+   "sort": [
+    3792.0,
+    -1663.8
+   ],
+   "name": "Culvert parapet",
+   "text": "Concrete, with a rail on top. The creek runs under the road here, frozen grey."
+  },
+  {
+   "type": "guardrail",
+   "footprint": [
+    24.493,
+    27.507,
+    -0.291,
+    0.769
+   ],
+   "sprite": "spr_022.png",
+   "x0": 2765.8,
+   "y0": -2511.1,
+   "sort": [
+    3005.6,
+    -2238.9
+   ],
+   "name": "Culvert parapet",
+   "text": "Concrete, with a rail on top. The creek runs under the road here, frozen grey."
+  },
+  {
+   "type": "guardrail",
+   "footprint": [
+    26.969,
+    34.031,
+    -7.733,
+    -6.928
+   ],
+   "sprite": "spr_023.png",
+   "x0": 3957.8,
+   "y0": -2404.7,
+   "sort": [
+    4413.8,
+    -1977.0
+   ]
+  },
+  {
+   "type": "guardrail",
+   "footprint": [
+    43.971,
+    50.029,
+    -4.846,
+    -2.567
+   ],
+   "sprite": "spr_024.png",
+   "x0": 5494.1,
+   "y0": -4090.9,
+   "sort": [
+    5916.1,
+    -3694.2
+   ]
+  },
+  {
+   "type": "dead_tree",
+   "footprint": [
+    23.9,
+    24.7,
+    8.8,
+    9.6
+   ],
+   "sprite": "spr_025.png",
+   "x0": 1498.1,
+   "y0": -3896.7,
+   "sort": [
+    1761.8,
+    -2858.5
+   ]
+  },
+  {
+   "type": "dead_tree",
+   "footprint": [
+    25.2,
+    26.0,
+    10.6,
+    11.4
+   ],
+   "sprite": "spr_026.png",
+   "x0": 1534.8,
+   "y0": -4008.2,
+   "sort": [
+    1703.4,
+    -3123.0
+   ]
+  },
+  {
+   "type": "dead_tree",
+   "footprint": [
+    27.5,
+    28.3,
+    10.1,
+    10.9
+   ],
+   "sprite": "spr_027.png",
+   "x0": 1620.4,
+   "y0": -4299.8,
+   "sort": [
+    2030.1,
+    -3276.6
+   ]
+  },
+  {
+   "type": "dead_tree",
+   "footprint": [
+    24.6,
+    25.4,
+    -10.4,
+    -9.6
+   ],
+   "sprite": "spr_028.png",
+   "x0": 3681.2,
+   "y0": -2155.8,
+   "sort": [
+    4083.5,
+    -1279.9
+   ]
+  },
+  {
+   "type": "dead_tree",
+   "footprint": [
+    26.8,
+    27.6,
+    -11.8,
+    -11.0
+   ],
+   "sprite": "spr_029.png",
+   "x0": 4228.2,
+   "y0": -2337.1,
+   "sort": [
+    4503.6,
+    -1348.2
+   ]
+  },
+  {
+   "type": "firewood",
+   "footprint": [
+    21.4,
+    23.0,
+    8.2,
+    8.9
+   ],
+   "sprite": "spr_030.png",
+   "x0": 1444.7,
+   "y0": -2842.7,
+   "sort": [
+    1592.6,
+    -2623.9
+   ],
+   "name": "Firewood",
+   "text": "Split pallet wood under a sheet of tin, stacked against the wind. Somebody meant to stay longer."
+  },
+  {
+   "type": "sacks",
+   "footprint": [
+    22.0,
+    23.009,
+    5.675,
+    6.925
+   ],
+   "sprite": "spr_031.png",
+   "x0": 1757.8,
+   "y0": -2629.8,
+   "sort": [
+    1890.6,
+    -2457.9
+   ],
+   "name": "Bedroll",
+   "text": "Army blanket over a sack of straw, feet to the fire. Still roughly the shape of a sleeper."
+  },
+  {
+   "type": "sacks",
+   "footprint": [
+    23.76,
+    24.7,
+    6.781,
+    8.019
+   ],
+   "sprite": "spr_032.png",
+   "x0": 1823.4,
+   "y0": -2869.1,
+   "sort": [
+    1963.6,
+    -2699.0
+   ],
+   "name": "Bedroll",
+   "text": "Army blanket over a sack of straw, feet to the fire."
+  },
+  {
+   "type": "bucket",
+   "footprint": [
+    23.0,
+    23.34,
+    6.33,
+    6.67
+   ],
+   "sprite": "spr_033.png",
+   "x0": 1894.1,
+   "y0": -2614.2,
+   "sort": [
+    1944.9,
+    -2531.7
+   ],
+   "name": "Tin pot"
+  },
+  {
+   "type": "power_pylon",
+   "footprint": [
+    28.5,
+    32.7,
+    6.6,
+    10.8
+   ],
+   "sprite": "spr_034.png",
+   "x0": 1853.1,
+   "y0": -5444.6,
+   "sort": [
+    2555.1,
+    -3353.4
+   ],
+   "name": "Leaning pylon",
+   "text": "Leaning over the road like it is listening. Scorch marks on the legs and spent cases in the snow under it: people fought here."
+  },
+  {
+   "type": "fallen_pylon",
+   "footprint": [
+    27.464,
+    39.736,
+    -12.4,
+    -7.957
+   ],
+   "sprite": "spr_035.png",
+   "x0": 3735.9,
+   "y0": -3370.0,
+   "sort": [
+    5107.8,
+    -1998.5
+   ],
+   "name": "Fallen pylon",
+   "text": "The next pylon down the line, lying where it fell, cables still running back up to its neighbour."
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    32.724,
+    33.476,
+    8.248,
+    9.0
+   ],
+   "sprite": "spr_036.png",
+   "x0": 2760.8,
+   "y0": -3694.3,
+   "sort": [
+    2855.7,
+    -3560.3
+   ],
+   "name": "Air-drop crate",
+   "text": "A military crate, dropped from the air and never collected. Its parachute is snagged on the pylon above, flapping when the wind gets up.",
+   "poi": "search"
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    34.404,
+    38.796,
+    -7.414,
+    -5.102
+   ],
+   "sprite": "spr_037.png",
+   "x0": 4609.5,
+   "y0": -3071.7,
+   "sort": [
+    5000.4,
+    -2589.1
+   ],
+   "name": "Stalled car",
+   "text": "Stopped in its lane, doors open, engine cold for years. A suitcase on the back seat, a child's seat, a road map with New Meridian circled in pencil."
+  },
+  {
+   "type": "sacks",
+   "footprint": [
+    41.281,
+    42.519,
+    -10.2,
+    -9.26
+   ],
+   "sprite": "spr_038.png",
+   "x0": 5889.6,
+   "y0": -2923.9,
+   "sort": [
+    6023.8,
+    -2745.0
+   ],
+   "name": "Shape in the snow",
+   "text": "At the end of the drag mark. A rucksack strap sticks up out of the drift, and a boot. You'd have to dig.",
+   "poi": "search"
+  },
+  {
+   "type": "dead_tree",
+   "footprint": [
+    40.0,
+    40.8,
+    -11.6,
+    -10.8
+   ],
+   "sprite": "spr_039.png",
+   "x0": 5770.0,
+   "y0": -3393.5,
+   "sort": [
+    6020.3,
+    -2491.6
+   ]
+  },
+  {
+   "type": "dead_tree",
+   "footprint": [
+    43.0,
+    43.8,
+    -11.2,
+    -10.4
+   ],
+   "sprite": "spr_040.png",
+   "x0": 6225.3,
+   "y0": -3545.6,
+   "sort": [
+    6323.7,
+    -2781.7
+   ]
+  },
+  {
+   "type": "box_trailer",
+   "footprint": [
+    36.05,
+    47.55,
+    2.9,
+    5.4
+   ],
+   "sprite": "spr_041.png",
+   "x0": 3566.9,
+   "y0": -4954.5,
+   "sort": [
+    4392.7,
+    -3920.9
+   ],
+   "name": "Jack-knifed trailer",
+   "text": "BALTIC FREIGHT, faded to pink. It jack-knifed pulling in for fuel. The back doors were cut open with a torch. Empty, apart from frost."
+  },
+  {
+   "type": "rest_kiosk",
+   "footprint": [
+    41.2,
+    47.2,
+    9.6,
+    13.6
+   ],
+   "sprite": "spr_042.png",
+   "x0": 3211.2,
+   "y0": -5937.0,
+   "sort": [
+    3803.5,
+    -4761.4
+   ],
+   "name": "Rest stop kiosk",
+   "text": "Shelves stripped to the brackets. A kettle on a cold stove. A radio on the counter, its battery long dead, still tuned to the emergency band."
+  },
+  {
+   "type": "fuel_pump",
+   "footprint": [
+    41.95,
+    42.85,
+    7.3,
+    8.0
+   ],
+   "sprite": "spr_043.png",
+   "x0": 3933.5,
+   "y0": -4564.6,
+   "sort": [
+    4054.4,
+    -4270.7
+   ],
+   "name": "Fuel pump",
+   "text": "NO FUEL, says the sign. The hose has been cut for the rubber."
+  },
+  {
+   "type": "fuel_pump",
+   "footprint": [
+    45.15,
+    46.05,
+    7.3,
+    8.0
+   ],
+   "sprite": "spr_044.png",
+   "x0": 4306.9,
+   "y0": -4837.6,
+   "sort": [
+    4427.7,
+    -4543.8
+   ],
+   "name": "Fuel pump"
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    47.3,
+    51.5,
+    6.4,
+    8.2
+   ],
+   "sprite": "spr_045.png",
+   "x0": 4553.9,
+   "y0": -5294.9,
+   "sort": [
+    4911.9,
+    -4838.2
+   ],
+   "name": "Snowed-in car",
+   "text": "Parked square in the bay, the only tidy thing here. A photo tucked in the sun visor: three people squinting into summer."
+  },
+  {
+   "type": "tyre_stack",
+   "footprint": [
+    47.47,
+    48.13,
+    11.74,
+    12.4
+   ],
+   "sprite": "spr_046.png",
+   "x0": 4038.2,
+   "y0": -5242.8,
+   "sort": [
+    4168.7,
+    -5108.6
+   ]
+  },
+  {
+   "type": "tyre_stack",
+   "footprint": [
+    48.17,
+    48.83,
+    11.04,
+    11.7
+   ],
+   "sprite": "spr_047.png",
+   "x0": 4211.6,
+   "y0": -5197.8,
+   "sort": [
+    4332.1,
+    -5108.6
+   ]
+  },
+  {
+   "type": "dead_tree",
+   "footprint": [
+    35.8,
+    36.6,
+    11.4,
+    12.2
+   ],
+   "sprite": "spr_048.png",
+   "x0": 2425.1,
+   "y0": -5149.9,
+   "sort": [
+    2846.8,
+    -4095.8
+   ]
+  },
+  {
+   "type": "dead_tree",
+   "footprint": [
+    38.0,
+    38.8,
+    12.2,
+    13.0
+   ],
+   "sprite": "spr_049.png",
+   "x0": 2787.5,
+   "y0": -5215.9,
+   "sort": [
+    3010.2,
+    -4351.8
+   ]
+  },
+  {
+   "type": "billboard",
+   "footprint": [
+    51.8,
+    58.2,
+    11.5,
+    12.4
+   ],
+   "sprite": "spr_050.png",
+   "x0": 4588.3,
+   "y0": -6775.2,
+   "sort": [
+    5022.8,
+    -5712.8
+   ],
+   "name": "Billboard",
+   "text": "NEW MERIDIAN 40 km - EVACUATION ROUTE. Someone has painted a line of marks under it, one for each day, until they stopped."
+  },
+  {
+   "type": "container",
+   "footprint": [
+    46.0,
+    52.0,
+    -11.4,
+    -8.95
+   ],
+   "sprite": "spr_051.png",
+   "x0": 6385.0,
+   "y0": -4009.4,
+   "sort": [
+    6904.1,
+    -3312.9
+   ],
+   "name": "Shipping container"
+  },
+  {
+   "type": "container",
+   "footprint": [
+    52.4,
+    58.4,
+    -11.4,
+    -8.95
+   ],
+   "sprite": "spr_052.png",
+   "x0": 7131.7,
+   "y0": -4555.5,
+   "sort": [
+    7650.8,
+    -3859.0
+   ],
+   "name": "Shipping container"
+  },
+  {
+   "type": "burned_bus",
+   "footprint": [
+    51.75,
+    62.25,
+    8.1,
+    10.6
+   ],
+   "sprite": "spr_053.png",
+   "x0": 4792.6,
+   "y0": -6660.2,
+   "sort": [
+    5559.5,
+    -5661.6
+   ],
+   "name": "Burned bus",
+   "text": "Burned from the inside. The seats are springs."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    58.995,
+    63.005,
+    -11.6,
+    -7.93
+   ],
+   "sprite": "spr_054.png",
+   "x0": 8045.4,
+   "y0": -4827.3,
+   "sort": [
+    8256.3,
+    -4371.8
+   ],
+   "name": "Scrapped van",
+   "text": "Stripped down to the frame. Its doors are in the town wall now."
+  },
+  {
+   "type": "grave",
+   "footprint": [
+    54.35,
+    55.25,
+    -6.8,
+    -4.9
+   ],
+   "sprite": "spr_055.png",
+   "x0": 6998.0,
+   "y0": -4361.8,
+   "sort": [
+    7076.2,
+    -4176.9
+   ],
+   "name": "Graves",
+   "text": "A row of five, facing the road. Crosses of exhaust pipe and fence post, hubcaps for headstones. Number plates for names."
+  },
+  {
+   "type": "grave",
+   "footprint": [
+    55.5,
+    56.4,
+    -6.8,
+    -4.9
+   ],
+   "sprite": "spr_056.png",
+   "x0": 7132.2,
+   "y0": -4459.9,
+   "sort": [
+    7210.4,
+    -4275.0
+   ],
+   "name": "Graves",
+   "text": "A row of five, facing the road. Crosses of exhaust pipe and fence post, hubcaps for headstones. Number plates for names."
+  },
+  {
+   "type": "grave",
+   "footprint": [
+    56.65,
+    57.55,
+    -6.8,
+    -4.9
+   ],
+   "sprite": "spr_057.png",
+   "x0": 7266.4,
+   "y0": -4558.0,
+   "sort": [
+    7344.5,
+    -4373.1
+   ],
+   "name": "Graves",
+   "text": "A row of five, facing the road. Crosses of exhaust pipe and fence post, hubcaps for headstones. Number plates for names."
+  },
+  {
+   "type": "grave",
+   "footprint": [
+    57.8,
+    58.7,
+    -6.8,
+    -4.9
+   ],
+   "sprite": "spr_058.png",
+   "x0": 7400.6,
+   "y0": -4656.2,
+   "sort": [
+    7478.7,
+    -4471.2
+   ],
+   "name": "Graves",
+   "text": "A row of five, facing the road. Crosses of exhaust pipe and fence post, hubcaps for headstones. Number plates for names."
+  },
+  {
+   "type": "grave",
+   "footprint": [
+    58.95,
+    59.85,
+    -6.8,
+    -4.9
+   ],
+   "sprite": "spr_059.png",
+   "x0": 7534.7,
+   "y0": -4754.3,
+   "sort": [
+    7612.9,
+    -4569.4
+   ],
+   "name": "Graves",
+   "text": "A row of five, facing the road. Crosses of exhaust pipe and fence post, hubcaps for headstones. Number plates for names."
+  },
+  {
+   "type": "dead_tree",
+   "footprint": [
+    53.0,
+    53.8,
+    -8.6,
+    -7.8
+   ],
+   "sprite": "spr_060.png",
+   "x0": 6935.7,
+   "y0": -4593.7,
+   "sort": [
+    7187.0,
+    -3856.9
+   ]
+  },
+  {
+   "type": "tyre_stack",
+   "footprint": [
+    52.07,
+    52.73,
+    6.94,
+    7.6
+   ],
+   "sprite": "spr_061.png",
+   "x0": 5134.9,
+   "y0": -5202.7,
+   "sort": [
+    5265.4,
+    -5091.6
+   ]
+  },
+  {
+   "type": "tyre_stack",
+   "footprint": [
+    52.77,
+    53.43,
+    6.74,
+    7.4
+   ],
+   "sprite": "spr_046.png",
+   "x0": 5239.9,
+   "y0": -5268.4,
+   "sort": [
+    5370.4,
+    -5134.2
+   ]
+  },
+  {
+   "type": "safe",
+   "footprint": [
+    59.563,
+    60.437,
+    6.381,
+    7.2
+   ],
+   "sprite": "spr_062.png",
+   "x0": 6090.3,
+   "y0": -5899.1,
+   "sort": [
+    6208.1,
+    -5699.2
+   ],
+   "name": "Strongbox",
+   "text": "Thrown clear of the bus, blackened by the fire. Somebody went at the lock with a crowbar and gave up. Whatever is inside is still inside.",
+   "poi": "locked"
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    62.9,
+    65.1,
+    -14.3,
+    -9.7
+   ],
+   "sprite": "spr_063.png",
+   "x0": 8465.5,
+   "y0": -4998.0,
+   "sort": [
+    8867.1,
+    -4437.1
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    63.55,
+    64.45,
+    -9.7,
+    -5.5
+   ],
+   "sprite": "spr_064.png",
+   "x0": 8032.3,
+   "y0": -5276.0,
+   "sort": [
+    8353.8,
+    -4812.6
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    63.85,
+    64.1,
+    -5.7,
+    -2.3
+   ],
+   "sprite": "spr_006.png",
+   "x0": 7712.4,
+   "y0": -5527.3,
+   "sort": [
+    7930.8,
+    -5117.6
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    63.1,
+    64.9,
+    2.2,
+    6.4
+   ],
+   "sprite": "spr_065.png",
+   "x0": 6583.4,
+   "y0": -6284.8,
+   "sort": [
+    6965.4,
+    -5828.0
+   ],
+   "name": "Junk Town wall",
+   "text": "A Zhiguli on its belly, chained to a post. Plates nailed along it: names, dates. A memorial of the road."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    62.9,
+    65.1,
+    6.3,
+    10.9
+   ],
+   "sprite": "spr_066.png",
+   "x0": 5961.0,
+   "y0": -6911.7,
+   "sort": [
+    6463.7,
+    -6194.9
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    63.55,
+    64.45,
+    10.5,
+    14.7
+   ],
+   "sprite": "spr_064.png",
+   "x0": 5675.5,
+   "y0": -6999.6,
+   "sort": [
+    5997.0,
+    -6536.2
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "junk_gate_open",
+   "footprint": [
+    64.0,
+    64.0,
+    0.0,
+    0.0
+   ],
+   "sprite": "spr_067.png",
+   "x0": 6709.4,
+   "y0": -6223.1,
+   "sort": [
+    7467.0,
+    -5461.1
+   ],
+   "name": "Junk Town gate",
+   "text": "Truck-box doors on rails, open by day. Somebody up on the towers is always watching the road."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    59.7,
+    63.9,
+    -3.4,
+    -2.5
+   ],
+   "sprite": "spr_068.png",
+   "x0": 7248.0,
+   "y0": -5486.0,
+   "sort": [
+    7554.6,
+    -5021.6
+   ],
+   "name": "Gate leaf",
+   "text": "A gate leaf of planks and sheet on a rail, pulled open."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    59.7,
+    63.9,
+    2.5,
+    3.4
+   ],
+   "sprite": "spr_069.png",
+   "x0": 6544.7,
+   "y0": -6000.7,
+   "sort": [
+    6866.2,
+    -5525.0
+   ],
+   "name": "Gate leaf",
+   "text": "A gate leaf of planks and sheet on a rail, pulled open."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    61.0,
+    62.8,
+    -6.9,
+    -4.3
+   ],
+   "sprite": "spr_070.png",
+   "x0": 7449.4,
+   "y0": -5727.8,
+   "sort": [
+    7875.4,
+    -4804.0
+   ],
+   "name": "Gate tower",
+   "text": "A rifleman's platform of scaffold and planks. The guard up there nods at you, rifle across his knees."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    61.0,
+    62.8,
+    4.5,
+    7.1
+   ],
+   "sprite": "spr_071.png",
+   "x0": 6119.3,
+   "y0": -6700.6,
+   "sort": [
+    6545.3,
+    -5776.8
+   ],
+   "name": "Gate tower"
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    64.0,
+    68.6,
+    12.4,
+    14.6
+   ],
+   "sprite": "spr_072.png",
+   "x0": 5755.0,
+   "y0": -7369.1,
+   "sort": [
+    6160.3,
+    -6809.3
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    68.6,
+    72.8,
+    13.1,
+    14.0
+   ],
+   "sprite": "spr_068.png",
+   "x0": 6361.3,
+   "y0": -7653.4,
+   "sort": [
+    6667.8,
+    -7189.0
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    72.8,
+    77.4,
+    12.4,
+    14.6
+   ],
+   "sprite": "spr_073.png",
+   "x0": 6781.7,
+   "y0": -8277.0,
+   "sort": [
+    7187.0,
+    -7560.1
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    77.4,
+    81.6,
+    12.6,
+    14.4
+   ],
+   "sprite": "spr_045.png",
+   "x0": 7342.4,
+   "y0": -8392.4,
+   "sort": [
+    7700.4,
+    -7935.6
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    81.6,
+    85.2,
+    11.9,
+    15.1
+   ],
+   "sprite": "spr_074.png",
+   "x0": 7763.7,
+   "y0": -8849.9,
+   "sort": [
+    8155.4,
+    -8268.4
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    85.2,
+    89.4,
+    13.1,
+    14.0
+   ],
+   "sprite": "spr_068.png",
+   "x0": 8298.1,
+   "y0": -9069.8,
+   "sort": [
+    8604.6,
+    -8605.4
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    89.3,
+    91.9,
+    11.6,
+    13.4
+   ],
+   "sprite": "spr_075.png",
+   "x0": 8806.1,
+   "y0": -9721.2,
+   "sort": [
+    9112.1,
+    -8797.4
+   ],
+   "name": "Watchtower"
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    64.1,
+    66.7,
+    11.2,
+    13.0
+   ],
+   "sprite": "spr_076.png",
+   "x0": 5912.6,
+   "y0": -7536.8,
+   "sort": [
+    6218.7,
+    -6613.0
+   ],
+   "name": "Watchtower"
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    90.9,
+    93.1,
+    6.7,
+    11.3
+   ],
+   "sprite": "spr_063.png",
+   "x0": 9282.2,
+   "y0": -9179.1,
+   "sort": [
+    9683.8,
+    -8618.2
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    91.55,
+    92.45,
+    2.5,
+    6.7
+   ],
+   "sprite": "spr_064.png",
+   "x0": 9875.7,
+   "y0": -8706.2,
+   "sort": [
+    10197.2,
+    -8242.8
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    90.9,
+    93.1,
+    -2.1,
+    2.5
+   ],
+   "sprite": "spr_066.png",
+   "x0": 10207.9,
+   "y0": -8584.2,
+   "sort": [
+    10710.5,
+    -7867.3
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    91.1,
+    92.9,
+    -6.1,
+    -1.9
+   ],
+   "sprite": "spr_065.png",
+   "x0": 10818.6,
+   "y0": -7965.7,
+   "sort": [
+    11200.6,
+    -7508.9
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    91.55,
+    92.45,
+    -10.3,
+    -6.1
+   ],
+   "sprite": "spr_064.png",
+   "x0": 11369.1,
+   "y0": -7614.0,
+   "sort": [
+    11690.6,
+    -7150.6
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    90.4,
+    93.6,
+    -13.9,
+    -10.3
+   ],
+   "sprite": "spr_077.png",
+   "x0": 11930.3,
+   "y0": -7399.3,
+   "sort": [
+    12145.6,
+    -6817.8
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    64.3,
+    67.7,
+    -14.15,
+    -13.9
+   ],
+   "sprite": "spr_078.png",
+   "x0": 9115.1,
+   "y0": -4844.6,
+   "sort": [
+    9336.7,
+    -4435.0
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    67.9,
+    72.1,
+    -14.9,
+    -13.1
+   ],
+   "sprite": "spr_079.png",
+   "x0": 9441.5,
+   "y0": -5235.2,
+   "sort": [
+    9800.5,
+    -4778.4
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    72.3,
+    75.7,
+    -14.15,
+    -13.9
+   ],
+   "sprite": "spr_078.png",
+   "x0": 10048.5,
+   "y0": -5527.3,
+   "sort": [
+    10270.1,
+    -5117.6
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    75.9,
+    80.1,
+    -14.45,
+    -13.55
+   ],
+   "sprite": "spr_068.png",
+   "x0": 10427.4,
+   "y0": -5925.5,
+   "sort": [
+    10733.9,
+    -5461.1
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    80.1,
+    84.3,
+    -14.9,
+    -13.1
+   ],
+   "sprite": "spr_045.png",
+   "x0": 10865.9,
+   "y0": -6276.2,
+   "sort": [
+    11223.9,
+    -5819.4
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    84.4,
+    87.8,
+    -14.15,
+    -13.9
+   ],
+   "sprite": "spr_078.png",
+   "x0": 11460.3,
+   "y0": -6559.8,
+   "sort": [
+    11681.8,
+    -6150.1
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    87.9,
+    92.1,
+    -14.9,
+    -13.1
+   ],
+   "sprite": "spr_079.png",
+   "x0": 11774.9,
+   "y0": -6941.8,
+   "sort": [
+    12134.0,
+    -6485.0
+   ],
+   "name": "Junk Town wall",
+   "text": "Wrecks nose to tail, propped and chained, fence panels in the gaps."
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    88.6,
+    90.4,
+    -12.9,
+    -10.3
+   ],
+   "sprite": "spr_070.png",
+   "x0": 11369.6,
+   "y0": -7570.9,
+   "sort": [
+    11795.6,
+    -6647.1
+   ],
+   "name": "Watchtower"
+  },
+  {
+   "type": "scrap_house",
+   "footprint": [
+    66.4,
+    72.0,
+    7.6,
+    11.8
+   ],
+   "sprite": "spr_080.png",
+   "x0": 6362.0,
+   "y0": -7632.6,
+   "sort": [
+    6942.0,
+    -6732.5
+   ],
+   "name": "Bunkhouse",
+   "text": "Bunks for travellers who reach the gate after dark. Two blankets each, and a rule about boots."
+  },
+  {
+   "type": "scrap_house",
+   "footprint": [
+    72.4,
+    76.8,
+    7.8,
+    11.8
+   ],
+   "sprite": "spr_081.png",
+   "x0": 7062.0,
+   "y0": -8152.4,
+   "sort": [
+    7560.4,
+    -7201.8
+   ],
+   "name": "Clinic",
+   "text": "A cot, a lamp, boiled rags on a line. The medic is out, but the kettle is warm."
+  },
+  {
+   "type": "scrap_house",
+   "footprint": [
+    78.1,
+    81.7,
+    8.6,
+    11.8
+   ],
+   "sprite": "spr_082.png",
+   "x0": 7726.4,
+   "y0": -8291.7,
+   "sort": [
+    8132.1,
+    -7688.1
+   ],
+   "name": "Smokehouse",
+   "text": "Goat, mostly. The smell carries to the gate."
+  },
+  {
+   "type": "scrap_house",
+   "footprint": [
+    82.9,
+    88.3,
+    7.2,
+    11.8
+   ],
+   "sprite": "spr_083.png",
+   "x0": 8286.4,
+   "y0": -9178.0,
+   "sort": [
+    8878.8,
+    -8114.8
+   ],
+   "name": "Mara's garage",
+   "text": "Half workshop, half home: a vice, a parts shelf, a stove that never goes out, and an engine block on a stand."
+  },
+  {
+   "type": "scrap_house",
+   "footprint": [
+    84.4,
+    90.2,
+    2.2,
+    7.0
+   ],
+   "sprite": "spr_084.png",
+   "x0": 9184.2,
+   "y0": -8684.2,
+   "sort": [
+    9648.8,
+    -7841.7
+   ],
+   "name": "Market shack",
+   "text": "Tin roof, salvaged counter, and a hand-painted sign: BUY - SELL - SWAP. Ammunition by the round."
+  },
+  {
+   "type": "scrap_house",
+   "footprint": [
+    86.2,
+    90.2,
+    -6.25,
+    1.25
+   ],
+   "sprite": "spr_085.png",
+   "x0": 10130.6,
+   "y0": -8128.3,
+   "sort": [
+    10582.2,
+    -7312.7
+   ],
+   "name": "Water store",
+   "text": "Barrels of meltwater, boiled and counted. The cistern is padlocked twice."
+  },
+  {
+   "type": "laundry",
+   "footprint": [
+    70.6,
+    74.2,
+    5.9,
+    6.2
+   ],
+   "sprite": "spr_086.png",
+   "x0": 7507.7,
+   "y0": -7103.9,
+   "sort": [
+    7741.2,
+    -6694.1
+   ],
+   "name": "Washing line",
+   "text": "Shirts, a blanket, socks frozen stiff. Somebody here still does laundry."
+  },
+  {
+   "type": "laundry",
+   "footprint": [
+    83.7,
+    84.0,
+    -7.9,
+    -4.9
+   ],
+   "sprite": "spr_087.png",
+   "x0": 10343.2,
+   "y0": -6992.5,
+   "sort": [
+    10529.7,
+    -6608.7
+   ]
+  },
+  {
+   "type": "glbp",
+   "footprint": [
+    78.417,
+    82.783,
+    -7.6,
+    -5.371
+   ],
+   "sprite": "spr_088.png",
+   "x0": 9792.5,
+   "y0": -6790.0,
+   "sort": [
+    10160.5,
+    -6324.1
+   ],
+   "name": "Car on blocks",
+   "text": "Mara's project. Half its parts are in the wall already."
+  },
+  {
+   "type": "burn_barrel",
+   "footprint": [
+    77.0,
+    77.58,
+    0.31,
+    0.89
+   ],
+   "sprite": "spr_089.png",
+   "x0": 8869.8,
+   "y0": -6812.5,
+   "sort": [
+    8947.6,
+    -6646.3
+   ],
+   "name": "Burn barrel",
+   "text": "Somebody always keeps it lit. People stand round it to trade news."
+  },
+  {
+   "type": "market_stall",
+   "footprint": [
+    72.0,
+    74.8,
+    2.7,
+    4.6
+   ],
+   "sprite": "spr_090.png",
+   "x0": 7855.1,
+   "y0": -7112.7,
+   "sort": [
+    8137.9,
+    -6574.6
+   ],
+   "name": "Market stall",
+   "text": "Jars of rendered fat, valve washers, a radio that works if you hit it."
+  },
+  {
+   "type": "market_stall",
+   "footprint": [
+    78.8,
+    81.6,
+    2.7,
+    4.6
+   ],
+   "sprite": "spr_091.png",
+   "x0": 8648.4,
+   "y0": -7692.9,
+   "sort": [
+    8931.3,
+    -7154.8
+   ],
+   "name": "Market stall",
+   "text": "Boots, coats, gloves: none of them new, all of them dry."
+  },
+  {
+   "type": "market_stall",
+   "footprint": [
+    76.0,
+    78.8,
+    -3.8,
+    -1.9
+   ],
+   "sprite": "spr_092.png",
+   "x0": 9069.8,
+   "y0": -6907.2,
+   "sort": [
+    9363.0,
+    -6361.3
+   ],
+   "name": "Market stall",
+   "text": "Dried mushrooms, salt, a jar of something red."
+  },
+  {
+   "type": "notice_board",
+   "footprint": [
+    68.6,
+    68.9,
+    -3.4,
+    -1.4
+   ],
+   "sprite": "spr_093.png",
+   "x0": 8158.8,
+   "y0": -6061.8,
+   "sort": [
+    8301.3,
+    -5661.6
+   ],
+   "name": "Notice board",
+   "text": "WORK: wall repair, pays in food. LOST: grey dog, answers to Kopek. CONVOY TO NEW MERIDIAN - SUSPENDED - ASK MARA."
+  },
+  {
+   "type": "animal_pen",
+   "footprint": [
+    82.1,
+    86.3,
+    -11.8,
+    -8.8
+   ],
+   "sprite": "spr_094.png",
+   "x0": 10583.6,
+   "y0": -6755.8,
+   "sort": [
+    11025.6,
+    -6305.8
+   ],
+   "name": "Goat pen",
+   "text": "Three goats, a trough and a hay pile. The settlement's milk."
+  },
+  {
+   "type": "firewood",
+   "footprint": [
+    90.1,
+    90.8,
+    -6.2,
+    -4.6
+   ],
+   "sprite": "spr_095.png",
+   "x0": 11034.9,
+   "y0": -7473.1,
+   "sort": [
+    11183.1,
+    -7257.2
+   ]
+  },
+  {
+   "type": "oil_drum",
+   "footprint": [
+    82.2,
+    82.78,
+    5.91,
+    6.49
+   ],
+   "sprite": "spr_096.png",
+   "x0": 8822.1,
+   "y0": -7732.1,
+   "sort": [
+    8901.0,
+    -7567.8
+   ]
+  },
+  {
+   "type": "oil_drum",
+   "footprint": [
+    82.8,
+    83.38,
+    5.51,
+    6.09
+   ],
+   "sprite": "spr_097.png",
+   "x0": 8938.8,
+   "y0": -7749.1,
+   "sort": [
+    9017.6,
+    -7584.9
+   ]
+  },
+  {
+   "type": "oil_drum",
+   "footprint": [
+    87.4,
+    87.98,
+    -9.49,
+    -8.91
+   ],
+   "sprite": "spr_098.png",
+   "x0": 11225.6,
+   "y0": -6861.7,
+   "sort": [
+    11304.4,
+    -6697.5
+   ]
+  },
+  {
+   "type": "oil_drum",
+   "footprint": [
+    67.2,
+    67.78,
+    -11.49,
+    -10.91
+   ],
+   "sprite": "spr_099.png",
+   "x0": 9102.1,
+   "y0": -4967.4,
+   "sort": [
+    9181.0,
+    -4803.2
+   ]
+  },
+  {
+   "type": "oil_drum",
+   "footprint": [
+    77.9,
+    78.48,
+    -9.69,
+    -9.11
+   ],
+   "sprite": "spr_100.png",
+   "x0": 10140.5,
+   "y0": -6034.0,
+   "sort": [
+    10219.4,
+    -5869.8
+   ]
+  },
+  {
+   "type": "tyre_stack",
+   "footprint": [
+    66.4,
+    67.06,
+    5.27,
+    5.93
+   ],
+   "sprite": "spr_101.png",
+   "x0": 7078.7,
+   "y0": -6282.7,
+   "sort": [
+    7132.2,
+    -6171.8
+   ]
+  },
+  {
+   "type": "tyre_stack",
+   "footprint": [
+    88.4,
+    89.06,
+    7.27,
+    7.93
+   ],
+   "sprite": "spr_102.png",
+   "x0": 9412.1,
+   "y0": -8353.6,
+   "sort": [
+    9465.6,
+    -8219.7
+   ]
+  },
+  {
+   "type": "tyre_stack",
+   "footprint": [
+    73.2,
+    73.86,
+    -8.73,
+    -8.07
+   ],
+   "sprite": "spr_103.png",
+   "x0": 9505.5,
+   "y0": -5646.3,
+   "sort": [
+    9559.0,
+    -5557.5
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    81.4,
+    82.02,
+    1.29,
+    1.91
+   ],
+   "sprite": "spr_104.png",
+   "x0": 9265.5,
+   "y0": -7223.3,
+   "sort": [
+    9346.6,
+    -7108.8
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    82.0,
+    82.62,
+    0.89,
+    1.51
+   ],
+   "sprite": "spr_104.png",
+   "x0": 9382.1,
+   "y0": -7240.4,
+   "sort": [
+    9463.3,
+    -7125.8
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    71.6,
+    72.22,
+    1.49,
+    2.11
+   ],
+   "sprite": "spr_104.png",
+   "x0": 8098.7,
+   "y0": -6404.1,
+   "sort": [
+    8179.9,
+    -6289.6
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    74.2,
+    74.82,
+    -1.71,
+    -1.09
+   ],
+   "sprite": "spr_104.png",
+   "x0": 8775.4,
+   "y0": -6352.9,
+   "sort": [
+    8856.6,
+    -6238.4
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    74.8,
+    75.42,
+    -1.31,
+    -0.69
+   ],
+   "sprite": "spr_104.png",
+   "x0": 8798.8,
+   "y0": -6438.3,
+   "sort": [
+    8880.0,
+    -6323.7
+   ]
+  },
+  {
+   "type": "scrap_house",
+   "footprint": [
+    68.1,
+    72.7,
+    -12.0,
+    -6.9
+   ],
+   "sprite": "spr_105.png",
+   "x0": 8861.8,
+   "y0": -5924.2,
+   "sort": [
+    9316.3,
+    -5200.8
+   ],
+   "name": "Tea house",
+   "text": "A stove, a samovar, six stools. Payment in sugar, salt or news."
+  },
+  {
+   "type": "scrap_house",
+   "footprint": [
+    73.4,
+    79.0,
+    -12.4,
+    -9.8
+   ],
+   "sprite": "spr_106.png",
+   "x0": 9832.2,
+   "y0": -6055.0,
+   "sort": [
+    10185.5,
+    -5554.9
+   ],
+   "name": "Tool shed",
+   "text": "Shovels, a sledge, chain, rope. All counted, all signed out."
+  },
+  {
+   "type": "burn_barrel",
+   "footprint": [
+    67.4,
+    67.98,
+    2.91,
+    3.49
+   ],
+   "sprite": "spr_089.png",
+   "x0": 7446.4,
+   "y0": -6215.2,
+   "sort": [
+    7524.2,
+    -6049.0
+   ],
+   "name": "Gate fire",
+   "text": "The gate watch warms its hands here between shifts."
+  },
+  {
+   "type": "market_stall",
+   "footprint": [
+    69.4,
+    72.2,
+    -4.6,
+    -2.7
+   ],
+   "sprite": "spr_107.png",
+   "x0": 8393.1,
+   "y0": -6275.8,
+   "sort": [
+    8686.3,
+    -5729.8
+   ],
+   "name": "Market stall",
+   "text": "Batteries, sorted by how much charge someone swears is left in them."
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    68.6,
+    69.22,
+    6.09,
+    6.71
+   ],
+   "sprite": "spr_104.png",
+   "x0": 7212.0,
+   "y0": -6540.7,
+   "sort": [
+    7293.2,
+    -6426.1
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    69.2,
+    69.82,
+    5.69,
+    6.31
+   ],
+   "sprite": "spr_104.png",
+   "x0": 7328.7,
+   "y0": -6557.7,
+   "sort": [
+    7409.9,
+    -6443.2
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    86.0,
+    86.62,
+    -4.91,
+    -4.29
+   ],
+   "sprite": "spr_104.png",
+   "x0": 10525.5,
+   "y0": -7086.8,
+   "sort": [
+    10606.7,
+    -6972.2
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    83.6,
+    84.22,
+    0.89,
+    1.51
+   ],
+   "sprite": "spr_104.png",
+   "x0": 9568.8,
+   "y0": -7376.9,
+   "sort": [
+    9650.0,
+    -7262.3
+   ]
+  },
+  {
+   "type": "crate",
+   "footprint": [
+    84.2,
+    84.82,
+    0.29,
+    0.91
+   ],
+   "sprite": "spr_104.png",
+   "x0": 9708.8,
+   "y0": -7376.9,
+   "sort": [
+    9790.0,
+    -7262.3
+   ]
+  },
+  {
+   "type": "firewood",
+   "footprint": [
+    79.0,
+    80.6,
+    7.0,
+    7.7
+   ],
+   "sprite": "spr_030.png",
+   "x0": 8305.1,
+   "y0": -7655.3,
+   "sort": [
+    8452.9,
+    -7436.4
+   ]
+  },
+  {
+   "type": "tyre_stack",
+   "footprint": [
+    81.2,
+    81.86,
+    -5.13,
+    -4.47
+   ],
+   "sprite": "spr_103.png",
+   "x0": 10018.8,
+   "y0": -6636.1,
+   "sort": [
+    10072.3,
+    -6547.3
+   ]
+  },
+  {
+   "type": "scrap_pile",
+   "footprint": [
+    66.6,
+    68.2,
+    -8.4,
+    -6.4
+   ],
+   "sprite": "spr_108.png",
+   "x0": 8493.8,
+   "y0": -5357.5,
+   "sort": [
+    8727.1,
+    -5119.7
+   ],
+   "name": "Scrap pile",
+   "text": "Door panels and bonnets, sorted by size. The wall eats them."
+  }
+ ],
+ "inspect": [
+  {
+   "id": "cold_camp",
+   "u": 23.3,
+   "v": 7.1,
+   "name": "Cold campfire",
+   "poi": "search",
+   "text": "Two bedrolls round a fire that went out days ago, not years. A tin pot with soup frozen in it. Their tracks head east."
+  },
+  {
+   "id": "culvert",
+   "u": 26.6,
+   "v": -7.73125,
+   "name": "Culvert",
+   "poi": "search",
+   "text": "A concrete pipe under the road, half choked with ice. Branches and rags have been dragged into the mouth to make a nest. Recently."
+  },
+  {
+   "id": "backpack",
+   "u": 6.0,
+   "v": 3.6,
+   "name": "Child's backpack",
+   "poi": "search",
+   "text": "Hung on the guardrail by its straps, the way you leave something for someone to find. Red, with a cartoon cosmonaut on the flap."
+  },
+  {
+   "id": "field_radio",
+   "u": 22.4,
+   "v": -8.0,
+   "name": "Field radio",
+   "poi": "radio",
+   "text": "Strapped into the truck's cab, battery dead. The tuning dial is taped down on one frequency, and someone wrote 'MERIDIAN' on the tape."
+  },
+  {
+   "id": "dog_bed",
+   "u": 51.0,
+   "v": 11.8,
+   "name": "A hollow in the snow",
+   "poi": "track",
+   "text": "Paw prints lead here from the rest stop and circle a hollow scraped out under the billboard. A gnawed paper wrapper, the kind sugar comes in. A dog sleeps here."
+  }
+ ],
+ "stairs": [
+  {
+   "id": "to_l1_from_rd",
+   "u": 4.5,
+   "v": 9.6,
+   "to": "L1",
+   "arrive": [
+    -2.6,
+    0.6
+   ],
+   "name": "Silo 81 portal",
+   "text": "Back down the ramp to the surface depot and the lifts."
+  }
+ ],
+ "spawns": {
+  "player": [
+   4.5,
+   8.2,
+   5
+  ],
+  "worms": [],
+  "enemies": [
+   {
+    "kind": "infected",
+    "u": 35.0,
+    "v": -2.4,
+    "dir": 1,
+    "group": "car",
+    "wake": 10,
+    "coat": 0,
+    "state": "still",
+    "speak": "A voice from the figure by the car, wet and wrong: 'Close the door. You're letting the warm out.'",
+    "speak_d": 19
+   },
+   {
+    "kind": "feral",
+    "u": 38.6,
+    "v": -6.0,
+    "dir": 3,
+    "group": "car",
+    "coat": 1,
+    "state": "hidden"
+   },
+   {
+    "kind": "feral",
+    "u": 39.4,
+    "v": -3.0,
+    "dir": 3,
+    "group": "car",
+    "coat": 2,
+    "state": "hidden"
+   },
+   {
+    "kind": "feral",
+    "u": 46.6,
+    "v": 8.6,
+    "dir": 4,
+    "group": "reststop",
+    "wake": 8,
+    "coat": 2,
+    "state": "still"
+   },
+   {
+    "kind": "feral",
+    "u": 43.8,
+    "v": 6.4,
+    "dir": 2,
+    "group": "reststop",
+    "wake": 8,
+    "coat": 0
+   },
+   {
+    "kind": "infected",
+    "u": 55.6,
+    "v": -2.0,
+    "dir": 3,
+    "group": "gate",
+    "wake": 12,
+    "coat": 1
+   },
+   {
+    "kind": "feral",
+    "u": 53.6,
+    "v": 4.2,
+    "dir": 4,
+    "group": "gate",
+    "wake": 12,
+    "coat": 0
+   },
+   {
+    "kind": "infected",
+    "u": 59.0,
+    "v": 5.2,
+    "dir": 3,
+    "group": "gate",
+    "wake": 12,
+    "coat": 2
+   }
+  ],
+  "folk": [
+   {
+    "u": 75.6,
+    "v": 1.6,
+    "dir": 4,
+    "coat": [
+     0.21,
+     0.19,
+     0.16
+    ],
+    "name": "Woman at the barrel",
+    "bark": "Warm your hands, Silo. Then tell me how many of you are still down there."
+   },
+   {
+    "u": 78.4,
+    "v": 1.8,
+    "dir": 3,
+    "coat": [
+     0.16,
+     0.18,
+     0.21
+    ],
+    "name": "Old trader",
+    "bark": "Salt for news, news for salt. What's the road like?"
+   },
+   {
+    "u": 73.4,
+    "v": 2.0,
+    "dir": 5,
+    "coat": [
+     0.25,
+     0.22,
+     0.17
+    ],
+    "name": "Washerwoman",
+    "bark": "If you see a grey dog, his name's Kopek. He comes for sugar."
+   },
+   {
+    "u": 80.2,
+    "v": 2.0,
+    "dir": 4,
+    "coat": [
+     0.19,
+     0.2,
+     0.17
+    ],
+    "name": "Boot seller",
+    "bark": "Dry boots. Not new, but dry. You'll thank me past the bridge."
+   },
+   {
+    "u": 77.4,
+    "v": -2.0,
+    "dir": 1,
+    "coat": [
+     0.22,
+     0.17,
+     0.15
+    ],
+    "name": "Mushroom seller",
+    "bark": "The red jar? Don't ask. Two salt."
+   },
+   {
+    "u": 66.8,
+    "v": 1.8,
+    "dir": 3,
+    "coat": [
+     0.17,
+     0.18,
+     0.17
+    ],
+    "name": "Gate watch",
+    "bark": "You came up the road on foot? Then you met them. Keep your voice down in here, people are tired."
+   },
+   {
+    "u": 85.0,
+    "v": -8.4,
+    "dir": 4,
+    "coat": [
+     0.2,
+     0.19,
+     0.17
+    ],
+    "name": "Goatherd",
+    "bark": "Three goats, one stove. Touch the goats and we have words."
+   },
+   {
+    "u": 83.6,
+    "v": 4.0,
+    "dir": 0,
+    "coat": [
+     0.16,
+     0.17,
+     0.19
+    ],
+    "name": "Customer",
+    "bark": "Rook sets the prices. Mara fixes what breaks. The rest of us wait for spring."
+   },
+   {
+    "u": 71.4,
+    "v": -6.2,
+    "dir": 2,
+    "coat": [
+     0.21,
+     0.2,
+     0.17
+    ],
+    "name": "Tea drinker",
+    "bark": "Tea's hot. That's about all I can say for today."
+   }
+  ]
+ },
+ "creatures": [
+  {
+   "kind": "goat",
+   "u": 83.2,
+   "v": -10.6,
+   "facing": 40.0,
+   "phase": 0.0
+  },
+  {
+   "kind": "goat",
+   "u": 85.2,
+   "v": -11.0,
+   "facing": 200.0,
+   "phase": 2.1
+  },
+  {
+   "kind": "goat",
+   "u": 84.4,
+   "v": -9.6,
+   "facing": 110.0,
+   "phase": 4.3
+  }
+ ],
+ "support": [
+  {
+   "group": "gate",
+   "u": 62.8,
+   "v": 5.8,
+   "z": 5.6,
+   "after_round": 2,
+   "hit": 65,
+   "msg": "A rifle cracks from the gate tower. 'Keep your head down, Silo!'"
+  },
+  {
+   "group": "gate",
+   "u": 62.8,
+   "v": -5.6,
+   "z": 5.6,
+   "after_round": 3,
+   "hit": 55,
+   "msg": "The second tower joins in. Somebody up there is a good shot."
+  }
+ ],
+ "max_zoom": 0.85,
+ "blocked": [
+  [
+   17.46,
+   20.54,
+   5.3,
+   6.7
+  ],
+  [
+   23.92,
+   27.28,
+   -10.24,
+   -8.56
+  ],
+  [
+   45.74,
+   48.26,
+   -6.13,
+   -4.87
+  ],
+  [
+   50.2,
+   53.0,
+   -8.5,
+   -7.1
+  ],
+  [
+   1.8,
+   2.8,
+   1.8,
+   2.4
+  ],
+  [
+   6.2,
+   7.2,
+   1.8,
+   2.4
+  ],
+  [
+   63.8,
+   64.6,
+   -2.5,
+   -2.0
+  ],
+  [
+   63.8,
+   64.6,
+   2.0,
+   2.5
+  ]
+ ],
+ "bounds": [
+  -2.0,
+  92.0,
+  -12.6,
+  12.6
+ ],
+ "sprites": [],
+ "bg": {
+  "none": true,
+  "x0": -4900,
+  "y0": -11093,
+  "w": 19834,
+  "h": 14506
+ },
+ "ground": {
+  "ambient": [
+   0.86,
+   0.93,
+   1.08
+  ],
+  "floors": [
+   {
+    "r": [
+     -16.0,
+     104.0,
+     -24.0,
+     26.0
+    ],
+    "tex": "snow",
+    "tint": [
+     1.02,
+     1.02,
+     1.02
+    ],
+    "layer": -1
+   },
+   {
+    "r": [
+     -1.0,
+     10.0,
+     3.0,
+     9.7
+    ],
+    "tex": "concrete",
+    "tint": [
+     1,
+     1,
+     1
+    ],
+    "layer": 2
+   },
+   {
+    "r": [
+     36.0,
+     51.0,
+     3.0,
+     9.4
+    ],
+    "tex": "concrete",
+    "tint": [
+     0.94,
+     0.94,
+     0.95
+    ],
+    "layer": 2
+   },
+   {
+    "r": [
+     -2.0,
+     24.0,
+     -12.0,
+     12.0
+    ],
+    "tex": "snow",
+    "tint": [
+     1,
+     1,
+     1
+    ],
+    "layer": 0
+   },
+   {
+    "r": [
+     24.0,
+     50.0,
+     -12.0,
+     12.5
+    ],
+    "tex": "snow",
+    "tint": [
+     1,
+     1,
+     1
+    ],
+    "layer": 0
+   },
+   {
+    "r": [
+     50.0,
+     64.0,
+     -12.5,
+     12.5
+    ],
+    "tex": "snow",
+    "tint": [
+     1,
+     1,
+     1
+    ],
+    "layer": 0
+   },
+   {
+    "r": [
+     64.0,
+     90.6,
+     -12.6,
+     12.6
+    ],
+    "tex": "yard",
+    "tint": [
+     1,
+     1,
+     1
+    ],
+    "layer": 1
+   }
+  ],
+  "patches": [
+   {
+    "r": [
+     0.0,
+     2.2,
+     -0.0437090591265947,
+     0.1162909408734053
+    ],
+    "ang": 0.09441835301555089,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     5.0,
+     7.199999999999999,
+     -0.08251200960768613,
+     0.07748799039231387
+    ],
+    "ang": -1.3691368647170474,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     10.0,
+     12.2,
+     -0.27747547720042415,
+     -0.11747547720042416
+    ],
+    "ang": -4.073645406300371,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     15.000000000000002,
+     17.200000000000003,
+     -0.9435717773437503,
+     -0.7835717773437504
+    ],
+    "ang": -11.43469594694151,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     20.0,
+     22.200000000000003,
+     -2.0861254882812506,
+     -1.9261254882812504
+    ],
+    "ang": -12.537575560993385,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     25.0,
+     27.200000000000003,
+     -3.233762207031251,
+     -3.0737622070312507
+    ],
+    "ang": -12.80600729901475,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     30.0,
+     32.2,
+     -3.9413037109375,
+     -3.7813037109375
+    ],
+    "ang": -2.1744046370400403,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     35.0,
+     37.2,
+     -3.7417431640624996,
+     -3.5817431640624995
+    ],
+    "ang": 6.436467269857255,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     40.0,
+     42.2,
+     -2.7395166015625,
+     -2.5795166015624997
+    ],
+    "ang": 16.35778812324376,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     45.0,
+     47.2,
+     -1.2547915656810467,
+     -1.0947915656810465
+    ],
+    "ang": 14.327076002576451,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     50.0,
+     52.2,
+     -0.008893260451705493,
+     0.1511067395482945
+    ],
+    "ang": 12.647688420546592,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     55.0,
+     57.2,
+     0.6417252550317066,
+     0.8017252550317066
+    ],
+    "ang": -0.416623357800512,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     60.0,
+     62.2,
+     0.3654334376435461,
+     0.5254334376435461
+    ],
+    "ang": -3.099693164270303,
+    "rgb": [
+     0.78,
+     0.7,
+     0.42
+    ],
+    "a": 0.75,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     -1.15,
+     1.15,
+     -1.8667293928923987,
+     -1.5667293928923989
+    ],
+    "ang": 0.20916814235548767,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     0.8500000000000001,
+     3.15,
+     -1.863078588078588,
+     -1.5630785880785882
+    ],
+    "ang": -0.02150978945245895,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     2.85,
+     5.15,
+     -1.8704263096519553,
+     -1.5704263096519555
+    ],
+    "ang": -0.4529434307159538,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     4.85,
+     7.15,
+     -1.9,
+     -1.6
+    ],
+    "ang": -1.3326728414970626,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     6.85,
+     9.15,
+     -1.9532593778591032,
+     -1.6532593778591034
+    ],
+    "ang": -1.7315366769925018,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     8.85,
+     11.15,
+     -2.0309597523219813,
+     -1.7309597523219815
+    ],
+    "ang": -2.9331989153080835,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     10.85,
+     13.15,
+     -2.1706296493092454,
+     -1.8706296493092456
+    ],
+    "ang": -5.216227109503045,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     12.85,
+     15.15,
+     -2.4,
+     -2.1
+    ],
+    "ang": -7.940778655176706,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     14.85,
+     17.15,
+     -2.7429687499999997,
+     -2.44296875
+    ],
+    "ang": -11.313967482782276,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     16.85,
+     19.15,
+     -3.18125,
+     -2.88125
+    ],
+    "ang": -13.088467372312657,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     18.85,
+     21.15,
+     -3.65390625,
+     -3.35390625
+    ],
+    "ang": -13.194588600226064,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     20.85,
+     23.15,
+     -4.1000000000000005,
+     -3.8000000000000003
+    ],
+    "ang": -11.975483428225834,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     22.85,
+     25.15,
+     -4.553906250000001,
+     -4.25390625
+    ],
+    "ang": -13.483299829226414,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     24.85,
+     27.15,
+     -5.031250000000001,
+     -4.73125
+    ],
+    "ang": -12.910509693031148,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     26.85,
+     29.15,
+     -5.44296875,
+     -5.14296875
+    ],
+    "ang": -9.878734637673396,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     28.85,
+     31.15,
+     -5.7,
+     -5.3999999999999995
+    ],
+    "ang": -4.466463892330479,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     30.85,
+     33.15,
+     -5.7828125,
+     -5.4828125
+    ],
+    "ang": -0.4951709221286693,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     32.85,
+     35.15,
+     -5.737500000000001,
+     -5.4375
+    ],
+    "ang": 3.0381898398829184,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     34.85,
+     37.15,
+     -5.573437500000001,
+     -5.2734375
+    ],
+    "ang": 6.283379655672268,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     36.85,
+     39.15,
+     -5.300000000000001,
+     -5.0
+    ],
+    "ang": 9.475024561190992,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     38.85,
+     41.15,
+     -4.8671875,
+     -4.567187499999999
+    ],
+    "ang": 14.637614020807531,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     40.85,
+     43.15,
+     -4.2875000000000005,
+     -3.9875000000000003
+    ],
+    "ang": 17.162669993872736,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     42.85,
+     45.15,
+     -3.6640624999999996,
+     -3.3640624999999997
+    ],
+    "ang": 16.95812245670682,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     44.85,
+     47.15,
+     -3.1,
+     -2.8000000000000003
+    ],
+    "ang": 14.351364157087263,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     46.85,
+     49.15,
+     -2.589395902025436,
+     -2.289395902025436
+    ],
+    "ang": 14.390701313081223,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     48.85,
+     51.15,
+     -2.086762623879188,
+     -1.7867626238791883
+    ],
+    "ang": 13.609224854941646,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     50.85,
+     53.15,
+     -1.6360512630014856,
+     -1.3360512630014858
+    ],
+    "ang": 11.477521358119017,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     52.85,
+     55.15,
+     -1.2999999999999998,
+     -0.9999999999999999
+    ],
+    "ang": 6.8943516842808545,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     54.85,
+     57.15,
+     -1.178433734939759,
+     -0.878433734939759
+    ],
+    "ang": -0.00916195037489812,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     56.85,
+     59.15,
+     -1.2721686746987955,
+     -0.9721686746987955
+    ],
+    "ang": -4.142448859148181,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     58.85,
+     61.15,
+     -1.4,
+     -1.1
+    ],
+    "ang": -2.772339352072783,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     60.85,
+     63.15,
+     -1.5058592035980694,
+     -1.2058592035980695
+    ],
+    "ang": -3.4025045741474975,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     62.85,
+     65.15,
+     -1.6316244239631335,
+     -1.3316244239631336
+    ],
+    "ang": -3.7429219672623684,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     -1.15,
+     1.15,
+     -1.1667293928923987,
+     -0.8667293928923988
+    ],
+    "ang": 0.20916814235548767,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     0.8500000000000001,
+     3.15,
+     -1.163078588078588,
+     -0.8630785880785882
+    ],
+    "ang": -0.02150978945245895,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     2.85,
+     5.15,
+     -1.1704263096519554,
+     -0.8704263096519554
+    ],
+    "ang": -0.4529434307159538,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     4.85,
+     7.15,
+     -1.2,
+     -0.9
+    ],
+    "ang": -1.3326728414970626,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     6.85,
+     9.15,
+     -1.2532593778591032,
+     -0.9532593778591033
+    ],
+    "ang": -1.7315366769925018,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     8.85,
+     11.15,
+     -1.3309597523219814,
+     -1.0309597523219816
+    ],
+    "ang": -2.9331989153080835,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     10.85,
+     13.15,
+     -1.4706296493092454,
+     -1.1706296493092456
+    ],
+    "ang": -5.216227109503045,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     12.85,
+     15.15,
+     -1.7,
+     -1.4000000000000001
+    ],
+    "ang": -7.940778655176706,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     14.85,
+     17.15,
+     -2.04296875,
+     -1.7429687500000002
+    ],
+    "ang": -11.313967482782276,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     16.85,
+     19.15,
+     -2.48125,
+     -2.1812500000000004
+    ],
+    "ang": -13.088467372312657,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     18.85,
+     21.15,
+     -2.9539062499999997,
+     -2.65390625
+    ],
+    "ang": -13.194588600226064,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     20.85,
+     23.15,
+     -3.4,
+     -3.1
+    ],
+    "ang": -11.975483428225834,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     22.85,
+     25.15,
+     -3.85390625,
+     -3.5539062500000003
+    ],
+    "ang": -13.483299829226414,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     24.85,
+     27.15,
+     -4.331250000000001,
+     -4.03125
+    ],
+    "ang": -12.910509693031148,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     26.85,
+     29.15,
+     -4.74296875,
+     -4.4429687499999995
+    ],
+    "ang": -9.878734637673396,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     28.85,
+     31.15,
+     -5.0,
+     -4.699999999999999
+    ],
+    "ang": -4.466463892330479,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     30.85,
+     33.15,
+     -5.0828125,
+     -4.7828124999999995
+    ],
+    "ang": -0.4951709221286693,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     32.85,
+     35.15,
+     -5.0375000000000005,
+     -4.7375
+    ],
+    "ang": 3.0381898398829184,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     34.85,
+     37.15,
+     -4.8734375000000005,
+     -4.5734375
+    ],
+    "ang": 6.283379655672268,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     36.85,
+     39.15,
+     -4.6000000000000005,
+     -4.3
+    ],
+    "ang": 9.475024561190992,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     38.85,
+     41.15,
+     -4.167187500000001,
+     -3.8671875000000004
+    ],
+    "ang": 14.637614020807531,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     40.85,
+     43.15,
+     -3.5875,
+     -3.2875
+    ],
+    "ang": 17.162669993872736,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     42.85,
+     45.15,
+     -2.9640624999999994,
+     -2.6640624999999996
+    ],
+    "ang": 16.95812245670682,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     44.85,
+     47.15,
+     -2.4,
+     -2.1
+    ],
+    "ang": 14.351364157087263,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     46.85,
+     49.15,
+     -1.8893959020254356,
+     -1.5893959020254358
+    ],
+    "ang": 14.390701313081223,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     48.85,
+     51.15,
+     -1.3867626238791881,
+     -1.0867626238791883
+    ],
+    "ang": 13.609224854941646,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     50.85,
+     53.15,
+     -0.9360512630014858,
+     -0.6360512630014857
+    ],
+    "ang": 11.477521358119017,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     52.85,
+     55.15,
+     -0.6000000000000001,
+     -0.30000000000000004
+    ],
+    "ang": 6.8943516842808545,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     54.85,
+     57.15,
+     -0.47843373493975916,
+     -0.17843373493975914
+    ],
+    "ang": -0.00916195037489812,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     56.85,
+     59.15,
+     -0.5721686746987956,
+     -0.2721686746987956
+    ],
+    "ang": -4.142448859148181,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     58.85,
+     61.15,
+     -0.7000000000000001,
+     -0.4
+    ],
+    "ang": -2.772339352072783,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     60.85,
+     63.15,
+     -0.8058592035980695,
+     -0.5058592035980695
+    ],
+    "ang": -3.4025045741474975,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     62.85,
+     65.15,
+     -0.9316244239631337,
+     -0.6316244239631337
+    ],
+    "ang": -3.7429219672623684,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     -1.15,
+     1.15,
+     1.1332706071076013,
+     1.4332706071076011
+    ],
+    "ang": 0.20916814235548767,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     0.8500000000000001,
+     3.15,
+     1.136921411921412,
+     1.4369214119214118
+    ],
+    "ang": -0.02150978945245895,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     2.85,
+     5.15,
+     1.1295736903480447,
+     1.4295736903480445
+    ],
+    "ang": -0.4529434307159538,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     4.85,
+     7.15,
+     1.1,
+     1.4
+    ],
+    "ang": -1.3326728414970626,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     6.85,
+     9.15,
+     1.0467406221408968,
+     1.3467406221408966
+    ],
+    "ang": -1.7315366769925018,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     8.85,
+     11.15,
+     0.9690402476780186,
+     1.2690402476780185
+    ],
+    "ang": -2.9331989153080835,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     10.85,
+     13.15,
+     0.8293703506907545,
+     1.1293703506907544
+    ],
+    "ang": -5.216227109503045,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     12.85,
+     15.15,
+     0.6,
+     0.9
+    ],
+    "ang": -7.940778655176706,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     14.85,
+     17.15,
+     0.25703124999999993,
+     0.55703125
+    ],
+    "ang": -11.313967482782276,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     16.85,
+     19.15,
+     -0.18125000000000022,
+     0.11874999999999977
+    ],
+    "ang": -13.088467372312657,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     18.85,
+     21.15,
+     -0.65390625,
+     -0.35390625
+    ],
+    "ang": -13.194588600226064,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     20.85,
+     23.15,
+     -1.1,
+     -0.8000000000000002
+    ],
+    "ang": -11.975483428225834,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     22.85,
+     25.15,
+     -1.5539062500000003,
+     -1.2539062500000004
+    ],
+    "ang": -13.483299829226414,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     24.85,
+     27.15,
+     -2.0312500000000004,
+     -1.7312500000000006
+    ],
+    "ang": -12.910509693031148,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     26.85,
+     29.15,
+     -2.44296875,
+     -2.14296875
+    ],
+    "ang": -9.878734637673396,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     28.85,
+     31.15,
+     -2.6999999999999997,
+     -2.4
+    ],
+    "ang": -4.466463892330479,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     30.85,
+     33.15,
+     -2.7828124999999995,
+     -2.4828124999999996
+    ],
+    "ang": -0.4951709221286693,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     32.85,
+     35.15,
+     -2.7375,
+     -2.4375
+    ],
+    "ang": 3.0381898398829184,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     34.85,
+     37.15,
+     -2.5734375,
+     -2.2734375
+    ],
+    "ang": 6.283379655672268,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     36.85,
+     39.15,
+     -2.3,
+     -2.0
+    ],
+    "ang": 9.475024561190992,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     38.85,
+     41.15,
+     -1.8671875,
+     -1.5671875000000002
+    ],
+    "ang": 14.637614020807531,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     40.85,
+     43.15,
+     -1.2875,
+     -0.9875000000000002
+    ],
+    "ang": 17.162669993872736,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     42.85,
+     45.15,
+     -0.6640624999999997,
+     -0.3640624999999996
+    ],
+    "ang": 16.95812245670682,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     44.85,
+     47.15,
+     -0.09999999999999995,
+     0.20000000000000004
+    ],
+    "ang": 14.351364157087263,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     46.85,
+     49.15,
+     0.4106040979745643,
+     0.7106040979745644
+    ],
+    "ang": 14.390701313081223,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     48.85,
+     51.15,
+     0.9132373761208118,
+     1.2132373761208117
+    ],
+    "ang": 13.609224854941646,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     50.85,
+     53.15,
+     1.3639487369985144,
+     1.6639487369985142
+    ],
+    "ang": 11.477521358119017,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     52.85,
+     55.15,
+     1.7000000000000002,
+     2.0
+    ],
+    "ang": 6.8943516842808545,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     54.85,
+     57.15,
+     1.821566265060241,
+     2.121566265060241
+    ],
+    "ang": -0.00916195037489812,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     56.85,
+     59.15,
+     1.7278313253012045,
+     2.0278313253012046
+    ],
+    "ang": -4.142448859148181,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     58.85,
+     61.15,
+     1.6,
+     1.9
+    ],
+    "ang": -2.772339352072783,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     60.85,
+     63.15,
+     1.4941407964019306,
+     1.7941407964019305
+    ],
+    "ang": -3.4025045741474975,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     62.85,
+     65.15,
+     1.3683755760368665,
+     1.6683755760368664
+    ],
+    "ang": -3.7429219672623684,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     -1.15,
+     1.15,
+     1.8332706071076013,
+     2.133270607107601
+    ],
+    "ang": 0.20916814235548767,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     0.8500000000000001,
+     3.15,
+     1.836921411921412,
+     2.1369214119214117
+    ],
+    "ang": -0.02150978945245895,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     2.85,
+     5.15,
+     1.8295736903480446,
+     2.1295736903480447
+    ],
+    "ang": -0.4529434307159538,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     4.85,
+     7.15,
+     1.8,
+     2.1
+    ],
+    "ang": -1.3326728414970626,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     6.85,
+     9.15,
+     1.7467406221408968,
+     2.046740622140897
+    ],
+    "ang": -1.7315366769925018,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     8.85,
+     11.15,
+     1.6690402476780186,
+     1.9690402476780184
+    ],
+    "ang": -2.9331989153080835,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     10.85,
+     13.15,
+     1.5293703506907546,
+     1.8293703506907544
+    ],
+    "ang": -5.216227109503045,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     12.85,
+     15.15,
+     1.3,
+     1.5999999999999999
+    ],
+    "ang": -7.940778655176706,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     14.85,
+     17.15,
+     0.9570312499999999,
+     1.2570312499999998
+    ],
+    "ang": -11.313967482782276,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     16.85,
+     19.15,
+     0.5187499999999997,
+     0.8187499999999998
+    ],
+    "ang": -13.088467372312657,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     18.85,
+     21.15,
+     0.04609374999999996,
+     0.34609375
+    ],
+    "ang": -13.194588600226064,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     20.85,
+     23.15,
+     -0.40000000000000024,
+     -0.10000000000000023
+    ],
+    "ang": -11.975483428225834,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     22.85,
+     25.15,
+     -0.8539062500000004,
+     -0.5539062500000004
+    ],
+    "ang": -13.483299829226414,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     24.85,
+     27.15,
+     -1.3312500000000005,
+     -1.0312500000000007
+    ],
+    "ang": -12.910509693031148,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     26.85,
+     29.15,
+     -1.74296875,
+     -1.4429687500000001
+    ],
+    "ang": -9.878734637673396,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     28.85,
+     31.15,
+     -1.9999999999999998,
+     -1.7
+    ],
+    "ang": -4.466463892330479,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     30.85,
+     33.15,
+     -2.0828124999999997,
+     -1.7828124999999997
+    ],
+    "ang": -0.4951709221286693,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     32.85,
+     35.15,
+     -2.0375,
+     -1.7375
+    ],
+    "ang": 3.0381898398829184,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     34.85,
+     37.15,
+     -1.8734374999999999,
+     -1.5734375
+    ],
+    "ang": 6.283379655672268,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     36.85,
+     39.15,
+     -1.5999999999999999,
+     -1.3
+    ],
+    "ang": 9.475024561190992,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     38.85,
+     41.15,
+     -1.1671875,
+     -0.8671875000000001
+    ],
+    "ang": 14.637614020807531,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     40.85,
+     43.15,
+     -0.5875000000000002,
+     -0.2875000000000002
+    ],
+    "ang": 17.162669993872736,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     42.85,
+     45.15,
+     0.035937500000000316,
+     0.33593750000000033
+    ],
+    "ang": 16.95812245670682,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     44.85,
+     47.15,
+     0.6,
+     0.9
+    ],
+    "ang": 14.351364157087263,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     46.85,
+     49.15,
+     1.1106040979745644,
+     1.4106040979745642
+    ],
+    "ang": 14.390701313081223,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     48.85,
+     51.15,
+     1.6132373761208119,
+     1.9132373761208117
+    ],
+    "ang": 13.609224854941646,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     50.85,
+     53.15,
+     2.063948736998514,
+     2.363948736998514
+    ],
+    "ang": 11.477521358119017,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     52.85,
+     55.15,
+     2.4,
+     2.6999999999999997
+    ],
+    "ang": 6.8943516842808545,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     54.85,
+     57.15,
+     2.521566265060241,
+     2.8215662650602407
+    ],
+    "ang": -0.00916195037489812,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     56.85,
+     59.15,
+     2.4278313253012045,
+     2.7278313253012043
+    ],
+    "ang": -4.142448859148181,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     58.85,
+     61.15,
+     2.3000000000000003,
+     2.6
+    ],
+    "ang": -2.772339352072783,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     60.85,
+     63.15,
+     2.1941407964019306,
+     2.4941407964019304
+    ],
+    "ang": -3.4025045741474975,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     62.85,
+     65.15,
+     2.0683755760368663,
+     2.368375576036866
+    ],
+    "ang": -3.7429219672623684,
+    "rgb": [
+     0.3,
+     0.31,
+     0.33
+    ],
+    "a": 0.4,
+    "tex": "softrect",
+    "layer": 3
+   },
+   {
+    "r": [
+     -1.3,
+     1.3,
+     -3.666729392892399,
+     -2.466729392892399
+    ],
+    "ang": 0.20916814235548767,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     0.7,
+     3.3,
+     -3.663078588078588,
+     -2.463078588078588
+    ],
+    "ang": -0.02150978945245895,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     2.7,
+     5.3,
+     -3.6704263096519556,
+     -2.4704263096519554
+    ],
+    "ang": -0.4529434307159538,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     4.7,
+     7.3,
+     -3.7,
+     -2.5
+    ],
+    "ang": -1.3326728414970626,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     6.7,
+     9.3,
+     -3.7532593778591035,
+     -2.5532593778591033
+    ],
+    "ang": -1.7315366769925018,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     8.7,
+     11.3,
+     -3.8309597523219816,
+     -2.6309597523219814
+    ],
+    "ang": -2.9331989153080835,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     10.7,
+     13.3,
+     -3.9706296493092457,
+     -2.7706296493092455
+    ],
+    "ang": -5.216227109503045,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     12.7,
+     15.3,
+     -4.2,
+     -3.0
+    ],
+    "ang": -7.940778655176706,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     14.7,
+     17.3,
+     -4.54296875,
+     -3.3429687500000003
+    ],
+    "ang": -11.313967482782276,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     16.7,
+     19.3,
+     -4.98125,
+     -3.7812500000000004
+    ],
+    "ang": -13.088467372312657,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     18.7,
+     21.3,
+     -5.453906249999999,
+     -4.25390625
+    ],
+    "ang": -13.194588600226064,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     20.7,
+     23.3,
+     -5.9,
+     -4.700000000000001
+    ],
+    "ang": -11.975483428225834,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     22.7,
+     25.3,
+     -6.35390625,
+     -5.15390625
+    ],
+    "ang": -13.483299829226414,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     24.7,
+     27.3,
+     -6.831250000000001,
+     -5.631250000000001
+    ],
+    "ang": -12.910509693031148,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     26.7,
+     29.3,
+     -7.242968749999999,
+     -6.04296875
+    ],
+    "ang": -9.878734637673396,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     28.7,
+     31.3,
+     -7.5,
+     -6.300000000000001
+    ],
+    "ang": -4.466463892330479,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     30.7,
+     33.3,
+     -7.582812499999999,
+     -6.3828125
+    ],
+    "ang": -0.4951709221286693,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     32.7,
+     35.3,
+     -7.5375,
+     -6.3375
+    ],
+    "ang": 3.0381898398829184,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     34.7,
+     37.3,
+     -7.3734375,
+     -6.1734375
+    ],
+    "ang": 6.283379655672268,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     36.7,
+     39.3,
+     -7.1,
+     -5.9
+    ],
+    "ang": 9.475024561190992,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     38.7,
+     41.3,
+     -6.6671875,
+     -5.4671875000000005
+    ],
+    "ang": 14.637614020807531,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     40.7,
+     43.3,
+     -6.0875,
+     -4.887500000000001
+    ],
+    "ang": 17.162669993872736,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     42.7,
+     45.3,
+     -5.464062499999999,
+     -4.2640625
+    ],
+    "ang": 16.95812245670682,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     44.7,
+     47.3,
+     -4.8999999999999995,
+     -3.6999999999999997
+    ],
+    "ang": 14.351364157087263,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     46.7,
+     49.3,
+     -4.389395902025435,
+     -3.1893959020254354
+    ],
+    "ang": 14.390701313081223,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     48.7,
+     51.3,
+     -3.8867626238791884,
+     -2.686762623879188
+    ],
+    "ang": 13.609224854941646,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     50.7,
+     53.3,
+     -3.436051263001486,
+     -2.2360512630014857
+    ],
+    "ang": 11.477521358119017,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     52.7,
+     55.3,
+     -3.1,
+     -1.9
+    ],
+    "ang": 6.8943516842808545,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     54.7,
+     57.3,
+     -2.978433734939759,
+     -1.778433734939759
+    ],
+    "ang": -0.00916195037489812,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     56.7,
+     59.3,
+     -3.0721686746987955,
+     -1.8721686746987953
+    ],
+    "ang": -4.142448859148181,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     58.7,
+     61.3,
+     -3.2,
+     -2.0
+    ],
+    "ang": -2.772339352072783,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     60.7,
+     63.3,
+     -3.3058592035980694,
+     -2.105859203598069
+    ],
+    "ang": -3.4025045741474975,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     62.7,
+     65.3,
+     -3.4316244239631337,
+     -2.2316244239631335
+    ],
+    "ang": -3.7429219672623684,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     -1.3,
+     1.3,
+     2.533270607107601,
+     3.733270607107601
+    ],
+    "ang": 0.20916814235548767,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     0.7,
+     3.3,
+     2.536921411921412,
+     3.7369214119214123
+    ],
+    "ang": -0.02150978945245895,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     2.7,
+     5.3,
+     2.5295736903480446,
+     3.7295736903480448
+    ],
+    "ang": -0.4529434307159538,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     4.7,
+     7.3,
+     2.5,
+     3.7
+    ],
+    "ang": -1.3326728414970626,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     6.7,
+     9.3,
+     2.4467406221408967,
+     3.646740622140897
+    ],
+    "ang": -1.7315366769925018,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     8.7,
+     11.3,
+     2.3690402476780186,
+     3.5690402476780188
+    ],
+    "ang": -2.9331989153080835,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     10.7,
+     13.3,
+     2.2293703506907545,
+     3.4293703506907547
+    ],
+    "ang": -5.216227109503045,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     12.7,
+     15.3,
+     2.0,
+     3.2
+    ],
+    "ang": -7.940778655176706,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     14.7,
+     17.3,
+     1.6570312499999997,
+     2.85703125
+    ],
+    "ang": -11.313967482782276,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     16.7,
+     19.3,
+     1.21875,
+     2.4187499999999997
+    ],
+    "ang": -13.088467372312657,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     18.7,
+     21.3,
+     0.7460937500000001,
+     1.9460937500000002
+    ],
+    "ang": -13.194588600226064,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     20.7,
+     23.3,
+     0.29999999999999993,
+     1.5
+    ],
+    "ang": -11.975483428225834,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     22.7,
+     25.3,
+     -0.15390625000000024,
+     1.0460937499999998
+    ],
+    "ang": -13.483299829226414,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     24.7,
+     27.3,
+     -0.6312500000000004,
+     0.5687499999999995
+    ],
+    "ang": -12.910509693031148,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     26.7,
+     29.3,
+     -1.04296875,
+     0.15703125000000007
+    ],
+    "ang": -9.878734637673396,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     28.7,
+     31.3,
+     -1.2999999999999998,
+     -0.09999999999999976
+    ],
+    "ang": -4.466463892330479,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     30.7,
+     33.3,
+     -1.3828124999999996,
+     -0.1828124999999995
+    ],
+    "ang": -0.4951709221286693,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     32.7,
+     35.3,
+     -1.3375,
+     -0.13749999999999984
+    ],
+    "ang": 3.0381898398829184,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     34.7,
+     37.3,
+     -1.1734375,
+     0.026562500000000155
+    ],
+    "ang": 6.283379655672268,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     36.7,
+     39.3,
+     -0.8999999999999998,
+     0.30000000000000016
+    ],
+    "ang": 9.475024561190992,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     38.7,
+     41.3,
+     -0.4671875,
+     0.7328125
+    ],
+    "ang": 14.637614020807531,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     40.7,
+     43.3,
+     0.11249999999999993,
+     1.3125
+    ],
+    "ang": 17.162669993872736,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     42.7,
+     45.3,
+     0.7359375000000005,
+     1.9359375000000005
+    ],
+    "ang": 16.95812245670682,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     44.7,
+     47.3,
+     1.3000000000000003,
+     2.5
+    ],
+    "ang": 14.351364157087263,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     46.7,
+     49.3,
+     1.8106040979745646,
+     3.0106040979745647
+    ],
+    "ang": 14.390701313081223,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     48.7,
+     51.3,
+     2.313237376120812,
+     3.513237376120812
+    ],
+    "ang": 13.609224854941646,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     50.7,
+     53.3,
+     2.7639487369985143,
+     3.9639487369985145
+    ],
+    "ang": 11.477521358119017,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     52.7,
+     55.3,
+     3.1,
+     4.3
+    ],
+    "ang": 6.8943516842808545,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     54.7,
+     57.3,
+     3.221566265060241,
+     4.421566265060241
+    ],
+    "ang": -0.00916195037489812,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     56.7,
+     59.3,
+     3.1278313253012047,
+     4.327831325301204
+    ],
+    "ang": -4.142448859148181,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     58.7,
+     61.3,
+     3.0,
+     4.2
+    ],
+    "ang": -2.772339352072783,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     60.7,
+     63.3,
+     2.894140796401931,
+     4.0941407964019305
+    ],
+    "ang": -3.4025045741474975,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     62.7,
+     65.3,
+     2.7683755760368665,
+     3.9683755760368666
+    ],
+    "ang": -3.7429219672623684,
+    "rgb": [
+     0.62,
+     0.63,
+     0.65
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     14.3,
+     17.7,
+     -0.44296875000000013,
+     1.15703125
+    ],
+    "ang": -1.3139674827822763,
+    "rgb": [
+     0.5,
+     0.6,
+     0.68
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 4
+   },
+   {
+    "r": [
+     31.5,
+     35.5,
+     -3.4603271484375,
+     -2.2603271484375
+    ],
+    "ang": -11.818890709263963,
+    "rgb": [
+     0.5,
+     0.6,
+     0.68
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 4
+   },
+   {
+    "r": [
+     49.2,
+     51.8,
+     -0.5672967189728957,
+     0.8327032810271042
+    ],
+    "ang": 33.22445061558389,
+    "rgb": [
+     0.5,
+     0.6,
+     0.68
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 4
+   },
+   {
+    "r": [
+     56.5,
+     59.5,
+     -1.4721686746987956,
+     -0.47216867469879564
+    ],
+    "ang": -0.14244885914818095,
+    "rgb": [
+     0.5,
+     0.6,
+     0.68
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 4
+   },
+   {
+    "r": [
+     6.0,
+     6.28,
+     4.08,
+     4.21
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     6.62,
+     6.9,
+     4.0,
+     4.13
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     7.24,
+     7.5200000000000005,
+     3.44,
+     3.57
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     7.859999999999999,
+     8.139999999999999,
+     3.3600000000000003,
+     3.49
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     8.48,
+     8.76,
+     2.8,
+     2.9299999999999997
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     9.1,
+     9.379999999999999,
+     2.72,
+     2.85
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     9.719999999999999,
+     9.999999999999998,
+     2.16,
+     2.29
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     10.34,
+     10.62,
+     2.08,
+     2.21
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     10.96,
+     11.24,
+     1.52,
+     1.65
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     11.58,
+     11.86,
+     1.4400000000000004,
+     1.5700000000000003
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     12.2,
+     12.479999999999999,
+     0.88,
+     1.01
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     12.82,
+     13.1,
+     0.8000000000000002,
+     0.9300000000000002
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     13.44,
+     13.719999999999999,
+     0.24000000000000032,
+     0.37000000000000033
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     14.06,
+     14.34,
+     0.16000000000000003,
+     0.29000000000000004
+    ],
+    "ang": -25,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     38.2,
+     42.6,
+     -8.75,
+     -8.15
+    ],
+    "ang": -38,
+    "rgb": [
+     0.45,
+     0.46,
+     0.5
+    ],
+    "a": 0.5,
+    "tex": "softrect",
+    "layer": 4
+   },
+   {
+    "r": [
+     21.8074375,
+     27.8761875,
+     -10.665625,
+     -8.465625000000001
+    ],
+    "ang": 80,
+    "rgb": [
+     0.4,
+     0.47,
+     0.54
+    ],
+    "a": 0.5,
+    "tex": "soft",
+    "layer": 2
+   },
+   {
+    "r": [
+     21.8074375,
+     27.8761875,
+     -10.065625,
+     -9.065625
+    ],
+    "ang": 80,
+    "rgb": [
+     0.62,
+     0.74,
+     0.82
+    ],
+    "a": 0.7,
+    "tex": "soft",
+    "layer": 4
+   },
+   {
+    "r": [
+     21.5561875,
+     33.8874375,
+     5.334375,
+     7.534374999999999
+    ],
+    "ang": 80,
+    "rgb": [
+     0.4,
+     0.47,
+     0.54
+    ],
+    "a": 0.5,
+    "tex": "soft",
+    "layer": 2
+   },
+   {
+    "r": [
+     21.5561875,
+     33.8874375,
+     5.934374999999999,
+     6.934374999999999
+    ],
+    "ang": 80,
+    "rgb": [
+     0.62,
+     0.74,
+     0.82
+    ],
+    "a": 0.7,
+    "tex": "soft",
+    "layer": 4
+   },
+   {
+    "r": [
+     47.2,
+     47.34,
+     10.91,
+     11.03
+    ],
+    "ang": 10,
+    "rgb": [
+     0.5,
+     0.55,
+     0.62
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     47.53,
+     47.67,
+     11.347687074895076,
+     11.467687074895075
+    ],
+    "ang": 10,
+    "rgb": [
+     0.5,
+     0.55,
+     0.62
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     47.86,
+     48.0,
+     11.304179891995384,
+     11.424179891995383
+    ],
+    "ang": 10,
+    "rgb": [
+     0.5,
+     0.55,
+     0.62
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     48.190000000000005,
+     48.330000000000005,
+     11.43528374665955,
+     11.55528374665955
+    ],
+    "ang": 10,
+    "rgb": [
+     0.5,
+     0.55,
+     0.62
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     48.52,
+     48.660000000000004,
+     11.043995260062362,
+     11.16399526006236
+    ],
+    "ang": 10,
+    "rgb": [
+     0.5,
+     0.55,
+     0.62
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     48.85,
+     48.99,
+     10.949686708924151,
+     11.06968670892415
+    ],
+    "ang": 10,
+    "rgb": [
+     0.5,
+     0.55,
+     0.62
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     49.18,
+     49.32,
+     10.561369691034566,
+     10.681369691034565
+    ],
+    "ang": 10,
+    "rgb": [
+     0.5,
+     0.55,
+     0.62
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     49.510000000000005,
+     49.650000000000006,
+     10.697018954950266,
+     10.817018954950266
+    ],
+    "ang": 10,
+    "rgb": [
+     0.5,
+     0.55,
+     0.62
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     49.84,
+     49.980000000000004,
+     10.657493344851071,
+     10.77749334485107
+    ],
+    "ang": 10,
+    "rgb": [
+     0.5,
+     0.55,
+     0.62
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     50.17,
+     50.31,
+     11.09672556019374,
+     11.216725560193739
+    ],
+    "ang": 10,
+    "rgb": [
+     0.5,
+     0.55,
+     0.62
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     50.5,
+     50.64,
+     11.172794639487515,
+     11.292794639487514
+    ],
+    "ang": 10,
+    "rgb": [
+     0.5,
+     0.55,
+     0.62
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     50.830000000000005,
+     50.970000000000006,
+     11.4852672935508,
+     11.6052672935508
+    ],
+    "ang": 10,
+    "rgb": [
+     0.5,
+     0.55,
+     0.62
+    ],
+    "a": 0.6,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     40.0,
+     47.0,
+     1.2,
+     5.0
+    ],
+    "ang": 0,
+    "rgb": [
+     0.62,
+     0.64,
+     0.67
+    ],
+    "a": 0.45,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     66.0,
+     88.0,
+     -1.6,
+     1.6
+    ],
+    "ang": 0,
+    "rgb": [
+     0.5,
+     0.48,
+     0.45
+    ],
+    "a": 0.16,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     74.0,
+     80.0,
+     -9.0,
+     9.0
+    ],
+    "ang": 0,
+    "rgb": [
+     0.5,
+     0.48,
+     0.45
+    ],
+    "a": 0.14,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     68.25,
+     72.75,
+     -4.4,
+     -2.0
+    ],
+    "ang": 15,
+    "rgb": [
+     0.3,
+     0.26,
+     0.22
+    ],
+    "a": 0.32,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     73.0,
+     78.0,
+     2.7,
+     5.3
+    ],
+    "ang": -10,
+    "rgb": [
+     0.3,
+     0.26,
+     0.22
+    ],
+    "a": 0.3,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     80.0,
+     84.0,
+     -5.6,
+     -3.4
+    ],
+    "ang": 25,
+    "rgb": [
+     0.3,
+     0.26,
+     0.22
+    ],
+    "a": 0.3,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     84.2,
+     87.8,
+     2.5,
+     4.5
+    ],
+    "ang": -5,
+    "rgb": [
+     0.3,
+     0.26,
+     0.22
+    ],
+    "a": 0.28,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     65.0,
+     68.0,
+     -2.3,
+     2.3
+    ],
+    "ang": 0,
+    "rgb": [
+     0.3,
+     0.26,
+     0.22
+    ],
+    "a": 0.34,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     76.8,
+     80.2,
+     -1.9,
+     1.1
+    ],
+    "ang": 0,
+    "rgb": [
+     0.3,
+     0.26,
+     0.22
+    ],
+    "a": 0.26,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     69.5,
+     74.5,
+     7.8,
+     9.4
+    ],
+    "ang": 5,
+    "rgb": [
+     0.3,
+     0.26,
+     0.22
+    ],
+    "a": 0.24,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     77.5,
+     83.5,
+     -9.600000000000001,
+     -8.0
+    ],
+    "ang": -5,
+    "rgb": [
+     0.3,
+     0.26,
+     0.22
+    ],
+    "a": 0.24,
+    "tex": "soft",
+    "layer": 3
+   },
+   {
+    "r": [
+     66.10000000000001,
+     68.7,
+     2.16,
+     4.24
+    ],
+    "ang": 0,
+    "rgb": [
+     0.17,
+     0.16,
+     0.15
+    ],
+    "a": 0.45,
+    "tex": "soft",
+    "layer": 4
+   },
+   {
+    "r": [
+     75.7,
+     78.3,
+     -0.44000000000000006,
+     1.6400000000000001
+    ],
+    "ang": 0,
+    "rgb": [
+     0.17,
+     0.16,
+     0.15
+    ],
+    "a": 0.45,
+    "tex": "soft",
+    "layer": 4
+   },
+   {
+    "r": [
+     22.6,
+     24.0,
+     6.6,
+     7.6
+    ],
+    "ang": 0,
+    "rgb": [
+     0.42,
+     0.4,
+     0.39
+    ],
+    "a": 0.35,
+    "tex": "soft",
+    "layer": 4
+   },
+   {
+    "r": [
+     23.0,
+     23.6,
+     6.9,
+     7.3
+    ],
+    "ang": 0,
+    "rgb": [
+     0.2,
+     0.18,
+     0.17
+    ],
+    "a": 0.45,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     24.4,
+     24.68,
+     6.4799999999999995,
+     6.609999999999999
+    ],
+    "ang": -38,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     25.02,
+     25.3,
+     6.22,
+     6.35
+    ],
+    "ang": -38,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     25.639999999999997,
+     25.919999999999998,
+     5.4799999999999995,
+     5.609999999999999
+    ],
+    "ang": -38,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     26.259999999999998,
+     26.54,
+     5.22,
+     5.35
+    ],
+    "ang": -38,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     26.88,
+     27.16,
+     4.4799999999999995,
+     4.609999999999999
+    ],
+    "ang": -38,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     27.5,
+     27.78,
+     4.22,
+     4.35
+    ],
+    "ang": -38,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     28.119999999999997,
+     28.4,
+     3.4799999999999995,
+     3.6099999999999994
+    ],
+    "ang": -38,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     28.74,
+     29.02,
+     3.2199999999999998,
+     3.3499999999999996
+    ],
+    "ang": -38,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     29.36,
+     29.64,
+     2.4799999999999995,
+     2.6099999999999994
+    ],
+    "ang": -38,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 5
+   },
+   {
+    "r": [
+     29.979999999999997,
+     30.259999999999998,
+     2.2199999999999998,
+     2.3499999999999996
+    ],
+    "ang": -38,
+    "rgb": [
+     0.48,
+     0.53,
+     0.6
+    ],
+    "a": 0.55,
+    "tex": "soft",
+    "layer": 5
+   }
+  ],
+  "mounds": [
+   [
+    4.5,
+    17.0,
+    10.0,
+    5.5,
+    4.2
+   ],
+   [
+    -6.0,
+    13.0,
+    6.0,
+    7.0,
+    3.2
+   ],
+   [
+    15.0,
+    16.5,
+    6.5,
+    4.0,
+    2.6
+   ],
+   [
+    -6.0,
+    3.0,
+    3.2,
+    6.0,
+    1.6
+   ],
+   [
+    -8.0,
+    -6.0,
+    4.0,
+    5.0,
+    1.0
+   ],
+   [
+    1.0,
+    15.6,
+    4.6,
+    1.8,
+    0.9
+   ],
+   [
+    8.0,
+    16.2,
+    4.6,
+    1.8,
+    1.2
+   ],
+   [
+    15.0,
+    16.8,
+    4.6,
+    1.8,
+    0.9
+   ],
+   [
+    22.0,
+    15.6,
+    4.6,
+    1.8,
+    1.2
+   ],
+   [
+    29.0,
+    16.2,
+    4.6,
+    1.8,
+    0.9
+   ],
+   [
+    36.0,
+    16.8,
+    4.6,
+    1.8,
+    1.2
+   ],
+   [
+    43.0,
+    15.6,
+    4.6,
+    1.8,
+    0.9
+   ],
+   [
+    50.0,
+    16.2,
+    4.6,
+    1.8,
+    1.2
+   ],
+   [
+    57.0,
+    16.8,
+    4.6,
+    1.8,
+    0.9
+   ],
+   [
+    64.0,
+    15.6,
+    4.6,
+    1.8,
+    1.2
+   ],
+   [
+    71.0,
+    16.2,
+    4.6,
+    1.8,
+    0.9
+   ],
+   [
+    78.0,
+    16.8,
+    4.6,
+    1.8,
+    1.2
+   ],
+   [
+    85.0,
+    15.6,
+    4.6,
+    1.8,
+    0.9
+   ],
+   [
+    92.0,
+    16.2,
+    4.6,
+    1.8,
+    1.2
+   ],
+   [
+    2.0,
+    -14.6,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    8.0,
+    -15.0,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    14.0,
+    -14.6,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    20.0,
+    -15.0,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    26.0,
+    -14.6,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    32.0,
+    -15.0,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    38.0,
+    -14.6,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    44.0,
+    -15.0,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    50.0,
+    -14.6,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    56.0,
+    -15.0,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    62.0,
+    -14.6,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    68.0,
+    -15.0,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    74.0,
+    -14.6,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    80.0,
+    -15.0,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    86.0,
+    -14.6,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    92.0,
+    -15.0,
+    3.8,
+    1.2,
+    0.45
+   ],
+   [
+    94.5,
+    -10.0,
+    1.6,
+    3.6,
+    0.9
+   ],
+   [
+    95.1,
+    -4.0,
+    1.6,
+    3.6,
+    0.9
+   ],
+   [
+    94.5,
+    2.0,
+    1.6,
+    3.6,
+    0.9
+   ],
+   [
+    95.1,
+    8.0,
+    1.6,
+    3.6,
+    0.9
+   ],
+   [
+    94.5,
+    14.0,
+    1.6,
+    3.6,
+    0.9
+   ],
+   [
+    19.0,
+    6.0,
+    2.2,
+    1.0,
+    0.35
+   ],
+   [
+    25.6,
+    -9.4,
+    2.4,
+    1.2,
+    0.4
+   ],
+   [
+    47.0,
+    -5.5,
+    1.8,
+    0.9,
+    0.3
+   ],
+   [
+    51.6,
+    -7.8,
+    2.0,
+    1.0,
+    0.35
+   ],
+   [
+    67.5,
+    -11.9,
+    2.2,
+    0.8,
+    0.28
+   ],
+   [
+    67.5,
+    11.9,
+    2.2,
+    0.8,
+    0.28
+   ],
+   [
+    72.1,
+    -11.9,
+    2.2,
+    0.8,
+    0.36
+   ],
+   [
+    72.1,
+    11.9,
+    2.2,
+    0.8,
+    0.36
+   ],
+   [
+    75.5,
+    -11.9,
+    2.2,
+    0.8,
+    0.44
+   ],
+   [
+    75.5,
+    11.9,
+    2.2,
+    0.8,
+    0.44
+   ],
+   [
+    80.1,
+    -11.9,
+    2.2,
+    0.8,
+    0.28
+   ],
+   [
+    80.1,
+    11.9,
+    2.2,
+    0.8,
+    0.28
+   ],
+   [
+    83.5,
+    -11.9,
+    2.2,
+    0.8,
+    0.36
+   ],
+   [
+    83.5,
+    11.9,
+    2.2,
+    0.8,
+    0.36
+   ],
+   [
+    88.1,
+    -11.9,
+    2.2,
+    0.8,
+    0.44
+   ],
+   [
+    88.1,
+    11.9,
+    2.2,
+    0.8,
+    0.44
+   ],
+   [
+    90.2,
+    -9.0,
+    0.8,
+    2.0,
+    0.3
+   ],
+   [
+    90.2,
+    -5.0,
+    0.8,
+    2.0,
+    0.3
+   ],
+   [
+    90.2,
+    -1.0,
+    0.8,
+    2.0,
+    0.3
+   ],
+   [
+    90.2,
+    3.0,
+    0.8,
+    2.0,
+    0.3
+   ],
+   [
+    90.2,
+    7.0,
+    0.8,
+    2.0,
+    0.3
+   ],
+   [
+    90.2,
+    11.0,
+    0.8,
+    2.0,
+    0.3
+   ],
+   [
+    0.33,
+    -5.163,
+    1.0,
+    0.9,
+    0.3
+   ],
+   [
+    5.41,
+    -5.233,
+    1.0,
+    0.9,
+    0.3
+   ],
+   [
+    9.98,
+    -5.436,
+    1.0,
+    0.9,
+    0.3
+   ],
+   [
+    13.71,
+    -5.965,
+    1.0,
+    0.9,
+    0.3
+   ],
+   [
+    16.6,
+    -8.2,
+    1.2,
+    1.4,
+    0.35
+   ],
+   [
+    34.6,
+    -5.4,
+    0.8,
+    0.8,
+    0.25
+   ],
+   [
+    47.4,
+    8.0,
+    0.9,
+    1.0,
+    0.35
+   ],
+   [
+    51.2,
+    9.4,
+    0.9,
+    1.0,
+    0.3
+   ]
+  ],
+  "pools": [
+   {
+    "u": 77.0,
+    "v": 0.6,
+    "r": 5.0,
+    "rgb": [
+     0.5,
+     0.3,
+     0.08
+    ]
+   },
+   {
+    "u": 67.4,
+    "v": 3.2,
+    "r": 3.5,
+    "rgb": [
+     0.5,
+     0.3,
+     0.08
+    ]
+   },
+   {
+    "u": 85.6,
+    "v": 9.6,
+    "r": 4.0,
+    "rgb": [
+     0.5,
+     0.3,
+     0.08
+    ]
+   },
+   {
+    "u": 74.6,
+    "v": 9.8,
+    "r": 3.0,
+    "rgb": [
+     0.5,
+     0.3,
+     0.08
+    ]
+   },
+   {
+    "u": 69.2,
+    "v": 9.4,
+    "r": 3.0,
+    "rgb": [
+     0.5,
+     0.3,
+     0.08
+    ]
+   },
+   {
+    "u": 89.0,
+    "v": 4.0,
+    "r": 3.0,
+    "rgb": [
+     0.5,
+     0.3,
+     0.08
+    ]
+   },
+   {
+    "u": 84.2,
+    "v": -10.2,
+    "r": 3.0,
+    "rgb": [
+     0.3,
+     0.18,
+     0.048
+    ]
+   },
+   {
+    "u": 63.0,
+    "v": 0.0,
+    "r": 4.0,
+    "rgb": [
+     0.575,
+     0.345,
+     0.092
+    ]
+   }
+  ],
+  "roads": [
+   {
+    "pts": [
+     [
+      -6.0,
+      0.0
+     ],
+     [
+      -5.407,
+      0.002
+     ],
+     [
+      -4.648,
+      0.006
+     ],
+     [
+      -3.75,
+      0.012
+     ],
+     [
+      -2.741,
+      0.019
+     ],
+     [
+      -1.648,
+      0.025
+     ],
+     [
+      -0.5,
+      0.031
+     ],
+     [
+      0.676,
+      0.035
+     ],
+     [
+      1.852,
+      0.037
+     ],
+     [
+      3.0,
+      0.035
+     ],
+     [
+      4.093,
+      0.029
+     ],
+     [
+      5.102,
+      0.018
+     ],
+     [
+      6.0,
+      0.0
+     ],
+     [
+      7.191,
+      -0.03
+     ],
+     [
+      8.281,
+      -0.062
+     ],
+     [
+      9.293,
+      -0.098
+     ],
+     [
+      10.25,
+      -0.144
+     ],
+     [
+      11.176,
+      -0.203
+     ],
+     [
+      12.094,
+      -0.279
+     ],
+     [
+      13.027,
+      -0.377
+     ],
+     [
+      14.0,
+      -0.5
+     ],
+     [
+      15.0,
+      -0.656
+     ],
+     [
+      16.0,
+      -0.843
+     ],
+     [
+      17.0,
+      -1.054
+     ],
+     [
+      18.0,
+      -1.281
+     ],
+     [
+      19.0,
+      -1.517
+     ],
+     [
+      20.0,
+      -1.754
+     ],
+     [
+      21.0,
+      -1.984
+     ],
+     [
+      22.0,
+      -2.2
+     ],
+     [
+      23.0,
+      -2.418
+     ],
+     [
+      24.0,
+      -2.654
+     ],
+     [
+      25.0,
+      -2.895
+     ],
+     [
+      26.0,
+      -3.131
+     ],
+     [
+      27.0,
+      -3.351
+     ],
+     [
+      28.0,
+      -3.543
+     ],
+     [
+      29.0,
+      -3.696
+     ],
+     [
+      30.0,
+      -3.8
+     ],
+     [
+      31.0,
+      -3.858
+     ],
+     [
+      32.0,
+      -3.883
+     ],
+     [
+      33.0,
+      -3.876
+     ],
+     [
+      34.0,
+      -3.837
+     ],
+     [
+      35.0,
+      -3.77
+     ],
+     [
+      36.0,
+      -3.673
+     ],
+     [
+      37.0,
+      -3.55
+     ],
+     [
+      38.0,
+      -3.4
+     ],
+     [
+      39.0,
+      -3.208
+     ],
+     [
+      40.0,
+      -2.967
+     ],
+     [
+      41.0,
+      -2.689
+     ],
+     [
+      42.0,
+      -2.388
+     ],
+     [
+      43.0,
+      -2.075
+     ],
+     [
+      44.0,
+      -1.764
+     ],
+     [
+      45.0,
+      -1.468
+     ],
+     [
+      46.0,
+      -1.2
+     ],
+     [
+      47.014,
+      -0.943
+     ],
+     [
+      48.047,
+      -0.677
+     ],
+     [
+      49.088,
+      -0.412
+     ],
+     [
+      50.125,
+      -0.156
+     ],
+     [
+      51.146,
+      0.082
+     ],
+     [
+      52.141,
+      0.293
+     ],
+     [
+      53.096,
+      0.469
+     ],
+     [
+      54.0,
+      0.6
+     ],
+     [
+      55.093,
+      0.698
+     ],
+     [
+      56.074,
+      0.722
+     ],
+     [
+      57.0,
+      0.694
+     ],
+     [
+      57.926,
+      0.633
+     ],
+     [
+      58.907,
+      0.562
+     ],
+     [
+      60.0,
+      0.5
+     ],
+     [
+      60.959,
+      0.453
+     ],
+     [
+      62.047,
+      0.391
+     ],
+     [
+      63.205,
+      0.32
+     ],
+     [
+      64.375,
+      0.244
+     ],
+     [
+      65.498,
+      0.168
+     ]
+    ],
+    "w": 6.0,
+    "tex": "asphalt"
+   }
+  ],
+  "smoke": [
+   {
+    "u": 67.0,
+    "v": 11.350000000000001,
+    "z": 4.5,
+    "k": 0.6
+   },
+   {
+    "u": 73.0,
+    "v": 11.350000000000001,
+    "z": 4.5,
+    "k": 0.6
+   },
+   {
+    "u": 78.7,
+    "v": 11.350000000000001,
+    "z": 4.5,
+    "k": 1.0
+   },
+   {
+    "u": 83.5,
+    "v": 11.350000000000001,
+    "z": 4.5,
+    "k": 0.6
+   },
+   {
+    "u": 89.75,
+    "v": 6.3999999999999995,
+    "z": 4.5,
+    "k": 0.6
+   },
+   {
+    "u": 89.75,
+    "v": -1.1,
+    "z": 4.5,
+    "k": 0.6
+   },
+   {
+    "u": 77.0,
+    "v": 0.6,
+    "z": 1.2,
+    "k": 1.0
+   },
+   {
+    "u": 68.7,
+    "v": -11.55,
+    "z": 4.5,
+    "k": 0.6
+   },
+   {
+    "u": 67.4,
+    "v": 3.2,
+    "z": 1.2,
+    "k": 1.0
+   }
+  ]
+ },
+ "sprite_scale": 0.62,
+ "wallparts": []
+}

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://pyf6qlrw8dix"
-path="res://.godot/imported/wall_12_09.png-44a40ad7197986cd76182904e639b255.ctex"
+uid="uid://hm8wxto8wi40"
+path="res://.godot/imported/spr_109.png-43246e041eb68cfa10ab9e76742f797e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://levels/L2/wall_12_09.png"
-dest_files=["res://.godot/imported/wall_12_09.png-44a40ad7197986cd76182904e639b255.ctex"]
+source_file="res://levels/RD/spr_109.png"
+dest_files=["res://.godot/imported/spr_109.png-43246e041eb68cfa10ab9e76742f797e.ctex"]
 
 [params]
 

@@ -570,12 +570,26 @@ func go_near(t: Dictionary) -> bool:
 	return true
 
 
+## Road points of interest are placed now and opened later; inspecting one says what it is waiting for.
+const POI_HINT := {
+	"search": "Worth a proper search, when you have the time.",
+	"locked": "Locked. A crowbar, a torch or the right key would get it open.",
+	"radio": "With a charged battery it might still pick something up.",
+	"track": "The tracks lead off into the snow. You could follow them.",
+}
+
+
 func interact(t: Dictionary) -> void:
 	match t["kind"]:
 		"look", "prop":
+			var poi: String = t.get("poi", "")
+			if poi != "" and mode == "explore" and not await go_near(t):   # a point of interest: walk up to it
+				return
 			player.face_ground(Hex.plan_to_ground(t["plan"]))
 			player.play(player.idle_clip(mode == "combat"), player.dir)
 			hud.log_msg("%s: %s" % [t["name"], t["text"]])
+			if POI_HINT.has(poi):
+				hud.log_msg(POI_HINT[poi], Hud.DIM)
 		"door":
 			if await go_near(t):
 				door_dialog(t["id"])

@@ -1108,6 +1108,42 @@ def L1():
     return D
 
 
+# the road's centre line (u, v): a long, shallow S, so the road reads as a road and not a ruler
+ROAD_CTRL = [(-6.0, 0.0), (6.0, 0.0), (14.0, -0.5), (22.0, -2.2), (30.0, -3.8), (38.0, -3.4), (46.0, -1.2), (54.0, 0.6), (60.0, 0.5), (68.0, 0.0)]
+
+
+def _road_line(step=1.0):
+    """Catmull-Rom through ROAD_CTRL, sampled about every step metres along u."""
+    P = ROAD_CTRL
+    out = []
+    for i in range(len(P) - 1):
+        p0, p1, p2, p3 = P[max(i - 1, 0)], P[i], P[i + 1], P[min(i + 2, len(P) - 1)]
+        n = max(2, int(round((p2[0] - p1[0]) / step)))
+        for k in range(n):
+            t = k / n
+            t2, t3 = t * t, t * t * t
+            out.append(tuple(0.5 * ((2 * p1[j]) + (-p0[j] + p2[j]) * t + (2 * p0[j] - 5 * p1[j] + 4 * p2[j] - p3[j]) * t2
+                                    + (-p0[j] + 3 * p1[j] - 3 * p2[j] + p3[j]) * t3) for j in (0, 1)))
+    out.append(P[-1])
+    return out
+
+
+_RL = _road_line(0.5)
+
+
+def rc(u):
+    """Road centre v at u."""
+    for (a, b) in zip(_RL, _RL[1:]):
+        if a[0] <= u <= b[0]:
+            return a[1] + (b[1] - a[1]) * (u - a[0]) / max(b[0] - a[0], 1e-6)
+    return _RL[0][1] if u < _RL[0][0] else _RL[-1][1]
+
+
+def rang(u):
+    """Road direction at u, degrees (0 = due east along u)."""
+    return math.degrees(math.atan2(rc(u + 0.5) - rc(u - 0.5), 1.0))
+
+
 def RD():
     """The road from Silo 81 to Junk Town (docs/LEVEL_ROAD_TO_JUNK_TOWN.md), one continuous outdoor level.
     u runs east along the road (screen up-right), v north (screen up-left); the camera looks from the south-west,
@@ -1130,7 +1166,7 @@ def RD():
     D["sprite_scale"] = 0.62
     D["rooms"] += [
         dict(id="rd_apron", name="Silo 81 surface portal", r=[-1.0, 10.0, 3.0, 9.7], floor=concrete, layer=2),
-        dict(id="rd_road", name="The road east", r=[-2.0, 64.0, -3.0, 3.0], floor=asphalt, layer=2),
+        dict(id="rd_road", name="The road east", r=[-2.0, 64.0, -7.0, 3.0], floor=asphalt, layer=2, nofloor=True),
         dict(id="rd_reststop", name="Rest stop", r=[36.0, 51.0, 3.0, 9.4], floor=forecourt, layer=2),
         dict(id="rd_west", name="Snowfield", r=[-2.0, 24.0, -12.0, 12.0], floor=snow),
         dict(id="rd_mid", name="Snowfield", r=[24.0, 50.0, -12.0, 12.5], floor=snow),
@@ -1139,6 +1175,7 @@ def RD():
     ]
     D["terrain"] = [dict(r=[-16.0, 104.0, -24.0, 26.0], floor=snow_far)]
     D["bounds"] = [-2.0, 92.0, -12.6, 12.6]
+    D["roads"] = [dict(pts=[[round(u, 3), round(v, 3)] for (u, v) in _road_line(1.0) if u <= 66.0], w=6.0, tex="asphalt")]
     # ---- terrain: the hill the Silo is dug into, banks along the edges, drifts
     D["mounds"] = [(4.5, 17.0, 10.0, 5.5, 4.2), (-6.0, 13.0, 6.0, 7.0, 3.2), (15.0, 16.5, 6.5, 4.0, 2.6),
                    (-6.0, 3.0, 3.2, 6.0, 1.6), (-8.0, -6.0, 4.0, 5.0, 1.0)]
@@ -1148,27 +1185,43 @@ def RD():
         D["mounds"].append((u + 2.0, -14.6 - (i % 2) * 0.4, 3.8, 1.2, 0.45))
     for i, v in enumerate(range(-12, 14, 6)):                     # east edge beyond the town
         D["mounds"].append((94.5 + (i % 2) * 0.6, v + 2.0, 1.6, 3.6, 0.9))
-    for (u, v, ru, rv, h) in ((19.0, 6.0, 2.2, 1.0, 0.35), (30.5, -7.5, 2.4, 1.2, 0.4), (47.0, -5.5, 1.8, 0.9, 0.3),
-                              (8.0, -4.6, 2.6, 0.7, 0.25), (57.5, -10.0, 2.0, 1.0, 0.35)):
+    for (u, v, ru, rv, h) in ((19.0, 6.0, 2.2, 1.0, 0.35), (25.6, -9.4, 2.4, 1.2, 0.4), (47.0, -5.5, 1.8, 0.9, 0.3),
+                              (51.6, -7.8, 2.0, 1.0, 0.35)):
         D["mounds"].append((u, v, ru, rv, h))
         D["blocked"].append([u - ru * 0.7, u + ru * 0.7, v - rv * 0.7, v + rv * 0.7])
-    # ---- ground marks: centre line, tyre ruts, black ice, slush at the road edges, boot prints, a drag mark
+    # ---- ground marks along the curve: centre line, tyre ruts, slush at the edges, black ice; boot prints, a drag mark
     dec = D["decor"]
+    def along(u, dv, l, w, **kw):          # a patch lying along the road at offset dv from its centre
+        dec.append(dict(t="patch", r=[u - l / 2, u + l / 2, rc(u) + dv - w / 2, rc(u) + dv + w / 2], ang=rang(u), **kw))
     for u in range(0, 62, 5):
-        dec.append(dict(t="patch", r=[u, u + 2.2, -0.08, 0.08], rgb=(0.78, 0.70, 0.42), alpha=0.75, layer=3, id="line"))
-    for v0 in (-1.9, -1.2, 1.1, 1.8):
-        dec.append(dict(t="patch", r=[-1.5, 63.5, v0, v0 + 0.3], rgb=(0.30, 0.31, 0.33), alpha=0.4, layer=3, id="rut"))
-    for (u, v, a, w, l) in ((16.0, 1.2, 10, 1.6, 3.4), (33.5, -1.4, -14, 1.2, 4.0), (50.5, 0.8, 20, 1.4, 2.6), (58.0, -1.6, 4, 1.0, 3.0)):
-        dec.append(dict(t="patch", r=[u - l / 2, u + l / 2, v - w / 2, v + w / 2], ang=a, rgb=(0.50, 0.60, 0.68), alpha=0.55, tex="soft", layer=4, id="ice"))
-    for v0, v1 in ((-3.4, -2.8), (2.8, 3.4)):
-        dec.append(dict(t="patch", r=[-1.5, 63.5, v0 - 0.3, v1 + 0.3], rgb=(0.62, 0.63, 0.65), alpha=0.6, layer=3, id="slush"))
+        along(u + 1.1, 0.0, 2.2, 0.16, rgb=(0.78, 0.70, 0.42), alpha=0.75, layer=3, id="line")
+    for dv in (-1.75, -1.05, 1.25, 1.95):
+        for u in range(-1, 64, 2):
+            along(u + 1.0, dv, 2.3, 0.3, rgb=(0.30, 0.31, 0.33), alpha=0.4, layer=3, id="rut")
+    for dv in (-3.1, 3.1):
+        for u in range(-1, 64, 2):
+            along(u + 1.0, dv, 2.6, 1.2, rgb=(0.62, 0.63, 0.65), alpha=0.6, tex="soft", layer=3, id="slush")
+    for (u, dv, a, w, l) in ((16.0, 1.2, 10, 1.6, 3.4), (33.5, 1.0, -14, 1.2, 4.0), (50.5, 0.2, 20, 1.4, 2.6), (58.0, -1.6, 4, 1.0, 3.0)):
+        dec.append(dict(t="patch", r=[u - l / 2, u + l / 2, rc(u) + dv - w / 2, rc(u) + dv + w / 2], ang=a + rang(u), rgb=(0.50, 0.60, 0.68), alpha=0.55, tex="soft", layer=4, id="ice"))
     for k in range(14):                                         # boot prints away from the Silo, not coming back
         u = 6.0 + k * 0.62
         v = 4.2 - k * 0.32 + (0.12 if k % 2 else -0.12)
         dec.append(dict(t="patch", r=[u, u + 0.28, v, v + 0.13], ang=-25, rgb=(0.48, 0.53, 0.60), alpha=0.6, tex="soft", layer=5, id="print"))
-    dec.append(dict(t="patch", r=[36.5, 41.5, -7.6, -7.0], ang=-18, rgb=(0.45, 0.46, 0.50), alpha=0.5, layer=4, id="drag"))
+    # the drag mark: off the south verge into the snow, ending at a shape (see "Shape in the snow")
+    dec.append(dict(t="patch", r=[38.2, 42.6, -8.75, -8.15], ang=-38, rgb=(0.45, 0.46, 0.50), alpha=0.5, layer=4, id="drag"))
+    # the frozen creek: crosses under the road at u 26 through a culvert (banked, iced, dirty at the edges)
+    for (v0, v1) in ((-12.6, rc(26.0) - 3.4), (rc(26.0) + 3.4, 12.6)):
+        vm, lv = (v0 + v1) / 2, (v1 - v0)
+        um = 26.0 + (vm - rc(26.0)) * 0.18
+        dec.append(dict(t="patch", r=[um - lv / 2, um + lv / 2, vm - 1.1, vm + 1.1], ang=80, rgb=(0.40, 0.47, 0.54), alpha=0.5, tex="soft", layer=2, id="creek"))
+        dec.append(dict(t="patch", r=[um - lv / 2, um + lv / 2, vm - 0.5, vm + 0.5], ang=80, rgb=(0.62, 0.74, 0.82), alpha=0.7, tex="soft", layer=4, id="creek_ice"))
+    # paw prints: a dog's, from the rest stop out under the billboard and round in circles (Kopek, see Junk Town's notice board)
+    for k in range(12):
+        u = 47.2 + k * 0.33
+        v = 11.0 + 0.4 * math.sin(k * 0.7) + (0.09 if k % 2 else -0.09)
+        dec.append(dict(t="patch", r=[u, u + 0.14, v, v + 0.12], ang=10, rgb=(0.50, 0.55, 0.62), alpha=0.6, tex="soft", layer=5, id="paw"))
     # trodden paths: from the road to the rest stop, and the yard's tracks between the stalls
-    dec.append(dict(t="patch", r=[40.0, 47.0, 2.5, 5.0], ang=0, rgb=(0.62, 0.64, 0.67), alpha=0.45, tex="soft", layer=3, id="trod"))
+    dec.append(dict(t="patch", r=[40.0, 47.0, 1.2, 5.0], ang=0, rgb=(0.62, 0.64, 0.67), alpha=0.45, tex="soft", layer=3, id="trod"))
     dec.append(dict(t="patch", r=[66.0, 88.0, -1.6, 1.6], ang=0, rgb=(0.50, 0.48, 0.45), alpha=0.16, tex="soft", layer=3, id="trod"))
     dec.append(dict(t="patch", r=[74.0, 80.0, -9.0, 9.0], ang=0, rgb=(0.50, 0.48, 0.45), alpha=0.14, tex="soft", layer=3, id="trod"))
     # the yard: snow shovelled to the foot of the wall, churned mud where people stand and queue, ash by the fires
@@ -1196,57 +1249,114 @@ def RD():
         name="Checkpoint barrier", text="The boom snapped where it met the post. A child's red mitten is tied to the stump.")
     add("notice_board", 11.2, 3.6, "-v", name="Evacuation notice",
         text="EVACUATION - NEW MERIDIAN - 40 KM. Assemble at the depot. Bring documents, warm clothing, three days of food. The arrow pointing east has been torn half away.")
-    add("glbp", -0.8, 6.2, "+u", key="jt_chainlink", name="Perimeter fence", text="Chain-link, bent outwards. Whatever went through it was leaving.")
-    add("glbp", 15.6, 5.6, "-v", key="jt_chainlink", turn=8, name="Perimeter fence")
-    # the car graveyard (near side, low)
-    add("glbp", 4.8, -9.2, "+v", key="jt_van_a", turn=24, name="Abandoned van",
-        text="Nose in the snow, doors open. The seats have been cut out for the foam.")
-    add("glbp", 10.2, -6.6, "+v", key="jt_car", turn=-14, name="Abandoned car",
-        text="A family estate car. Under the snow on the back seat, a shape you decide not to look at closely.")
-    add("glbp", 13.4, -10.6, "+v", key="jt_van_b", turn=40, name="Abandoned van")
-    add("glbp", 0.6, -7.0, "+v", key="jt_car", turn=72, mirror=True, name="Abandoned car")
-    add("army_truck_side", 19.6, -10.8, "+v", name="Army truck",
-        text="On its side. Sandbags, a field radio, jerrycans. No bodies. No tracks leading away, either.")
-    add("dead_tree", -1.0, -11.5, "+v", seed=1, H=7.0)
-    add("dead_tree", 17.8, 9.2, "-v", seed=2, H=6.0)
-    add("dead_tree", 22.8, 11.0, "-v", seed=3, H=7.5)
-    add("guardrail", 9.0, -3.6, "+v", L=6.0)
-    add("guardrail", 20.0, -3.6, "+v", L=8.0, bent=0.9, name="Guardrail", text="Bent out by something heavy, long ago.")
-    add("guardrail", 17.0, 3.6, "-v", L=6.0)
-    # ============ B: pylon, the first Changed, the trailer, the rest stop
-    add("power_pylon", 28.0, 10.6, "-v", lean=12.0, name="Leaning pylon",
+    # Placement rule for this level: every object has a reason to be where it is (what put it there, what it
+    # leans on, which way it points), and sits in the snow, not on it (contact shadows in level.gd, drifts here).
+    # ---- the portal compound: one fence line along its east side, bent outwards where something left
+    add("glbp", -0.8, 6.2, "+u", key="jt_chainlink", name="Perimeter fence", text="Chain-link round the portal compound, sagging between its posts.")
+    add("glbp", 16.4, 9.6, "-u", key="jt_chainlink", name="Perimeter fence", text="Chain-link round the portal compound, sagging between its posts.")
+    add("glbp", 16.6, 6.2, "-u", key="jt_chainlink", turn=-14, name="Perimeter fence", text="Chain-link, bent outwards. Whatever went through it was leaving.")
+    def rail(u, side, L, **kw):           # a guardrail on the verge, turned to follow the curve
+        add("guardrail", u, rc(u) + side * 3.9, "+v" if side < 0 else "-v", L=L, turn=round(rang(u) * (1 if side < 0 else -1), 1), **kw)
+    def railrun(u0, u1, side, **kw):      # a continuous run, 6 m sections end to end
+        n = max(1, int(round((u1 - u0) / 6.0)))
+        for i in range(n):
+            rail(u0 + (u1 - u0) * (i + 0.5) / n, side, (u1 - u0) / n + 0.05, **kw)
+    # ---- the evacuation jam: the last convoy out of the depot, heading east for New Meridian. A plough later
+    # shoved it onto the south verge, nose to tail, and the rail went with it. Everything points east.
+    jam = [("jt_van_a", 2.4, 4.6, 4, False, "Abandoned van", "Doors open, nose to the tail-lights of the car in front. The seats have been cut out for the foam."),
+           ("jt_car", 7.3, 4.2, -5, False, "Abandoned car", "A family estate car. Under the snow on the back seat, a shape you decide not to look at closely."),
+           ("jt_van_b", 11.6, 3.6, 7, True, "Abandoned van", "Pushed sideways by the plough, its back wheels in the ditch."),
+           ("jt_car", 15.6, 4.2, -3, True, "Abandoned car", "Keys still in. The fuel cap is off and the tank is dry.")]
+    for (key, u, Lc, turn, mir, nm, tx) in jam:
+        add("glbp", u, rc(u) - 4.3, "-v", key=key, turn=round(turn - rang(u), 1), mirror=mir, name=nm, text=tx)
+        D["mounds"].append((u - Lc * 0.45, rc(u) - 5.2, 1.0, 0.9, 0.3))          # snow banked against the west ends
+    # the army truck went over the rail at the end of the jam and rolled down the bank; its load spilled road-side
+    add("army_truck_side", 20.6, -9.6, "+v", name="Army truck",
+        text="On its side below the road, where it went through the rail. Sandbags, a field radio, jerrycans. No bodies. No tracks leading away, either.")
+    D["mounds"].append((16.6, -8.2, 1.2, 1.4, 0.35))
+    add("crate", 18.2, -6.2, "+v", turn=-6, name="Army crate", poi="search",
+        text="Stencilled CIVIL DEFENCE - RATIONS. Thrown from the truck's bed. The lid is frozen down and the lead seal is still on it.")
+    add("crate", 18.9, -6.0, "+v", turn=10)
+    add("sacks", 22.4, -6.2, "+v", turn=-4, name="Sandbags", text="Spilled from the truck bed in a line. Split, frozen hard as stone.")
+    railrun(12.6, 25.0, 1)                                         # north verge: open at the compound gate, then intact
+    railrun(27.0, 39.0, 1)
+    rail(19.2, -1, 4.0, bent=0.9, name="Guardrail", text="Torn out and bent down the bank where the army truck went over.")
+    rail(26.0, -1, 3.0, name="Culvert parapet", text="Concrete, with a rail on top. The creek runs under the road here, frozen grey.")
+    rail(26.0, 1, 3.0, name="Culvert parapet", text="Concrete, with a rail on top. The creek runs under the road here, frozen grey.")
+    railrun(27.0, 34.0, -1)
+    railrun(44.0, 50.0, -1, bent=0.4)
+    # ---- the frozen creek: the only trees on this stretch grow along it, in two small stands
+    for (u, v, sd, H) in ((24.3, 9.6, 2, 7.2), (25.6, 11.4, 3, 6.0), (27.9, 10.9, 6, 6.6),
+                          (25.0, -10.4, 1, 6.4), (27.2, -11.8, 4, 7.0)):
+        add("dead_tree", u, v, "+v" if v < 0 else "-v", seed=sd, H=H)
+    # the cold camp: travellers stopped in the lee of the creek trees, days ago, not years
+    add("firewood", 22.2, 8.9, "-v", name="Firewood", text="Split pallet wood under a sheet of tin, stacked against the wind. Somebody meant to stay longer.")
+    dec.append(dict(t="patch", r=[22.6, 24.0, 6.6, 7.6], ang=0, rgb=(0.42, 0.40, 0.39), alpha=0.35, tex="soft", layer=4, id="ash"))
+    dec.append(dict(t="patch", r=[23.0, 23.6, 6.9, 7.3], ang=0, rgb=(0.20, 0.18, 0.17), alpha=0.45, tex="soft", layer=5, id="ash"))
+    D["inspect"].append(dict(id="cold_camp", u=23.3, v=7.1, name="Cold campfire", poi="search",
+                             text="Two bedrolls round a fire that went out days ago, not years. A tin pot with soup frozen in it. Their tracks head east."))
+    add("sacks", 22.0, 6.3, "+u", turn=25, name="Bedroll", text="Army blanket over a sack of straw, feet to the fire. Still roughly the shape of a sleeper.")
+    add("sacks", 24.7, 7.4, "-u", turn=-20, name="Bedroll", text="Army blanket over a sack of straw, feet to the fire.")
+    add("bucket", 23.0, 6.5, "+u", name="Tin pot")
+    for k in range(10):                                            # their tracks, out to the road and east
+        u = 24.4 + k * 0.62
+        v = 6.6 - k * 0.5 + (0.12 if k % 2 else -0.12)
+        dec.append(dict(t="patch", r=[u, u + 0.28, v, v + 0.13], ang=-38, rgb=(0.48, 0.53, 0.60), alpha=0.55, tex="soft", layer=5, id="print"))
+    # ============ B: the power line crosses the road here (one pylon leaning, the next one down), the first Changed
+    add("power_pylon", 30.6, 10.8, "-v", lean=12.0, name="Leaning pylon",
         text="Leaning over the road like it is listening. Scorch marks on the legs and spent cases in the snow under it: people fought here.")
-    add("fallen_pylon", 30.0, -10.8, "+v", L=12.0, name="Fallen pylon")
-    add("glbp", 36.4, -4.4, "+v", key="jt_car", turn=12, name="Stalled car",
-        text="Doors open, engine cold for years. A suitcase on the back seat, a child's seat, a road map with New Meridian circled in pencil.")
-    add("guardrail", 31.5, 3.6, "-v", L=6.0)
-    add("guardrail", 47.5, -3.6, "+v", L=6.0, bent=0.5)
+    add("fallen_pylon", 33.6, -12.4, "+v", L=12.0, turn=8, name="Fallen pylon", text="The next pylon down the line, lying where it fell, cables still running back up to its neighbour.")
+    add("crate", 33.1, 9.0, "-v", turn=14, name="Air-drop crate", poi="search",
+        text="A military crate, dropped from the air and never collected. Its parachute is snagged on the pylon above, flapping when the wind gets up.")
+    # the stalled car: in its lane, still pointing east, stopped where the engine died
+    add("glbp", 36.6, rc(36.6) - 1.5, "-v", key="jt_car", turn=round(-rang(36.6), 1), name="Stalled car",
+        text="Stopped in its lane, doors open, engine cold for years. A suitcase on the back seat, a child's seat, a road map with New Meridian circled in pencil.")
+    D["mounds"].append((34.6, rc(34.6) - 1.6, 0.8, 0.8, 0.25))
+    # the drag mark ends in the trees south of the road
+    add("sacks", 41.9, -10.2, "+v", turn=-20, name="Shape in the snow", poi="search",
+        text="At the end of the drag mark. A rucksack strap sticks up out of the drift, and a boot. You'd have to dig.")
+    for (u, v, sd, H) in ((40.4, -11.6, 4, 6.4), (43.4, -11.2, 5, 5.6)):
+        add("dead_tree", u, v, "+v", seed=sd, H=H)
+    # ---- the rest stop: a kiosk with its forecourt, the trailer that jack-knifed pulling in, a car in the bay
     add("box_trailer", 41.8, 5.4, "-v", cab=52.0, name="Jack-knifed trailer",
-        text="BALTIC FREIGHT, faded to pink. The back doors were cut open with a torch. Empty, apart from frost.")
-    add("dead_tree", 38.8, -11.4, "+v", seed=4, H=6.5)
-    add("dead_tree", 46.8, -8.8, "+v", seed=5, H=5.5)
-    add("dead_tree", 35.0, 12.0, "-v", seed=6, H=6.8)
+        text="BALTIC FREIGHT, faded to pink. It jack-knifed pulling in for fuel. The back doors were cut open with a torch. Empty, apart from frost.")
     add("rest_kiosk", 44.2, 13.6, "-v", name="Rest stop kiosk",
         text="Shelves stripped to the brackets. A kettle on a cold stove. A radio on the counter, its battery long dead, still tuned to the emergency band.")
     add("fuel_pump", 42.4, 8.0, "-v", name="Fuel pump", text="NO FUEL, says the sign. The hose has been cut for the rubber.")
     add("fuel_pump", 45.6, 8.0, "-v", broken=True, name="Fuel pump")
-    add("glbp", 38.6, 11.6, "-v", key="jt_car", turn=-8, name="Snowed-in car",
-        text="A photo tucked in the sun visor: three people squinting into summer.")
-    add("tyre_stack", 49.2, 11.2, "-v", n=4)
-    add("tyre_stack", 50.0, 10.6, "-v", n=2)
-    # ============ C: billboard and scrapyard
+    add("glbp", 49.4, 8.2, "-v", key="jt_car", name="Snowed-in car",
+        text="Parked square in the bay, the only tidy thing here. A photo tucked in the sun visor: three people squinting into summer.")
+    D["mounds"].append((47.4, 8.0, 0.9, 1.0, 0.35))
+    add("tyre_stack", 47.8, 12.4, "-v", n=4)                       # against the kiosk's east wall
+    add("tyre_stack", 48.5, 11.7, "-v", n=2)
+    for (u, v, sd, H) in ((36.2, 12.2, 6, 6.8), (38.4, 13.0, 2, 6.0)):   # a windbreak behind the kiosk
+        add("dead_tree", u, v, "-v", seed=sd, H=H)
+    # ============ C: billboard and scrapyard. The containers stand in a row, the graves in a row in front of them.
     add("billboard", 55.0, 12.4, "-v", name="Billboard",
         text="NEW MERIDIAN 40 km - EVACUATION ROUTE. Someone has painted a line of marks under it, one for each day, until they stopped.")
-    add("container", 55.4, -10.4, "+v", paint="teal", name="Shipping container")
-    add("container", 49.2, -11.9, "+v", paint="red")
+    add("container", 49.0, -11.4, "+v", paint="red", name="Shipping container")
+    add("container", 55.4, -11.4, "+v", paint="teal", name="Shipping container")
     add("burned_bus", 57.0, 10.6, "-v", name="Burned bus", text="Burned from the inside. The seats are springs.")
-    add("glbp", 60.8, -12.8, "+v", key="jt_van_b", turn=-30, mirror=True)
-    for i, (u, v) in enumerate(((56.6, -5.4), (58.0, -5.9), (59.4, -5.4), (56.9, -7.4), (58.4, -7.8))):
-        add("grave", u, v, "+u", seed=i, name="Graves",
-            text="Crosses of exhaust pipe and fence post, hubcaps for headstones. Number plates for names.")
-    add("tyre_stack", 52.6, 5.4, "-v", n=3)
-    add("tyre_stack", 53.4, 6.0, "-v", n=4)
-    add("dead_tree", 55.0, -6.6, "+v", seed=7, H=5.0)
+    add("glbp", 61.0, -11.6, "+v", key="jt_van_b", turn=-8, mirror=True, name="Scrapped van", text="Stripped down to the frame. Its doors are in the town wall now.")
+    for i in range(5):
+        add("grave", 54.8 + i * 1.15, -6.8, "+v", seed=i, name="Graves",
+            text="A row of five, facing the road. Crosses of exhaust pipe and fence post, hubcaps for headstones. Number plates for names.")
+    add("dead_tree", 53.4, -8.6, "+v", seed=7, H=5.0)
+    add("tyre_stack", 52.4, 7.6, "-v", n=3)                        # against the bus's front
+    add("tyre_stack", 53.1, 7.4, "-v", n=4)
+    D["mounds"].append((51.2, 9.4, 0.9, 1.0, 0.3))
+    add("safe", 60.0, 7.2, "-v", turn=22, name="Strongbox", poi="locked",
+        text="Thrown clear of the bus, blackened by the fire. Somebody went at the lock with a crowbar and gave up. Whatever is inside is still inside.")
+    D["inspect"] += [
+        dict(id="culvert", u=26.6, v=rc(26.0) - 4.6, name="Culvert", poi="search",
+             text="A concrete pipe under the road, half choked with ice. Branches and rags have been dragged into the mouth to make a nest. Recently."),
+        dict(id="backpack", u=6.0, v=rc(6.0) + 3.6, name="Child's backpack", poi="search",
+             text="Hung on the guardrail by its straps, the way you leave something for someone to find. Red, with a cartoon cosmonaut on the flap."),
+        dict(id="field_radio", u=22.4, v=-8.0, name="Field radio", poi="radio",
+             text="Strapped into the truck's cab, battery dead. The tuning dial is taped down on one frequency, and someone wrote 'MERIDIAN' on the tape."),
+        dict(id="dog_bed", u=51.0, v=11.8, name="A hollow in the snow", poi="track",
+             text="Paw prints lead here from the rest stop and circle a hollow scraped out under the billboard. A gnawed paper wrapper, the kind sugar comes in. A dog sleeps here."),
+    ]
     # ============ Junk Town: the ring (west and south walls face out to the camera and stay low; north and
     # east walls are the tall far side). Centre sorting is right for these 4-5 m pieces.
     W = []
@@ -1756,8 +1866,35 @@ def puddle_mat(name, cu, cv, ru, rv, kind):
     return m
 
 
+# wall decor remade in Meshy: t -> (file, fit, L, D, H or None, z(d)); the kit builder stays the fallback
+MESHY_DECOR = {
+    "radiator": lambda d: ("silo81_radiator", "x", d["sections"] * 0.065 + 0.08, 0.16, None, 0.1),
+    "intercom": lambda d: ("silo81_intercom", "z", 0.24, 0.1, 0.34, d["z"] - 0.17),
+    "blackboard": lambda d: ("silo81_blackboard", "x", 2.6, 0.06, None, d.get("z", 0.85) - 0.08),
+    "noticeboard": lambda d: ("silo81_noticeboard", "x", 1.3, 0.05, None, d.get("z", 1.0)),
+    "tvscreen": lambda d: ("silo81_tvscreen", "x", 0.74, 0.5, None, d.get("z", 1.9)),
+    "switchboard": lambda d: ("silo81_switchboard", "z", 0.8, 0.2, 0.95, d.get("z", 0.9)),
+    "toolboard": lambda d: ("silo81_toolboard", "x", 2.0, 0.06, None, d.get("z", 1.0)),
+    "manifold": lambda d: ("silo81_manifold", "x", 1.5, 0.3, None, 0.7),
+    "gauge_bank": lambda d: ("silo81_gauge_bank", "x", 1.3, 0.12, None, d.get("z", 1.15) - 0.25),
+}
+DECOR_TINT = {"frozen": (0.86, 0.95, 1.06), "dead": (0.92, 0.86, 0.78)}
+
+
 def decor(d):
     t = d["t"]
+    if t in MESHY_DECOR:
+        f, fit, L, D_, H, z = MESHY_DECOR[t](d)
+        if os.path.exists(os.path.join(kit.GLB_DIR, "meshy/%s.glb" % f)):
+            ob, _ = kit.glb_prop(t, "meshy/%s.glb" % f, L, D_, rot=180, fit=fit, H=H, outline=0.006,
+                                 tint=DECOR_TINT.get(d.get("state")))
+            add_on_wall(ob, d["u"], d["v"], d["f"], z)
+            if t == "blackboard":            # the chalk line stays real text
+                add_text_on_wall(d.get("text", "THE CORE KEEPS US WARM"), MARKER, 0.11, flat("ChalkWhite", (0.82, 0.82, 0.76)),
+                                 d["u"] - 0.45, d["v"], d["f"], d.get("z", 0.85) + 0.82, dy=0.04)
+            elif t == "noticeboard" and d.get("title"):
+                add_text_on_wall(d["title"], STENCIL, 0.09, flat("StencilPaint", (0.12, 0.12, 0.11)), d["u"], d["v"], d["f"], d.get("z", 1.0) + 0.9)
+            return
     if t == "patch":                               # flat mark on the ground: plan rect (u0, u1, v0, v1), turned by ang
         if LV.get("godot_ground"):
             return                                 # drawn by Godot (out["ground"]["patches"])
@@ -2245,7 +2382,10 @@ if LV.get("godot_ground"):
     G = {"ambient": list(LV.get("light", {}).get("ambient", (1, 1, 1))), "floors": [], "patches": [], "mounds": [], "pools": []}
     for t in LV.get("terrain", []):
         G["floors"].append({"r": t["r"], "tex": t["floor"]["tex"], "tint": list(t["floor"].get("tint", (1, 1, 1))), "layer": -1})
+    G["roads"] = LV.get("roads", [])
     for r in LV["rooms"]:
+        if r.get("nofloor"):
+            continue
         G["floors"].append({"r": r["r"], "tex": r["floor"]["tex"], "tint": list(r["floor"].get("tint", (1, 1, 1))), "layer": r.get("layer", 0)})
     for d in LV["decor"]:
         if d["t"] == "patch":
@@ -2596,7 +2736,7 @@ MESHY = {
     "burned_bus": _m("road_burned_bus", "x", 10.5, 2.5, 2.9),
     "army_truck_side": _m("road_army_truck", "x", 6.8, 3.0, 2.6),
     "container": _m("road_container", "x", 6.0, 2.45, 2.6),
-    "guardrail": lambda p: _m("road_guardrail", "x", p.get("L", 6.0), 0.4, 0.8),
+    "guardrail": lambda p: _m("road_guardrail", "box", p.get("L", 6.0), 0.4, 0.8),
     "dead_tree": lambda p: _m("road_dead_tree", "z", 0.8, 0.8, p.get("H", 6.0)),
     "fuel_pump": _m("road_fuel_pump", "z", 0.9, 0.7, 1.8),
     "grave": _m("road_grave", "x", 0.9, 1.9, 1.2),
@@ -2638,6 +2778,12 @@ def meshy_prop(kind, p, spec):
         x0, x1, y0, y1, z0, z1 = _bounds(ob)
         me.transform(Matrix.Translation((0, -y0, -z0)))
         size = (size[0], y1 - y0)
+    if p.get("turn"):                                 # yaw on the spot (guardrails along a curve, a crate askew)
+        me = ob.data
+        cy = size[1] / 2
+        me.transform(Matrix.Translation((0, cy, 0)) @ Matrix.Rotation(math.radians(p["turn"]), 4, "Z") @ Matrix.Translation((0, -cy, 0)))
+        ys = [v.co.y for v in me.vertices]
+        me.transform(Matrix.Translation((0, -min(ys), 0)))
     return ob, size
 
 
@@ -2734,7 +2880,7 @@ for i, p in enumerate(LV["props"]):
         p["k"] = p["k"] % 4                            # two Tripo bunks, each plain or mirrored
     if p["t"] == "locker" and have_glb("locker") and p.get("w", 0.55) >= 0.9 and not p.get("open"):
         p["k"] = 0
-    keyargs = tuple(sorted((k, repr(v)) for k, v in p.items() if k not in ("u", "v", "name", "text", "id", "sort_at", "noblock", "posts")))
+    keyargs = tuple(sorted((k, repr(v)) for k, v in p.items() if k not in ("u", "v", "name", "text", "id", "sort_at", "noblock", "posts", "poi")))
 
     def build(p=p):
         ob, size = PROP_FN[p["t"]](p)
@@ -2780,7 +2926,7 @@ for i, p in enumerate(LV["props"]):
     srt = scr_uv(cu, cv)
     entry = {"type": p["t"], "footprint": fp, "sprite": f, "x0": round(sx + off[0], 1), "y0": round(sy + off[1], 1),
              "sort": [round(srt[0], 1), round(srt[1], 1)]}
-    for k in ("id", "name", "text"):
+    for k in ("id", "name", "text", "poi"):
         if k in p:
             entry[k] = p[k]
     out["props"].append(entry)
@@ -2800,6 +2946,19 @@ def door_obj(kind, is_open, label="2-D"):
         slab = toon("PlyDoor", kit.PLY, noise=0.12, noise_scale=8)
         rivet = toon("Steel", (0.5, 0.5, 0.5))
     th = 0.06
+    mf, ml = "meshy/silo81_%s_door_frame.glb" % kind, "meshy/silo81_%s_door_leaf.glb" % kind
+    if all(os.path.exists(os.path.join(kit.GLB_DIR, f)) for f in (mf, ml)):
+        M = (Matrix.Translation((-W / 2, 0, 0)) @ Matrix.Rotation(math.radians(-95), 4, "Z") @ Matrix.Translation((W / 2, 0, 0))) if is_open else Matrix()
+        fr, _ = kit.glb_prop("DoorFrameM", mf, W + 0.14, T, rot=180, fit="box", H=H + 0.08)
+        fr.data.transform(Matrix.Translation((0, -T / 2, 0)))
+        lf, _ = kit.glb_prop("DoorLeafM", ml, W - 0.02, th, rot=180, fit="box", H=H - 0.04)
+        lf.data.transform(M @ Matrix.Translation((0, -th / 2, 0.02)))
+        objs = [fr, lf]
+        if kind == "steel" and not is_open:
+            txt = text_obj(label, STENCIL, 0.2, flat("DoorStencil", (0.82, 0.78, 0.66)))
+            txt.matrix_world = Matrix.Translation((0, th / 2 + 0.006, 1.6)) @ Matrix.Rotation(math.pi, 4, "Z") @ Matrix.Rotation(math.radians(90), 4, "X")
+            objs.append(txt)
+        return objs
     if is_open:                      # swung inwards (+y local is the corridor side, door opens away from it)
         M = Matrix.Translation((-W / 2, 0, 0)) @ Matrix.Rotation(math.radians(-95), 4, "Z") @ Matrix.Translation((W / 2, 0, 0))
     else:
