@@ -15,6 +15,13 @@ uniform vec3 mid_col = vec3(0.79, 0.79, 0.8);
 uniform vec3 lit_col = vec3(1.09, 1.04, 0.96);
 uniform float t_mid = 0.12;
 uniform float t_lit = 0.45;
+// surface detail (Meshy models): the normal map decides light and shade too, and the band edges can be
+// feathered a little so the many small lumps of a generated mesh don't flicker between bands
+uniform sampler2D normal_tex : hint_normal, filter_linear_mipmap;
+uniform bool has_normal = false;
+uniform float normal_strength = 1.0;
+uniform float band_soft = 0.0;
+uniform float rim_amount = 0.0;
 uniform bool flat_shade = false;   // facet normals (the worm's sprite renders are flat-shaded)
 uniform vec4 flash : source_color = vec4(1.0);
 // duotone (the Changed): the texture's brightness picks between a coat colour and pale, mottled skin
@@ -55,9 +62,26 @@ void fragment() {
 	vec3 n = normalize(NORMAL);
 	if (flat_shade) { n = normalize(cross(dFdx(VERTEX), dFdy(VERTEX))); if (n.z < 0.0) n = -n; }
 	float d = dot(n, L);
-	vec3 band = d < t_mid ? shade_col : (d < t_lit ? mid_col : lit_col);
+	// the bands follow the smooth surface; the normal map adds its small relief on top as soft light and
+	// shade (folds, seams, wrinkles), so the detail shows without breaking the bands into blotches
+	float detail = 1.0;
+	if (has_normal) {
+		vec2 nxy = texture(normal_tex, UV).rg * 2.0 - 1.0;
+		float nz = sqrt(clamp(1.0 - dot(nxy, nxy), 0.0, 1.0));     // normal maps import as two channels
+		vec3 nm = normalize(TANGENT * nxy.x + BINORMAL * nxy.y + n * nz);
+		detail = clamp(1.0 + normal_strength * (dot(nm, L) - d), 0.55, 1.45);
+	}
+	vec3 band;
+	if (band_soft > 0.0) {
+		band = mix(shade_col, mid_col, smoothstep(t_mid - band_soft, t_mid + band_soft, d));
+		band = mix(band, lit_col, smoothstep(t_lit - band_soft, t_lit + band_soft, d));
+	} else {
+		band = d < t_mid ? shade_col : (d < t_lit ? mid_col : lit_col);
+	}
 	// the bands are Blender's (scene-linear multipliers); the Compatibility renderer shades in sRGB,
 	// so (tex_lin * band) -> sRGB equals tex_srgb * band^(1/2.2)
 	band = pow(band, vec3(1.0 / 2.2));
-	ALBEDO = base * band * flash.rgb;
+	// a thin rim on the lit side lifts the silhouette off dark floors
+	float rim = pow(1.0 - clamp(dot(n, VIEW), 0.0, 1.0), 3.0) * rim_amount * smoothstep(-0.2, 0.4, d);
+	ALBEDO = base * band * detail * flash.rgb + rim * vec3(0.9, 0.88, 0.82) * base;
 }

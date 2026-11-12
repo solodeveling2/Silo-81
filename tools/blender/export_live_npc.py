@@ -2,14 +2,20 @@
 the same 1.75 m scale render_character.py uses (rest mesh height), feet at z=0, every action kept.
 Writes OUT.glb and OUT.json (clip map and idle loop) for game/scripts/puppet3d.gd.
 
-Usage: blender -b --python-exit-code 1 -P export_live_npc.py -- model.glb OUT_BASENAME [height_m]
-   or: python3 -I export_live_npc.py model.glb OUT_BASENAME [height_m]   (bpy module)
+Usage: blender -b --python-exit-code 1 -P export_live_npc.py -- model.glb OUT_BASENAME [height_m] [exposure] [--flat]
+   or: python3 -I export_live_npc.py model.glb OUT_BASENAME [height_m] [exposure] [--flat]   (bpy module)
+
+Default (art rule for every new model, docs/ART_DIRECTION.md): keep the normal map, 2048 px textures,
+JPEG q92, and write normal_strength / band_soft / rim into the json for toon_v2. --flat = old
+base-colour-only 1024 px export.
 """
 import sys, os, json
 import bpy
 from mathutils import Vector
 
 argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
+KEEP_NORMAL = "--flat" not in argv
+argv = [a for a in argv if not a.startswith("--")]
 MODEL, OUT = argv[0], argv[1]
 HEIGHT_M = float(argv[2]) if len(argv) > 2 else 1.75
 EXPOSURE = float(argv[3]) if len(argv) > 3 else 1.35
@@ -64,16 +70,17 @@ arm.scale = arm.scale * s_
 arm.location = arm.location - Vector((0, 0, min(zs) * s_))
 bpy.context.view_layer.update()
 
-def slim_materials(max_px=1024):
-    """The game's toon shader reads only base colour: drop normal / metal / roughness maps and
-    cap the colour texture, so the web download carries nothing unused."""
+def slim_materials(max_px=2048 if KEEP_NORMAL else 1024):
+    """The toon shader reads base colour and (by default) the normal map as relief: drop metal /
+    roughness maps (and the normal map with --flat) and cap textures, so the web download carries
+    nothing unused."""
     for m in bpy.data.materials:
         if not m.use_nodes:
             continue
         nt = m.node_tree
         for n in list(nt.nodes):
             if n.type == "BSDF_PRINCIPLED":
-                for name in ("Normal", "Metallic", "Roughness"):
+                for name in ("Metallic", "Roughness") + (() if KEEP_NORMAL else ("Normal",)):
                     for l in list(n.inputs[name].links):
                         nt.links.remove(l)
     for img in bpy.data.images:
@@ -82,17 +89,22 @@ def slim_materials(max_px=1024):
 
 
 slim_materials()
+HAS_NORMAL = KEEP_NORMAL and any(nd.type == "NORMAL_MAP" and nd.inputs["Color"].links
+                                 for m in bpy.data.materials if m.use_nodes for nd in m.node_tree.nodes)
 for a in bpy.data.actions:
     a.use_fake_user = True
 try:
     bpy.ops.export_scene.gltf(filepath=OUT + ".glb", export_format="GLB", export_animations=True,
                               export_animation_mode="ACTIONS", export_force_sampling=True, export_frame_range=False,
-                              export_def_bones=False, export_apply=False, use_selection=False)
+                              export_def_bones=False, export_apply=False, use_selection=False,
+                              export_image_format="JPEG", export_jpeg_quality=92 if KEEP_NORMAL else 88)
 except TypeError:
     bpy.ops.export_scene.gltf(filepath=OUT + ".glb", export_format="GLB", export_animations=True,
                               export_nla_strips=True, export_force_sampling=True, export_frame_range=False,
-                              export_def_bones=False, export_apply=False, use_selection=False)
+                              export_def_bones=False, export_apply=False, use_selection=False,
+                              export_image_format="JPEG", export_jpeg_quality=92 if KEEP_NORMAL else 88)
     clips = {k: k for k in clips}
-json.dump({"fps_src": 24, "clips": clips, "idle_loop_src": idle_loop, "height_m": HEIGHT_M, "exposure": EXPOSURE},
+json.dump({"fps_src": 24, "clips": clips, "idle_loop_src": idle_loop, "height_m": HEIGHT_M, "exposure": EXPOSURE,
+           **({"normal_strength": 1.6 if HAS_NORMAL else 0.0, "band_soft": 0.06, "rim": 0.6} if KEEP_NORMAL else {})},
           open(OUT + ".json", "w"), indent=1)
 print("exported", OUT, "scale", round(s_, 4), "clips", clips, "idle loop", idle_loop)

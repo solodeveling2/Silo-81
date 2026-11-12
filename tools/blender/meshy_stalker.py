@@ -21,6 +21,8 @@ from mathutils import Matrix, Quaternion, Vector
 IN, OUT = sys.argv[1], sys.argv[2]
 HEIGHT = float(sys.argv[3]) if len(sys.argv) > 3 and not sys.argv[3].startswith("--") else 1.2
 FPS = 24
+KEEP_NORMAL = "--flat" not in sys.argv     # default: keep the normal map, 2048 px textures, soft bands + rim (art rule); --flat = old base-colour-only look
+TEX_MAX = 2048 if KEEP_NORMAL else 1024
 SIDES = ("", "R_")                       # left bones have no prefix, right ones "R_"
 LEGS = {f"{s}{kind}": ([f"{s}{kind}", f"{s}{kind}0", f"{s}{kind}1"], f"{s}{kind}2") for s in SIDES for kind in ("frontleg", "backleg")}
 
@@ -458,19 +460,22 @@ for m in bpy.data.materials:
     if m.node_tree:
         for nd in m.node_tree.nodes:
             if nd.type == "BSDF_PRINCIPLED":
-                for nm in ("Normal", "Metallic", "Roughness"):
+                for nm in ("Metallic", "Roughness") + (() if KEEP_NORMAL else ("Normal",)):
                     for l in list(nd.inputs[nm].links):
                         m.node_tree.links.remove(l)
+HAS_NORMAL = KEEP_NORMAL and any(nd.type == "NORMAL_MAP" and nd.inputs["Color"].links
+                                  for m in bpy.data.materials if m.node_tree for nd in m.node_tree.nodes)
 for img in bpy.data.images:
-    if img.users and img.size[0] > 1024:
-        img.scale(1024, max(1, img.size[1] * 1024 // img.size[0]))
+    if img.users and img.size[0] > TEX_MAX:
+        img.scale(TEX_MAX, max(1, img.size[1] * TEX_MAX // img.size[0]))
 arm.animation_data.action = None
 sc.frame_set(0)
 bpy.ops.export_scene.gltf(filepath=OUT + ".glb", export_format="GLB", export_animations=True,
                           export_animation_mode="ACTIONS", export_force_sampling=True, export_frame_range=False,
                           export_def_bones=False, export_apply=False, use_selection=False,
-                          export_image_format="JPEG", export_jpeg_quality=88)
+                          export_image_format="AUTO" if HAS_NORMAL else "JPEG", export_jpeg_quality=92 if KEEP_NORMAL else 88)
 json.dump({"fps_src": FPS, "clips": {c: c for c in clips}, "idle_loop_src": [0, 48], "height_m": HEIGHT, "exposure": 1.1,
+           **({"normal_strength": 1.6 if HAS_NORMAL else 0.0, "band_soft": 0.06, "rim": 0.6} if KEEP_NORMAL else {}),
            "creature": "feral", "lengths": clips, "view": VIEW, "walk_v": round(WALK_V, 4), "bite_hit": BITE_HIT},
           open(OUT + ".json", "w"), indent=1)
 for img in bpy.data.images:

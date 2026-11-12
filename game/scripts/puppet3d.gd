@@ -248,6 +248,13 @@ func _dress(n: Node) -> void:
 				if bm.albedo_texture:
 					m.set_shader_parameter("albedo_tex", bm.albedo_texture)
 				m.set_shader_parameter("has_tex", bm.albedo_texture != null)
+				var ns := float(cfg.get("normal_strength", 0.0))
+				if ns > 0.0 and bm.normal_enabled and bm.normal_texture:
+					m.set_shader_parameter("normal_tex", bm.normal_texture)
+					m.set_shader_parameter("has_normal", true)
+					m.set_shader_parameter("normal_strength", ns)
+			m.set_shader_parameter("band_soft", float(cfg.get("band_soft", 0.0)))
+			m.set_shader_parameter("rim_amount", float(cfg.get("rim", 0.0)))
 			var ink := ShaderMaterial.new()
 			ink.shader = INK
 			m.next_pass = ink

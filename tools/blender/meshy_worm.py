@@ -21,8 +21,10 @@ import numpy as np
 from mathutils import Matrix, Quaternion, Vector
 
 IN, OUT = sys.argv[1], sys.argv[2]
-LENGTH = float(sys.argv[3]) if len(sys.argv) > 3 else 1.3
+LENGTH = float(sys.argv[3]) if len(sys.argv) > 3 and not sys.argv[3].startswith("--") else 1.3
 FPS = 24
+KEEP_NORMAL = "--flat" not in sys.argv     # default: keep the normal map, 2048 px textures, soft bands + rim (art rule); --flat = old base-colour-only look
+TEX_MAX = 2048 if KEEP_NORMAL else 1024
 CRAWL_N, CRAWL_V = 24, 0.0533                     # as the old worm (pipe_worm/character.json step_px 8.794)
 LATCH = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "latch.json")))
 # the old worm's frame: +x forward, +y left; this model faces -Y, its left is +X
@@ -322,19 +324,22 @@ for mt in bpy.data.materials:
     if mt.node_tree:
         for nd in mt.node_tree.nodes:
             if nd.type == "BSDF_PRINCIPLED":
-                for nm in ("Normal", "Metallic", "Roughness"):
+                for nm in ("Metallic", "Roughness") + (() if KEEP_NORMAL else ("Normal",)):
                     for l in list(nd.inputs[nm].links):
                         mt.node_tree.links.remove(l)
 for img in bpy.data.images:
-    if img.users and img.size[0] > 1024:
-        img.scale(1024, max(1, img.size[1] * 1024 // img.size[0]))
+    if img.users and img.size[0] > TEX_MAX:
+        img.scale(TEX_MAX, max(1, img.size[1] * TEX_MAX // img.size[0]))
+for img in bpy.data.images:                               # colour as JPEG; only the normal map stays lossless
+    if img.users and "normal" not in img.name.lower():
+        img.file_format = "JPEG"
 arm.animation_data.action = None
 sc.frame_set(0)
 bpy.ops.export_scene.gltf(filepath=OUT + ".glb", export_format="GLB", export_animations=True,
                           export_animation_mode="ACTIONS", export_force_sampling=True, export_frame_range=False,
                           export_def_bones=False, export_apply=False, use_selection=False,
-                          export_image_format="JPEG", export_jpeg_quality=88)
-json.dump({"fps_src": FPS, "clips": {c: c for c in clips}, "idle_loop_src": [0, 32], "height_m": 0.5, "exposure": 1.1,
+                          export_image_format="JPEG", export_jpeg_quality=92 if KEEP_NORMAL else 88)
+json.dump({**({"normal_strength": 1.6, "band_soft": 0.06, "rim": 0.6} if KEEP_NORMAL else {}), "fps_src": FPS, "clips": {c: c for c in clips}, "idle_loop_src": [0, 32], "height_m": 0.5, "exposure": 1.1,
            "lengths": clips, "view": VIEW},
           open(OUT + ".json", "w"), indent=1)
 for img in bpy.data.images:

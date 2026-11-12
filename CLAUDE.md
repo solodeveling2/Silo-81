@@ -40,6 +40,9 @@ turn-based combat only, Wasteland 3-style action bar. See README.md for layout a
   pre-rendered sprite sheets. Static things (levels, walls, furniture, props) stay pre-rendered 2D.
   The Actor keeps driving clip, frame, facing and aim, so stride and timing are unchanged. Sprite sheets
   are only a fallback until a model has its live export. See `docs/ART_DIRECTION.md`.
+- **Detail treatment for every new model:** keep its normal map as relief inside the toon bands,
+  2048 px JPEG q92 textures, and json `normal_strength 1.6`, `band_soft 0.06`, `rim 0.6`. This is the
+  default in `export_live_npc.py` and `tools/blender/meshy_*.py` (`--flat` is only for comparison).
 - The silo is a believable civilian Cold War shelter, not a dungeon built from game-design checklists.
   Heat inequality comes from infrastructure and politics.
 - Don't use or open SpriteCook. Reference images come from Gemini (Nano Banana 2.1) in the browser;

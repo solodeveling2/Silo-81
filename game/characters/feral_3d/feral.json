@@ -13,6 +13,9 @@
  ],
  "height_m": 1.2,
  "exposure": 1.1,
+ "normal_strength": 0.0,
+ "band_soft": 0.06,
+ "rim": 0.6,
  "creature": "feral",
  "lengths": {
   "idle": 48,

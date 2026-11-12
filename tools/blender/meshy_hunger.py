@@ -13,10 +13,12 @@ import bpy
 from mathutils import Quaternion, Vector
 
 IN, SRC, OUT = sys.argv[1:4]
-HEIGHT = float(sys.argv[4]) if len(sys.argv) > 4 else 1.75
+HEIGHT = float(sys.argv[4]) if len(sys.argv) > 4 and not sys.argv[4].startswith("--") else 1.75
 FPS = 24
 RENAME = {"Alert": "idle", "Walking": "walk", "Running": "run", "Left_Hook_from_Guard": "bite"}
 HIPS = "mixamorig:Hips"
+KEEP_NORMAL = "--flat" not in sys.argv     # default: keep the normal map, 2048 px textures, soft bands + rim (art rule); --flat = old base-colour-only look
+TEX_MAX = 2048 if KEEP_NORMAL else 1024
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
@@ -195,19 +197,19 @@ for m in bpy.data.materials:
     if m.use_nodes:
         for n in m.node_tree.nodes:
             if n.type == "BSDF_PRINCIPLED":
-                for name in ("Normal", "Metallic", "Roughness"):
+                for name in ("Metallic", "Roughness") + (() if KEEP_NORMAL else ("Normal",)):
                     for l in list(n.inputs[name].links):
                         m.node_tree.links.remove(l)
 for img in bpy.data.images:
-    if img.users and img.size[0] > 1024:
-        img.scale(1024, max(1, img.size[1] * 1024 // img.size[0]))
+    if img.users and img.size[0] > TEX_MAX:
+        img.scale(TEX_MAX, max(1, img.size[1] * TEX_MAX // img.size[0]))
 
 arm.animation_data.action = None
 bpy.ops.export_scene.gltf(filepath=OUT + ".glb", export_format="GLB", export_animations=True,
                           export_animation_mode="ACTIONS", export_force_sampling=True, export_frame_range=False,
                           export_def_bones=False, export_apply=False, use_selection=False,
-                          export_image_format="JPEG", export_jpeg_quality=88)
-json.dump({"fps_src": FPS, "clips": {c: c for c in ("idle", "walk", "run", "bite", "hit", "death")},
+                          export_image_format="JPEG", export_jpeg_quality=92 if KEEP_NORMAL else 88)
+json.dump({**({"normal_strength": 1.6, "band_soft": 0.06, "rim": 0.6} if KEEP_NORMAL else {}), "fps_src": FPS, "clips": {c: c for c in ("idle", "walk", "run", "bite", "hit", "death")},
            "idle_loop_src": [0, lengths["idle"]], "height_m": HEIGHT, "exposure": 1.2, "creature": "infected",
            "lengths": lengths, "bite_hit": hit_frame, "view": VIEW},
           open(OUT + ".json", "w"), indent=1)

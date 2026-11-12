@@ -98,8 +98,18 @@ rule above is being deliberately changed.
    `export_live_npc.py` (any Mixamo NPC). Rig-less creatures built in code (the worm): export every
    frame's vertices (`worm_live.py`) and the puppet plays them as a mesh flipbook.
    The toon shader takes Blender's bands as linear values (it converts them, because the
-   Compatibility renderer shades in sRGB) and only base colour: exporters drop normal and
-   roughness maps and cap textures at 1024 px. Launch with `-- --sprites` to compare.
+   Compatibility renderer shades in sRGB). Launch with `-- --sprites` to compare.
+   **Detail treatment (general rule for every new model, Nov 2026):** keep the model's normal map
+   and use it as relief inside the toon bands, export textures at up to 2048 px as JPEG q92, and
+   give the sidecar json `"normal_strength": 1.6, "band_soft": 0.06, "rim": 0.6` (soft band edges
+   and a faint warm rim on the lit side). Metal and roughness maps are still dropped. Bands are
+   chosen from the smooth normal, so the three-band look stays and the normal map only modulates
+   brightness within a band (clamped 0.55-1.45). A model with no normal map still gets soft bands
+   and rim (`normal_strength` 0). This is the default in `export_live_npc.py` and the
+   `tools/blender/meshy_*.py` scripts; `--flat` gives the old base-colour-only 1024 px export and
+   is only for comparison. Characters exported before this rule (player, Tibor, Overseer,
+   townsfolk, goat) keep the flat look until they are re-exported. Check a new model next to its
+   source with `A=src.glb,src.json B=game.glb,game.json godot --path game -s tools/compare_test.gd`.
 5. **Render (fallback / reference)** - only through `tools/blender/render_character.py`: orthographic, the shared camera
    (`tools/blender/camera.json`, 47 degrees), 165 px per metre, six hex directions, key light from
    top-left-front, three toon bands over the painted texture, the same ink outline and the same
@@ -110,6 +120,21 @@ rule above is being deliberately changed.
 7. **Check** - `python3 tools/lineup.py lineup.png` puts every character's idle frame side by side
    at the game camera's zoom on a Silo 81 floor. A new character is done only when it passes the
    final quality test in that line-up and in the game itself.
+
+## Meshy models (enemies, Nov 2026)
+
+The Tier 1 enemies now come from Meshy and replace the Blender-built ones below (those scripts and
+.blend files are kept for reference):
+
+- The Tattered Hunger (`tools/blender/meshy_hunger.py`): replaces the Infected. It keeps Meshy's
+  idle, walk, run and attack clips and retargets hit and death from the Changed. Outside combat it
+  patrols left and right at walking pace; in combat it only runs.
+- The Spined Wasteland Stalker (`meshy_stalker.py`): replaces the Feral. The script adds a jaw bone,
+  plus idle, bite, hit and death clips authored in Blender on Meshy's skeleton.
+- The pipe worm (`meshy_worm.py`): a 19-bone chain with crawl, bite, chew and release clips posed
+  along a spine curve.
+- Each writes the game GLB and json with the detail treatment above. The Meshy originals are in
+  `source/meshy/` (not in git).
 
 ## Enemies and creatures modelled in Blender (from code)
 
